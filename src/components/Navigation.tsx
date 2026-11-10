@@ -13,11 +13,10 @@ export function Navbar() {
 
   const navLinks = [
     { label: 'Beranda', href: '/' },
-    { label: 'Direktori', href: '/direktori' },
-    { label: 'Peta Alumni', href: '/peta' },
-    { label: 'Kegiatan', href: '/kegiatan' },
+    { label: 'Direktori Alumni', href: '/direktori' },
+    { label: 'Agenda Kumpul', href: '/kegiatan' },
     { label: 'Mentoring', href: '/peluang' },
-    { label: 'Cerita', href: '/cerita' },
+    { label: 'Sentra Wilayah', href: '/peta' },
     { label: 'Tentang', href: '/tentang' },
   ];
 
@@ -185,13 +184,12 @@ export function Footer() {
                 </span>
               </div>
             </div>
-            <p className="text-xs text-[#EDF1FA]/80 max-w-md leading-relaxed">
-              Jejaring independen alumni Universitas Muhammadiyah Surakarta di wilayah Jakarta, Bogor, Depok, Tangerang, dan Bekasi. Berlandaskan keterbukaan, gotong royong, dan kepatuhan privasi UU PDP.
+            <p className="text-sm text-white/80 max-w-md leading-relaxed">
+              Jejaring silaturahmi dan saling bantu alumni Universitas Muhammadiyah Surakarta di wilayah Jakarta, Bogor, Depok, Tangerang, dan Bekasi.
             </p>
-            <div className="inline-flex items-center gap-2 border border-white/20 px-3 py-1.5 text-[11px] font-mono text-[#F4C542] bg-white/5 rounded-lg">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#10B981]" />
-              <span>DATA DEMONSTRASI & KONSEN OPT-IN (k &ge; 5)</span>
-            </div>
+            <p className="text-xs text-white/60">
+              Inisiatif independen alumni UMS untuk mempermudah jejaring karir, wirausaha, dan pendampingan sesama rekan di perantauan.
+            </p>
           </div>
 
           <div>

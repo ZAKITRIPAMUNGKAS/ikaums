@@ -28,6 +28,9 @@ export interface WilayahStatistik {
   keteranganAman: string; // Misal: ">= 5 Alumni Terdaftar" atau "Data Terbatas"
   agendaTerdekat?: string;
   isDataTerbatas: boolean;
+  titikKumpul?: string;
+  koordinator?: string;
+  kontakWa?: string;
 }
 
 export interface AlumniProfile {
