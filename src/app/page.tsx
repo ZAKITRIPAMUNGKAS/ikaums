@@ -134,9 +134,9 @@ export default function Home() {
                   <span>Jejaring Resmi Alumni UMS Jabodetabek</span>
                 </div>
 
-                <h1 className="font-serif text-4xl sm:text-5xl md:text-5xl lg:text-6xl xl:text-7xl font-bold tracking-tight text-[#0B1536] leading-[1.05]">
+                <h1 className="font-serif text-5xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-[5.25rem] font-normal tracking-tight text-[#0B1536] leading-[1.02]">
                   Dari Temu Kangen, <br />
-                  <span className="italic font-normal text-[#B45309]">menjadi Temu Peluang.</span>
+                  <span className="italic text-[#B45309]">menjadi Temu Peluang.</span>
                 </h1>
 
                 <p className="text-sm sm:text-base md:text-lg text-[#475569] max-w-xl leading-relaxed">
@@ -201,36 +201,39 @@ export default function Home() {
             {/* 3-Column Metric Rule Bar */}
             <div className="grid grid-cols-1 sm:grid-cols-3 border-t border-[#0C1222]/10 mt-12 pt-8 divide-y sm:divide-y-0 sm:divide-x divide-[#0C1222]/10">
               <div className="py-3 sm:pr-8">
-                <span className="text-xs uppercase tracking-wider text-[#64748B] font-semibold block mb-1">
+                <span className="text-[11px] font-mono uppercase tracking-wider text-[#64748B] font-semibold block mb-1">
                   ALUMNI TERVERIFIKASI
                 </span>
-                <span className="font-serif text-3xl font-bold text-[#0B1536] block">
-                  1.248 Anggota
-                </span>
+                <div className="flex items-baseline gap-2">
+                  <span className="font-serif text-4xl text-[#0B1536]">1.248</span>
+                  <span className="text-sm font-semibold text-[#0B1536]">Anggota</span>
+                </div>
                 <span className="text-xs text-[#64748B] mt-1 block">
                   Terdaftar aktif dari angkatan 1985 hingga 2025 lintas 12 fakultas.
                 </span>
               </div>
 
               <div className="py-3 sm:px-8">
-                <span className="text-xs uppercase tracking-wider text-[#64748B] font-semibold block mb-1">
+                <span className="text-[11px] font-mono uppercase tracking-wider text-[#64748B] font-semibold block mb-1">
                   DISTRIBUSI METROPOLITAN
                 </span>
-                <span className="font-serif text-3xl font-bold text-[#0B1536] block">
-                  9 Sentra Wilayah
-                </span>
+                <div className="flex items-baseline gap-2">
+                  <span className="font-serif text-4xl text-[#0B1536]">9</span>
+                  <span className="text-sm font-semibold text-[#0B1536]">Sentra Wilayah</span>
+                </div>
                 <span className="text-xs text-[#64748B] mt-1 block">
                   Tersebar di DKI Jakarta, Tangerang Raya, Bekasi, Depok, dan Bogor.
                 </span>
               </div>
 
               <div className="py-3 sm:pl-8">
-                <span className="text-xs uppercase tracking-wider text-[#64748B] font-semibold block mb-1">
+                <span className="text-[11px] font-mono uppercase tracking-wider text-[#64748B] font-semibold block mb-1">
                   BIMBINGAN & MENTORING
                 </span>
-                <span className="font-serif text-3xl font-bold text-[#0B1536] block">
-                  326 Mentor Aktif
-                </span>
+                <div className="flex items-baseline gap-2">
+                  <span className="font-serif text-4xl text-[#0B1536]">326</span>
+                  <span className="text-sm font-semibold text-[#0B1536]">Mentor Aktif</span>
+                </div>
                 <span className="text-xs text-[#64748B] mt-1 block">
                   Alumni senior yang bersedia membimbing karier dan membuka rujukan loker.
                 </span>
