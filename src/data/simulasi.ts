@@ -110,6 +110,38 @@ export const DATA_ALUMNI_SIMULASI: AlumniProfile[] = [
     bersediaMentoring: true,
     avatarInitials: 'FN',
     avatarUrl: '/images/avatar-bambang.jpg'
+  },
+  {
+    id: 'alm-nurul',
+    nama: 'Nurul Hidayati, S.Ars.',
+    prodi: 'Arsitektur',
+    angkatan: 2017,
+    wilayah: 'Tangerang Raya',
+    industri: 'Arsitektur & Desain Properti',
+    pekerjaan: 'Principal Architect',
+    perusahaan: 'Studio Rancang Ruang BSD',
+    bio: 'Fokus pada perancangan hunian tropis kontemporer dan ruang komersial adaptif di Jabodetabek. Membuka pintu magang dan studi karya bagi mahasiswa serta lulusan arsitektur UMS.',
+    keahlian: ['Sustainable Design', 'Master Planning', 'BIM Architecture', 'Interior Fitout'],
+    isVerified: true,
+    bersediaMentoring: true,
+    avatarInitials: 'NH',
+    avatarUrl: '/images/avatar-nurul.jpg'
+  },
+  {
+    id: 'alm-bambang',
+    nama: 'Bambang Triyono, S.E., Ak., CA',
+    prodi: 'Akuntansi',
+    angkatan: 2014,
+    wilayah: 'Jakarta Pusat',
+    industri: 'Akuntansi & Perpajakan',
+    pekerjaan: 'Senior Tax Advisor',
+    perusahaan: 'Deloitte Indonesia Tax Advisory',
+    bio: 'Berpengalaman menangani audit pajak korporasi, transfer pricing, dan restrukturisasi keuangan di Jakarta. Aktif mendampingi pelaporan pajak UMKM rintisan sesama rekan alumni.',
+    keahlian: ['Corporate Tax', 'Financial Audit', 'Transfer Pricing', 'Financial Modeling'],
+    isVerified: true,
+    bersediaMentoring: true,
+    avatarInitials: 'BT',
+    avatarUrl: '/images/avatar-bambang.jpg'
   }
 ];
 
