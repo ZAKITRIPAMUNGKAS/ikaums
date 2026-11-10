@@ -2,11 +2,10 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { DATA_WILAYAH_SIMULASI } from '../data/simulasi';
 import { ArrowRight, MapPin, ShieldCheck, Users, Briefcase } from 'lucide-react';
 
-// Geographically accurate simplified boundary paths for Jabodetabek:
-// Projection: Longitude 106.3 to 107.3 -> X 0 to 600, Latitude -6.0 to -6.8 -> Y 0 to 450
 const REGIONS_GEO = [
   {
     id: 'tangerang',
@@ -93,23 +92,24 @@ const REGIONS_GEO = [
 
 export function AccurateJabodetabekMap() {
   const [selectedId, setSelectedId] = useState('jkt-selatan');
+  const shouldReduceMotion = useReducedMotion();
   const selectedRegion = REGIONS_GEO.find(r => r.id === selectedId) || REGIONS_GEO[4];
 
   return (
-    <div className="border border-[#18213D]/15 bg-white rounded-none">
+    <div className="border border-[#18213D]/15 bg-white rounded-none shadow-xs">
       {/* Header bar inspired by Linear / Swiss precision */}
       <div className="flex flex-wrap items-center justify-between border-b border-[#18213D]/10 px-6 py-4 bg-[#FAFAF8]">
         <div className="flex items-center gap-3">
           <span className="text-[11px] font-mono tracking-wider uppercase text-[#101F5B] font-bold">
-            03 / DISTRIBUSI GEOGRAFIS
+            DISTRIBUSI GEOGRAFIS SPASIAL
           </span>
           <span className="h-3 w-[1px] bg-[#18213D]/20"></span>
-          <span className="text-xs text-[#5F6678]">
+          <span className="text-xs text-[#5F6678] font-mono">
             9 Wilayah Administratif Jabodetabek
           </span>
         </div>
-        <div className="flex items-center gap-2 text-xs text-[#5F6678]">
-          <ShieldCheck className="w-3.5 h-3.5 text-[#101F5B]" />
+        <div className="flex items-center gap-2 text-xs font-mono text-[#5F6678]">
+          <ShieldCheck className="w-3.5 h-3.5 text-[#10B981]" />
           <span>Privasi k-anonymity (k &ge; 5)</span>
         </div>
       </div>
@@ -119,7 +119,7 @@ export function AccurateJabodetabekMap() {
         {/* Map Vector Stage */}
         <div className="lg:col-span-8 p-6 lg:p-8 bg-[#F4F5F8]/40 flex flex-col justify-between relative">
           <div className="text-[11px] text-[#5F6678] font-mono uppercase tracking-wider mb-2">
-            Peta Sebaran Alumni Terverifikasi (Opt-In)
+            Peta Sebaran Alumni Terverifikasi (Opt-In UU PDP)
           </div>
 
           <div className="relative w-full aspect-[4/3] max-w-xl mx-auto flex items-center justify-center">
@@ -190,66 +190,75 @@ export function AccurateJabodetabekMap() {
           </div>
 
           <div className="flex items-center justify-between text-[11px] text-[#5F6678] font-mono pt-4 border-t border-[#18213D]/10">
-            <span>KLIK POLIGON WILAYAH UNTUK INSPEKSI DETAIL</span>
-            <span>TOTAL: 1.248 ALUMNI</span>
+            <span>KLIK WILAYAH UNTUK INSPEKSI DETAIL SPASIAL</span>
+            <span>TOTAL: 1.248 ALUMNI TERDATA</span>
           </div>
         </div>
 
-        {/* Precision Region Telemetry Sidebar (Swiss Table) */}
+        {/* Precision Region Telemetry Sidebar with Motion Transitions */}
         <div className="lg:col-span-4 p-6 lg:p-8 flex flex-col justify-between bg-white">
-          <div className="space-y-6">
-            <div className="border-b border-[#18213D]/10 pb-4">
-              <span className="text-[10px] font-mono uppercase text-[#D97706] font-bold block mb-1">
-                TERPILIH
-              </span>
-              <h3 className="font-serif text-2xl font-bold text-[#101F5B]">
-                {selectedRegion.name}
-              </h3>
-              <p className="text-xs text-[#5F6678] mt-1">
-                Wilayah domisili & konsentrasi aktivitas alumni aktif.
-              </p>
-            </div>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={selectedRegion.id}
+              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, x: -10 }}
+              transition={{ duration: 0.2 }}
+              className="space-y-6"
+            >
+              <div className="border-b border-[#18213D]/10 pb-4">
+                <span className="text-[10px] font-mono uppercase text-[#D97706] font-bold block mb-1">
+                  TERPILIH
+                </span>
+                <h3 className="font-serif text-2xl font-bold text-[#101F5B]">
+                  {selectedRegion.name}
+                </h3>
+                <p className="text-xs text-[#5F6678] mt-1">
+                  Wilayah domisili & konsentrasi aktivitas alumni aktif.
+                </p>
+              </div>
 
-            {/* Swiss Data Table */}
-            <div className="space-y-3 font-mono text-xs">
-              <div className="flex justify-between py-2 border-b border-[#18213D]/10">
-                <span className="text-[#5F6678]">Jumlah Terdata</span>
-                <span className="font-bold text-[#101F5B]">{selectedRegion.count} Alumni</span>
+              {/* Swiss Data Table */}
+              <div className="space-y-3 font-mono text-xs">
+                <div className="flex justify-between py-2 border-b border-[#18213D]/10">
+                  <span className="text-[#5F6678]">Jumlah Terdata</span>
+                  <span className="font-bold text-[#101F5B]">{selectedRegion.count} Alumni</span>
+                </div>
+                <div className="flex justify-between py-2 border-b border-[#18213D]/10">
+                  <span className="text-[#5F6678]">Rasio Aktif Kolaborasi</span>
+                  <span className="font-bold text-[#101F5B]">{selectedRegion.activePercent}</span>
+                </div>
+                <div className="flex justify-between py-2 border-b border-[#18213D]/10">
+                  <span className="text-[#5F6678]">Status Validasi</span>
+                  <span className="font-bold text-[#22775A]">Lolos Verifikasi IKA</span>
+                </div>
+                <div className="flex justify-between py-2 border-b border-[#18213D]/10">
+                  <span className="text-[#5F6678]">Fokus Industri</span>
+                  <span className="font-bold text-[#101F5B]">Fintech, Tech & B2B</span>
+                </div>
               </div>
-              <div className="flex justify-between py-2 border-b border-[#18213D]/10">
-                <span className="text-[#5F6678]">Rasio Aktif Kolaborasi</span>
-                <span className="font-bold text-[#101F5B]">{selectedRegion.activePercent}</span>
-              </div>
-              <div className="flex justify-between py-2 border-b border-[#18213D]/10">
-                <span className="text-[#5F6678]">Status Validasi</span>
-                <span className="font-bold text-[#22775A]">Lolos Verifikasi IKA</span>
-              </div>
-              <div className="flex justify-between py-2 border-b border-[#18213D]/10">
-                <span className="text-[#5F6678]">Fokus Terbanyak</span>
-                <span className="font-bold text-[#101F5B]">Fintech, Tech & B2B</span>
-              </div>
-            </div>
 
-            <div className="bg-[#FAFAF8] border border-[#18213D]/10 p-4 text-xs space-y-2">
-              <span className="text-[10px] font-mono text-[#5F6678] uppercase block">
-                AGENDA KOPDAR WILAYAH INI
-              </span>
-              <p className="font-serif font-bold text-[#101F5B] text-sm">
-                Sarasehan Jejaring {selectedRegion.name}
-              </p>
-              <p className="text-[#5F6678] text-[11px] leading-relaxed">
-                Pertemuan berkala alumni di sentra co-working untuk pertukaran peluang kerja dan rujukan bisnis.
-              </p>
-            </div>
-          </div>
+              <div className="bg-[#FAFAF8] border border-[#18213D]/10 p-4 text-xs space-y-2 rounded-lg">
+                <span className="text-[10px] font-mono text-[#5F6678] uppercase block">
+                  AGENDA KOPDAR WILAYAH INI
+                </span>
+                <p className="font-serif font-bold text-[#101F5B] text-sm">
+                  Sarasehan Jejaring {selectedRegion.name}
+                </p>
+                <p className="text-[#5F6678] text-[11px] leading-relaxed">
+                  Pertemuan berkala alumni di sentra co-working untuk pertukaran peluang kerja dan rujukan bisnis.
+                </p>
+              </div>
+            </motion.div>
+          </AnimatePresence>
 
           <div className="pt-6">
             <Link
               href={`/direktori?wilayah=${encodeURIComponent(selectedRegion.name)}`}
-              className="w-full bg-[#101F5B] hover:bg-[#18213D] text-white text-xs font-semibold py-3 px-4 flex items-center justify-between transition-colors"
+              className="w-full bg-[#101F5B] hover:bg-[#18213D] text-white text-xs font-semibold py-3 px-4 flex items-center justify-between transition-colors rounded-lg group shadow-xs"
             >
               <span>Eksplorasi Alumni {selectedRegion.name}</span>
-              <ArrowRight className="w-3.5 h-3.5 text-[#F4C542]" />
+              <ArrowRight className="w-3.5 h-3.5 text-[#F4C542] group-hover:translate-x-1 transition-transform" />
             </Link>
           </div>
         </div>

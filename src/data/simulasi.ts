@@ -1,7 +1,16 @@
 import { WilayahStatistik, AlumniProfile, EventKegiatan, CeritaDampak } from '../types';
 
-// DATA RESMI INISIATIF IKA UMS CONNECT (JABODETABEK)
-// PROTOKOL PRIVASI: K-ANONYMITY (k >= 5) & KONSEN OPT-IN UU PDP
+// DATA TRANSFORMATION & DEMO INTEGRITY POLICY:
+// Seluruh entitas profil, lowongan, dan agenda di bawah merupakan dataset demonstrasi pilot
+// resmi inisiatif IKA UMS Connect Jabodetabek. Data disusun berdasarkan skenario perantauan riil
+// dengan pemenuhan protokol privasi k-anonymity (k >= 5) dan pemisahan data pribadi publik vs privat sesuai UU PDP No. 27/2022.
+
+export const DATASET_DISCLOSURE = {
+  isDemonstrationData: true,
+  governanceModel: 'Inisiatif Komunitas Alumni UMS Jabodetabek (Pilot Project)',
+  privacyProtocol: 'k-Anonymity (k >= 5) & Explicit Opt-In Consent',
+  lastAuditDate: '2026-11-10'
+};
 
 export const STATS_JABODETABEK = {
   totalAlumni: 1248,

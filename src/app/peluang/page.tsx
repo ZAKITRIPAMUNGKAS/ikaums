@@ -1,8 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { Navbar, Footer } from '@/components/Navigation';
+import { AnimatedTabs } from '@/components/ui/animated-tabs';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
 import { 
   Briefcase, 
   Code, 
@@ -13,11 +22,12 @@ import {
   Building2, 
   MapPin, 
   Clock, 
-  DollarSign, 
   CheckCircle2, 
   ExternalLink, 
   X,
-  ShieldCheck 
+  ShieldCheck,
+  Send,
+  Sparkles
 } from 'lucide-react';
 
 interface PeluangItem {
@@ -25,10 +35,10 @@ interface PeluangItem {
   title: string;
   company: string;
   postedBy: string;
-  category: 'Lowongan' | 'Proyek' | 'Bisnis Alumni' | 'Mentoring';
+  category: string;
   location: string;
-  workType: 'Full-time' | 'Kontrak / Proyek' | 'Volunteer' | 'Kemitraan';
-  workModel: 'On-site' | 'Hybrid' | 'Remote';
+  workType: string;
+  workModel: string;
   compensation: string;
   badge?: string;
   tags: string[];
@@ -37,12 +47,21 @@ interface PeluangItem {
   contactEmail: string;
 }
 
+const STORAGE_KEY_INQUIRIES = 'ikaums_persisted_inquiries';
+
 export default function PeluangPage() {
   const [activeTab, setActiveTab] = useState('Semua');
   const [selectedOpportunity, setSelectedOpportunity] = useState<PeluangItem | null>(null);
   const [inquirySent, setInquirySent] = useState<Record<string, boolean>>({});
+  const shouldReduceMotion = useReducedMotion();
 
-  const tabs = ['Semua', 'Lowongan', 'Proyek', 'Bisnis Alumni', 'Mentoring'];
+  const tabs = [
+    { id: 'Semua', label: 'Semua' },
+    { id: 'Lowongan', label: 'Lowongan' },
+    { id: 'Proyek', label: 'Proyek' },
+    { id: 'Bisnis Alumni', label: 'Bisnis Alumni' },
+    { id: 'Mentoring', label: 'Mentoring' }
+  ];
 
   const opportunities: PeluangItem[] = [
     {
@@ -143,14 +162,30 @@ export default function PeluangPage() {
     }
   ];
 
+  // Load persisted inquiry states
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY_INQUIRIES);
+      if (saved) {
+        setInquirySent(JSON.parse(saved));
+      }
+    } catch (e) {}
+  }, []);
+
+  const handleInquiry = (id: string) => {
+    setInquirySent(prev => {
+      const updated = { ...prev, [id]: true };
+      try {
+        localStorage.setItem(STORAGE_KEY_INQUIRIES, JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
+  };
+
   const filteredOpportunities = opportunities.filter((op) => {
     if (activeTab === 'Semua') return true;
     return op.category === activeTab;
   });
-
-  const handleInquiry = (id: string) => {
-    setInquirySent((prev) => ({ ...prev, [id]: true }));
-  };
 
   return (
     <div className="min-h-screen bg-[#FAFAF8] text-[#18213D] flex flex-col font-sans">
@@ -181,146 +216,135 @@ export default function PeluangPage() {
 
             <Link
               href="/gabung"
-              className="bg-[#101F5B] hover:bg-[#18213D] text-white text-xs font-mono font-bold uppercase tracking-wider px-5 py-2.5 transition-colors shadow-xs flex items-center gap-1.5"
+              className="bg-[#101F5B] hover:bg-[#18213D] text-white text-xs font-mono font-bold uppercase tracking-wider px-5 py-2.5 transition-colors shadow-xs flex items-center gap-1.5 rounded-lg group"
             >
               <span>Pasang Lowongan / Proyek</span>
-              <ArrowRight className="w-3.5 h-3.5 text-[#F4C542]" />
+              <ArrowRight className="w-3.5 h-3.5 text-[#F4C542] group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </div>
         </div>
 
-        {/* Filter Tabs */}
-        <div className="flex flex-wrap items-center gap-2 mb-8">
-          {tabs.map((tab) => (
-            <button
-              key={tab}
-              type="button"
-              onClick={() => setActiveTab(tab)}
-              className={`text-xs px-4 py-2 rounded-lg font-mono uppercase tracking-wider transition-all ${
-                activeTab === tab
-                  ? 'bg-[#101F5B] text-white font-bold shadow-xs'
-                  : 'bg-white text-[#5F6678] border border-[#D1D5DB] hover:text-[#101F5B]'
-              }`}
-            >
-              {tab}
-            </button>
-          ))}
+        {/* Filter Tabs using 21st.dev Animated Tabs */}
+        <div className="mb-8">
+          <AnimatedTabs
+            tabs={tabs}
+            activeTab={activeTab}
+            onChange={setActiveTab}
+            layoutId="peluangCategoryTabs"
+          />
         </div>
 
-        {/* High-Craft Contra-Style Opportunity Cards */}
+        {/* High-Craft Contra-Style Opportunity Cards with AnimatePresence */}
         <div className="space-y-4 max-w-5xl">
-          {filteredOpportunities.map((item) => (
-            <div
-              key={item.id}
-              onClick={() => setSelectedOpportunity(item)}
-              className="bg-white border border-[#E5E8EF] hover:border-[#101F5B]/30 rounded-xl p-6 shadow-xs hover:shadow-md transition-all cursor-pointer group"
-            >
-              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
-                
-                {/* Left Metadata Block */}
-                <div className="space-y-2 flex-1">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <span className="bg-[#EDF1FA] text-[#101F5B] text-[10px] font-mono font-bold px-2.5 py-0.5 rounded">
-                      {item.category}
-                    </span>
-                    <span className="bg-[#FAFAF8] text-[#5F6678] border border-[#E5E8EF] text-[10px] font-mono px-2 py-0.5 rounded">
-                      {item.workType} • {item.workModel}
-                    </span>
-                    {item.badge && (
-                      <span className="bg-[#FEF3C7] text-[#92400E] text-[10px] font-mono font-bold px-2 py-0.5 rounded">
-                        {item.badge}
+          <AnimatePresence mode="popLayout">
+            {filteredOpportunities.map((item) => (
+              <motion.div
+                key={item.id}
+                layout={!shouldReduceMotion}
+                initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.98 }}
+                transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                onClick={() => setSelectedOpportunity(item)}
+                className="bg-white border border-[#E5E8EF] hover:border-[#101F5B]/30 rounded-xl p-6 shadow-xs hover:shadow-md transition-all cursor-pointer group"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                  
+                  {/* Left Metadata Block */}
+                  <div className="space-y-2 flex-1">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="bg-[#EDF1FA] text-[#101F5B] text-[10px] font-mono font-bold px-2.5 py-0.5 rounded">
+                        {item.category}
                       </span>
-                    )}
-                  </div>
-
-                  <h3 className="font-serif text-xl font-bold text-[#101F5B] group-hover:text-[#18213D] transition-colors leading-tight">
-                    {item.title}
-                  </h3>
-
-                  <div className="flex flex-wrap items-center gap-4 text-xs text-[#5F6678] font-mono">
-                    <span className="flex items-center gap-1 font-semibold text-[#18213D]">
-                      <Building2 className="w-3.5 h-3.5 text-[#101F5B]" />
-                      {item.company}
-                    </span>
-                    <span className="flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5 text-[#101F5B]" />
-                      {item.location}
-                    </span>
-                  </div>
-
-                  <p className="text-xs text-[#5F6678] line-clamp-2 leading-relaxed pt-1">
-                    {item.description}
-                  </p>
-
-                  {/* Skill Badges */}
-                  <div className="flex flex-wrap items-center gap-1.5 pt-2">
-                    {item.tags.map((t, idx) => (
-                      <span
-                        key={idx}
-                        className="bg-[#FAFAF8] text-[#5F6678] border border-[#E5E8EF] text-[10px] font-mono px-2 py-0.5 rounded"
-                      >
-                        {t}
+                      <span className="bg-[#FAFAF8] text-[#5F6678] border border-[#E5E8EF] text-[10px] font-mono px-2 py-0.5 rounded">
+                        {item.workType} • {item.workModel}
                       </span>
-                    ))}
+                      {item.badge && (
+                        <span className="bg-[#FEF3C7] text-[#92400E] text-[10px] font-mono font-bold px-2 py-0.5 rounded">
+                          {item.badge}
+                        </span>
+                      )}
+                    </div>
+
+                    <h3 className="font-serif text-xl font-bold text-[#101F5B] group-hover:text-[#18213D] transition-colors leading-tight">
+                      {item.title}
+                    </h3>
+
+                    <div className="flex flex-wrap items-center gap-4 text-xs text-[#5F6678] font-mono">
+                      <span className="flex items-center gap-1 font-semibold text-[#18213D]">
+                        <Building2 className="w-3.5 h-3.5 text-[#101F5B]" />
+                        {item.company}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <MapPin className="w-3.5 h-3.5 text-[#101F5B]" />
+                        {item.location}
+                      </span>
+                    </div>
+
+                    <p className="text-xs text-[#5F6678] line-clamp-2 leading-relaxed pt-1">
+                      {item.description}
+                    </p>
+
+                    {/* Skill Badges */}
+                    <div className="flex flex-wrap items-center gap-1.5 pt-2">
+                      {item.tags.map((t, idx) => (
+                        <span
+                          key={idx}
+                          className="bg-[#FAFAF8] text-[#5F6678] border border-[#E5E8EF] text-[10px] font-mono px-2 py-0.5 rounded"
+                        >
+                          {t}
+                        </span>
+                      ))}
+                    </div>
                   </div>
+
+                  {/* Right Compensation & Action */}
+                  <div className="sm:text-right shrink-0 flex flex-col justify-between items-start sm:items-end border-t sm:border-0 border-[#F0F2F6] pt-3 sm:pt-0">
+                    <div className="mb-3">
+                      <span className="text-[10px] font-mono uppercase text-[#5F6678] block">Kompensasi / Imbalan</span>
+                      <span className="font-serif text-base font-bold text-[#101F5B]">
+                        {item.compensation}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-mono text-[#101F5B] font-bold group-hover:underline flex items-center gap-1">
+                        <span>Rincian & Lamar</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </span>
+                    </div>
+                  </div>
+
                 </div>
-
-                {/* Right Compensation & Action */}
-                <div className="sm:text-right shrink-0 flex flex-col justify-between items-start sm:items-end border-t sm:border-0 border-[#F0F2F6] pt-3 sm:pt-0">
-                  <div className="mb-3">
-                    <span className="text-[10px] font-mono uppercase text-[#5F6678] block">Kompensasi / Imbalan</span>
-                    <span className="font-serif text-base font-bold text-[#101F5B]">
-                      {item.compensation}
-                    </span>
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-mono text-[#101F5B] font-bold group-hover:underline flex items-center gap-1">
-                      <span>Rincian & Lamar</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </span>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          ))}
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
 
-        {/* DETAIL INQUIRY MODAL */}
-        {selectedOpportunity && (
-          <div className="fixed inset-0 bg-[#101F5B]/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-[#E5E8EF] animate-in fade-in zoom-in-95 duration-150 p-6 sm:p-8">
-              
-              <div className="flex items-start justify-between border-b border-[#18213D]/10 pb-4 mb-4">
-                <div>
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <span className="bg-[#EDF1FA] text-[#101F5B] text-[10px] font-mono font-bold px-2 py-0.5 rounded">
-                      {selectedOpportunity.category}
-                    </span>
-                    <span className="bg-[#FEF3C7] text-[#92400E] text-[10px] font-mono font-bold px-2 py-0.5 rounded">
-                      {selectedOpportunity.workType}
-                    </span>
-                  </div>
-                  <h3 className="font-serif text-2xl font-bold text-[#101F5B] leading-tight">
-                    {selectedOpportunity.title}
-                  </h3>
-                  <p className="text-xs font-mono text-[#5F6678] mt-1">
-                    {selectedOpportunity.company} • {selectedOpportunity.location}
-                  </p>
+        {/* ACCESSIBLE SHADCN/UI DIALOG FOR OPPORTUNITY DETAILS */}
+        <Dialog
+          open={!!selectedOpportunity}
+          onOpenChange={(open) => !open && setSelectedOpportunity(null)}
+        >
+          {selectedOpportunity && (
+            <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+              <DialogHeader>
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="bg-[#EDF1FA] text-[#101F5B] text-[10px] font-mono font-bold px-2 py-0.5 rounded">
+                    {selectedOpportunity.category}
+                  </span>
+                  <span className="bg-[#FEF3C7] text-[#92400E] text-[10px] font-mono font-bold px-2 py-0.5 rounded">
+                    {selectedOpportunity.workType}
+                  </span>
                 </div>
-
-                <button
-                  type="button"
-                  onClick={() => setSelectedOpportunity(null)}
-                  className="p-1.5 text-[#5F6678] hover:text-[#101F5B] rounded-lg hover:bg-slate-100 transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
+                <DialogTitle>{selectedOpportunity.title}</DialogTitle>
+                <DialogDescription>
+                  {selectedOpportunity.company} • {selectedOpportunity.location}
+                </DialogDescription>
+              </DialogHeader>
 
               {/* Body */}
-              <div className="space-y-5 text-xs text-[#18213D] leading-relaxed">
+              <div className="space-y-5 text-xs text-[#18213D] leading-relaxed pt-2">
                 <div>
                   <h4 className="font-mono uppercase font-bold text-[#101F5B] text-[11px] mb-1">
                     Tentang Kesempatan Ini
@@ -360,7 +384,7 @@ export default function PeluangPage() {
                     <CheckCircle2 className="w-6 h-6 mx-auto mb-1" />
                     <p className="font-bold text-xs">Peminatan Kolaborasi Terkirim!</p>
                     <p className="text-[11px]">
-                      Profil dan kontak Anda telah diteruskan ke {selectedOpportunity.postedBy}. Silakan periksa notifikasi berkala.
+                      Profil dan kontak Anda telah diteruskan ke {selectedOpportunity.postedBy}. Status ini tersimpan di perangkat Anda.
                     </p>
                   </div>
                 ) : (
@@ -372,21 +396,21 @@ export default function PeluangPage() {
                     >
                       Tutup
                     </button>
-                    <button
+                    <motion.button
+                      whileTap={shouldReduceMotion ? undefined : { scale: 0.98 }}
                       type="button"
                       onClick={() => handleInquiry(selectedOpportunity.id)}
                       className="px-5 py-2.5 rounded-lg bg-[#101F5B] hover:bg-[#18213D] text-white text-xs font-mono font-bold uppercase tracking-wider transition-colors shadow-xs"
                     >
                       Kirim Lamaran / Peminatan
-                    </button>
+                    </motion.button>
                   </div>
                 )}
 
               </div>
-
-            </div>
-          </div>
-        )}
+            </DialogContent>
+          )}
+        </Dialog>
 
       </main>
 

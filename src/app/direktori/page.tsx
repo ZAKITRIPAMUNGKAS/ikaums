@@ -1,37 +1,42 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { Navbar, Footer } from '@/components/Navigation';
+import { AnimatedTabs } from '@/components/ui/animated-tabs';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
 import { DATA_ALUMNI_SIMULASI } from '@/data/simulasi';
 import { AlumniProfile } from '@/types';
 import { 
   Search, 
-  Filter, 
-  LayoutGrid, 
-  List, 
   MapPin, 
   Briefcase, 
-  GraduationCap, 
   CheckCircle2, 
   X, 
   MessageSquare, 
-  MoreHorizontal, 
-  Share2,
   ShieldCheck,
   Building2,
-  Mail,
-  Send,
   UserPlus
 } from 'lucide-react';
+
+const STORAGE_KEY_CONNECTIONS = 'ikaums_persisted_connections';
+const STORAGE_KEY_MESSAGES = 'ikaums_persisted_messages';
 
 export default function DirektoriPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRegion, setSelectedRegion] = useState('Semua Wilayah');
   const [selectedAlumni, setSelectedAlumni] = useState<AlumniProfile | null>(null);
   const [connectionRequested, setConnectionRequested] = useState<Record<string, boolean>>({});
-  const [activeTab, setActiveTab] = useState<'tentang' | 'pengalaman' | 'keahlian' | 'kontribusi'>('tentang');
-  const [messageSent, setMessageSent] = useState(false);
+  const [messagesSent, setMessagesSent] = useState<Record<string, boolean>>({});
+  const [activeProfileTab, setActiveProfileTab] = useState('tentang');
+  const shouldReduceMotion = useReducedMotion();
 
   const regions = [
     'Semua Wilayah',
@@ -46,6 +51,44 @@ export default function DirektoriPage() {
     'Bogor'
   ];
 
+  const profileTabs = [
+    { id: 'tentang', label: 'Tentang' },
+    { id: 'pengalaman', label: 'Pengalaman' },
+    { id: 'keahlian', label: 'Keahlian' },
+    { id: 'kontribusi', label: 'Kontribusi' }
+  ];
+
+  // Client-side persistence for connections and messages
+  useEffect(() => {
+    try {
+      const savedConn = localStorage.getItem(STORAGE_KEY_CONNECTIONS);
+      if (savedConn) setConnectionRequested(JSON.parse(savedConn));
+      const savedMsg = localStorage.getItem(STORAGE_KEY_MESSAGES);
+      if (savedMsg) setMessagesSent(JSON.parse(savedMsg));
+    } catch (e) {}
+  }, []);
+
+  const toggleConnection = (id: string, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    setConnectionRequested(prev => {
+      const updated = { ...prev, [id]: !prev[id] };
+      try {
+        localStorage.setItem(STORAGE_KEY_CONNECTIONS, JSON.stringify(updated));
+      } catch (err) {}
+      return updated;
+    });
+  };
+
+  const handleSendMessage = (id: string) => {
+    setMessagesSent(prev => {
+      const updated = { ...prev, [id]: true };
+      try {
+        localStorage.setItem(STORAGE_KEY_MESSAGES, JSON.stringify(updated));
+      } catch (err) {}
+      return updated;
+    });
+  };
+
   const filteredAlumni = DATA_ALUMNI_SIMULASI.filter(alumni => {
     const matchesSearch = 
       alumni.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -58,11 +101,6 @@ export default function DirektoriPage() {
 
     return matchesSearch && matchesRegion;
   });
-
-  const toggleConnection = (id: string, e?: React.MouseEvent) => {
-    if (e) e.stopPropagation();
-    setConnectionRequested(prev => ({ ...prev, [id]: !prev[id] }));
-  };
 
   return (
     <div className="min-h-screen bg-[#FAFAF8] text-[#18213D] flex flex-col font-sans">
@@ -112,7 +150,6 @@ export default function DirektoriPage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3 w-full md:w-auto justify-between md:justify-end">
-            {/* Region select dropdown */}
             <select
               value={selectedRegion}
               onChange={(e) => setSelectedRegion(e.target.value)}
@@ -129,99 +166,106 @@ export default function DirektoriPage() {
           </div>
         </div>
 
-        {/* Alumni List Items (Contra/ADPList Style) */}
+        {/* Alumni List Items with AnimatePresence */}
         <div className="space-y-3.5 max-w-5xl">
-          {filteredAlumni.map((alumni) => {
-            const isRequested = connectionRequested[alumni.id];
-            return (
-              <div
-                key={alumni.id}
-                onClick={() => {
-                  setSelectedAlumni(alumni);
-                  setMessageSent(false);
-                }}
-                className="bg-white border border-[#E5E8EF] hover:border-[#101F5B]/30 rounded-xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs hover:shadow-md cursor-pointer transition-all group"
-              >
-                <div className="flex items-center gap-4">
-                  {/* Avatar */}
-                  <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 border-2 border-white shadow-xs bg-[#E8ECF2]">
-                    {alumni.avatarUrl ? (
-                      <img
-                        src={alumni.avatarUrl}
-                        alt={alumni.nama}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-[#101F5B] text-[#F4C542] font-mono font-bold text-base">
-                        {alumni.avatarInitials}
+          <AnimatePresence mode="popLayout">
+            {filteredAlumni.map((alumni) => {
+              const isRequested = connectionRequested[alumni.id];
+              return (
+                <motion.div
+                  key={alumni.id}
+                  layout={!shouldReduceMotion}
+                  initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                  onClick={() => setSelectedAlumni(alumni)}
+                  className="bg-white border border-[#E5E8EF] hover:border-[#101F5B]/30 rounded-xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs hover:shadow-md cursor-pointer transition-all group"
+                >
+                  <div className="flex items-center gap-4">
+                    {/* Avatar */}
+                    <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 border-2 border-white shadow-xs bg-[#E8ECF2]">
+                      {alumni.avatarUrl ? (
+                        <img
+                          src={alumni.avatarUrl}
+                          alt={alumni.nama}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-[#101F5B] text-[#F4C542] font-mono font-bold text-base">
+                          {alumni.avatarInitials}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-serif text-base font-bold text-[#101F5B] group-hover:text-[#18213D] transition-colors leading-tight">
+                          {alumni.nama}
+                        </h3>
+                        {alumni.isVerified && (
+                          <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981]" />
+                        )}
+                        {alumni.bersediaMentoring && (
+                          <span className="bg-[#FEF3C7] text-[#92400E] text-[10px] font-mono px-2 py-0.2 rounded font-semibold hidden md:inline">
+                            Siap Mentoring
+                          </span>
+                        )}
                       </div>
-                    )}
-                  </div>
-
-                  <div className="space-y-0.5">
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-serif text-base font-bold text-[#101F5B] group-hover:text-[#18213D] transition-colors leading-tight">
-                        {alumni.nama}
-                      </h3>
-                      {alumni.isVerified && (
-                        <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981]" />
-                      )}
-                      {alumni.bersediaMentoring && (
-                        <span className="bg-[#FEF3C7] text-[#92400E] text-[10px] font-mono px-2 py-0.2 rounded font-semibold hidden md:inline">
-                          Siap Mentoring
+                      <p className="text-xs text-[#5F6678] font-mono">
+                        {alumni.prodi} • Angkatan {alumni.angkatan}
+                      </p>
+                      <p className="text-xs font-semibold text-[#18213D] pt-0.5">
+                        {alumni.perusahaan ? `${alumni.pekerjaan} — ${alumni.perusahaan}` : alumni.pekerjaan}
+                      </p>
+                      <div className="flex items-center gap-3 text-[11px] text-[#5F6678] font-mono pt-1">
+                        <span className="flex items-center gap-1">
+                          <MapPin className="w-3 h-3 text-[#101F5B]" />
+                          {alumni.wilayah}
                         </span>
-                      )}
-                    </div>
-                    <p className="text-xs text-[#5F6678] font-mono">
-                      {alumni.prodi} • Angkatan {alumni.angkatan}
-                    </p>
-                    <p className="text-xs font-semibold text-[#18213D] pt-0.5">
-                      {alumni.perusahaan ? `${alumni.pekerjaan} — ${alumni.perusahaan}` : alumni.pekerjaan}
-                    </p>
-                    <div className="flex items-center gap-3 text-[11px] text-[#5F6678] font-mono pt-1">
-                      <span className="flex items-center gap-1">
-                        <MapPin className="w-3 h-3 text-[#101F5B]" />
-                        {alumni.wilayah}
-                      </span>
-                      <span>•</span>
-                      <span>{alumni.industri}</span>
+                        <span>•</span>
+                        <span>{alumni.industri}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="flex items-center justify-between sm:justify-end gap-3 pt-3 sm:pt-0 border-t sm:border-0 border-[#F0F2F6]">
-                  <button
-                    type="button"
-                    onClick={(e) => toggleConnection(alumni.id, e)}
-                    className={`text-xs font-mono font-bold uppercase tracking-wider px-5 py-2.5 rounded-lg transition-all shadow-xs flex items-center gap-1.5 ${
-                      isRequested
-                        ? 'bg-[#EDF1FA] text-[#101F5B] border border-[#101F5B]/20'
-                        : 'bg-[#101F5B] hover:bg-[#18213D] text-white'
-                    }`}
-                  >
-                    {isRequested ? (
-                      <>
-                        <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981]" />
-                        <span>Terkirim</span>
-                      </>
-                    ) : (
-                      <>
-                        <UserPlus className="w-3.5 h-3.5 text-[#F4C542]" />
-                        <span>Koneksi</span>
-                      </>
-                    )}
-                  </button>
-                </div>
-              </div>
-            );
-          })}
+                  <div className="flex items-center justify-between sm:justify-end gap-3 pt-3 sm:pt-0 border-t sm:border-0 border-[#F0F2F6]">
+                    <motion.button
+                      whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
+                      type="button"
+                      onClick={(e) => toggleConnection(alumni.id, e)}
+                      className={`text-xs font-mono font-bold uppercase tracking-wider px-5 py-2.5 rounded-lg transition-all shadow-xs flex items-center gap-1.5 ${
+                        isRequested
+                          ? 'bg-[#EDF1FA] text-[#101F5B] border border-[#101F5B]/20'
+                          : 'bg-[#101F5B] hover:bg-[#18213D] text-white'
+                      }`}
+                    >
+                      {isRequested ? (
+                        <>
+                          <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981]" />
+                          <span>Terkirim</span>
+                        </>
+                      ) : (
+                        <>
+                          <UserPlus className="w-3.5 h-3.5 text-[#F4C542]" />
+                          <span>Koneksi</span>
+                        </>
+                      )}
+                    </motion.button>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </AnimatePresence>
         </div>
 
-        {/* ALUMNI DETAIL MODAL WITH 4 CONTRA TABS */}
-        {selectedAlumni && (
-          <div className="fixed inset-0 bg-[#101F5B]/50 backdrop-blur-xs flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-2xl max-w-xl w-full overflow-hidden shadow-2xl border border-[#E5E8EF] animate-in fade-in zoom-in-95 duration-150">
-              
+        {/* ACCESSIBLE SHADCN/UI DIALOG FOR ALUMNI PROFILE */}
+        <Dialog
+          open={!!selectedAlumni}
+          onOpenChange={(open) => !open && setSelectedAlumni(null)}
+        >
+          {selectedAlumni && (
+            <DialogContent className="p-0 overflow-hidden max-w-xl max-h-[92vh]">
               {/* Header Cover Photo */}
               <div className="h-32 bg-[#101F5B] relative overflow-hidden">
                 <img
@@ -229,18 +273,10 @@ export default function DirektoriPage() {
                   alt="Cover Acara Alumni"
                   className="w-full h-full object-cover opacity-40 filter contrast-125"
                 />
-                <button
-                  type="button"
-                  onClick={() => setSelectedAlumni(null)}
-                  className="absolute top-3 right-3 bg-black/40 hover:bg-black/60 text-white rounded-full p-1.5 transition-colors"
-                >
-                  <X className="w-4 h-4" />
-                </button>
               </div>
 
               {/* Profile Details Container */}
-              <div className="px-6 pb-6 pt-0 relative">
-                
+              <div className="px-6 pb-6 pt-0 relative overflow-y-auto max-h-[calc(92vh-8rem)]">
                 {/* Round Avatar overlapping cover */}
                 <div className="-mt-12 mb-3 flex justify-between items-end">
                   <div className="w-20 h-20 rounded-full border-4 border-white shadow-md overflow-hidden bg-white">
@@ -259,7 +295,8 @@ export default function DirektoriPage() {
 
                   {/* Actions: Koneksi & Hubungi */}
                   <div className="flex items-center gap-2">
-                    <button
+                    <motion.button
+                      whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
                       type="button"
                       onClick={() => toggleConnection(selectedAlumni.id)}
                       className={`text-xs font-mono font-bold uppercase tracking-wider px-4 py-2 rounded-lg transition-all ${
@@ -269,15 +306,16 @@ export default function DirektoriPage() {
                       }`}
                     >
                       {connectionRequested[selectedAlumni.id] ? 'Terhubung' : 'Koneksi'}
-                    </button>
-                    <button
+                    </motion.button>
+                    <motion.button
+                      whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
                       type="button"
-                      onClick={() => setMessageSent(!messageSent)}
+                      onClick={() => handleSendMessage(selectedAlumni.id)}
                       className="text-xs font-mono font-semibold text-[#101F5B] border border-[#D1D5DB] px-3.5 py-2 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-1"
                     >
                       <MessageSquare className="w-3.5 h-3.5" />
-                      <span>Kirim Pesan</span>
-                    </button>
+                      <span>{messagesSent[selectedAlumni.id] ? 'Pesan Terkirim' : 'Kirim Pesan'}</span>
+                    </motion.button>
                   </div>
                 </div>
 
@@ -303,41 +341,33 @@ export default function DirektoriPage() {
                   </p>
                 </div>
 
-                {messageSent && (
+                {messagesSent[selectedAlumni.id] && (
                   <div className="mt-3 bg-[#22775A]/10 border border-[#22775A]/20 p-3 rounded-lg text-xs text-[#22775A] flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 shrink-0" />
-                    <span>Pesan pengantar perkenalan berhasil diteruskan via jalur terproteksi IKA UMS.</span>
+                    <span>Pesan pengantar berhasil diteruskan via jalur terproteksi IKA UMS.</span>
                   </div>
                 )}
 
-                {/* Navigation Tabs */}
-                <div className="flex border-b border-[#E5E8EF] mt-5 gap-6 text-xs font-mono uppercase tracking-wider font-semibold">
-                  {(['tentang', 'pengalaman', 'keahlian', 'kontribusi'] as const).map(tab => (
-                    <button
-                      key={tab}
-                      type="button"
-                      onClick={() => setActiveTab(tab)}
-                      className={`pb-2.5 transition-colors ${
-                        activeTab === tab
-                          ? 'text-[#101F5B] border-b-2 border-[#101F5B] font-bold'
-                          : 'text-[#5F6678] hover:text-[#18213D]'
-                      }`}
-                    >
-                      {tab}
-                    </button>
-                  ))}
+                {/* 21st.dev Animated Tabs for Profile Navigation */}
+                <div className="mt-5 mb-4">
+                  <AnimatedTabs
+                    tabs={profileTabs}
+                    activeTab={activeProfileTab}
+                    onChange={setActiveProfileTab}
+                    layoutId="profileModalTabs"
+                  />
                 </div>
 
                 {/* Tab Content */}
-                <div className="pt-4 text-xs text-[#5F6678] leading-relaxed">
-                  {activeTab === 'tentang' && (
-                    <div className="space-y-3">
+                <div className="pt-2 text-xs text-[#5F6678] leading-relaxed">
+                  {activeProfileTab === 'tentang' && (
+                    <div className="space-y-2">
                       <h4 className="font-bold text-[#101F5B] font-serif text-sm">Biografi Singkat</h4>
                       <p>{selectedAlumni.bio}</p>
                     </div>
                   )}
-                  {activeTab === 'pengalaman' && (
-                    <div className="space-y-3">
+                  {activeProfileTab === 'pengalaman' && (
+                    <div className="space-y-2">
                       <h4 className="font-bold text-[#101F5B] font-serif text-sm">Jejak Karier & Institusi</h4>
                       <div className="bg-[#FAFAF8] p-3.5 rounded-lg border border-[#E5E8EF] space-y-1">
                         <p className="font-bold text-[#18213D] text-xs">{selectedAlumni.pekerjaan}</p>
@@ -348,8 +378,8 @@ export default function DirektoriPage() {
                       </div>
                     </div>
                   )}
-                  {activeTab === 'keahlian' && (
-                    <div className="space-y-3">
+                  {activeProfileTab === 'keahlian' && (
+                    <div className="space-y-2">
                       <h4 className="font-bold text-[#101F5B] font-serif text-sm">Keahlian & Domain Spesialisasi</h4>
                       <div className="flex flex-wrap gap-1.5">
                         {selectedAlumni.keahlian.map((skill, idx) => (
@@ -360,8 +390,8 @@ export default function DirektoriPage() {
                       </div>
                     </div>
                   )}
-                  {activeTab === 'kontribusi' && (
-                    <div className="space-y-3">
+                  {activeProfileTab === 'kontribusi' && (
+                    <div className="space-y-2">
                       <h4 className="font-bold text-[#101F5B] font-serif text-sm">Dukungan Untuk Komunitas Alumni</h4>
                       <p>
                         {selectedAlumni.bersediaMentoring 
@@ -374,9 +404,9 @@ export default function DirektoriPage() {
                 </div>
 
               </div>
-            </div>
-          </div>
-        )}
+            </DialogContent>
+          )}
+        </Dialog>
 
       </main>
 
