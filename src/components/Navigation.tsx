@@ -13,29 +13,16 @@ export function Navbar() {
 
   const navLinks = [
     { label: 'Beranda', href: '/' },
-    { label: 'Peta Alumni', href: '/peta' },
     { label: 'Direktori', href: '/direktori' },
+    { label: 'Peta Alumni', href: '/peta' },
     { label: 'Kegiatan', href: '/kegiatan' },
-    { label: 'Peluang', href: '/peluang' },
+    { label: 'Mentoring', href: '/peluang' },
     { label: 'Cerita', href: '/cerita' },
     { label: 'Tentang', href: '/tentang' },
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-[#FDFCFB]/95 backdrop-blur-md border-b border-[#18213D]/15">
-      {/* Precision Top Editorial Bar */}
-      <div className="bg-[#101F5B] text-white text-[10px] font-mono py-1.5 px-4 tracking-widest flex items-center justify-between border-b border-[#18213D]">
-        <div className="flex items-center gap-2 overflow-hidden text-ellipsis whitespace-nowrap">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse shrink-0"></span>
-          <span className="truncate">IKATAN ALUMNI UMS JABODETABEK • JEJARING RESMI</span>
-        </div>
-        <div className="hidden sm:flex items-center gap-4 text-[#EDF1FA]/80 shrink-0">
-          <span>KONSEN OPT-IN UU PDP</span>
-          <span>•</span>
-          <span>EDISI 2026</span>
-        </div>
-      </div>
-
+    <header className="sticky top-0 z-50 bg-[#FAF9F5]/90 backdrop-blur-md border-b border-[#0C1222]/8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 sm:h-18 gap-4">
           
@@ -46,24 +33,24 @@ export function Navbar() {
               alt="Logo Resmi Ikatan Alumni UMS"
               className="h-8 sm:h-9 w-auto max-w-[140px] sm:max-w-[170px] object-contain shrink-0 transition-transform group-hover:scale-102"
             />
-            <span className="hidden sm:block h-4 w-[1px] bg-[#18213D]/20 shrink-0"></span>
-            <span className="hidden sm:inline-block bg-[#101F5B]/10 text-[#101F5B] text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded border border-[#101F5B]/20 shrink-0 whitespace-nowrap">
+            <span className="hidden sm:block h-4 w-[1px] bg-[#0C1222]/15 shrink-0"></span>
+            <span className="hidden sm:inline-block bg-[#0B1536]/5 text-[#0B1536] text-[11px] font-sans font-semibold tracking-wide px-2.5 py-0.5 rounded-full border border-[#0B1536]/10 shrink-0 whitespace-nowrap">
               Jabodetabek
             </span>
           </Link>
 
           {/* Navigation Links with animated indicator */}
-          <nav className="hidden lg:flex items-center gap-4 xl:gap-6 shrink-0">
+          <nav className="hidden lg:flex items-center gap-5 xl:gap-7 shrink-0">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`relative text-xs font-mono uppercase tracking-wider transition-colors pb-1.5 pt-1 whitespace-nowrap shrink-0 ${
+                  className={`relative text-xs tracking-wider transition-colors pb-1.5 pt-1 whitespace-nowrap shrink-0 font-medium ${
                     isActive
-                      ? 'text-[#101F5B] font-bold'
-                      : 'text-[#5F6678] font-medium hover:text-[#101F5B]'
+                      ? 'text-[#0B1536] font-bold'
+                      : 'text-[#525866] hover:text-[#0B1536]'
                   }`}
                 >
                   <span>{link.label}</span>
@@ -71,7 +58,7 @@ export function Navbar() {
                     <motion.div
                       layoutId={shouldReduceMotion ? undefined : 'navbarActiveIndicator'}
                       transition={{ type: 'spring', stiffness: 350, damping: 30 }}
-                      className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#101F5B]"
+                      className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#0B1536]"
                     />
                   )}
                 </Link>
@@ -83,13 +70,13 @@ export function Navbar() {
           <div className="hidden lg:flex items-center gap-3 shrink-0">
             <Link
               href="/masuk"
-              className="text-xs font-mono font-semibold uppercase tracking-wider text-[#101F5B] px-3.5 py-2 hover:bg-[#18213D]/5 transition-colors rounded-lg whitespace-nowrap"
+              className="text-xs font-semibold text-[#0B1536] px-4 py-2 hover:bg-[#0C1222]/5 transition-colors rounded-full whitespace-nowrap"
             >
               Masuk
             </Link>
             <Link
               href="/gabung"
-              className="text-xs font-mono font-semibold uppercase tracking-wider text-white bg-[#101F5B] hover:bg-[#18213D] px-4 py-2.5 transition-colors flex items-center gap-1.5 shadow-xs rounded-lg group whitespace-nowrap"
+              className="text-xs font-semibold text-white bg-[#0B1536] hover:bg-[#16234D] px-5 py-2.5 transition-all flex items-center gap-1.5 shadow-sm rounded-full group whitespace-nowrap"
             >
               <span>Bergabung</span>
               <ArrowRight className="w-3.5 h-3.5 text-[#F4C542] group-hover:translate-x-0.5 transition-transform" />
@@ -100,14 +87,14 @@ export function Navbar() {
           <div className="flex lg:hidden items-center gap-2">
             <Link
               href="/gabung"
-              className="text-[11px] font-mono font-bold text-white bg-[#101F5B] px-3 py-1.5 uppercase rounded-sm whitespace-nowrap"
+              className="text-xs font-bold text-white bg-[#0B1536] px-3.5 py-1.5 rounded-full whitespace-nowrap"
             >
-              Daftar
+              Gabung
             </Link>
             <button
               onClick={() => setIsOpen(!isOpen)}
               type="button"
-              className="p-2 text-[#101F5B] focus:outline-none"
+              className="p-2 text-[#0B1536] focus:outline-none"
               aria-label="Toggle menu"
               aria-expanded={isOpen}
             >
@@ -234,7 +221,7 @@ export function Footer() {
 
         <div className="border-t border-white/10 mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between text-[11px] font-mono text-[#EDF1FA]/60 gap-4">
           <p>© 2026 IKA UMS Jabodetabek. Menghubungkan Silaturahmi Menjadi Peluang.</p>
-          <p>Disiplin Tata Letak Swiss & Desain Kontemporer Bebas AI-Slop</p>
+          <p>Universitas Muhammadiyah Surakarta · Wilayah DKI Jakarta, Banten & Jawa Barat</p>
         </div>
       </div>
     </footer>
