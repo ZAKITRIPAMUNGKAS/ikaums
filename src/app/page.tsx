@@ -28,13 +28,13 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-16 lg:pt-16 lg:pb-20">
             
             {/* Top Precision Meta Bar */}
-            <div className="flex flex-wrap items-center justify-between border-b border-[#18213D]/10 pb-4 mb-10 text-xs font-mono uppercase tracking-wider text-[#5F6678]">
+            <div className="flex flex-wrap items-center justify-between border-b border-[#18213D]/10 pb-4 mb-10 text-xs font-mono uppercase tracking-wider text-[#5F6678] gap-3">
               <div className="flex items-center gap-3">
                 <span className="font-bold text-[#101F5B]">IKA UMS CONNECT</span>
                 <span className="h-3 w-[1px] bg-[#18213D]/20"></span>
                 <span>PLATFORM ALUMNI WILAYAH JABODETABEK</span>
               </div>
-              <div className="flex items-center gap-4">
+              <div className="hidden sm:flex items-center gap-4">
                 <span>VOL. 2026</span>
                 <span>KONSEN OPT-IN UU PDP</span>
               </div>
@@ -372,50 +372,87 @@ export default function Home() {
               </Link>
             </div>
 
-            {/* Swiss Precision Table */}
-            <div className="border border-[#18213D]/15 overflow-x-auto shadow-xs">
-              <table className="w-full text-left text-xs font-sans">
-                <thead className="bg-[#FAFAF8] border-b border-[#18213D]/15 text-[11px] font-mono uppercase tracking-wider text-[#5F6678]">
-                  <tr>
-                    <th className="py-3 px-4 font-bold">Nama & Gelar</th>
-                    <th className="py-3 px-4 font-bold">Prodi & Angkatan</th>
-                    <th className="py-3 px-4 font-bold">Profesi / Institusi</th>
-                    <th className="py-3 px-4 font-bold">Wilayah</th>
-                    <th className="py-3 px-4 font-bold text-right">Aksi</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[#18213D]/10 bg-white">
-                  {DATA_ALUMNI_SIMULASI.slice(0, 4).map((alumni) => (
-                    <tr key={alumni.id} className="hover:bg-[#F9FAFB] transition-colors">
-                      <td className="py-3.5 px-4">
-                        <div className="font-bold text-[#101F5B] flex items-center gap-1.5">
-                          <span>{alumni.nama}</span>
+            {/* Contra-Inspired People Discovery Grid (Not a Spreadsheet Table) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {DATA_ALUMNI_SIMULASI.slice(0, 4).map((alumni) => (
+                <div
+                  key={alumni.id}
+                  className="bg-white border border-[#18213D]/15 p-5 flex flex-col justify-between hover:border-[#101F5B] hover:shadow-md transition-all group"
+                >
+                  <div className="space-y-3.5">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-full overflow-hidden shrink-0 border border-[#18213D]/15 bg-[#E8ECF2]">
+                        {alumni.avatarUrl ? (
+                          <img
+                            src={alumni.avatarUrl}
+                            alt={alumni.nama}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-[#101F5B] text-[#F4C542] font-mono font-bold text-sm">
+                            {alumni.avatarInitials}
+                          </div>
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1.5">
+                          <h4 className="font-serif font-bold text-sm text-[#101F5B] truncate group-hover:text-[#18213D]">
+                            {alumni.nama}
+                          </h4>
                           {alumni.isVerified && (
-                            <CheckCircle2 className="w-3 h-3 text-[#22775A]" />
+                            <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981] shrink-0" />
                           )}
                         </div>
-                      </td>
-                      <td className="py-3.5 px-4 text-[#5F6678]">
-                        {alumni.prodi} • {alumni.angkatan}
-                      </td>
-                      <td className="py-3.5 px-4 text-[#18213D] font-medium">
-                        {alumni.pekerjaan} {alumni.perusahaan ? `(${alumni.perusahaan})` : ''}
-                      </td>
-                      <td className="py-3.5 px-4 font-mono text-[#5F6678]">
-                        {alumni.wilayah}
-                      </td>
-                      <td className="py-3.5 px-4 text-right">
-                        <Link
-                          href="/direktori"
-                          className="font-mono text-xs uppercase text-[#101F5B] hover:underline font-bold"
+                        <p className="text-[11px] font-mono text-[#5F6678] truncate">
+                          {alumni.prodi} • {alumni.angkatan}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <p className="text-xs font-semibold text-[#18213D] leading-snug line-clamp-2">
+                        {alumni.pekerjaan} {alumni.perusahaan ? `· ${alumni.perusahaan}` : ''}
+                      </p>
+                      <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#5F6678] mt-1.5">
+                        <MapPin className="w-3 h-3 text-[#101F5B] shrink-0" />
+                        <span className="truncate">{alumni.wilayah}</span>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {alumni.keahlian.slice(0, 2).map((skill) => (
+                        <span
+                          key={skill}
+                          className="bg-[#F4F6FA] text-[#101F5B] text-[10px] font-mono px-2 py-0.5 border border-[#18213D]/10"
                         >
-                          Lihat Profil →
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                          {skill}
+                        </span>
+                      ))}
+                      {alumni.bersediaMentoring && (
+                        <span className="bg-[#FEF3C7] text-[#92400E] text-[10px] font-mono font-semibold px-2 py-0.5">
+                          Mentoring
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="pt-4 mt-4 border-t border-[#18213D]/10 flex items-center justify-between">
+                    <Link
+                      href="/direktori"
+                      className="text-xs font-mono font-bold text-[#101F5B] hover:text-[#D97706] flex items-center gap-1"
+                    >
+                      <span>Lihat Profil</span>
+                      <ArrowRight className="w-3 h-3" />
+                    </Link>
+                    <Link
+                      href="/direktori"
+                      className="text-[10px] font-mono uppercase bg-[#101F5B] text-white px-3 py-1 hover:bg-[#18213D] transition-colors"
+                    >
+                      Koneksi
+                    </Link>
+                  </div>
+                </div>
+              ))}
             </div>
 
           </div>

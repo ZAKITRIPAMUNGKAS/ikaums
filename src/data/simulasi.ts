@@ -92,7 +92,8 @@ export const DATA_ALUMNI_SIMULASI: AlumniProfile[] = [
     keahlian: ['Clinical Pharmacy', 'Healthcare Operations', 'Pharmacovigilance', 'Health Tech'],
     isVerified: true,
     bersediaMentoring: true,
-    avatarInitials: 'DA'
+    avatarInitials: 'DA',
+    avatarUrl: '/images/avatar-dian.jpg'
   },
   {
     id: 'alm-fajar',
@@ -107,7 +108,8 @@ export const DATA_ALUMNI_SIMULASI: AlumniProfile[] = [
     keahlian: ['Corporate Law', 'Contract Drafting', 'Compliance', 'Labor Law', 'M&A'],
     isVerified: true,
     bersediaMentoring: true,
-    avatarInitials: 'FN'
+    avatarInitials: 'FN',
+    avatarUrl: '/images/avatar-bambang.jpg'
   }
 ];
 
