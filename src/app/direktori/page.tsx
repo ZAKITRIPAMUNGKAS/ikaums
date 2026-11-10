@@ -66,6 +66,21 @@ export default function DirektoriPage() {
       const savedMsg = localStorage.getItem(STORAGE_KEY_MESSAGES);
       if (savedMsg) setMessagesSent(JSON.parse(savedMsg));
     } catch (e) {}
+
+    // Synchronize filter from URL query param ?wilayah=...
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const paramWilayah = params.get('wilayah');
+      if (paramWilayah) {
+        const decoded = decodeURIComponent(paramWilayah).toLowerCase();
+        const match = regions.find(
+          r => r.toLowerCase() === decoded || decoded.includes(r.toLowerCase()) || r.toLowerCase().includes(decoded)
+        );
+        if (match) {
+          setSelectedRegion(match);
+        }
+      }
+    }
   }, []);
 
   const toggleConnection = (id: string, e?: React.MouseEvent) => {
