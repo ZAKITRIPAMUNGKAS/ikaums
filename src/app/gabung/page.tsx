@@ -39,8 +39,8 @@ export default function GabungPage() {
       <main className="flex-grow max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 w-full">
         {/* Editorial Page Header */}
         <div className="mb-8 sm:mb-10 text-center sm:text-left">
-          <div className="inline-flex items-center gap-2 bg-[#0B1536]/5 text-[#0B1536] px-3.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-3 border border-[#0B1536]/10">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse"></span>
+          <div className="inline-flex items-center gap-2 bg-white text-[#0B1536] px-3 py-1.5 rounded-md text-xs font-mono font-semibold uppercase tracking-wider mb-3 border border-[#0B1536]/15 shadow-2xs">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E]"></span>
             <span>Registrasi Sukarela Anggota</span>
           </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[#0B1536] leading-[1.1]">

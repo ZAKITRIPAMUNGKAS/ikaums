@@ -129,9 +129,9 @@ export default function Home() {
               
               {/* Left Column: Bold Editorial Typography */}
               <div className="md:col-span-7 space-y-5">
-                <div className="inline-flex items-center gap-2 bg-[#0B1536]/5 text-[#0B1536] px-3 py-1 rounded-full text-xs font-medium border border-[#0B1536]/10">
-                  <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse"></span>
-                  <span>Jejaring Resmi Alumni UMS Jabodetabek</span>
+                <div className="inline-flex items-center gap-2 font-mono text-xs font-semibold uppercase tracking-wider text-[#0B1536] bg-white border border-[#0B1536]/15 px-3 py-1.5 rounded-md shadow-2xs">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E]"></span>
+                  <span>Jejaring Resmi Alumni · Wilayah Jabodetabek</span>
                 </div>
 
                 <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-extrabold tracking-[-0.035em] text-[#0B1536] leading-[1.08]">

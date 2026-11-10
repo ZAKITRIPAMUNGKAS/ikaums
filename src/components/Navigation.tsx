@@ -26,17 +26,21 @@ export function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 sm:h-18 gap-4">
           
-          {/* Official IKA UMS Logo Wordmark */}
-          <Link href="/" className="flex items-center gap-2.5 group shrink-0">
+          {/* Official IKA UMS Brand Lockup (Curations & Editorial Style) */}
+          <Link href="/" className="flex items-center gap-3 group shrink-0">
             <img
-              src="/images/logo-transparent.png"
+              src="/images/logo-emblem.png"
               alt="Logo Resmi Ikatan Alumni UMS"
-              className="h-8 sm:h-9 w-auto max-w-[140px] sm:max-w-[170px] object-contain shrink-0 transition-transform group-hover:scale-102"
+              className="w-8 h-8 sm:w-9 sm:h-9 object-contain shrink-0 transition-transform group-hover:scale-105"
             />
-            <span className="hidden sm:block h-4 w-[1px] bg-[#0C1222]/15 shrink-0"></span>
-            <span className="hidden sm:inline-block bg-[#0B1536]/5 text-[#0B1536] text-[11px] font-sans font-semibold tracking-wide px-2.5 py-0.5 rounded-full border border-[#0B1536]/10 shrink-0 whitespace-nowrap">
-              Jabodetabek
-            </span>
+            <div className="flex flex-col justify-center">
+              <span className="text-base sm:text-[17px] font-extrabold tracking-[-0.035em] text-[#0B1536] leading-none">
+                IKA UMS
+              </span>
+              <span className="text-[10px] font-mono font-bold tracking-[0.14em] text-[#0F766E] uppercase leading-none mt-1">
+                WILAYAH JABODETABEK
+              </span>
+            </div>
           </Link>
 
           {/* Navigation Links with animated indicator */}
