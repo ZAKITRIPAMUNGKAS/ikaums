@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Menu, X, ArrowRight, ShieldCheck, MapPin, Users, Calendar, Briefcase } from 'lucide-react';
 
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,37 +15,49 @@ export function Navbar() {
     { label: 'Direktori', href: '/direktori' },
     { label: 'Kegiatan', href: '/kegiatan' },
     { label: 'Peluang', href: '/peluang' },
+    { label: 'Cerita', href: '/cerita' },
     { label: 'Tentang', href: '/tentang' },
   ];
 
   return (
-    <header className="sticky top-0 z-50 bg-[#FDFCFB]/95 backdrop-blur-sm border-b border-[#18213D]/15">
-      {/* Precision Top Editorial Ribbon */}
-      <div className="bg-[#101F5B] text-white text-[10px] font-mono py-1 px-4 text-center tracking-widest flex items-center justify-between border-b border-[#18213D]">
+    <header className="sticky top-0 z-50 bg-[#FDFCFB]/95 backdrop-blur-md border-b border-[#18213D]/15">
+      {/* Precision Top Editorial Bar */}
+      <div className="bg-[#101F5B] text-white text-[10px] font-mono py-1.5 px-4 tracking-widest flex items-center justify-between border-b border-[#18213D]">
         <div className="flex items-center gap-2">
-          <span className="bg-[#F4C542] text-[#101F5B] px-1 py-0.2 font-bold">SIMULASI</span>
-          <span>IKATAN ALUMNI UMS JABODETABEK • KONSEN DATA OPT-IN (UU PDP)</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse"></span>
+          <span>IKATAN ALUMNI UMS JABODETABEK • JEJARING RESMI ALUMNI PERANTAU</span>
         </div>
-        <div className="hidden sm:block text-[#EDF1FA]/70">
-          EDISI 2026 / RESMI INISIATIF
+        <div className="hidden sm:flex items-center gap-4 text-[#EDF1FA]/80">
+          <span>KONSEN OPT-IN UU PDP</span>
+          <span>•</span>
+          <span>EDISI 2026</span>
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 sm:h-18">
           
-          {/* Authentic Wordmark */}
-          <Link href="/" className="flex items-baseline gap-3 group">
-            <span className="font-serif font-black text-2xl tracking-tight text-[#101F5B]">
-              IKA UMS
-            </span>
-            <span className="font-mono text-xs uppercase tracking-wider text-[#5F6678] font-semibold border-l border-[#18213D]/20 pl-3">
-              Connect Jabodetabek
-            </span>
+          {/* Authentic Wordmark with Emblem */}
+          <Link href="/" className="flex items-center gap-3 group">
+            <div className="w-9 h-9 rounded-lg bg-[#101F5B] flex items-center justify-center p-1 border border-[#101F5B]/30 shadow-xs group-hover:scale-105 transition-transform">
+              <img
+                src="/images/logo-emblem.png"
+                alt="Emblem IKA UMS"
+                className="w-full h-full object-contain filter brightness-110"
+              />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-serif font-black text-xl tracking-tight text-[#101F5B] leading-none">
+                IKA UMS
+              </span>
+              <span className="font-mono text-[10px] uppercase tracking-wider text-[#5F6678] font-semibold mt-0.5">
+                Connect Jabodetabek
+              </span>
+            </div>
           </Link>
 
           {/* Navigation Links */}
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-7">
             {navLinks.map((link) => {
               const isActive = pathname === link.href;
               return (
@@ -64,7 +76,7 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* Precision Action Buttons */}
+          {/* Action Buttons */}
           <div className="hidden md:flex items-center gap-3">
             <Link
               href="/masuk"
@@ -74,7 +86,7 @@ export function Navbar() {
             </Link>
             <Link
               href="/gabung"
-              className="text-xs font-mono font-semibold uppercase tracking-wider text-white bg-[#101F5B] hover:bg-[#18213D] px-5 py-2.5 transition-colors flex items-center gap-1.5"
+              className="text-xs font-mono font-semibold uppercase tracking-wider text-white bg-[#101F5B] hover:bg-[#18213D] px-5 py-2.5 transition-colors flex items-center gap-1.5 shadow-xs"
             >
               <span>Bergabung</span>
               <ArrowRight className="w-3.5 h-3.5 text-[#F4C542]" />
@@ -104,7 +116,7 @@ export function Navbar() {
 
       {/* Mobile Drawer */}
       {isOpen && (
-        <div className="md:hidden border-b border-[#18213D]/15 bg-white px-5 py-4 space-y-3 font-mono text-xs">
+        <div className="md:hidden border-b border-[#18213D]/15 bg-white px-5 py-4 space-y-3 font-mono text-xs shadow-lg animate-in fade-in slide-in-from-top-2 duration-150">
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -144,20 +156,29 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           
           <div className="md:col-span-2 space-y-4">
-            <div className="flex items-baseline gap-3">
-              <span className="font-serif font-black text-2xl text-white">
-                IKA UMS
-              </span>
-              <span className="font-mono text-xs uppercase tracking-wider text-[#F4C542] border-l border-white/20 pl-3">
-                Wilayah Jabodetabek
-              </span>
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center p-1.5 border border-white/20">
+                <img
+                  src="/images/logo-emblem.png"
+                  alt="Emblem IKA UMS"
+                  className="w-full h-full object-contain filter brightness-125"
+                />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-serif font-black text-2xl text-white leading-none">
+                  IKA UMS
+                </span>
+                <span className="font-mono text-xs uppercase tracking-wider text-[#F4C542] mt-0.5">
+                  Wilayah Jabodetabek
+                </span>
+              </div>
             </div>
             <p className="text-xs text-[#EDF1FA]/80 max-w-md leading-relaxed">
               Jejaring independen alumni Universitas Muhammadiyah Surakarta di wilayah Jakarta, Bogor, Depok, Tangerang, dan Bekasi. Berlandaskan keterbukaan, gotong royong, dan kepatuhan privasi UU PDP.
             </p>
-            <div className="inline-flex items-center gap-2 border border-white/20 px-3 py-1 text-[11px] font-mono text-[#F4C542]">
-              <ShieldCheck className="w-3.5 h-3.5" />
-              <span>DATA SIMULASI PROTOKOL PRIVASI (k &ge; 5)</span>
+            <div className="inline-flex items-center gap-2 border border-white/20 px-3 py-1.5 text-[11px] font-mono text-[#F4C542] bg-white/5">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#10B981]" />
+              <span>PROTOKOL PRIVASI & PROTEKSI DATA (k &ge; 5)</span>
             </div>
           </div>
 
@@ -171,6 +192,7 @@ export function Footer() {
               <li><Link href="/direktori" className="hover:text-[#F4C542]">Direktori Alumni</Link></li>
               <li><Link href="/kegiatan" className="hover:text-[#F4C542]">Agenda & Event</Link></li>
               <li><Link href="/peluang" className="hover:text-[#F4C542]">Peluang Karier & Bisnis</Link></li>
+              <li><Link href="/cerita" className="hover:text-[#F4C542]">Cerita Alumni</Link></li>
             </ul>
           </div>
 
@@ -182,7 +204,8 @@ export function Footer() {
               <li><Link href="/tentang" className="hover:text-[#F4C542]">Tentang Inisiatif</Link></li>
               <li><Link href="/privasi" className="hover:text-[#F4C542]">Kebijakan Privasi</Link></li>
               <li><Link href="/syarat" className="hover:text-[#F4C542]">Ketentuan Komunitas</Link></li>
-              <li><span className="text-white/40 block mt-2">Versi Editorial 2.0</span></li>
+              <li><Link href="/app" className="hover:text-[#F4C542]">Area Member</Link></li>
+              <li><Link href="/admin" className="hover:text-[#F4C542]">Dashboard Pengurus</Link></li>
             </ul>
           </div>
 

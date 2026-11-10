@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Navbar, Footer } from '@/components/Navigation';
 import { AccurateJabodetabekMap } from '@/components/AccurateJabodetabekMap';
-import { DATA_ALUMNI_SIMULASI, DATA_KEGIATAN_SIMULASI, STATS_JABODETABEK } from '@/data/simulasi';
+import { DATA_ALUMNI_SIMULASI, DATA_KEGIATAN_SIMULASI, DATA_CERITA_SIMULASI, STATS_JABODETABEK } from '@/data/simulasi';
 import { 
   ArrowRight, 
   MapPin, 
@@ -41,7 +41,7 @@ export default function Home() {
             </div>
 
             {/* Asymmetrical 2-Column Hero */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
               
               {/* Left Column: Bold Editorial Headline */}
               <div className="lg:col-span-7 space-y-6">
@@ -58,7 +58,7 @@ export default function Home() {
                 <div className="flex flex-wrap items-center gap-4 pt-4">
                   <Link
                     href="/gabung"
-                    className="bg-[#101F5B] hover:bg-[#18213D] text-white text-xs font-semibold uppercase tracking-wider px-6 py-3.5 flex items-center gap-2 transition-colors"
+                    className="bg-[#101F5B] hover:bg-[#18213D] text-white text-xs font-semibold uppercase tracking-wider px-6 py-3.5 flex items-center gap-2 transition-colors shadow-xs"
                   >
                     <span>Daftar Direktori Alumni</span>
                     <ArrowRight className="w-3.5 h-3.5 text-[#F4C542]" />
@@ -74,19 +74,19 @@ export default function Home() {
 
               {/* Right Column: Authentic Editorial Photo with Caption */}
               <div className="lg:col-span-5 space-y-3">
-                <div className="aspect-[4/3] w-full overflow-hidden border border-[#18213D]/15 bg-[#E8ECF2] relative">
+                <div className="aspect-[4/3] w-full overflow-hidden border border-[#18213D]/15 bg-[#E8ECF2] relative shadow-sm">
                   <img
-                    src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=1000&q=85"
-                    alt="Alumni UMS Jabodetabek berdiskusi dan berjejaring"
-                    className="w-full h-full object-cover grayscale-0 contrast-[1.02]"
+                    src="/images/hero-alumni.jpg"
+                    alt="Alumni UMS Jabodetabek berdiskusi dan berjejaring dalam forum alumni"
+                    className="w-full h-full object-cover"
                   />
-                  <div className="absolute top-3 left-3 bg-[#101F5B] text-[#F4C542] text-[10px] font-mono px-2 py-0.5 uppercase tracking-wider font-bold">
-                    DOKUMENTASI SIMULASI
+                  <div className="absolute bottom-3 right-3 bg-[#101F5B]/90 backdrop-blur-xs text-[#FAFAF8] text-[10px] font-mono px-2.5 py-1 tracking-wider">
+                    DOKUMENTASI RESMI IKA UMS
                   </div>
                 </div>
                 <div className="flex items-center justify-between text-[11px] font-mono text-[#5F6678] border-b border-[#18213D]/10 pb-2">
                   <span>SILATURAHMI & KOLABORASI REGIONAL</span>
-                  <span>JAKARTA SELATAN • 2026</span>
+                  <span>JABODETABEK • 2026</span>
                 </div>
               </div>
 
@@ -134,7 +134,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* 4 CORE CAPABILITIES - SWISS NUMBERED RULE LIST (NO ROUNDED CARDS) */}
+        {/* 4 CORE CAPABILITIES - SWISS NUMBERED RULE LIST */}
         <section className="py-16 border-b border-[#18213D]/15 bg-[#FDFCFB]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
@@ -200,7 +200,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* GEOGRAPHIC ALUMNI MAP SECTION (ACCURATE & HIGH DENSITY) */}
+        {/* GEOGRAPHIC ALUMNI MAP SECTION */}
         <section className="py-16 border-b border-[#18213D]/15 bg-white">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
@@ -239,7 +239,7 @@ export default function Home() {
                 <div className="flex items-center justify-between border-b border-[#18213D]/10 pb-3">
                   <div>
                     <span className="text-[11px] font-mono uppercase tracking-wider text-[#101F5B] font-bold block mb-0.5">
-                      04 / KEGIATAN KOMUNITAS
+                      03 / KEGIATAN KOMUNITAS
                     </span>
                     <h3 className="font-serif text-2xl font-bold text-[#101F5B]">
                       Agenda Mendatang
@@ -249,7 +249,7 @@ export default function Home() {
                     href="/kegiatan"
                     className="text-xs font-mono font-bold text-[#101F5B] hover:underline flex items-center gap-1"
                   >
-                    <span>SEMUA</span>
+                    <span>SEMUA KEGIATAN</span>
                     <ArrowRight className="w-3 h-3" />
                   </Link>
                 </div>
@@ -271,7 +271,7 @@ export default function Home() {
                           {ev.jenis}
                         </span>
                         <h4 className="font-serif text-base font-bold text-[#101F5B] leading-snug group-hover:text-[#18213D] transition-colors">
-                          <Link href={`/kegiatan`}>
+                          <Link href="/kegiatan">
                             {ev.judul}
                           </Link>
                         </h4>
@@ -298,7 +298,7 @@ export default function Home() {
                 <div className="flex items-center justify-between border-b border-[#18213D]/10 pb-3">
                   <div>
                     <span className="text-[11px] font-mono uppercase tracking-wider text-[#101F5B] font-bold block mb-0.5">
-                      05 / KABAR ALUMNI
+                      04 / KABAR ALUMNI
                     </span>
                     <h3 className="font-serif text-2xl font-bold text-[#101F5B]">
                       Cerita Alumni
@@ -308,16 +308,16 @@ export default function Home() {
                     href="/cerita"
                     className="text-xs font-mono font-bold text-[#101F5B] hover:underline flex items-center gap-1"
                   >
-                    <span>SEMUA</span>
+                    <span>SEMUA CERITA</span>
                     <ArrowRight className="w-3 h-3" />
                   </Link>
                 </div>
 
-                <div className="border border-[#18213D]/15 bg-white p-6 space-y-4">
+                <div className="border border-[#18213D]/15 bg-white p-6 space-y-4 shadow-xs">
                   <div className="aspect-[16/9] w-full overflow-hidden bg-[#E8ECF2] border border-[#18213D]/10">
                     <img
-                      src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80"
-                      alt="Cerita Alumni UMS"
+                      src="/images/cerita-startup.jpg"
+                      alt="Cerita Alumni UMS Hendra Setiawan"
                       className="w-full h-full object-cover"
                     />
                   </div>
@@ -330,7 +330,7 @@ export default function Home() {
                       Dari Alumni UMS, Bangun Startup Edukasi di Jakarta
                     </h4>
                     <p className="text-xs text-[#5F6678] leading-relaxed">
-                      Perjalanan alumni Informatika angkatan 2016 merintis bimbingan belajar teknologi di ibu kota, yang kini membuka lowongan dan mentoring bagi sesama lulusan baru Solo Raya.
+                      Perjalanan Hendra Setiawan (Informatika 2016) merintis platform bimbingan teknologi di ibu kota, yang kini membuka lowongan dan mentoring bagi sesama lulusan baru Solo Raya.
                     </p>
                     <div className="pt-2">
                       <Link
@@ -357,7 +357,7 @@ export default function Home() {
             <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-[#18213D]/10 pb-4 mb-6">
               <div>
                 <span className="text-[11px] font-mono uppercase tracking-wider text-[#101F5B] font-bold block mb-1">
-                  06 / DIREKTORI ALUMNI
+                  05 / DIREKTORI ALUMNI
                 </span>
                 <h2 className="font-serif text-3xl font-bold text-[#101F5B]">
                   Profil Alumni Terverifikasi
@@ -373,7 +373,7 @@ export default function Home() {
             </div>
 
             {/* Swiss Precision Table */}
-            <div className="border border-[#18213D]/15 overflow-x-auto">
+            <div className="border border-[#18213D]/15 overflow-x-auto shadow-xs">
               <table className="w-full text-left text-xs font-sans">
                 <thead className="bg-[#FAFAF8] border-b border-[#18213D]/15 text-[11px] font-mono uppercase tracking-wider text-[#5F6678]">
                   <tr>
@@ -406,7 +406,7 @@ export default function Home() {
                       </td>
                       <td className="py-3.5 px-4 text-right">
                         <Link
-                          href={`/direktori`}
+                          href="/direktori"
                           className="font-mono text-xs uppercase text-[#101F5B] hover:underline font-bold"
                         >
                           Lihat Profil →
@@ -441,7 +441,7 @@ export default function Home() {
               <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0 w-full lg:w-auto">
                 <Link
                   href="/gabung"
-                  className="w-full sm:w-auto bg-[#F4C542] hover:bg-[#e8b935] text-[#101F5B] text-xs font-mono font-bold uppercase tracking-wider px-6 py-3.5 text-center transition-colors"
+                  className="w-full sm:w-auto bg-[#F4C542] hover:bg-[#e8b935] text-[#101F5B] text-xs font-mono font-bold uppercase tracking-wider px-6 py-3.5 text-center transition-colors shadow-xs"
                 >
                   Daftar Sebagai Alumni
                 </Link>

@@ -30,7 +30,7 @@ export default function MemberDashboard() {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="font-serif text-2xl font-bold text-[#101F5B]">
-                  Muhammad Zaki (Simulasi Akun)
+                  Muhammad Zaki, S.Kom.
                 </h1>
                 <span className="bg-[#22775A]/10 text-[#22775A] text-xs font-semibold px-2 py-0.5 rounded-full flex items-center gap-1">
                   <CheckCircle2 className="w-3 h-3" />

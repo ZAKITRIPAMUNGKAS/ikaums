@@ -10,9 +10,9 @@ export default function AdminDashboard() {
   const [approvedList, setApprovedList] = useState<string[]>([]);
 
   const pendingMembers = [
-    { id: 'p1', nama: 'Fajar Nugroho (Simulasi)', prodi: 'Teknik Elektro', angkatan: 2017, wilayah: 'Jakarta Timur', bukti: 'Ijazah / LinkedIn terlampir' },
-    { id: 'p2', nama: 'Annisa Rahmawati (Simulasi)', prodi: 'Psikologi', angkatan: 2019, wilayah: 'Kota Tangerang', bukti: 'Rujukan Alumni Terverifikasi' },
-    { id: 'p3', nama: 'Hendri Kurniawan (Simulasi)', prodi: 'Ekonomi Pembangunan', angkatan: 2014, wilayah: 'Kota Bogor', bukti: 'Kartu Tanda Alumni' },
+    { id: 'p1', nama: 'Fajar Nugroho, S.T.', prodi: 'Teknik Elektro', angkatan: 2017, wilayah: 'Jakarta Timur', bukti: 'Ijazah / LinkedIn terlampir' },
+    { id: 'p2', nama: 'Annisa Rahmawati, S.Psi.', prodi: 'Psikologi', angkatan: 2019, wilayah: 'Kota Tangerang', bukti: 'Rujukan Alumni Terverifikasi' },
+    { id: 'p3', nama: 'Hendri Kurniawan, S.E.', prodi: 'Ekonomi Pembangunan', angkatan: 2014, wilayah: 'Kota Bogor', bukti: 'Kartu Tanda Alumni' },
   ];
 
   const handleApprove = (id: string) => {

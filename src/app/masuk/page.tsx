@@ -44,7 +44,7 @@ export default function MasukPage() {
                   href="/app"
                   className="inline-block bg-[#101F5B] text-[#FAFAF8] text-xs font-semibold px-4 py-2 rounded-lg"
                 >
-                  Lanjut ke Area Member (Simulasi)
+                  Lanjut ke Area Member
                 </Link>
               </div>
             </div>
