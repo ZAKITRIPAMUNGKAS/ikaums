@@ -359,7 +359,7 @@ export function AccurateJabodetabekMap() {
                     {selectedRegion.id.includes('jkt') ? 'DKI Jakarta' : selectedRegion.id === 'tangerang' ? 'Banten' : 'Jawa Barat'}
                   </span>
                 </div>
-                <h3 className="font-serif text-2xl font-bold text-[#101F5B] leading-tight">
+                <h3 className="text-2xl font-extrabold tracking-tight text-[#0B1536] leading-tight">
                   {selectedRegion.name}
                 </h3>
                 <p className="text-xs text-[#5F6678] mt-1 leading-relaxed">
@@ -373,7 +373,7 @@ export function AccurateJabodetabekMap() {
                   <span className="text-[10px] font-mono text-[#5F6678] uppercase block mb-0.5">
                     Total Alumni
                   </span>
-                  <span className="font-serif text-xl font-bold text-[#101F5B] block">
+                  <span className="font-mono text-xl font-bold text-[#0B1536] block">
                     {selectedRegion.count}
                   </span>
                   <span className="text-[10px] text-[#10B981] font-mono font-medium">
@@ -385,7 +385,7 @@ export function AccurateJabodetabekMap() {
                   <span className="text-[10px] font-mono text-[#5F6678] uppercase block mb-0.5">
                     Siap Mentoring
                   </span>
-                  <span className="font-serif text-xl font-bold text-[#101F5B] block">
+                  <span className="font-mono text-xl font-bold text-[#0B1536] block">
                     {selectedRegion.mentorCount}
                   </span>
                   <span className="text-[10px] text-[#5F6678] font-mono">
@@ -397,7 +397,7 @@ export function AccurateJabodetabekMap() {
                   <span className="text-[10px] font-mono text-[#5F6678] uppercase block mb-0.5">
                     Keaktifan
                   </span>
-                  <span className="font-serif text-xl font-bold text-[#101F5B] block">
+                  <span className="font-mono text-xl font-bold text-[#0B1536] block">
                     {selectedRegion.activePercent}
                   </span>
                   <span className="text-[10px] text-[#5F6678] font-mono">
@@ -409,7 +409,7 @@ export function AccurateJabodetabekMap() {
                   <span className="text-[10px] font-mono text-[#5F6678] uppercase block mb-0.5">
                     Inisiatif Bisnis
                   </span>
-                  <span className="font-serif text-xl font-bold text-[#101F5B] block">
+                  <span className="font-mono text-xl font-bold text-[#0B1536] block">
                     {Math.round(selectedRegion.count * 0.14)}
                   </span>
                   <span className="text-[10px] text-[#5F6678] font-mono">
@@ -440,7 +440,7 @@ export function AccurateJabodetabekMap() {
                 <span className="text-[10px] font-mono text-[#D97706] uppercase tracking-wider font-bold block">
                   Agenda Komunitas Terdekat
                 </span>
-                <p className="font-serif font-bold text-[#101F5B] text-xs leading-snug">
+                <p className="font-bold text-[#0B1536] text-xs leading-snug">
                   {selectedRegion.agenda}
                 </p>
                 <p className="text-[#5F6678] text-[10px] font-mono">

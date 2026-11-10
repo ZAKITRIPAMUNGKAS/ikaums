@@ -24,7 +24,7 @@ export default function CeritaPage() {
               <span className="text-[11px] font-mono uppercase tracking-wider text-[#101F5B] font-bold block mb-1">
                 JEJAK INSPIRASI & DAMPAK NYATA
               </span>
-              <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#101F5B]">
+              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0B1536]">
                 Cerita Sinergi Alumni UMS
               </h1>
               <p className="text-xs sm:text-sm text-[#5F6678] mt-1.5 max-w-2xl leading-relaxed">
@@ -65,7 +65,7 @@ export default function CeritaPage() {
                     {cerita.jurusanAngkatan}
                   </span>
 
-                  <h3 className="font-serif text-xl font-bold text-[#101F5B] group-hover:text-[#18213D] transition-colors leading-snug">
+                  <h3 className="text-xl font-bold text-[#0B1536] group-hover:text-[#18213D] transition-colors leading-snug">
                     {cerita.judul}
                   </h3>
 

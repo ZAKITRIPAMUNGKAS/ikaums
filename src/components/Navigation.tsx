@@ -173,7 +173,7 @@ export function Footer() {
                 />
               </div>
               <div className="flex flex-col">
-                <span className="font-serif font-black text-2xl text-white leading-none">
+                <span className="font-extrabold text-2xl text-white leading-none tracking-tight">
                   IKA UMS
                 </span>
                 <span className="font-mono text-xs uppercase tracking-wider text-[#F4C542] mt-0.5">

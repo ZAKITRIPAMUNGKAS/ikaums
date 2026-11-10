@@ -167,7 +167,7 @@ export function MapInteractiveSection() {
       <div className="lg:col-span-4 bg-white border border-[#E5E8EF] rounded-2xl p-6 shadow-sm space-y-5">
         <div className="flex items-center gap-2 pb-3 border-b border-[#E5E8EF]">
           <Filter className="w-4 h-4 text-[#101F5B]" />
-          <h3 className="font-serif text-lg font-bold text-[#101F5B]">
+          <h3 className="text-lg font-bold text-[#0B1536]">
             Filter Alumni
           </h3>
         </div>
@@ -406,7 +406,7 @@ export function MapInteractiveSection() {
               />
             </div>
             <div>
-              <h4 className="font-serif font-bold text-sm text-[#101F5B]">
+              <h4 className="font-bold text-sm text-[#0B1536]">
                 {selectedRegion.name}
               </h4>
               <span className="text-xs font-bold text-[#D97706]">

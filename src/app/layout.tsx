@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Instrument_Serif, JetBrains_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, Newsreader, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const jakartaSans = Plus_Jakarta_Sans({
@@ -8,11 +8,11 @@ const jakartaSans = Plus_Jakarta_Sans({
   weight: ["400", "500", "600", "700", "800"],
 });
 
-const instrumentSerif = Instrument_Serif({
+const newsreaderSerif = Newsreader({
   variable: "--font-serif",
-  weight: "400",
   style: ["normal", "italic"],
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -34,7 +34,7 @@ export default function RootLayout({
   return (
     <html
       lang="id"
-      className={`${jakartaSans.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable} h-full antialiased`}
+      className={`${jakartaSans.variable} ${newsreaderSerif.variable} ${jetbrainsMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans bg-[#FAF9F5] text-[#0C1222]">
         {children}

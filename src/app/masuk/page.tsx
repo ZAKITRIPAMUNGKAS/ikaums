@@ -21,10 +21,10 @@ export default function MasukPage() {
       <main className="flex-grow flex items-center justify-center px-4 py-16">
         <div className="bg-white border border-[#E5E8EF] rounded-2xl p-8 max-w-md w-full shadow-sm">
           <div className="text-center mb-6">
-            <div className="w-12 h-12 rounded-xl bg-[#101F5B] text-[#F4C542] flex items-center justify-center font-serif font-bold text-xl mx-auto mb-3">
+            <div className="w-12 h-12 rounded-xl bg-[#0B1536] text-[#F4C542] flex items-center justify-center font-bold text-xl mx-auto mb-3 font-mono">
               U
             </div>
-            <h1 className="font-serif text-2xl font-bold text-[#101F5B]">
+            <h1 className="text-2xl font-extrabold tracking-tight text-[#0B1536]">
               Masuk ke IKA UMS Connect
             </h1>
             <p className="text-xs text-[#5F6678] mt-1">

@@ -30,7 +30,7 @@ export default function AdminDashboard() {
               <Shield className="w-3.5 h-3.5" />
               <span>Otoritas Pengurus IKA UMS Jabodetabek</span>
             </div>
-            <h1 className="font-serif text-2xl sm:text-3xl font-bold">
+            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
               Dashboard Pengurus Wilayah
             </h1>
             <p className="text-xs text-[#EDF1FA]/80 mt-1 max-w-xl">
@@ -71,7 +71,7 @@ export default function AdminDashboard() {
         {/* Tab 1: Verifikasi Anggota */}
         {activeTab === 'verifikasi' && (
           <div className="bg-white border border-[#E5E8EF] rounded-xl p-6 shadow-sm space-y-4">
-            <h3 className="font-serif text-lg font-bold text-[#101F5B]">
+            <h3 className="text-lg font-bold text-[#0B1536]">
               Daftar Permohonan Registrasi Sukarela
             </h3>
             <p className="text-xs text-[#5F6678] mb-4">
@@ -124,7 +124,7 @@ export default function AdminDashboard() {
         {activeTab === 'kegiatan' && (
           <div className="bg-white border border-[#E5E8EF] rounded-xl p-6 shadow-sm space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="font-serif text-lg font-bold text-[#101F5B]">
+              <h3 className="text-lg font-bold text-[#0B1536]">
                 Agenda Temu Kangen & Workshop Aktif
               </h3>
               <button className="text-xs font-semibold bg-[#101F5B] text-white px-3 py-2 rounded-lg">
@@ -146,7 +146,7 @@ export default function AdminDashboard() {
         {/* Tab 3: Moderasi */}
         {activeTab === 'moderasi' && (
           <div className="bg-white border border-[#E5E8EF] rounded-xl p-6 shadow-sm space-y-4">
-            <h3 className="font-serif text-lg font-bold text-[#101F5B]">
+            <h3 className="text-lg font-bold text-[#0B1536]">
               Moderasi Konten & Laporan Komunitas
             </h3>
             <p className="text-xs text-[#5F6678]">
@@ -158,7 +158,7 @@ export default function AdminDashboard() {
         {/* Tab 4: Analitik Dampak */}
         {activeTab === 'analitik' && (
           <div className="bg-white border border-[#E5E8EF] rounded-xl p-6 shadow-sm space-y-6">
-            <h3 className="font-serif text-lg font-bold text-[#101F5B]">
+            <h3 className="text-lg font-bold text-[#0B1536]">
               Metrik Dampak Nyata Komunitas (Pilot Phase)
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

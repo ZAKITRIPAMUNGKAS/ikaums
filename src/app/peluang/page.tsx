@@ -206,7 +206,7 @@ export default function PeluangPage() {
               <span className="text-[11px] font-mono uppercase tracking-wider text-[#101F5B] font-bold block mb-1">
                 BURSA KARIER & KEMITRAAN ALUMNI
               </span>
-              <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#101F5B]">
+              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0B1536]">
                 Peluang Kerja, Proyek & Mentoring
               </h1>
               <p className="text-xs sm:text-sm text-[#5F6678] mt-1.5 max-w-2xl leading-relaxed">
@@ -266,7 +266,7 @@ export default function PeluangPage() {
                       )}
                     </div>
 
-                    <h3 className="font-serif text-xl font-bold text-[#101F5B] group-hover:text-[#18213D] transition-colors leading-tight">
+                    <h3 className="text-xl font-bold text-[#0B1536] group-hover:text-[#18213D] transition-colors leading-tight">
                       {item.title}
                     </h3>
 
@@ -302,7 +302,7 @@ export default function PeluangPage() {
                   <div className="sm:text-right shrink-0 flex flex-col justify-between items-start sm:items-end border-t sm:border-0 border-[#F0F2F6] pt-3 sm:pt-0">
                     <div className="mb-3">
                       <span className="text-[10px] font-mono uppercase text-[#5F6678] block">Kompensasi / Imbalan</span>
-                      <span className="font-serif text-base font-bold text-[#101F5B]">
+                      <span className="text-base font-bold font-mono text-[#0B1536]">
                         {item.compensation}
                       </span>
                     </div>

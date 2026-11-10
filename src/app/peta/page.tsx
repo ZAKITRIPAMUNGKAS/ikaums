@@ -18,7 +18,7 @@ export default function PetaPage() {
 
         {/* Page Title & Subtitle */}
         <div className="mb-8">
-          <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#101F5B]">
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0B1536]">
             Peta Sebaran Alumni
           </h1>
           <p className="text-xs sm:text-sm text-[#5F6678] mt-1.5 max-w-2xl leading-relaxed">

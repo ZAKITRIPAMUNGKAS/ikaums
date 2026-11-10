@@ -43,7 +43,7 @@ export default function GabungPage() {
             <span className="w-1.5 h-1.5 rounded-full bg-[#10B981] animate-pulse"></span>
             <span>Registrasi Sukarela Anggota</span>
           </div>
-          <h1 className="font-serif text-4xl sm:text-5xl font-normal text-[#0B1536] tracking-tight leading-[1.08]">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-[#0B1536] leading-[1.1]">
             Bergabung dengan IKA UMS Connect
           </h1>
           <p className="text-sm sm:text-base text-[#64748B] mt-2 max-w-xl leading-relaxed">
@@ -56,7 +56,7 @@ export default function GabungPage() {
             <div className="w-16 h-16 bg-[#ECFDF5] text-[#10B981] rounded-full flex items-center justify-center mx-auto mb-2">
               <CheckCircle2 className="w-9 h-9" />
             </div>
-            <h2 className="font-serif text-3xl font-normal text-[#0B1536]">
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#0B1536]">
               Pendaftaran Berhasil Diajukan
             </h2>
             <p className="text-sm text-[#64748B] max-w-md mx-auto leading-relaxed">

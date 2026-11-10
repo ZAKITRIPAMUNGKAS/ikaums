@@ -76,7 +76,7 @@ export default function KegiatanPage() {
               <span className="text-[11px] font-mono uppercase tracking-wider text-[#101F5B] font-bold block mb-1">
                 INISIATIF KOMUNITAS • JABODETABEK 2026
               </span>
-              <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#101F5B]">
+              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0B1536]">
                 Agenda Pertemuan & Kolaborasi
               </h1>
               <p className="text-xs sm:text-sm text-[#5F6678] mt-1.5 max-w-2xl leading-relaxed">
@@ -121,7 +121,7 @@ export default function KegiatanPage() {
                   </span>
                 </div>
 
-                <h2 className="font-serif text-2xl sm:text-3xl font-bold text-[#101F5B] leading-tight">
+                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#0B1536] leading-tight">
                   {featuredEvent.judul}
                 </h2>
 
@@ -194,7 +194,7 @@ export default function KegiatanPage() {
         {/* COMPACT EVENT ROWS WITH CURATED ANIMATED TABS */}
         <section className="space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#18213D]/10 pb-4">
-            <h3 className="font-serif text-2xl font-bold text-[#101F5B]">
+            <h3 className="text-2xl font-extrabold tracking-tight text-[#0B1536]">
               Daftar Seluruh Agenda Mendatang
             </h3>
 
@@ -229,7 +229,7 @@ export default function KegiatanPage() {
                     <div className="flex items-center gap-5 w-full sm:w-auto">
                       {/* Date Stamp */}
                       <div className="w-14 h-16 rounded-lg bg-[#EDF1FA] border border-[#101F5B]/15 flex flex-col items-center justify-center shrink-0 text-[#101F5B]">
-                        <span className="font-serif font-extrabold text-2xl leading-none">{day}</span>
+                        <span className="font-extrabold text-2xl leading-none font-mono">{day}</span>
                         <span className="text-[10px] font-mono font-bold uppercase tracking-wider mt-0.5">{month}</span>
                       </div>
 
@@ -252,7 +252,7 @@ export default function KegiatanPage() {
                             {item.jamWIB}
                           </span>
                         </div>
-                        <h4 className="font-serif text-lg font-bold text-[#101F5B] leading-snug">
+                        <h4 className="text-lg font-bold text-[#0B1536] leading-snug">
                           {item.judul}
                         </h4>
                         <p className="text-xs text-[#5F6678] line-clamp-1 max-w-xl">

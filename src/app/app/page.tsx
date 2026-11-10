@@ -24,12 +24,12 @@ export default function MemberDashboard() {
         {/* User Greeting Header */}
         <div className="bg-white border border-[#E5E8EF] rounded-2xl p-6 sm:p-8 mb-8 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
-            <div className="w-16 h-16 rounded-full bg-[#101F5B] text-[#F4C542] font-serif font-bold text-2xl flex items-center justify-center">
+            <div className="w-16 h-16 rounded-full bg-[#0B1536] text-[#F4C542] font-mono font-bold text-2xl flex items-center justify-center">
               MZ
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="font-serif text-2xl font-bold text-[#101F5B]">
+                <h1 className="text-2xl font-extrabold tracking-tight text-[#0B1536]">
                   Muhammad Zaki, S.Kom.
                 </h1>
                 <span className="bg-[#22775A]/10 text-[#22775A] text-xs font-semibold px-2 py-0.5 rounded-full flex items-center gap-1">
@@ -83,7 +83,7 @@ export default function MemberDashboard() {
                 <span className="text-xs font-bold text-[#5F6678] uppercase tracking-wider">
                   Koneksi Terkonfirmasi
                 </span>
-                <div className="text-3xl font-bold text-[#101F5B] font-serif mt-2">12</div>
+                <div className="text-3xl font-extrabold text-[#0B1536] font-mono mt-2">12</div>
                 <p className="text-xs text-[#5F6678] mt-1">Alumni saling terhubung aktif</p>
               </div>
 
@@ -91,7 +91,7 @@ export default function MemberDashboard() {
                 <span className="text-xs font-bold text-[#5F6678] uppercase tracking-wider">
                   Agenda Diikuti
                 </span>
-                <div className="text-3xl font-bold text-[#101F5B] font-serif mt-2">2</div>
+                <div className="text-3xl font-extrabold text-[#0B1536] font-mono mt-2">2</div>
                 <p className="text-xs text-[#5F6678] mt-1">RSVP Temu Kangen & Workshop</p>
               </div>
 
@@ -99,13 +99,13 @@ export default function MemberDashboard() {
                 <span className="text-xs font-bold text-[#5F6678] uppercase tracking-wider">
                   Status Bantuan
                 </span>
-                <div className="text-3xl font-bold text-[#22775A] font-serif mt-2">1 Aktif</div>
+                <div className="text-3xl font-extrabold text-[#0F766E] font-mono mt-2">1 Aktif</div>
                 <p className="text-xs text-[#5F6678] mt-1">Tawaran Mentoring Freshgrad</p>
               </div>
             </div>
 
             <div className="bg-white border border-[#E5E8EF] rounded-xl p-6 shadow-sm">
-              <h3 className="font-serif text-lg font-bold text-[#101F5B] mb-4">
+              <h3 className="text-lg font-bold text-[#0B1536] mb-4">
                 Rekomendasi Alumni Satu Wilayah (Jakarta Selatan)
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -135,7 +135,7 @@ export default function MemberDashboard() {
         {/* Tab 2: Permintaan Koneksi */}
         {activeTab === 'koneksi' && (
           <div className="bg-white border border-[#E5E8EF] rounded-xl p-6 shadow-sm space-y-4">
-            <h3 className="font-serif text-lg font-bold text-[#101F5B] mb-2">
+            <h3 className="text-lg font-bold text-[#0B1536] mb-2">
               Permintaan Koneksi Masuk
             </h3>
             <p className="text-xs text-[#5F6678] mb-4">
@@ -167,7 +167,7 @@ export default function MemberDashboard() {
           <div className="bg-white border border-[#E5E8EF] rounded-xl p-6 shadow-sm space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-serif text-lg font-bold text-[#101F5B]">
+                <h3 className="text-lg font-bold text-[#0B1536]">
                   Saya Bisa Bantu / Saya Butuh Bantuan
                 </h3>
                 <p className="text-xs text-[#5F6678]">
@@ -217,7 +217,7 @@ export default function MemberDashboard() {
         {activeTab === 'pengaturan' && (
           <div className="bg-white border border-[#E5E8EF] rounded-xl p-6 sm:p-8 shadow-sm space-y-6">
             <div>
-              <h3 className="font-serif text-lg font-bold text-[#101F5B]">
+              <h3 className="text-lg font-bold text-[#0B1536]">
                 Pengaturan Privasi & Persetujuan (UU PDP)
               </h3>
               <p className="text-xs text-[#5F6678] mt-1">

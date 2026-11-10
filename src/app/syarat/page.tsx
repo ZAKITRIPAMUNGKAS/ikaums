@@ -12,7 +12,7 @@ export default function TentangPage() {
           <span className="text-xs font-bold uppercase tracking-wider text-[#101F5B] bg-[#EDF1FA] px-3 py-1 rounded-full">
             Inisiatif & Kebijakan
           </span>
-          <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#101F5B] mt-3">
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0B1536] mt-3">
             Tentang IKA UMS Connect & Tata Kelola Privasi
           </h1>
           <p className="text-sm text-[#5F6678] mt-2 leading-relaxed">
@@ -22,7 +22,7 @@ export default function TentangPage() {
 
         <div className="space-y-8 text-sm leading-relaxed text-[#18213D]">
           <section className="bg-white border border-[#E5E8EF] rounded-xl p-6 shadow-sm">
-            <h2 className="font-serif text-xl font-bold text-[#101F5B] mb-3">
+            <h2 className="text-xl font-bold text-[#0B1536] mb-3">
               1. Latar Belakang & Status Inisiatif
             </h2>
             <p className="text-[#5F6678]">
@@ -36,7 +36,7 @@ export default function TentangPage() {
           <section className="bg-white border border-[#E5E8EF] rounded-xl p-6 shadow-sm">
             <div className="flex items-center gap-2 mb-3">
               <Shield className="w-5 h-5 text-[#22775A]" />
-              <h2 className="font-serif text-xl font-bold text-[#101F5B]">
+              <h2 className="text-xl font-bold text-[#0B1536]">
                 2. Prinsip Perlindungan Data Pribadi (UU PDP)
               </h2>
             </div>
@@ -61,7 +61,7 @@ export default function TentangPage() {
           </section>
 
           <section className="bg-white border border-[#E5E8EF] rounded-xl p-6 shadow-sm">
-            <h2 className="font-serif text-xl font-bold text-[#101F5B] mb-3">
+            <h2 className="text-xl font-bold text-[#0B1536] mb-3">
               3. Verifikasi & Integritas Keanggotaan
             </h2>
             <p className="text-[#5F6678]">

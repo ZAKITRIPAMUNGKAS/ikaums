@@ -121,7 +121,7 @@ export default function DirektoriPage() {
               <span className="text-[11px] font-mono uppercase tracking-wider text-[#101F5B] font-bold block mb-1">
                 JEJARING PROFESIONAL TERVERIFIKASI
               </span>
-              <h1 className="font-serif text-3xl sm:text-4xl font-bold text-[#101F5B]">
+              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0B1536]">
                 Direktori Alumni Jabodetabek
               </h1>
               <p className="text-xs sm:text-sm text-[#5F6678] mt-1.5 max-w-2xl leading-relaxed">
@@ -200,7 +200,7 @@ export default function DirektoriPage() {
 
                     <div className="space-y-0.5">
                       <div className="flex items-center gap-2">
-                        <h3 className="font-serif text-base font-bold text-[#101F5B] group-hover:text-[#18213D] transition-colors leading-tight">
+                        <h3 className="text-base font-bold text-[#0B1536] group-hover:text-[#18213D] transition-colors leading-tight">
                           {alumni.nama}
                         </h3>
                         {alumni.isVerified && (
@@ -322,7 +322,7 @@ export default function DirektoriPage() {
                 {/* Identity */}
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
-                    <h3 className="font-serif text-xl font-bold text-[#101F5B]">
+                    <h3 className="text-xl font-extrabold tracking-tight text-[#0B1536]">
                       {selectedAlumni.nama}
                     </h3>
                     {selectedAlumni.isVerified && (
@@ -362,13 +362,13 @@ export default function DirektoriPage() {
                 <div className="pt-2 text-xs text-[#5F6678] leading-relaxed">
                   {activeProfileTab === 'tentang' && (
                     <div className="space-y-2">
-                      <h4 className="font-bold text-[#101F5B] font-serif text-sm">Biografi Singkat</h4>
+                      <h4 className="font-bold text-[#0B1536] text-sm">Biografi Singkat</h4>
                       <p>{selectedAlumni.bio}</p>
                     </div>
                   )}
                   {activeProfileTab === 'pengalaman' && (
                     <div className="space-y-2">
-                      <h4 className="font-bold text-[#101F5B] font-serif text-sm">Jejak Karier & Institusi</h4>
+                      <h4 className="font-bold text-[#0B1536] text-sm">Jejak Karier & Institusi</h4>
                       <div className="bg-[#FAFAF8] p-3.5 rounded-lg border border-[#E5E8EF] space-y-1">
                         <p className="font-bold text-[#18213D] text-xs">{selectedAlumni.pekerjaan}</p>
                         <p className="text-[11px] text-[#5F6678] font-mono">{selectedAlumni.perusahaan} • 2021 - Sekarang</p>
@@ -380,7 +380,7 @@ export default function DirektoriPage() {
                   )}
                   {activeProfileTab === 'keahlian' && (
                     <div className="space-y-2">
-                      <h4 className="font-bold text-[#101F5B] font-serif text-sm">Keahlian & Domain Spesialisasi</h4>
+                      <h4 className="font-bold text-[#0B1536] text-sm">Keahlian & Domain Spesialisasi</h4>
                       <div className="flex flex-wrap gap-1.5">
                         {selectedAlumni.keahlian.map((skill, idx) => (
                           <span key={idx} className="bg-[#EDF1FA] text-[#101F5B] px-3 py-1 rounded-md text-[11px] font-mono font-medium">
@@ -392,7 +392,7 @@ export default function DirektoriPage() {
                   )}
                   {activeProfileTab === 'kontribusi' && (
                     <div className="space-y-2">
-                      <h4 className="font-bold text-[#101F5B] font-serif text-sm">Dukungan Untuk Komunitas Alumni</h4>
+                      <h4 className="font-bold text-[#0B1536] text-sm">Dukungan Untuk Komunitas Alumni</h4>
                       <p>
                         {selectedAlumni.bersediaMentoring 
                           ? 'Bersedia meluangkan waktu untuk konsultasi karir, review portofolio, dan bimbingan adaptasi perantauan bagi fresh graduates UMS.'

@@ -134,9 +134,9 @@ export default function Home() {
                   <span>Jejaring Resmi Alumni UMS Jabodetabek</span>
                 </div>
 
-                <h1 className="font-serif text-5xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-[5.25rem] font-normal tracking-tight text-[#0B1536] leading-[1.02]">
+                <h1 className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-extrabold tracking-[-0.035em] text-[#0B1536] leading-[1.08]">
                   Dari Temu Kangen, <br />
-                  <span className="italic text-[#B45309]">menjadi Temu Peluang.</span>
+                  <span className="text-[#0F766E]">Jadi Temu Peluang.</span>
                 </h1>
 
                 <p className="text-sm sm:text-base md:text-lg text-[#475569] max-w-xl leading-relaxed">
@@ -205,8 +205,8 @@ export default function Home() {
                   ALUMNI TERVERIFIKASI
                 </span>
                 <div className="flex items-baseline gap-2">
-                  <span className="font-serif text-4xl text-[#0B1536]">1.248</span>
-                  <span className="text-sm font-semibold text-[#0B1536]">Anggota</span>
+                  <span className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0B1536]">1.248</span>
+                  <span className="text-sm font-semibold text-[#64748B]">Anggota</span>
                 </div>
                 <span className="text-xs text-[#64748B] mt-1 block">
                   Terdaftar aktif dari angkatan 1985 hingga 2025 lintas 12 fakultas.
@@ -218,8 +218,8 @@ export default function Home() {
                   DISTRIBUSI METROPOLITAN
                 </span>
                 <div className="flex items-baseline gap-2">
-                  <span className="font-serif text-4xl text-[#0B1536]">9</span>
-                  <span className="text-sm font-semibold text-[#0B1536]">Sentra Wilayah</span>
+                  <span className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0B1536]">9</span>
+                  <span className="text-sm font-semibold text-[#64748B]">Sentra Wilayah</span>
                 </div>
                 <span className="text-xs text-[#64748B] mt-1 block">
                   Tersebar di DKI Jakarta, Tangerang Raya, Bekasi, Depok, dan Bogor.
@@ -231,8 +231,8 @@ export default function Home() {
                   BIMBINGAN & MENTORING
                 </span>
                 <div className="flex items-baseline gap-2">
-                  <span className="font-serif text-4xl text-[#0B1536]">326</span>
-                  <span className="text-sm font-semibold text-[#0B1536]">Mentor Aktif</span>
+                  <span className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0B1536]">326</span>
+                  <span className="text-sm font-semibold text-[#64748B]">Mentor Aktif</span>
                 </div>
                 <span className="text-xs text-[#64748B] mt-1 block">
                   Alumni senior yang bersedia membimbing karier dan membuka rujukan loker.
@@ -253,7 +253,7 @@ export default function Home() {
                 <span className="text-xs font-semibold text-[#B45309] uppercase tracking-wider block mb-1">
                   DIREKTORI & TALENTA
                 </span>
-                <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#0B1536]">
+                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-[#0B1536]">
                   Jelajahi Profil Profesional Terverifikasi
                 </h2>
                 <p className="text-xs sm:text-sm text-[#64748B] max-w-xl mt-1">
@@ -298,7 +298,7 @@ export default function Home() {
             {/* Contra-Style Talent Cards Grid */}
             {filteredAlumni.length === 0 ? (
               <div className="rounded-2xl border border-dashed border-[#0C1222]/20 p-12 text-center bg-[#FAF9F5]">
-                <p className="text-base font-serif text-[#0B1536] font-bold">
+                <p className="text-base font-bold text-[#0B1536]">
                   Tidak ditemukan profil yang sesuai kriteria pencarian.
                 </p>
                 <p className="text-xs text-[#64748B] mt-1">
@@ -331,7 +331,7 @@ export default function Home() {
 
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-1.5 flex-wrap">
-                            <h3 className="font-serif font-bold text-base text-[#0B1536] leading-tight">
+                            <h3 className="font-bold text-base text-[#0B1536] leading-tight">
                               {alumni.nama}
                             </h3>
                             {alumni.isVerified && (
@@ -449,7 +449,7 @@ export default function Home() {
                 <span className="text-xs font-semibold text-[#B45309] uppercase tracking-wider block mb-1">
                   BIMBINGAN 1-ON-1
                 </span>
-                <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#0B1536]">
+                <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0B1536]">
                   Mentoring Langsung dari Alumni Senior
                 </h2>
                 <p className="text-xs sm:text-sm text-[#64748B] max-w-xl mt-1">
@@ -481,7 +481,7 @@ export default function Home() {
                         />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <h3 className="font-serif font-bold text-base text-[#0B1536] leading-tight">
+                        <h3 className="font-bold text-base text-[#0B1536] leading-tight">
                           {mentor.nama}
                         </h3>
                         <p className="text-xs text-[#0B1536] font-semibold mt-0.5 truncate">
@@ -545,7 +545,7 @@ export default function Home() {
                 <span className="text-xs font-semibold text-[#B45309] uppercase tracking-wider block mb-1">
                   SEBARAN GEOGRAFIS
                 </span>
-                <h2 className="font-serif text-3xl font-bold text-[#0B1536]">
+                <h2 className="text-3xl font-extrabold tracking-tight text-[#0B1536]">
                   Peta Sebaran Alumni di Jabodetabek
                 </h2>
                 <p className="text-xs sm:text-sm text-[#64748B] max-w-lg mt-1">
@@ -577,7 +577,7 @@ export default function Home() {
                 <span className="text-xs font-semibold text-[#B45309] uppercase tracking-wider block mb-1">
                   KEGIATAN & EVENT
                 </span>
-                <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#0B1536]">
+                <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0B1536]">
                   Agenda Terdekat Komunitas Jabodetabek
                 </h2>
                 <p className="text-xs sm:text-sm text-[#64748B] max-w-lg mt-1">
@@ -633,7 +633,7 @@ export default function Home() {
                         <span>{ev.tanggalWIB} · {ev.jamWIB}</span>
                       </div>
 
-                      <h3 className="font-serif text-lg font-bold text-[#0B1536] leading-snug group-hover:text-[#16234D]">
+                      <h3 className="text-lg font-bold text-[#0B1536] leading-snug group-hover:text-[#16234D]">
                         {ev.judul}
                       </h3>
 
@@ -691,7 +691,7 @@ export default function Home() {
                 <span className="text-xs font-semibold text-[#B45309] uppercase tracking-wider block mb-1">
                   KABAR DARI IBU KOTA
                 </span>
-                <h2 className="font-serif text-3xl sm:text-4xl font-bold text-[#0B1536]">
+                <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0B1536]">
                   Rekam Jejak & Dampak Sinergi Alumni
                 </h2>
               </div>
@@ -725,7 +725,7 @@ export default function Home() {
                     <span className="text-[#64748B]">5 MENIT BACA</span>
                   </div>
 
-                  <h3 className="font-serif text-2xl sm:text-3xl font-bold text-[#0B1536] leading-tight">
+                  <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#0B1536] leading-tight">
                     Dari Kampus Pabelan ke Sentra Startup Jakarta: Hendra Membuka Pintu bagi Ratusan Lulusan Baru
                   </h3>
 
@@ -760,7 +760,7 @@ export default function Home() {
                       <span className="text-xs text-[#B45309] font-semibold uppercase tracking-wider block">
                         {story.kategori}
                       </span>
-                      <h4 className="font-serif text-xl font-bold text-[#0B1536] leading-snug">
+                      <h4 className="text-xl font-bold text-[#0B1536] leading-snug">
                         {story.judul}
                       </h4>
                       <p className="text-xs text-[#64748B] leading-relaxed line-clamp-3">
@@ -798,7 +798,7 @@ export default function Home() {
                 <span className="text-xs uppercase tracking-widest text-[#F4C542] font-bold block">
                   KOMITMEN KESETARAAN & GOTONG ROYONG
                 </span>
-                <h3 className="font-serif text-3xl sm:text-4xl font-bold leading-tight">
+                <h3 className="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight">
                   Mempertemukan Potensi, Memajukan Almamater di Perantauan.
                 </h3>
                 <p className="text-xs sm:text-sm text-[#EDF1FA]/80 leading-relaxed">
@@ -843,7 +843,7 @@ export default function Home() {
                   </div>
                   <div>
                     <div className="flex items-center gap-1.5 flex-wrap">
-                      <h3 className="font-serif text-xl font-bold">
+                      <h3 className="text-xl font-bold">
                         {selectedProfile.nama}
                       </h3>
                       {selectedProfile.isVerified && (
@@ -951,7 +951,7 @@ export default function Home() {
                   <span>•</span>
                   <span>{selectedEvent.jenis}</span>
                 </div>
-                <DialogTitle className="font-serif text-xl font-bold text-[#0B1536] text-left pt-1">
+                <DialogTitle className="text-xl font-bold text-[#0B1536] text-left pt-1">
                   {selectedEvent.judul}
                 </DialogTitle>
                 <DialogDescription className="text-xs text-[#64748B] text-left">
@@ -964,7 +964,7 @@ export default function Home() {
               {isRsvpDone ? (
                 <div className="bg-[#ECFDF5] border border-[#10B981]/30 p-6 rounded-xl text-center space-y-2">
                   <CheckCircle2 className="w-8 h-8 text-[#10B981] mx-auto" />
-                  <h4 className="font-serif font-bold text-base text-[#065F46]">
+                  <h4 className="font-bold text-base text-[#065F46]">
                     RSVP Berhasil Terkonfirmasi!
                   </h4>
                   <p className="text-xs text-[#047857]">
@@ -1040,7 +1040,7 @@ export default function Home() {
                 <div className="flex items-center gap-2 text-xs font-bold text-[#0F766E] uppercase">
                   <span>BOOKING SESI MENTORING 1-ON-1 (GRATIS)</span>
                 </div>
-                <DialogTitle className="font-serif text-xl font-bold text-[#0B1536] text-left pt-1">
+                <DialogTitle className="text-xl font-bold text-[#0B1536] text-left pt-1">
                   Bimbingan bersama {selectedMentor.nama}
                 </DialogTitle>
                 <DialogDescription className="text-xs text-[#64748B] text-left">
@@ -1051,7 +1051,7 @@ export default function Home() {
               {isBookingDone ? (
                 <div className="bg-[#ECFDF5] border border-[#10B981]/30 p-6 rounded-xl text-center space-y-2">
                   <CheckCircle2 className="w-8 h-8 text-[#10B981] mx-auto" />
-                  <h4 className="font-serif font-bold text-base text-[#065F46]">
+                  <h4 className="font-bold text-base text-[#065F46]">
                     Permintaan Sesi Terkirim!
                   </h4>
                   <p className="text-xs text-[#047857]">
