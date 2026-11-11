@@ -175,9 +175,9 @@ export default function Home() {
                 <div className="rounded-2xl overflow-hidden border border-[#0C2340]/15 bg-white shadow-md">
                   <div className="aspect-[4/3] w-full bg-[#E2E8F0] relative">
                     <img
-                      src="/images/event-kopdar.jpg"
-                      alt="Suasana temu alumni UMS di Jakarta"
-                      className="w-full h-full object-cover"
+                      src="/images/alumni-gathering-4.jpg"
+                      alt="Alumni UMS saling menyapa hangat saat kopdar di Museum Mandiri Kota Tua"
+                      className="w-full h-full object-cover object-[50%_25%]"
                     />
                   </div>
                   <div className="p-4 bg-white border-t border-[#0C2340]/10 flex items-center justify-between text-xs text-[#475569]">

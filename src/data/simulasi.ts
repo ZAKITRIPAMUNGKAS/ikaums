@@ -314,7 +314,7 @@ export const DATA_KEGIATAN_SIMULASI: EventKegiatan[] = [
     kapasitas: 80,
     terdaftarCount: 54,
     penanggungJawab: 'Panitia Kopdar Wilayah Jakarta Selatan',
-    gambar: '/images/event-kopdar.jpg'
+    gambar: '/images/alumni-gathering-5.jpg'
   },
   {
     id: 'ev-2',
