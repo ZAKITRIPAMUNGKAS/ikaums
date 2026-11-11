@@ -210,7 +210,7 @@ export default function KelolaPendaftaranPage() {
             <span className="text-[#0C2340] font-medium">Kelola Pendaftaran</span>
           </div>
           <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-[#92400E] text-xs font-semibold">
-            {DEMO_BADGE_LABEL} — Simulasi Lokal
+            {DEMO_BADGE_LABEL} | Simulasi Lokal
           </span>
         </nav>
 

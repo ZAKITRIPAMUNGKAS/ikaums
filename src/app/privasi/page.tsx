@@ -6,7 +6,7 @@ import { PatternSection, PatternDivider } from '@/components/PatternSection';
 import { COMMUNITY_PLACEHOLDERS } from '@/lib/config';
 
 export const metadata: Metadata = {
-  title: 'Kebijakan Privasi — IKA UMS Wilayah Jabodetabek',
+  title: 'Kebijakan Privasi | IKA UMS Wilayah Jabodetabek',
   description:
     'Penjelasan terbuka mengenai cara pengumpulan, penyimpanan, dan perlindungan data pribadi pendaftar IKA UMS Wilayah Jabodetabek.',
 };
@@ -38,17 +38,17 @@ export default function PrivasiPage() {
           </nav>
 
           <header className="space-y-3">
-            <p className="text-sm font-semibold text-[#92400E]">
+            <span className="inline-block text-sm font-semibold text-[#92400E]">
               Privasi &amp; Data Pendaftar
-            </p>
-            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#0C2340]">
+            </span>
+            <h1 className="text-[clamp(1.75rem,1.3rem+1.8vw,2.5rem)] font-bold tracking-[-0.02em] text-[#0C2340]">
               Kebijakan Privasi IKA UMS Wilayah Jabodetabek
             </h1>
-            <p className="text-base text-[#475569] leading-relaxed">
+            <p className="text-base text-[#475569] leading-[1.6]">
               Dokumen ini menjelaskan secara apa adanya data apa yang kami minta saat kamu mendaftar,
               bagaimana data itu digunakan pengurus, dan hak kamu untuk mengubah atau menghapusnya.
             </p>
-            <p className="text-sm text-[#475569]">
+            <p className="text-base text-[#475569]">
               Pembaruan terakhir: November 2026 (Tahap Prapeluncuran)
             </p>
           </header>
@@ -57,7 +57,7 @@ export default function PrivasiPage() {
         <PatternDivider variant="curve" fromColor="#F3F1EA" toColor="#FDFCF7" />
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-14 w-full relative z-[1]">
-        <div className="py-8 space-y-8 text-[15px] sm:text-base text-[#334155] leading-relaxed">
+        <div className="py-8 space-y-8 text-base text-[#334155] leading-[1.6]">
           <section className="space-y-2.5">
             <h2 className="text-xl font-bold text-[#0C2340]">
               1. Data yang Kamu Isikan Sendiri

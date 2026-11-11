@@ -62,8 +62,8 @@ export default function PetaContextualPanel({ region }: PetaContextualPanelProps
               <div className="text-xs font-bold text-[#0C2340] mb-1">
                 Jumlah Alumni Terdata
               </div>
-              <p className="text-xs text-[#475569] leading-relaxed">
-                {COMMUNITY_PLACEHOLDERS.coordinatorCount} — angka resmi per kota akan ditampilkan setelah verifikasi pendaftar awal berjalan.
+              <p className="text-sm text-[#475569] leading-relaxed">
+                {COMMUNITY_PLACEHOLDERS.coordinatorCount}, angka resmi per kota akan ditampilkan setelah verifikasi pendaftar awal berjalan.
               </p>
             </div>
 

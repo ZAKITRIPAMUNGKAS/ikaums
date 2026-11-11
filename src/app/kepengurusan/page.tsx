@@ -9,7 +9,7 @@ import { IS_DEMO_MODE, COMMUNITY_PLACEHOLDERS, DEMO_BADGE_LABEL } from '@/lib/co
 import { ArrowRight, MapPin, Info, PhoneCall, ExternalLink } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Pengurus & Kontak — IKA UMS Wilayah Jabodetabek',
+  title: 'Pengurus & Kontak | IKA UMS Wilayah Jabodetabek',
   description:
     'Susunan pengurus harian, bidang kerja, kontak sekretariat, serta koordinator 9 wilayah IKA UMS Wilayah Jabodetabek.',
 };
@@ -130,13 +130,13 @@ export default function KepengurusanPage() {
           {/* Page Header */}
           <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
             <div className="max-w-2xl space-y-2.5">
-              <p className="text-xs font-bold uppercase tracking-wider text-[#92400E]">
+              <span className="inline-block text-sm font-bold uppercase tracking-wider text-[#92400E]">
                 Struktur &amp; Kontak Resmi
-              </p>
-              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0C2340] leading-[1.15]">
+              </span>
+              <h1 className="text-[clamp(1.75rem,1.3rem+1.8vw,2.5rem)] font-extrabold tracking-[-0.02em] text-[#0C2340] leading-[1.15]">
                 Pengurus &amp; Koordinator Wilayah
               </h1>
-              <p className="text-sm sm:text-base text-[#475569] leading-relaxed">
+              <p className="text-base text-[#475569] leading-[1.6]">
                 IKA UMS Wilayah Jabodetabek dijalankan secara gotong royong oleh pengurus harian,
                 bidang kerja, dan perwakilan di sembilan wilayah domisili agar koordinasi kopdar tetap dekat.
               </p>
@@ -145,16 +145,16 @@ export default function KepengurusanPage() {
             <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2.5 sm:gap-3 shrink-0 w-full sm:w-auto">
               <Link
                 href="/tentang"
-                className="inline-flex items-center justify-center min-h-[44px] px-3.5 sm:px-4 py-2.5 rounded-xl bg-white border border-[#0C2340]/15 hover:border-[#0C2340]/35 text-[#0C2340] text-xs sm:text-sm font-semibold text-center transition-colors"
+                className="inline-flex items-center justify-center min-h-[44px] px-3.5 sm:px-4 py-2.5 rounded-lg bg-white border border-[#0C2340]/15 hover:border-[#0C2340]/35 text-[#0C2340] text-sm sm:text-base font-semibold text-center transition-colors"
               >
                 Tentang Komunitas
               </Link>
               <Link
                 href="/gabung"
-                className="inline-flex items-center justify-center gap-1.5 sm:gap-2 min-h-[44px] px-3.5 sm:px-4 py-2.5 rounded-xl bg-[#0C2340] hover:bg-[#16325C] text-white text-xs sm:text-sm font-semibold transition-colors"
+                className="inline-flex items-center justify-center gap-1.5 sm:gap-2 min-h-[44px] px-3.5 sm:px-4 py-2.5 rounded-lg bg-[#0C2340] hover:bg-[#08182E] text-white text-sm sm:text-base font-semibold transition-colors"
               >
                 <span>Daftar jadi anggota</span>
-                <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#F59E0B] shrink-0" />
+                <ArrowRight className="w-4 h-4 text-[#F59E0B] shrink-0" />
               </Link>
             </div>
           </header>
@@ -176,7 +176,7 @@ export default function KepengurusanPage() {
             <h2 id="heading-kontak-resmi" className="text-xl font-bold text-[#0C2340]">
               Kontak Pengurus &amp; Status IKA UMS Pusat
             </h2>
-            <p className="text-sm text-[#475569] leading-relaxed">
+            <p className="text-base text-[#475569] leading-[1.6]">
               Hubungi sekretariat untuk pertanyaan keanggotaan, pembaruan atau penghapusan data pribadi,
               serta konfirmasi kerja sama kegiatan wilayah.
             </p>
@@ -226,17 +226,17 @@ export default function KepengurusanPage() {
               <h2 id="heading-inti" className="text-2xl font-bold tracking-tight text-[#0C2340]">
                 Pengurus Harian
               </h2>
-              <p className="text-[15px] text-[#475569] leading-relaxed">
+              <p className="text-base text-[#475569] leading-[1.6]">
                 Jajaran inti yang mengoordinasikan kegiatan lintas wilayah, pencatatan anggota, serta kas kegiatan.
               </p>
             </div>
 
             <div className="bg-[#F3F1EA] border border-[#0C2340]/10 rounded-xl p-4 space-y-1.5">
-              <div className="flex items-center gap-2 text-xs font-bold text-[#0C2340]">
+              <div className="flex items-center gap-2 text-sm font-bold text-[#0C2340]">
                 <Info className="w-4 h-4 text-[#92400E] shrink-0" />
-                <span>Catatan Data Pra-Launch</span>
+                <span>Catatan Data Prapeluncuran</span>
               </div>
-              <p className="text-[13px] text-[#475569] leading-relaxed">
+              <p className="text-base text-[#475569] leading-[1.55]">
                 Penanda <strong className="font-semibold text-[#0C2340]">[ISI: ...]</strong> sengaja dibiarkan kosong agar hanya nama pengurus resmi hasil musyawarah yang ditampilkan saat rilis.
               </p>
             </div>
@@ -257,14 +257,14 @@ export default function KepengurusanPage() {
 
                 <div className="min-w-0 flex-1 space-y-1.5">
                   <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1 sm:gap-4">
-                    <h3 className="text-base font-bold text-[#0C2340]">
+                    <h3 className="text-lg font-bold text-[#0C2340]">
                       {item.jabatan}
                     </h3>
                     <span className="text-sm font-medium text-[#92400E] shrink-0">
                       {item.placeholderNama}
                     </span>
                   </div>
-                  <p className="text-sm text-[#475569] leading-relaxed">
+                  <p className="text-base text-[#475569] leading-[1.6]">
                     {item.amanah}
                   </p>
                 </div>
@@ -279,7 +279,7 @@ export default function KepengurusanPage() {
             <h2 id="heading-bidang" className="text-2xl font-bold tracking-tight text-[#0C2340]">
               Bidang Program Kerja
             </h2>
-            <p className="text-[15px] text-[#475569] leading-relaxed">
+            <p className="text-base text-[#475569] leading-[1.6]">
               Empat bidang kerja yang menangani mentoring, wirausaha, kopdar wilayah, dan publikasi informasi alumni.
             </p>
           </div>
@@ -311,7 +311,7 @@ export default function KepengurusanPage() {
                     <h3 className="text-lg font-bold text-[#0C2340] leading-snug">
                       {bidang.jabatan}
                     </h3>
-                    <p className="text-sm text-[#475569] leading-relaxed">
+                    <p className="text-base text-[#475569] leading-[1.6]">
                       {bidang.amanah}
                     </p>
                   </div>
@@ -344,7 +344,7 @@ export default function KepengurusanPage() {
                   </span>
                 )}
               </div>
-              <p className="text-[15px] text-[#475569] leading-relaxed">
+              <p className="text-base text-[#475569] leading-[1.6]">
                 Penghubung alumni di tingkat kota dan kabupaten untuk mengoordinasikan kopdar pertama di wilayah masing-masing.
               </p>
             </div>
@@ -473,14 +473,14 @@ export default function KepengurusanPage() {
             <h2 className="text-xl sm:text-2xl font-bold tracking-tight">
               Bersedia Jadi Penghubung Wilayahmu?
             </h2>
-            <p className="text-sm sm:text-[15px] text-white/85 leading-relaxed">
+            <p className="text-base text-white/90 leading-[1.6]">
               Setiap kota dan kabupaten terbuka bagi alumni yang bersedia membantu verifikasi
               pendaftar atau menjadi koordinator kopdar pertama di wilayahnya.
             </p>
           </div>
           <Link
             href="/gabung"
-            className="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 py-3 rounded-lg bg-[#F59E0B] hover:bg-[#FBBF24] text-[#0C2340] font-bold text-sm transition-colors shrink-0"
+            className="inline-flex items-center justify-center gap-2 min-h-[48px] px-5 py-3 rounded-lg bg-[#F59E0B] hover:bg-[#FBBF24] text-[#0C2340] font-bold text-base transition-colors shrink-0"
           >
             Daftar jadi anggota
             <ArrowRight className="w-4 h-4" />

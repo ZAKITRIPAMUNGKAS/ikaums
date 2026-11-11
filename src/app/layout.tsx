@@ -10,7 +10,7 @@ const jakartaSans = Plus_Jakarta_Sans({
 });
 
 const SITE_URL = "https://ikaums.vercel.app";
-const SITE_TITLE = "IKA UMS Wilayah Jabodetabek — Jaringan Alumni Universitas Muhammadiyah Surakarta";
+const SITE_TITLE = "IKA UMS Wilayah Jabodetabek | Jaringan Alumni Universitas Muhammadiyah Surakarta";
 const SITE_DESCRIPTION =
   "Pendataan awal anggota, usulan kopdar wilayah, Mentoring Alumni, serta Info Kerja & Usaha untuk lulusan Universitas Muhammadiyah Surakarta di Jabodetabek.";
 

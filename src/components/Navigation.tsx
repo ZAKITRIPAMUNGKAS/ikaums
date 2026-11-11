@@ -236,7 +236,7 @@ export function Navbar() {
               <span className="text-base sm:text-[17px] font-extrabold tracking-[-0.03em] text-[#0C2340] leading-none">
                 IKA UMS
               </span>
-              <span className="text-[10px] font-semibold tracking-[0.12em] text-[#92400E] uppercase leading-none mt-1">
+              <span className="text-xs font-semibold tracking-[0.06em] text-[#92400E] uppercase leading-none mt-1">
                 Wilayah Jabodetabek
               </span>
             </div>
@@ -337,104 +337,41 @@ export function Navbar() {
             transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
             className="lg:hidden border-b border-[#0C2340]/12 bg-[#FDFCF7] overflow-hidden shadow-lg"
           >
-            <div className="px-4 sm:px-6 py-4 space-y-4 text-sm">
-              <div className="grid grid-cols-2 gap-2">
+            <nav aria-label="Menu seluler" className="px-4 sm:px-6 py-5 space-y-2">
+              {[
+                { href: '/', label: 'Beranda', active: pathname === '/' },
+                { href: '/kegiatan', label: 'Jadwal Kopdar', active: isRouteMatch('/kegiatan') },
+                { href: '/peluang', label: 'Mentoring & Kerja', active: isRouteMatch('/peluang') },
+                { href: '/tentang', label: 'Tentang Komunitas', active: isRouteMatch('/tentang') },
+                { href: '/masuk', label: 'Masuk Anggota', active: isRouteMatch('/masuk') },
+              ].map((item) => (
                 <Link
-                  href="/"
+                  key={item.href}
+                  href={item.href}
                   onClick={() => setIsOpen(false)}
-                  className={`min-h-[44px] flex items-center justify-center py-2.5 px-3 rounded-xl border text-center transition-colors ${
-                    pathname === '/'
-                      ? 'bg-[#0C2340] border-[#0C2340] text-white font-bold'
-                      : 'bg-[#F3F1EA]/70 border-[#0C2340]/10 text-[#0C2340] hover:bg-[#F3F1EA] font-semibold'
+                  className={`min-h-[44px] flex items-center justify-between px-4 py-2.5 rounded-lg border text-base transition-colors ${
+                    item.active
+                      ? 'bg-[#0C2340]/8 border-[#0C2340]/30 text-[#0C2340] font-bold'
+                      : 'bg-white border-[#0C2340]/12 text-[#0C2340] hover:bg-[#F3F1EA]/70 font-medium'
                   }`}
                 >
-                  Beranda
+                  <span>{item.label}</span>
+                  {item.active && (
+                    <span className="text-xs font-semibold text-[#92400E]">Aktif</span>
+                  )}
                 </Link>
-                <Link
-                  href="/kegiatan"
-                  onClick={() => setIsOpen(false)}
-                  className={`min-h-[44px] flex items-center justify-center py-2.5 px-3 rounded-xl border text-center transition-colors ${
-                    isRouteMatch('/kegiatan')
-                      ? 'bg-[#0C2340] border-[#0C2340] text-white font-bold'
-                      : 'bg-[#F3F1EA]/70 border-[#0C2340]/10 text-[#0C2340] hover:bg-[#F3F1EA] font-semibold'
-                  }`}
-                >
-                  Jadwal Kopdar
-                </Link>
-              </div>
+              ))}
 
-              <div className="pt-2 border-t border-[#0C2340]/8 space-y-2">
-                <p className="text-[11px] font-bold uppercase tracking-wider text-[#475569]">
-                  {JARINGAN_GROUP.label}
-                </p>
-                <div className="grid grid-cols-2 gap-2">
-                  {JARINGAN_GROUP.items.map((item, idx) => {
-                    const active = isRouteMatch(item.href);
-                    return (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        onClick={() => setIsOpen(false)}
-                        className={`min-h-[44px] flex items-center py-2.5 px-3 rounded-xl border transition-colors ${
-                          idx === 2 ? 'col-span-2' : ''
-                        } ${
-                          active
-                            ? 'bg-[#0C2340]/10 border-[#0C2340]/25 text-[#0C2340] font-bold'
-                            : 'bg-white border-[#0C2340]/10 text-[#334155] hover:border-[#0C2340]/30 hover:text-[#0C2340] font-medium'
-                        }`}
-                      >
-                        <span className="block text-[13px]">{item.label}</span>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="pt-2 border-t border-[#0C2340]/8 space-y-2">
-                <p className="text-[11px] font-bold uppercase tracking-wider text-[#475569]">
-                  {TENTANG_GROUP.label}
-                </p>
-                <div className="grid grid-cols-2 gap-2">
-                  {TENTANG_GROUP.items.map((item, idx) => {
-                    const active = isRouteMatch(item.href);
-                    const isThirdOdd = TENTANG_GROUP.items.length === 3 && idx === 2;
-                    return (
-                      <Link
-                        key={item.href}
-                        href={item.href}
-                        onClick={() => setIsOpen(false)}
-                        className={`min-h-[44px] flex items-center py-2.5 px-3 rounded-xl border transition-colors ${
-                          isThirdOdd ? 'col-span-2' : ''
-                        } ${
-                          active
-                            ? 'bg-[#0C2340]/10 border-[#0C2340]/25 text-[#0C2340] font-bold'
-                            : 'bg-white border-[#0C2340]/10 text-[#334155] hover:border-[#0C2340]/30 hover:text-[#0C2340] font-medium'
-                        }`}
-                      >
-                        <span className="block text-[13px]">{item.label}</span>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-
-              <div className="pt-3 mt-2 border-t border-[#0C2340]/10 flex gap-2.5">
-                <Link
-                  href="/masuk"
-                  onClick={() => setIsOpen(false)}
-                  className="w-1/2 min-h-[44px] flex items-center justify-center text-center py-2.5 border border-[#0C2340]/20 font-semibold text-[#0C2340] rounded-lg hover:bg-[#0C2340]/5"
-                >
-                  Masuk
-                </Link>
+              <div className="pt-3 mt-2 border-t border-[#0C2340]/10">
                 <Link
                   href="/gabung"
                   onClick={() => setIsOpen(false)}
-                  className="w-1/2 min-h-[44px] flex items-center justify-center text-center py-2.5 bg-[#0C2340] text-white font-semibold rounded-lg shadow-xs"
+                  className="w-full min-h-[48px] flex items-center justify-center text-center py-3 px-4 bg-[#0C2340] hover:bg-[#08182E] text-white text-base font-semibold rounded-lg shadow-xs transition-colors"
                 >
                   Daftar jadi anggota
                 </Link>
               </div>
-            </div>
+            </nav>
           </motion.div>
         )}
       </AnimatePresence>
@@ -469,19 +406,19 @@ export function Footer() {
                 className="h-14 sm:h-16 w-auto object-contain"
               />
             </Link>
-            <p className="text-sm text-white/85 max-w-md leading-relaxed">
+            <p className="text-base text-white/90 max-w-md leading-[1.6]">
               Jaringan alumni Universitas Muhammadiyah Surakarta yang tinggal dan berkarya di Jakarta,
               Bogor, Depok, Tangerang, dan Bekasi.
             </p>
-            <div className="text-xs text-white/75 max-w-md space-y-1.5 leading-relaxed">
-              <p>
+            <div className="text-sm text-white/80 max-w-md space-y-1.5 leading-relaxed">
+              <div>
                 Koordinasi organisasi: <span className="text-white">{COMMUNITY_PLACEHOLDERS.ppIkaUmsStatus}</span>
-              </p>
-              <p>
+              </div>
+              <div>
                 Kontak pengurus: <span className="text-white">{COMMUNITY_PLACEHOLDERS.contactEmail}</span> ·{' '}
                 <span className="text-white">{COMMUNITY_PLACEHOLDERS.contactWhatsapp}</span>
-              </p>
-              <p>
+              </div>
+              <div>
                 <a
                   href={COMMUNITY_PLACEHOLDERS.ppIkaUmsUrl}
                   target="_blank"
@@ -489,9 +426,9 @@ export function Footer() {
                   className="inline-flex items-center gap-1 min-h-[44px] text-[#F59E0B] hover:text-white underline underline-offset-4 transition-colors"
                 >
                   Situs Resmi Universitas Muhammadiyah Surakarta
-                  <ExternalLink className="w-3 h-3" />
+                  <ExternalLink className="w-3.5 h-3.5" />
                 </a>
-              </p>
+              </div>
             </div>
           </div>
 
@@ -564,13 +501,13 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-8 sm:mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-xs text-white/65">
-          <p>
+        <div className="mt-8 sm:mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-sm text-white/75">
+          <span>
             &copy; 2026 IKA UMS Wilayah Jabodetabek · Komunitas Alumni Universitas Muhammadiyah Surakarta.
-          </p>
-          <p className="text-white/65">
+          </span>
+          <span className="text-white/75">
             Kanal resmi PP IKA UMS: {COMMUNITY_PLACEHOLDERS.ppIkaUmsChannelLabel}
-          </p>
+          </span>
         </div>
         </div>
       </PatternSection>

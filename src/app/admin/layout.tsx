@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Kelola Pendaftaran — IKA UMS Wilayah Jabodetabek",
+  title: "Kelola Pendaftaran | IKA UMS Wilayah Jabodetabek",
   description:
     "Halaman internal pengurus IKA UMS Wilayah Jabodetabek untuk meninjau dan memverifikasi pendaftaran alumni.",
   robots: {

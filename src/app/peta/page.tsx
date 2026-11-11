@@ -9,7 +9,7 @@ import { STATS_JABODETABEK } from '@/data/simulasi';
 import { ShieldCheck, Users, Award, ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Sebaran Wilayah Jabodetabek — IKA UMS Wilayah Jabodetabek',
+  title: 'Sebaran Wilayah Jabodetabek | IKA UMS Wilayah Jabodetabek',
   description:
     'Cakupan 9 wilayah kota dan kabupaten Ikatan Alumni Universitas Muhammadiyah Surakarta di Jabodetabek untuk koordinasi kopdar terdekat.',
 };
@@ -48,16 +48,16 @@ export default function PetaPage() {
 
           {/* Page Header */}
           <div>
-            <p className="text-xs font-bold uppercase tracking-wider text-[#92400E] mb-1.5">
+            <span className="inline-block text-sm font-bold uppercase tracking-wider text-[#92400E] mb-1.5">
               Cakupan Wilayah Jabodetabek
-            </p>
+            </span>
 
             <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
               <div>
-                <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0C2340]">
+                <h1 className="text-[clamp(1.75rem,1.3rem+1.8vw,2.5rem)] font-extrabold tracking-[-0.02em] text-[#0C2340]">
                   Sebaran 9 Wilayah Jabodetabek
                 </h1>
-                <p className="text-sm sm:text-base text-[#475569] mt-2 max-w-2xl leading-relaxed">
+                <p className="text-base text-[#475569] mt-2 max-w-[48ch] sm:max-w-2xl leading-[1.6]">
                   {IS_DEMO_MODE
                     ? 'Contoh tampilan peta sebaran alumni dan mentor di sembilan kota dan kabupaten Jabodetabek.'
                     : 'Pilih kota atau kabupaten di peta untuk melihat cakupan area dan mendaftarkan domisilimu guna persiapan kopdar pertama.'}
@@ -109,10 +109,10 @@ export default function PetaPage() {
             <div className="flex items-start gap-3.5">
               <ShieldCheck className="w-5 h-5 text-[#16A34A] shrink-0 mt-0.5" />
               <div className="space-y-1">
-                <h2 className="text-sm font-bold text-[#0C2340]">
+                <h2 className="text-base font-bold text-[#0C2340]">
                   Tentang Data Wilayah &amp; Perlindungan Privasi
                 </h2>
-                <p className="text-xs sm:text-sm text-[#475569] leading-relaxed">
+                <p className="text-base text-[#475569] leading-[1.6]">
                   Batas administrasi kota dan kabupaten merujuk data Badan Pusat Statistik (BPS) melalui
                   geoBoundaries (lisensi CC BY 3.0 IGO). Setelah pendaftaran berjalan penuh, angka yang
                   ditampilkan hanyalah total agregat tingkat kota/kabupaten; alamat rumah anggota tidak pernah dipublikasikan.
