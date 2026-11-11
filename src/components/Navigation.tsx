@@ -1,25 +1,218 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
-import { Menu, X, ArrowRight } from 'lucide-react';
+import { Menu, X, ArrowRight, ChevronDown } from 'lucide-react';
+
+interface NavSubItem {
+  label: string;
+  href: string;
+  description: string;
+}
+
+interface NavGroup {
+  id: 'jaringan' | 'tentang';
+  label: string;
+  items: NavSubItem[];
+}
+
+const JARINGAN_GROUP: NavGroup = {
+  id: 'jaringan',
+  label: 'Jaringan',
+  items: [
+    {
+      label: 'Direktori Alumni',
+      href: '/direktori',
+      description: 'Cari teman satu prodi, angkatan, & bidang',
+    },
+    {
+      label: 'Peta Wilayah',
+      href: '/peta',
+      description: 'Sebaran alumni di 9 wilayah Jabodetabek',
+    },
+    {
+      label: 'Mentoring & Peluang',
+      href: '/peluang',
+      description: 'Diskusi karier, lowongan, & usaha alumni',
+    },
+  ],
+};
+
+const TENTANG_GROUP: NavGroup = {
+  id: 'tentang',
+  label: 'Tentang',
+  items: [
+    {
+      label: 'Tentang Komunitas',
+      href: '/tentang',
+      description: 'Sejarah, tujuan, & prinsip pengelolaan',
+    },
+    {
+      label: 'Kepengurusan',
+      href: '/kepengurusan',
+      description: 'Pengurus harian, bidang kerja, & korwil',
+    },
+    {
+      label: 'Cerita Alumni',
+      href: '/cerita',
+      description: 'Kisah perantauan & kiprah alumni UMS',
+    },
+  ],
+};
 
 export function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const shouldReduceMotion = useReducedMotion();
+  const [mobileOpenPath, setMobileOpenPath] = useState<string | null>(null);
+  const [dropdownState, setDropdownState] = useState<{
+    menu: 'jaringan' | 'tentang';
+    path: string;
+  } | null>(null);
 
-  const navLinks = [
-    { label: 'Beranda', href: '/' },
-    { label: 'Direktori', href: '/direktori' },
-    { label: 'Agenda', href: '/kegiatan' },
-    { label: 'Mentoring & Peluang', href: '/peluang' },
-    { label: 'Peta Wilayah', href: '/peta' },
-    { label: 'Cerita', href: '/cerita' },
-    { label: 'Tentang', href: '/tentang' },
-  ];
+  const isOpen = mobileOpenPath === pathname;
+  const setIsOpen = (next: boolean) => setMobileOpenPath(next ? pathname : null);
+
+  const openDropdown = dropdownState?.path === pathname ? dropdownState.menu : null;
+  const setOpenDropdown = (menu: 'jaringan' | 'tentang' | null) =>
+    setDropdownState(menu ? { menu, path: pathname } : null);
+
+  const navContainerRef = useRef<HTMLElement>(null);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    function handleOutsideClick(event: MouseEvent) {
+      if (
+        navContainerRef.current &&
+        !navContainerRef.current.contains(event.target as Node)
+      ) {
+        setDropdownState(null);
+      }
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === 'Escape') {
+        setDropdownState(null);
+        setMobileOpenPath(null);
+      }
+    }
+
+    document.addEventListener('mousedown', handleOutsideClick);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.removeEventListener('mousedown', handleOutsideClick);
+      document.removeEventListener('keydown', handleKeyDown);
+      if (closeTimerRef.current) {
+        clearTimeout(closeTimerRef.current);
+      }
+    };
+  }, []);
+
+  const handleMouseEnterGroup = (groupId: 'jaringan' | 'tentang') => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+    setOpenDropdown(groupId);
+  };
+
+  const handleMouseLeaveGroup = () => {
+    if (closeTimerRef.current) {
+      clearTimeout(closeTimerRef.current);
+    }
+    closeTimerRef.current = setTimeout(() => {
+      setDropdownState(null);
+    }, 120);
+  };
+
+  const isRouteMatch = (href: string) =>
+    href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(`${href}/`);
+
+  const renderDropdownGroup = (group: NavGroup) => {
+    const isGroupActive = group.items.some((item) => isRouteMatch(item.href));
+    const isDropdownOpen = openDropdown === group.id;
+
+    return (
+      <div
+        key={group.id}
+        className="relative"
+        onMouseEnter={() => handleMouseEnterGroup(group.id)}
+        onMouseLeave={handleMouseLeaveGroup}
+      >
+        <button
+          type="button"
+          aria-expanded={isDropdownOpen}
+          aria-haspopup="menu"
+          onClick={() => setOpenDropdown(isDropdownOpen ? null : group.id)}
+          className={`relative inline-flex items-center gap-1 text-[13px] transition-colors pb-1.5 pt-1 whitespace-nowrap shrink-0 cursor-pointer ${
+            isGroupActive || isDropdownOpen
+              ? 'text-[#0C2340] font-bold'
+              : 'text-[#475569] hover:text-[#0C2340] font-medium'
+          }`}
+        >
+          <span>{group.label}</span>
+          <ChevronDown
+            className={`w-3.5 h-3.5 transition-transform duration-150 ${
+              isDropdownOpen ? 'rotate-180 text-[#0C2340]' : 'text-[#64748B]'
+            }`}
+          />
+          {isGroupActive && (
+            <motion.div
+              layoutId={shouldReduceMotion ? undefined : 'navbarActiveIndicator'}
+              transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+              className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#0C2340] rounded-full"
+            />
+          )}
+        </button>
+
+        <AnimatePresence>
+          {isDropdownOpen && (
+            <motion.div
+              initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 6 }}
+              animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+              exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 4 }}
+              transition={{ duration: 0.15, ease: 'easeOut' }}
+              role="menu"
+              aria-label={`Submenu ${group.label}`}
+              className="absolute left-0 top-full pt-2 z-50 w-72"
+            >
+              <div className="bg-white border border-[#0C2340]/12 rounded-xl shadow-[0_16px_36px_-12px_rgba(12,35,64,0.16)] p-2 space-y-0.5">
+                {group.items.map((item) => {
+                  const active = isRouteMatch(item.href);
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      role="menuitem"
+                      onClick={() => setDropdownState(null)}
+                      className={`block rounded-lg px-3 py-2.5 transition-colors ${
+                        active
+                          ? 'bg-[#F3F1EA] text-[#0C2340]'
+                          : 'hover:bg-[#FDFCF7] text-[#0C2340]'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between gap-2">
+                        <span className={`text-[13px] ${active ? 'font-bold' : 'font-semibold'}`}>
+                          {item.label}
+                        </span>
+                        {active && (
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#D97706] shrink-0" aria-hidden="true" />
+                        )}
+                      </div>
+                      <p className="text-[12px] text-[#64748B] mt-0.5 leading-snug">
+                        {item.description}
+                      </p>
+                    </Link>
+                  );
+                })}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    );
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-[#FDFCF7]/92 backdrop-blur-md border-b border-[#0C2340]/10">
@@ -43,31 +236,51 @@ export function Navbar() {
             </div>
           </Link>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-5 xl:gap-6 shrink-0" aria-label="Navigasi utama">
-            {navLinks.map((link) => {
-              const isActive = pathname === link.href;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`relative text-[13px] transition-colors pb-1.5 pt-1 whitespace-nowrap shrink-0 ${
-                    isActive
-                      ? 'text-[#0C2340] font-bold'
-                      : 'text-[#475569] hover:text-[#0C2340] font-medium'
-                  }`}
-                >
-                  <span>{link.label}</span>
-                  {isActive && (
-                    <motion.div
-                      layoutId={shouldReduceMotion ? undefined : 'navbarActiveIndicator'}
-                      transition={{ type: 'spring', stiffness: 350, damping: 30 }}
-                      className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#0C2340] rounded-full"
-                    />
-                  )}
-                </Link>
-              );
-            })}
+          {/* Desktop Navigation Links — ringkas dengan droplist */}
+          <nav
+            ref={navContainerRef}
+            className="hidden lg:flex items-center gap-7 xl:gap-8 shrink-0"
+            aria-label="Navigasi utama"
+          >
+            <Link
+              href="/"
+              className={`relative text-[13px] transition-colors pb-1.5 pt-1 whitespace-nowrap shrink-0 ${
+                pathname === '/'
+                  ? 'text-[#0C2340] font-bold'
+                  : 'text-[#475569] hover:text-[#0C2340] font-medium'
+              }`}
+            >
+              <span>Beranda</span>
+              {pathname === '/' && (
+                <motion.div
+                  layoutId={shouldReduceMotion ? undefined : 'navbarActiveIndicator'}
+                  transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#0C2340] rounded-full"
+                />
+              )}
+            </Link>
+
+            {renderDropdownGroup(JARINGAN_GROUP)}
+
+            <Link
+              href="/kegiatan"
+              className={`relative text-[13px] transition-colors pb-1.5 pt-1 whitespace-nowrap shrink-0 ${
+                isRouteMatch('/kegiatan')
+                  ? 'text-[#0C2340] font-bold'
+                  : 'text-[#475569] hover:text-[#0C2340] font-medium'
+              }`}
+            >
+              <span>Agenda</span>
+              {isRouteMatch('/kegiatan') && (
+                <motion.div
+                  layoutId={shouldReduceMotion ? undefined : 'navbarActiveIndicator'}
+                  transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#0C2340] rounded-full"
+                />
+              )}
+            </Link>
+
+            {renderDropdownGroup(TENTANG_GROUP)}
           </nav>
 
           {/* Desktop Action Buttons */}
@@ -119,24 +332,77 @@ export function Navbar() {
             transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
             className="lg:hidden border-b border-[#0C2340]/12 bg-[#FDFCF7] overflow-hidden shadow-lg"
           >
-            <div className="px-4 sm:px-6 py-4 space-y-1 text-sm">
-              {navLinks.map((link) => {
-                const isActive = pathname === link.href;
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setIsOpen(false)}
-                    className={`block py-2.5 px-3 rounded-lg transition-colors ${
-                      isActive
-                        ? 'bg-[#0C2340]/8 text-[#0C2340] font-bold'
-                        : 'text-[#334155] hover:bg-[#0C2340]/5 hover:text-[#0C2340] font-medium'
-                    }`}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
+            <div className="px-4 sm:px-6 py-4 space-y-4 text-sm">
+              <div className="space-y-1">
+                <Link
+                  href="/"
+                  onClick={() => setIsOpen(false)}
+                  className={`block py-2 px-3 rounded-lg transition-colors ${
+                    pathname === '/'
+                      ? 'bg-[#0C2340]/8 text-[#0C2340] font-bold'
+                      : 'text-[#334155] hover:bg-[#0C2340]/5 hover:text-[#0C2340] font-medium'
+                  }`}
+                >
+                  Beranda
+                </Link>
+                <Link
+                  href="/kegiatan"
+                  onClick={() => setIsOpen(false)}
+                  className={`block py-2 px-3 rounded-lg transition-colors ${
+                    isRouteMatch('/kegiatan')
+                      ? 'bg-[#0C2340]/8 text-[#0C2340] font-bold'
+                      : 'text-[#334155] hover:bg-[#0C2340]/5 hover:text-[#0C2340] font-medium'
+                  }`}
+                >
+                  Agenda
+                </Link>
+              </div>
+
+              <div className="pt-2 border-t border-[#0C2340]/8 space-y-1">
+                <p className="px-3 pb-1 text-xs font-semibold text-[#64748B]">
+                  {JARINGAN_GROUP.label}
+                </p>
+                {JARINGAN_GROUP.items.map((item) => {
+                  const active = isRouteMatch(item.href);
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setIsOpen(false)}
+                      className={`block py-2 px-3 rounded-lg transition-colors ${
+                        active
+                          ? 'bg-[#0C2340]/8 text-[#0C2340] font-bold'
+                          : 'text-[#334155] hover:bg-[#0C2340]/5 hover:text-[#0C2340] font-medium'
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  );
+                })}
+              </div>
+
+              <div className="pt-2 border-t border-[#0C2340]/8 space-y-1">
+                <p className="px-3 pb-1 text-xs font-semibold text-[#64748B]">
+                  {TENTANG_GROUP.label}
+                </p>
+                {TENTANG_GROUP.items.map((item) => {
+                  const active = isRouteMatch(item.href);
+                  return (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setIsOpen(false)}
+                      className={`block py-2 px-3 rounded-lg transition-colors ${
+                        active
+                          ? 'bg-[#0C2340]/8 text-[#0C2340] font-bold'
+                          : 'text-[#334155] hover:bg-[#0C2340]/5 hover:text-[#0C2340] font-medium'
+                      }`}
+                    >
+                      {item.label}
+                    </Link>
+                  );
+                })}
+              </div>
               <div className="pt-3 mt-2 border-t border-[#0C2340]/10 flex gap-2.5">
                 <Link
                   href="/masuk"
@@ -213,6 +479,7 @@ export function Footer() {
             </h4>
             <ul className="space-y-2.5 text-sm text-white/75">
               <li><Link href="/tentang" className="hover:text-[#F59E0B] transition-colors">Tentang Inisiatif</Link></li>
+              <li><Link href="/kepengurusan" className="hover:text-[#F59E0B] transition-colors">Struktur Kepengurusan</Link></li>
               <li><Link href="/privasi" className="hover:text-[#F59E0B] transition-colors">Kebijakan Privasi</Link></li>
               <li><Link href="/syarat" className="hover:text-[#F59E0B] transition-colors">Ketentuan Komunitas</Link></li>
               <li><Link href="/app" className="hover:text-[#F59E0B] transition-colors">Area Anggota</Link></li>
