@@ -11,9 +11,10 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@/components/ui/dialog';
-import { DATA_KEGIATAN_SIMULASI } from '@/data/simulasi';
-import { REGIONS_METADATA } from '@/data/jabodetabek-geo-meta';
-import { CheckCircle2, Plus, QrCode } from 'lucide-react';
+import { getKegiatanList, STATS_JABODETABEK } from '@/data/simulasi';
+import { WILAYAH_JABODETABEK } from '@/data/ums-prodi';
+import { IS_DEMO_MODE, COMMUNITY_PLACEHOLDERS, DEMO_BADGE_LABEL } from '@/lib/config';
+import { CheckCircle2, Plus, QrCode, Lock, ArrowRight } from 'lucide-react';
 
 interface PendaftarMenunggu {
   id: string;
@@ -37,7 +38,7 @@ interface AdminAgendaItem {
   presensiTerbuka: boolean;
 }
 
-const INITIAL_ANTREAN: PendaftarMenunggu[] = [
+const DEMO_ANTREAN: PendaftarMenunggu[] = [
   {
     id: 'pend-1',
     nama: 'Hendra Wijaya',
@@ -67,26 +68,31 @@ const INITIAL_ANTREAN: PendaftarMenunggu[] = [
   },
 ];
 
-export default function AdminPengurusPage() {
+export default function KelolaPendaftaranPage() {
   const [activeTab, setActiveTab] = useState('verifikasi');
-  const [antrean, setAntrean] = useState<PendaftarMenunggu[]>(INITIAL_ANTREAN);
-  const [totalDisetujui, setTotalDisetujui] = useState(1248);
+  const [antrean, setAntrean] = useState<PendaftarMenunggu[]>(() =>
+    IS_DEMO_MODE ? DEMO_ANTREAN : []
+  );
+  const [totalDisetujui, setTotalDisetujui] = useState(() =>
+    IS_DEMO_MODE ? STATS_JABODETABEK.totalAlumni : 0
+  );
   const [agendaList, setAgendaList] = useState<AdminAgendaItem[]>(() =>
-    DATA_KEGIATAN_SIMULASI.map((k) => ({
-      id: k.id,
-      judul: k.judul,
-      tanggalWIB: k.tanggalWIB,
-      lokasi: k.lokasi || k.lokasiSpesifik || 'Lokasi Jabodetabek',
-      wilayah: String(k.wilayah),
-      jenis: k.jenis,
-      kapasitas: k.kapasitas,
-      terdaftarCount: k.terdaftarCount,
-      presensiTerbuka: false,
-    }))
+    IS_DEMO_MODE
+      ? getKegiatanList().map((k) => ({
+          id: k.id,
+          judul: k.judul,
+          tanggalWIB: k.tanggalWIB,
+          lokasi: k.lokasi || k.lokasiSpesifik || 'Lokasi Jabodetabek',
+          wilayah: String(k.wilayah),
+          jenis: k.jenis,
+          kapasitas: k.kapasitas,
+          terdaftarCount: k.terdaftarCount,
+          presensiTerbuka: false,
+        }))
+      : []
   );
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
-  // Add Agenda Dialog
   const [agendaOpen, setAgendaOpen] = useState(false);
   const [judulAgenda, setJudulAgenda] = useState('');
   const [tanggalAgenda, setTanggalAgenda] = useState('');
@@ -97,24 +103,17 @@ export default function AdminPengurusPage() {
     setAntrean((prev) => prev.filter((p) => p.id !== item.id));
     if (setuju) {
       setTotalDisetujui((n) => n + 1);
-      setToastMsg(`Profil ${item.nama} (${item.prodi} '${String(item.angkatan).slice(2)}) telah disetujui.`);
+      setToastMsg(
+        `Profil ${item.nama} (${item.prodi} '${String(item.angkatan).slice(2)}) ditandai disetujui (${DEMO_BADGE_LABEL}).`
+      );
     } else {
-      setToastMsg(`Permintaan klarifikasi data dikirim ke ${item.nama}.`);
+      setToastMsg(`Permintaan ${item.nama} ditandai untuk pemeriksaan ulang oleh korwil.`);
     }
   };
 
-  const handleTogglePresensi = (id: string) => {
+  const togglePresensi = (id: string) => {
     setAgendaList((prev) =>
-      prev.map((a) => {
-        if (a.id !== id) return a;
-        const nextState = !a.presensiTerbuka;
-        setToastMsg(
-          nextState
-            ? `Presensi QR dibuka untuk "${a.judul}" (simulasi).`
-            : `Presensi QR ditutup untuk "${a.judul}".`
-        );
-        return { ...a, presensiTerbuka: nextState };
-      })
+      prev.map((a) => (a.id === id ? { ...a, presensiTerbuka: !a.presensiTerbuka } : a))
     );
   };
 
@@ -128,65 +127,119 @@ export default function AdminPengurusPage() {
         tanggalWIB: tanggalAgenda.trim(),
         lokasi: lokasiAgenda.trim(),
         wilayah: wilayahAgenda,
-        jenis: 'Kopdar Rutin',
-        kapasitas: 60,
+        jenis: 'Kopdar Wilayah',
+        kapasitas: 50,
         terdaftarCount: 1,
         presensiTerbuka: false,
       },
       ...prev,
     ]);
-    setToastMsg(`Agenda "${judulAgenda.trim()}" ditambahkan ke daftar pratinjau.`);
+    setToastMsg(`Jadwal "${judulAgenda.trim()}" ditambahkan ke daftar (${DEMO_BADGE_LABEL}).`);
     setJudulAgenda('');
     setTanggalAgenda('');
     setLokasiAgenda('');
     setAgendaOpen(false);
   };
 
+  if (!IS_DEMO_MODE) {
+    return (
+      <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
+        <Navbar />
+        <main className="flex-grow max-w-2xl mx-auto px-4 sm:px-6 py-12 sm:py-16 w-full">
+          <div className="bg-white border border-[#0C2340]/12 rounded-2xl p-6 sm:p-8 shadow-xs space-y-5">
+            <div className="w-11 h-11 rounded-xl bg-[#F3F1EA] border border-[#0C2340]/12 flex items-center justify-center text-[#0C2340]">
+              <Lock className="w-5 h-5" />
+            </div>
+            <div className="space-y-2">
+              <p className="text-xs font-bold uppercase tracking-wider text-[#B45309]">
+                Halaman Internal Pengurus
+              </p>
+              <h1 className="text-2xl sm:text-3xl font-bold text-[#0C2340]">
+                Kelola Pendaftaran Belum Dibuka di Publik
+              </h1>
+              <p className="text-sm sm:text-base text-[#475569] leading-relaxed">
+                Untuk menjaga data pribadi pendaftar, halaman verifikasi anggota hanya akan
+                diaktifkan setelah autentikasi pengurus di sisi server terpasang.
+              </p>
+            </div>
+
+            <div className="bg-[#F3F1EA] border border-[#0C2340]/10 rounded-xl p-4 text-sm text-[#475569] space-y-1.5">
+              <p className="font-semibold text-[#0C2340]">Koordinasi Pengurus Saat Pra-Launch</p>
+              <p>
+                Pengajuan verifikasi atau pembaruan data anggota sementara ditangani melalui{' '}
+                <span className="font-medium text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.contactEmail}</span>{' '}
+                atau <span className="font-medium text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.contactWhatsapp}</span>.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap gap-3 pt-2">
+              <Link
+                href="/"
+                className="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 py-2.5 rounded-lg bg-[#0C2340] hover:bg-[#16325C] text-white text-sm font-semibold transition-colors"
+              >
+                Kembali ke Beranda
+              </Link>
+              <Link
+                href="/kepengurusan"
+                className="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 py-2.5 rounded-lg bg-white border border-[#0C2340]/15 hover:border-[#0C2340]/35 text-[#0C2340] text-sm font-semibold transition-colors"
+              >
+                Lihat Pengurus &amp; Kontak
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
       <Navbar />
 
       <main className="flex-grow max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 w-full space-y-8">
-        <nav aria-label="Breadcrumb" className="text-sm text-[#64748B] flex items-center justify-between gap-4">
+        <nav aria-label="Breadcrumb" className="text-sm text-[#475569] flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <Link href="/" className="hover:text-[#0C2340] transition-colors">
+            <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
               Beranda
             </Link>
             <span aria-hidden="true">/</span>
-            <span className="text-[#0C2340] font-medium">Panel Pengurus Wilayah</span>
+            <span className="text-[#0C2340] font-medium">Kelola Pendaftaran</span>
           </div>
-          <span className="text-xs text-[#64748B]">Mode Simulasi Pengelolaan</span>
+          <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-[#92400E] text-xs font-semibold">
+            {DEMO_BADGE_LABEL} — Simulasi Lokal
+          </span>
         </nav>
 
         <header className="space-y-2">
-          <p className="text-sm font-semibold text-[#D97706]">
+          <p className="text-sm font-semibold text-[#B45309]">
             Koordinasi Pengurus Jabodetabek
           </p>
           <h1 className="text-3xl font-bold tracking-tight text-[#0C2340]">
-            Pengelolaan Anggota & Agenda Komunitas
+            Kelola Pendaftaran &amp; Jadwal Kopdar
           </h1>
           <p className="text-base text-[#475569]">
-            Alur kerja koordinator untuk memverifikasi kesesuaian latar alumni pendaftar baru serta menyusun jadwal pertemuan wilayah.
+            Simulasi alur pengurus untuk meninjau pendaftar baru serta menyusun jadwal kopdar per wilayah.
           </p>
         </header>
 
-        {/* Ringkasan Angka */}
-        <section className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <section className="grid grid-cols-2 lg:grid-cols-4 gap-4" aria-label="Ringkasan demo">
           <div className="bg-white border border-[#0C2340]/12 rounded-xl p-5">
-            <p className="text-xs font-medium text-[#64748B]">Menunggu Verifikasi</p>
+            <p className="text-xs font-medium text-[#475569]">Menunggu Verifikasi</p>
             <p className="text-2xl font-bold text-[#0C2340] mt-1">{antrean.length}</p>
           </div>
           <div className="bg-white border border-[#0C2340]/12 rounded-xl p-5">
-            <p className="text-xs font-medium text-[#64748B]">Total Anggota Aktif</p>
+            <p className="text-xs font-medium text-[#475569]">Anggota Contoh</p>
             <p className="text-2xl font-bold text-[#0C2340] mt-1">{totalDisetujui.toLocaleString('id-ID')}</p>
           </div>
           <div className="bg-white border border-[#0C2340]/12 rounded-xl p-5">
-            <p className="text-xs font-medium text-[#64748B]">Agenda Terjadwal</p>
+            <p className="text-xs font-medium text-[#475569]">Jadwal Kopdar</p>
             <p className="text-2xl font-bold text-[#0C2340] mt-1">{agendaList.length}</p>
           </div>
           <div className="bg-white border border-[#0C2340]/12 rounded-xl p-5">
-            <p className="text-xs font-medium text-[#64748B]">Cakupan Wilayah</p>
-            <p className="text-2xl font-bold text-[#0C2340] mt-1">{REGIONS_METADATA.length} Wilayah</p>
+            <p className="text-xs font-medium text-[#475569]">Cakupan Wilayah</p>
+            <p className="text-2xl font-bold text-[#0C2340] mt-1">{WILAYAH_JABODETABEK.length} Wilayah</p>
           </div>
         </section>
 
@@ -202,7 +255,7 @@ export default function AdminPengurusPage() {
             <button
               type="button"
               onClick={() => setToastMsg(null)}
-              className="text-xs font-semibold text-[#64748B] hover:text-[#0C2340] cursor-pointer"
+              className="min-h-[44px] px-2 text-xs font-semibold text-[#475569] hover:text-[#0C2340] cursor-pointer"
             >
               Tutup
             </button>
@@ -214,33 +267,31 @@ export default function AdminPengurusPage() {
           onChange={setActiveTab}
           layoutId="adminPengurusTabs"
           tabs={[
-            {
-              id: 'verifikasi',
-              label: 'Antrean Verifikasi',
-              badge: antrean.length,
-            },
-            {
-              id: 'agenda',
-              label: 'Kelola Agenda',
-              badge: agendaList.length,
-            },
-            {
-              id: 'wilayah',
-              label: 'Rekap Wilayah',
-            },
+            { id: 'verifikasi', label: 'Antrean Verifikasi', badge: antrean.length },
+            { id: 'agenda', label: 'Jadwal Kopdar', badge: agendaList.length },
+            { id: 'wilayah', label: 'Daftar Wilayah' },
           ]}
         />
 
-        {/* Tab 1: Antrean Verifikasi */}
         {activeTab === 'verifikasi' && (
           <section className="space-y-4">
+            <h2 className="text-lg font-bold text-[#0C2340]">
+              Verifikasi Pendaftaran Alumni Baru ({DEMO_BADGE_LABEL})
+            </h2>
+
             {antrean.length === 0 ? (
-              <div className="bg-white border border-[#0C2340]/12 rounded-2xl p-8 text-center space-y-2">
-                <p className="font-semibold text-[#0C2340]">Semua pendaftar sudah diperiksa</p>
-                <p className="text-sm text-[#64748B]">Tidak ada antrean verifikasi alumni yang tertunda saat ini.</p>
+              <div className="bg-white border border-[#0C2340]/12 rounded-xl p-10 text-center space-y-2">
+                <p className="font-semibold text-[#0C2340]">Tidak ada antrean pendaftar contoh.</p>
+                <button
+                  type="button"
+                  onClick={() => setAntrean(DEMO_ANTREAN)}
+                  className="mt-2 inline-flex items-center min-h-[44px] px-4 py-2 rounded-lg bg-[#F3F1EA] text-xs font-semibold text-[#0C2340] cursor-pointer"
+                >
+                  Muat Ulang Data Contoh
+                </button>
               </div>
             ) : (
-              <div className="divide-y divide-[#0C2340]/10 bg-white border border-[#0C2340]/12 rounded-2xl overflow-hidden">
+              <div className="bg-white border border-[#0C2340]/12 rounded-2xl divide-y divide-[#0C2340]/10 overflow-hidden shadow-xs">
                 {antrean.map((item) => (
                   <div
                     key={item.id}
@@ -248,31 +299,31 @@ export default function AdminPengurusPage() {
                   >
                     <div className="space-y-1">
                       <div className="flex flex-wrap items-center gap-2">
-                        <h2 className="font-bold text-[#0C2340]">{item.nama}</h2>
-                        <span className="text-xs px-2.5 py-0.5 rounded-full bg-[#F3F1EA] text-[#0C2340] font-medium">
-                          {item.wilayah}
+                        <h3 className="text-base font-bold text-[#0C2340]">{item.nama}</h3>
+                        <span className="text-xs px-2 py-0.5 rounded bg-[#F3F1EA] text-[#0C2340] font-medium">
+                          {item.prodi} &apos;{String(item.angkatan).slice(2)}
                         </span>
                       </div>
                       <p className="text-sm text-[#475569]">
-                        {item.prodi} (Angkatan {item.angkatan}) &middot; {item.pekerjaan}
+                        {item.pekerjaan} · Domisili <span className="font-medium text-[#0C2340]">{item.wilayah}</span>
                       </p>
-                      <p className="text-xs text-[#64748B]">Masuk: {item.tanggalDaftar}</p>
+                      <p className="text-xs text-[#475569]">Mendaftar {item.tanggalDaftar}</p>
                     </div>
 
                     <div className="flex items-center gap-2.5 shrink-0">
                       <button
                         type="button"
-                        onClick={() => handleVerifikasi(item, true)}
-                        className="px-4 py-2 rounded-lg bg-[#0C2340] hover:bg-[#16325C] text-white text-sm font-semibold transition-colors cursor-pointer"
+                        onClick={() => handleVerifikasi(item, false)}
+                        className="min-h-[44px] px-3.5 py-2 rounded-lg border border-[#0C2340]/15 hover:border-red-300 text-xs font-semibold text-[#475569] hover:text-red-700 transition-colors cursor-pointer"
                       >
-                        Setujui Alumni
+                        Tinjau Ulang
                       </button>
                       <button
                         type="button"
-                        onClick={() => handleVerifikasi(item, false)}
-                        className="px-4 py-2 rounded-lg bg-[#F3F1EA] hover:bg-[#E7E3D7] text-[#0C2340] text-sm font-semibold transition-colors cursor-pointer"
+                        onClick={() => handleVerifikasi(item, true)}
+                        className="min-h-[44px] px-4 py-2 rounded-lg bg-[#0C2340] hover:bg-[#16325C] text-white text-xs font-semibold transition-colors cursor-pointer"
                       >
-                        Minta Klarifikasi
+                        Setujui Anggota
                       </button>
                     </div>
                   </div>
@@ -282,53 +333,44 @@ export default function AdminPengurusPage() {
           </section>
         )}
 
-        {/* Tab 2: Kelola Agenda */}
         {activeTab === 'agenda' && (
           <section className="space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <p className="text-sm text-[#475569]">
-                Atur jadwal kumpul lintas angkatan dan aktivasi presensi kehadiran di lokasi.
-              </p>
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <h2 className="text-lg font-bold text-[#0C2340]">Daftar Jadwal Kopdar</h2>
               <button
                 type="button"
                 onClick={() => setAgendaOpen(true)}
-                className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-[#0C2340] hover:bg-[#16325C] text-white text-sm font-semibold transition-colors cursor-pointer shrink-0"
+                className="inline-flex items-center gap-2 min-h-[44px] px-4 py-2 rounded-lg bg-[#0C2340] hover:bg-[#16325C] text-white text-xs font-semibold transition-colors cursor-pointer"
               >
                 <Plus className="w-4 h-4" />
-                Tambah Agenda Baru
+                Buat Jadwal Kopdar Baru
               </button>
             </div>
 
-            <div className="divide-y divide-[#0C2340]/10 bg-white border border-[#0C2340]/12 rounded-2xl overflow-hidden">
+            <div className="bg-white border border-[#0C2340]/12 rounded-2xl divide-y divide-[#0C2340]/10 overflow-hidden shadow-xs">
               {agendaList.map((ag) => (
                 <div
                   key={ag.id}
                   className="p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
                 >
                   <div className="space-y-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <h2 className="font-bold text-[#0C2340]">{ag.judul}</h2>
-                      <span className="text-xs font-medium text-[#D97706]">{ag.jenis}</span>
-                    </div>
+                    <h3 className="text-base font-bold text-[#0C2340]">{ag.judul}</h3>
                     <p className="text-sm text-[#475569]">
-                      {ag.tanggalWIB} &middot; {ag.lokasi} ({ag.wilayah})
-                    </p>
-                    <p className="text-xs text-[#64748B]">
-                      Pendaftar tercatat: {ag.terdaftarCount} / {ag.kapasitas} peserta
+                      {ag.tanggalWIB} · {ag.lokasi} ({ag.wilayah})
                     </p>
                   </div>
 
                   <button
                     type="button"
-                    onClick={() => handleTogglePresensi(ag.id)}
-                    className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-colors cursor-pointer shrink-0 ${
+                    onClick={() => togglePresensi(ag.id)}
+                    className={`inline-flex items-center gap-1.5 min-h-[44px] px-3.5 py-2 rounded-lg text-xs font-semibold transition-colors cursor-pointer shrink-0 ${
                       ag.presensiTerbuka
-                        ? 'bg-emerald-50 border border-emerald-200 text-emerald-800'
-                        : 'bg-[#F3F1EA] hover:bg-[#E7E3D7] text-[#0C2340]'
+                        ? 'bg-emerald-700 text-white hover:bg-emerald-800'
+                        : 'bg-[#F3F1EA] text-[#0C2340] hover:bg-[#E7E3D7]'
                     }`}
                   >
-                    <QrCode className="w-4 h-4" />
-                    {ag.presensiTerbuka ? 'Presensi QR Aktif' : 'Buka Presensi QR'}
+                    <QrCode className="w-3.5 h-3.5" />
+                    {ag.presensiTerbuka ? 'Presensi Aktif' : 'Buka Presensi'}
                   </button>
                 </div>
               ))}
@@ -336,118 +378,105 @@ export default function AdminPengurusPage() {
           </section>
         )}
 
-        {/* Tab 3: Rekap Wilayah */}
         {activeTab === 'wilayah' && (
-          <section className="bg-white border border-[#0C2340]/12 rounded-2xl overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="border-b border-[#0C2340]/10 bg-[#FDFCF7] text-xs font-semibold text-[#64748B]">
-                    <th className="py-3.5 px-5">Wilayah</th>
-                    <th className="py-3.5 px-5">Alumni Terdata</th>
-                    <th className="py-3.5 px-5">Mentor Siap Berbagi</th>
-                    <th className="py-3.5 px-5">Bidang Dominan</th>
-                    <th className="py-3.5 px-5 text-right">Direktori</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[#0C2340]/10 text-sm">
-                  {REGIONS_METADATA.map((w) => (
-                    <tr key={w.regionId} className="hover:bg-[#FDFCF7]">
-                      <td className="py-3.5 px-5 font-semibold text-[#0C2340]">{w.regionName}</td>
-                      <td className="py-3.5 px-5 text-[#475569]">{w.count}</td>
-                      <td className="py-3.5 px-5 text-[#475569]">{w.mentorCount}</td>
-                      <td className="py-3.5 px-5 text-[#475569]">{w.industri.slice(0, 2).join(', ')}</td>
-                      <td className="py-3.5 px-5 text-right">
-                        <Link
-                          href={`/direktori?wilayah=${encodeURIComponent(w.regionName)}`}
-                          className="text-xs font-semibold text-[#0C2340] hover:text-[#D97706] underline underline-offset-4"
-                        >
-                          Buka
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+          <section className="space-y-4">
+            <h2 className="text-lg font-bold text-[#0C2340]">Sembilan Wilayah Jabodetabek</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              {WILAYAH_JABODETABEK.map((reg) => (
+                <div key={reg.id} className="bg-white border border-[#0C2340]/12 rounded-xl p-5 space-y-2">
+                  <h3 className="text-base font-bold text-[#0C2340]">{reg.nama}</h3>
+                  <p className="text-xs text-[#475569]">{reg.provinsi}</p>
+                  <p className="text-xs text-[#475569]">{reg.cakupan}</p>
+                </div>
+              ))}
             </div>
           </section>
         )}
       </main>
 
-      {/* Dialog Tambah Agenda */}
       <Dialog open={agendaOpen} onOpenChange={setAgendaOpen}>
         <DialogContent className="bg-white border border-[#0C2340]/15 rounded-2xl max-w-lg">
           <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-[#0C2340]">
-              Tambah Agenda Wilayah Baru
+            <DialogTitle className="text-lg font-bold text-[#0C2340]">
+              Tambah Jadwal Kopdar ({DEMO_BADGE_LABEL})
             </DialogTitle>
             <DialogDescription className="text-sm text-[#475569]">
-              Jadwalkan acara kumpul atau diskusi profesi baru ke kalender pratinjau.
+              Simulasi penambahan agenda pertemuan alumni ke daftar kegiatan wilayah.
             </DialogDescription>
           </DialogHeader>
           <form onSubmit={handleTambahAgenda} className="space-y-4 mt-2">
             <div>
-              <label className="block text-sm font-semibold text-[#0C2340] mb-1">Nama Kegiatan</label>
+              <label htmlFor="admin-judul-kopdar" className="block text-sm font-medium text-[#0C2340] mb-1">
+                Nama Kegiatan *
+              </label>
               <input
+                id="admin-judul-kopdar"
                 type="text"
                 required
-                placeholder="Contoh: Ngopi Sore Alumni Bekasi"
+                placeholder="Misalnya: Kopdar Alumni UMS Bekasi Barat"
                 value={judulAgenda}
                 onChange={(e) => setJudulAgenda(e.target.value)}
-                className="w-full px-3.5 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-sm text-[#0C2340]"
+                className="w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-sm text-[#0C2340]"
               />
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label className="block text-sm font-semibold text-[#0C2340] mb-1">Tanggal</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="Contoh: Sabtu, 28 Nov 2026"
-                  value={tanggalAgenda}
-                  onChange={(e) => setTanggalAgenda(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-sm text-[#0C2340]"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-[#0C2340] mb-1">Wilayah</label>
-                <select
-                  value={wilayahAgenda}
-                  onChange={(e) => setWilayahAgenda(e.target.value)}
-                  className="w-full px-3.5 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-sm text-[#0C2340]"
-                >
-                  {REGIONS_METADATA.map((w) => (
-                    <option key={w.regionId} value={w.regionName}>
-                      {w.regionName}
-                    </option>
-                  ))}
-                </select>
-              </div>
             </div>
             <div>
-              <label className="block text-sm font-semibold text-[#0C2340] mb-1">Lokasi Pertemuan</label>
+              <label htmlFor="admin-tanggal-kopdar" className="block text-sm font-medium text-[#0C2340] mb-1">
+                Hari, Tanggal &amp; Jam *
+              </label>
               <input
+                id="admin-tanggal-kopdar"
                 type="text"
                 required
-                placeholder="Contoh: Kedai Kopi Kemang Pratama"
+                placeholder="Misalnya: Sabtu, 19 Desember 2026 · 10.00 WIB"
+                value={tanggalAgenda}
+                onChange={(e) => setTanggalAgenda(e.target.value)}
+                className="w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-sm text-[#0C2340]"
+              />
+            </div>
+            <div>
+              <label htmlFor="admin-lokasi-kopdar" className="block text-sm font-medium text-[#0C2340] mb-1">
+                Lokasi Pertemuan *
+              </label>
+              <input
+                id="admin-lokasi-kopdar"
+                type="text"
+                required
+                placeholder="Misalnya: Kafe Sekitar Stasiun Bekasi"
                 value={lokasiAgenda}
                 onChange={(e) => setLokasiAgenda(e.target.value)}
-                className="w-full px-3.5 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-sm text-[#0C2340]"
+                className="w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-sm text-[#0C2340]"
               />
+            </div>
+            <div>
+              <label htmlFor="admin-wilayah-kopdar" className="block text-sm font-medium text-[#0C2340] mb-1">
+                Wilayah Jabodetabek
+              </label>
+              <select
+                id="admin-wilayah-kopdar"
+                value={wilayahAgenda}
+                onChange={(e) => setWilayahAgenda(e.target.value)}
+                className="w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-sm text-[#0C2340]"
+              >
+                {WILAYAH_JABODETABEK.map((r) => (
+                  <option key={r.id} value={r.nama}>
+                    {r.nama}
+                  </option>
+                ))}
+              </select>
             </div>
             <div className="flex justify-end gap-2.5 pt-2">
               <button
                 type="button"
                 onClick={() => setAgendaOpen(false)}
-                className="px-4 py-2 rounded-lg bg-[#F3F1EA] text-[#0C2340] text-sm font-semibold cursor-pointer"
+                className="min-h-[44px] px-4 py-2 rounded-lg bg-[#F3F1EA] text-[#0C2340] text-sm font-semibold cursor-pointer"
               >
                 Batal
               </button>
               <button
                 type="submit"
-                className="px-4 py-2 rounded-lg bg-[#0C2340] text-white text-sm font-semibold hover:bg-[#16325C] cursor-pointer"
+                className="min-h-[44px] px-4 py-2 rounded-lg bg-[#0C2340] text-white text-sm font-semibold hover:bg-[#16325C] cursor-pointer"
               >
-                Simpan Agenda
+                Simpan Jadwal
               </button>
             </div>
           </form>
