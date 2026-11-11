@@ -84,3 +84,22 @@ Seluruh spasi mengikuti kelipatan `4px` / `8px`:
 - **Seluruh 20 tangkapan layar** (`360px, 390px, 768px, 1440px` di `/`, `/gabung`, `/masuk`, `/kegiatan`, `/direktori`) + `after-drawer-360.png`: **0** overflow horizontal, **0** paragraf `< 16px`, **0** gambar rusak, dan **0** target sentuh `< 44x44px`.
 - **Drawer Navigasi Seluler (`360px`)**: Ringkas menjadi **5 tautan** (tinggi `46px`) + **1 tombol primer `Daftar jadi anggota`** (tinggi `48px`), tanpa penumpukan grid 10 tautan desktop.
 - **Mobile Lighthouse (`/`)**: Performance **95**, Accessibility **100**, Best Practices **100**, SEO **100**, CLS **0**, FCP **0.8 dtk**, TBT **30 ms**, trace LCP mentah **192 ms** (simulasi Slow 4G Lighthouse **3.0 dtk**).
+
+---
+
+## Kritik Putaran 4 (Audit Struktur & Bahasa Anti-AI-Slop Menyeluruh)
+
+Ulasan langsung atas hasil Putaran 3 menunjukkan tampilan masih membawa pola khas situs buatan AI:
+
+1. **Gelombang SVG (`PatternDivider curve` & `batik-rim`) & Kotak CTA Navy di Atas Footer Navy**: Enam pemisah gelombang SVG di antara pita krem-linen serta blok gelap `rounded-2xl` tepat di atas `<footer>` biru tua membuat halaman terbaca seperti templat landing page SaaS. **Perbaikan**: Hapus seluruh pemisah gelombang SVG dan kartu CTA gelap terpisah sebelum footer; ganti dengan batas garis tipis rata, ritme permukaan tenang, serta penutup ringan di atas kertas krem sebelum masuk footer.
+2. **Struktur SaaS Berpola (`Apa yang Kamu Dapatkan` -> `Cara Kerjanya 01/02/03` -> `Pertanyaan yang Sering Diajukan`)**: Judul-judul dan susunan 3 langkah bernomor tersebut adalah pola baku AI. **Perbaikan**: Gabungkan ke dalam bagian editorial 2 kolom lugas (*"Kenapa Didata Terlebih Dulu?"* + poin tugas pengurus berbahasa manusia) serta blok dokumentasi *"Kumpul Bolo Pisah"* & cakupan 9 wilayah yang terintegrasi.
+3. **Tag Pengembang `[ISI: ...]` Terpampang di UI Pengunjung Publik**: Kemunculan berulang `[ISI: jumlah pendaftar terverifikasi]`, `[ISI: nama acara...]`, dan `[ISI: email resmi...]` langsung di Hero, kotak jadwal, dan Footer terlihat seperti templat rusak yang belum selesai diisi. **Perbaikan**: Tetap pertahankan checklist lengkap `[ISI: ...]` di `TODO-DATA.md` bagi pengelola situs, sementara di antarmuka publik nyatakan fakta prapeluncuran secara apa adanya tanpa kurung siku dan tanpa mengarang satu pun angka/tanggal/kontak fiktif.
+4. **Sisa Cliché & Teks Kecil di Subhalaman**: Hapus kata sisa (`"perantauan"`, `"Mulai dari ... hingga ..."`, `"Interview"`), ganti judul header subhalaman yang selalu memakai pita bergelombang seragam, dan ubah grid bento 2 kolom `text-[11px]` di `/kepengurusan` mobile menjadi daftar 1 kolom minimal `16px`.
+
+## Hasil Verifikasi Putaran 4 (Build & Audit Akhir)
+
+- **Audit Statis & Build**: `npx tsc --noEmit`, `npx eslint src`, dan `npm run build` lolos (exit code `0`, 20 rute terbangun); `0` kemunculan `[ISI:` di `src/app`/`src/components`, `0` `PatternDivider variant="curve" | "batik-rim"`, dan `0` em dash UI.
+- **Audit DOM & Visual (`40` matriks render di `360px`, `390px`, `768px`, `1440px`)**: `0` overflow horizontal, `0` paragraf (`<main p, main li`) di bawah `16px`, `0` gambar rusak, `0` `[ISI:` terlihat di DOM, serta `0` error konsol maupun runtime; pemeriksaan HTTP untuk `/admin`, `/app`, dan `/direktori` mengembalikan `X-Robots-Tag: noindex, nofollow, noarchive`, `Cache-Control: private, no-store, max-age=0`, dan tanpa kebocoran data simulasi.
+- **Catatan Kontrol Peta & Tautan Inline**: 9 pin marker di dalam kanvas MapLibre `/peta` (`52–62 x 30–32px`) tetap ringkas agar tidak saling bertumpuk pada kanvas mobile sementara pilihan wilayah `>= 44px` tersedia tepat di atas dan bawah peta; tautan teks inline pada paragraf `/masuk`, `/privasi`, dan `/syarat` mengikuti pengecualian tautan inline prose WCAG.
+- **Uji Alur E2E (`390px`)**: Pengiriman form minat kopdar di `/`, `/gabung?mentor=ya&wilayah=Bekasi`, modal permintaan mentoring di `/peluang`, dan alur masuk email di `/masuk` berhasil (`e2eOk: true`).
+- **Mobile Lighthouse (`/`)**: Performance **95**, Accessibility **100**, Best Practices **100**, SEO **100** (CLS **0**, FCP **0.8 s**, TBT **30 ms**, LCP **3.0 s**).
