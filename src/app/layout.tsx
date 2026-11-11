@@ -22,8 +22,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "IKA UMS Connect — Dari Temu Kangen, Jadi Temu Peluang",
-  description: "Jaringan inisiatif alumni Universitas Muhammadiyah Surakarta di wilayah Jabodetabek untuk saling terhubung, berbagi kesempatan, berkembang, dan berkontribusi bersama.",
+  title: "IKA UMS Jabodetabek — Jaringan Alumni Universitas Muhammadiyah Surakarta",
+  description: "Jaringan alumni Universitas Muhammadiyah Surakarta di wilayah Jabodetabek untuk saling terhubung, berbagi pengalaman karier, dan berkegiatan bersama.",
 };
 
 export default function RootLayout({
