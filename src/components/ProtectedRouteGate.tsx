@@ -31,21 +31,21 @@ const VARIANT_CONTENT: Record<
     eyebrow: 'Profil Anggota',
     title: 'Masuk dulu untuk membuka halaman anggota',
     description:
-      'Pengaturan visibilitas direktori, status keanggotaan, dan permintaan hapus data hanya tersedia untuk alumni yang sudah masuk.',
+      'Pengaturan tampil di Daftar Anggota, status keanggotaan, dan permintaan hapus data hanya tersedia untuk alumni yang sudah masuk.',
     detail:
       'Selama kamu belum masuk dengan sesi terverifikasi, data profil anggota tidak ditampilkan oleh server.',
     loginHref: '/masuk?next=/app',
     loginLabel: 'Masuk ke akun anggota',
   },
   direktori: {
-    eyebrow: 'Direktori Khusus Anggota',
-    title: 'Direktori hanya terbuka untuk anggota yang sudah masuk',
+    eyebrow: 'Khusus Anggota Terdaftar',
+    title: 'Daftar Anggota hanya terbuka untuk anggota yang sudah masuk',
     description:
       'Untuk menjaga privasi alumni, nama dan latar bidang kerja hanya dapat dicari oleh anggota yang sudah diverifikasi dan menyetujui ketentuan tampil.',
     detail:
       'Nomor WhatsApp maupun email pribadi tidak pernah ditampilkan di halaman ini. Bila kamu belum terdaftar, silakan isi formulir pendaftaran terlebih dahulu.',
     loginHref: '/masuk?next=/direktori',
-    loginLabel: 'Masuk untuk lihat direktori',
+    loginLabel: 'Masuk untuk lihat Daftar Anggota',
   },
 };
 
@@ -64,7 +64,7 @@ export function ProtectedRouteGate({ variant }: ProtectedRouteGateProps) {
           aria-labelledby="protected-route-title"
           className="w-full max-w-xl bg-[#FDFCF7] border border-[#CBD5E1] rounded-2xl p-6 sm:p-8 shadow-sm"
         >
-          <div className="inline-flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-[#92400E] mb-3">
+          <div className="inline-flex items-center gap-2 text-sm font-semibold text-[#92400E] mb-3">
             {variant === 'admin' ? (
               <ShieldAlert className="w-4 h-4" aria-hidden="true" />
             ) : variant === 'direktori' ? (

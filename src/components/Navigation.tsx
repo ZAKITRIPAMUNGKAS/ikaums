@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { Menu, X, ArrowRight, ChevronDown, ExternalLink } from 'lucide-react';
 import { IS_DEMO_MODE, COMMUNITY_PLACEHOLDERS } from '@/lib/config';
-import { PatternSection, PatternDivider } from '@/components/PatternSection';
+import { PatternSection } from '@/components/PatternSection';
 
 interface NavSubItem {
   label: string;
@@ -205,9 +205,9 @@ export function Navbar() {
                           <span className="w-1.5 h-1.5 rounded-full bg-[#92400E] shrink-0" aria-hidden="true" />
                         )}
                       </div>
-                      <p className="text-[12px] text-[#475569] mt-0.5 leading-snug">
+                      <span className="block text-sm text-[#475569] mt-0.5 leading-snug">
                         {item.description}
-                      </p>
+                      </span>
                     </Link>
                   );
                 })}
@@ -381,8 +381,7 @@ export function Navbar() {
 
 export function Footer() {
   return (
-    <footer className="text-[#FDFCF7] font-sans">
-      <PatternDivider variant="batik-rim" fromColor="#FDFCF7" toColor="#08182E" />
+    <footer className="text-[#FDFCF7] font-sans border-t-2 border-[#92400E]/45">
       <PatternSection
         as="div"
         variant="batik"
@@ -391,124 +390,124 @@ export function Footer() {
         patternOpacity={0.045}
         patternSize="88px"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10">
-          <div className="md:col-span-6 space-y-3 sm:space-y-4">
-            <Link
-              href="/"
-              className="inline-flex items-center min-h-[44px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F59E0B] rounded-md"
-            >
-              <Image
-                src="/images/logo-white-text.png"
-                alt="Logo Ikatan Alumni UMS"
-                width={165}
-                height={64}
-                className="h-14 sm:h-16 w-auto object-contain"
-              />
-            </Link>
-            <p className="text-base text-white/90 max-w-md leading-[1.6]">
-              Jaringan alumni Universitas Muhammadiyah Surakarta yang tinggal dan berkarya di Jakarta,
-              Bogor, Depok, Tangerang, dan Bekasi.
-            </p>
-            <div className="text-sm text-white/80 max-w-md space-y-1.5 leading-relaxed">
-              <div>
-                Koordinasi organisasi: <span className="text-white">{COMMUNITY_PLACEHOLDERS.ppIkaUmsStatus}</span>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10">
+            <div className="md:col-span-6 space-y-4">
+              <Link
+                href="/"
+                className="inline-flex items-center min-h-[44px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F59E0B] rounded-md"
+              >
+                <Image
+                  src="/images/logo-white-text.png"
+                  alt="Logo Ikatan Alumni UMS"
+                  width={165}
+                  height={64}
+                  className="h-14 sm:h-16 w-auto object-contain"
+                />
+              </Link>
+              <p className="text-base text-white/90 max-w-md leading-[1.6]">
+                Jaringan alumni Universitas Muhammadiyah Surakarta yang tinggal dan bekerja di Jakarta,
+                Bogor, Depok, Tangerang, dan Bekasi.
+              </p>
+              <div className="text-sm text-white/80 max-w-md space-y-2 leading-relaxed">
+                <div>{COMMUNITY_PLACEHOLDERS.ppIkaUmsStatus}.</div>
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-1">
+                  <Link
+                    href="/kepengurusan"
+                    className="inline-flex items-center min-h-[44px] text-[#F59E0B] hover:text-white underline underline-offset-4 transition-colors font-medium"
+                  >
+                    Pengurus &amp; Sekretariat
+                  </Link>
+                  <a
+                    href={COMMUNITY_PLACEHOLDERS.ppIkaUmsUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 min-h-[44px] text-white/85 hover:text-white underline underline-offset-4 transition-colors"
+                  >
+                    Situs Resmi UMS
+                    <ExternalLink className="w-3.5 h-3.5" />
+                  </a>
+                </div>
               </div>
-              <div>
-                Kontak pengurus: <span className="text-white">{COMMUNITY_PLACEHOLDERS.contactEmail}</span> ·{' '}
-                <span className="text-white">{COMMUNITY_PLACEHOLDERS.contactWhatsapp}</span>
+            </div>
+
+            <div className="md:col-span-6 grid grid-cols-2 gap-6 sm:gap-8">
+              <div className="min-w-0">
+                <h2 className="text-xs font-bold text-white uppercase tracking-wider mb-3 border-b border-white/15 pb-2">
+                  Komunitas
+                </h2>
+                <ul className="space-y-0.5 text-sm sm:text-base text-white/85">
+                  <li>
+                    <Link href="/" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
+                      Beranda
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/kegiatan" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
+                      Jadwal Kopdar
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/peluang" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
+                      Mentoring &amp; Kerja
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/peta" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
+                      Sebaran Wilayah
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/direktori" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
+                      Daftar Anggota
+                    </Link>
+                  </li>
+                </ul>
               </div>
-              <div>
-                <a
-                  href={COMMUNITY_PLACEHOLDERS.ppIkaUmsUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 min-h-[44px] text-[#F59E0B] hover:text-white underline underline-offset-4 transition-colors"
-                >
-                  Situs Resmi Universitas Muhammadiyah Surakarta
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
+
+              <div className="min-w-0">
+                <h2 className="text-xs font-bold text-white uppercase tracking-wider mb-3 border-b border-white/15 pb-2">
+                  Informasi &amp; Privasi
+                </h2>
+                <ul className="space-y-0.5 text-sm sm:text-base text-white/85">
+                  <li>
+                    <Link href="/tentang" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
+                      Tentang Komunitas
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/kepengurusan" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
+                      Pengurus &amp; Kontak
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/privasi" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
+                      Kebijakan Privasi
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/syarat" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
+                      Ketentuan Komunitas
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/gabung" className="inline-flex items-center min-h-[44px] hover:text-white transition-colors font-semibold text-[#F59E0B]">
+                      Daftar jadi anggota
+                    </Link>
+                  </li>
+                </ul>
               </div>
             </div>
           </div>
 
-          <div className="md:col-span-6 grid grid-cols-2 gap-6 sm:gap-8">
-            <div className="min-w-0">
-              <h2 className="text-xs font-bold text-white uppercase tracking-wider mb-3 border-b border-white/10 pb-2">
-                Komunitas
-              </h2>
-              <ul className="space-y-0.5 text-xs sm:text-sm text-white/80">
-                <li>
-                  <Link href="/" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
-                    Beranda
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/kegiatan" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
-                    Jadwal Kopdar
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/peluang" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
-                    Mentoring &amp; Kerja
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/peta" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
-                    Sebaran Wilayah{!IS_DEMO_MODE && ' (Pra-Launch)'}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/direktori" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
-                    Daftar Anggota (Khusus Anggota)
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div className="min-w-0">
-              <h2 className="text-xs font-bold text-white uppercase tracking-wider mb-3 border-b border-white/10 pb-2">
-                Informasi &amp; Privasi
-              </h2>
-              <ul className="space-y-0.5 text-xs sm:text-sm text-white/80">
-                <li>
-                  <Link href="/tentang" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
-                    Tentang Komunitas
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/kepengurusan" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
-                    Pengurus &amp; Kontak
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/privasi" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
-                    Kebijakan Privasi
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/syarat" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
-                    Ketentuan Komunitas
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/gabung" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors font-semibold text-[#F59E0B]">
-                    Daftar jadi anggota
-                  </Link>
-                </li>
-              </ul>
-            </div>
+          <div className="mt-8 sm:mt-10 pt-6 border-t border-white/15 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-sm text-white/80">
+            <span>
+              &copy; 2026 IKA UMS Wilayah Jabodetabek · Komunitas Alumni Universitas Muhammadiyah Surakarta.
+            </span>
+            <span className="text-white/75">
+              Tahap Prapeluncuran Jabodetabek
+            </span>
           </div>
-        </div>
-
-        <div className="mt-8 sm:mt-10 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-sm text-white/75">
-          <span>
-            &copy; 2026 IKA UMS Wilayah Jabodetabek · Komunitas Alumni Universitas Muhammadiyah Surakarta.
-          </span>
-          <span className="text-white/75">
-            Kanal resmi PP IKA UMS: {COMMUNITY_PLACEHOLDERS.ppIkaUmsChannelLabel}
-          </span>
-        </div>
         </div>
       </PatternSection>
     </footer>

@@ -284,7 +284,7 @@ export const DATA_ALUMNI_SIMULASI: AlumniProfile[] = [
     pekerjaan: 'People Partner',
     perusahaan: 'Jaringan Ritel Bogor',
     bio: 'Menangani rekrutmen dan pembinaan karyawan di kawasan Bogor.',
-    keahlian: ['Latihan Interview', 'Pengembangan SDM'],
+    keahlian: ['Latihan Wawancara', 'Pengembangan SDM'],
     mentoringFokus: 'Simulasi wawancara HR & penulisan CV ATS',
     isVerified: true,
     bersediaMentoring: true,

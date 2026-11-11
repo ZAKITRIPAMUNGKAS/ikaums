@@ -1,4 +1,4 @@
-import React, { useId } from 'react';
+import React from 'react';
 import { cn } from '@/lib/utils';
 
 export type PatternVariant = 'dots' | 'batik' | 'contour' | 'grain' | 'none';
@@ -89,24 +89,19 @@ export function PatternSection({
 }
 
 export interface PatternDividerProps {
-  variant?: 'curve' | 'batik-rim' | 'gradient';
+  variant?: 'curve' | 'batik-rim' | 'gradient' | 'rule';
   fromColor?: string;
   toColor?: string;
   className?: string;
 }
 
 /**
- * Pemisah dekoratif antar-section (kurva SVG lembut, rim bermotif, atau gradient tipis).
- * Menggunakan aria-hidden="true" agar dilewati oleh pembaca layar.
+ * Garis pemisah struktural antar-bagian yang tenang tanpa gelombang dekoratif.
  */
 export function PatternDivider({
-  variant = 'curve',
-  fromColor = '#FDFCF7',
-  toColor = '#F3F1EA',
+  variant = 'rule',
   className,
 }: PatternDividerProps) {
-  const patternId = useId().replace(/:/g, '');
-
   if (variant === 'gradient') {
     return (
       <div
@@ -116,63 +111,10 @@ export function PatternDivider({
     );
   }
 
-  if (variant === 'batik-rim') {
-    return (
-      <div
-        aria-hidden="true"
-        className={cn('w-full overflow-hidden leading-none select-none pointer-events-none', className)}
-        style={{ backgroundColor: fromColor }}
-      >
-        <svg
-          className="block w-full h-[10px]"
-          width="100%"
-          height="10"
-          focusable="false"
-        >
-          <defs>
-            <pattern
-              id={`batik-rim-${patternId}`}
-              width="32"
-              height="10"
-              patternUnits="userSpaceOnUse"
-            >
-              <path
-                d="M0 10C7 10 10 2 16 2C22 2 25 10 32 10Z"
-                fill={toColor}
-              />
-              <path
-                d="M0 10C7 10 10 2 16 2C22 2 25 10 32 10"
-                fill="none"
-                stroke="#F59E0B"
-                strokeOpacity="0.28"
-                strokeWidth="0.85"
-              />
-              <circle cx="16" cy="7.2" r="1.05" fill="#F59E0B" fillOpacity="0.52" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="10" fill={`url(#batik-rim-${patternId})`} />
-        </svg>
-      </div>
-    );
-  }
-
   return (
     <div
       aria-hidden="true"
-      className={cn('w-full overflow-hidden leading-none select-none pointer-events-none', className)}
-      style={{ backgroundColor: fromColor }}
-    >
-      <svg
-        viewBox="0 0 1440 36"
-        preserveAspectRatio="none"
-        className="block w-full h-5 sm:h-7 md:h-9"
-        focusable="false"
-      >
-        <path
-          d="M0 36L0 18C320 0 640 32 980 14C1180 4 1340 10 1440 18L1440 36Z"
-          fill={toColor}
-        />
-      </svg>
-    </div>
+      className={cn('w-full border-t border-[#0C2340]/10', className)}
+    />
   );
 }
