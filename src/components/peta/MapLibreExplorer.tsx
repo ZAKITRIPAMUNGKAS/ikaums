@@ -1,14 +1,13 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Map, LngLatBounds, Marker, setWorkerUrl } from 'maplibre-gl';
+import { Map, Marker, setWorkerUrl } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import jabodetabekGeoJSON from '@/data/jabodetabek-geojson.json';
 import {
   REGIONS_METADATA,
   JABODETABEK_BOUNDS,
-  JABODETABEK_CENTER,
-  RegionMetadata
+  JABODETABEK_CENTER
 } from '@/data/jabodetabek-geo-meta';
 import { Plus, Minus, RotateCcw } from 'lucide-react';
 
@@ -160,6 +159,7 @@ export default function MapLibreExplorer({
       setIsMapLoaded(true);
 
       // Fit bounds to Jabodetabek on initial load with breathing room
+      map.resize();
       map.fitBounds(bounds, {
         padding: { top: 40, bottom: 40, left: 30, right: 30 },
         duration: 800
@@ -176,7 +176,7 @@ export default function MapLibreExplorer({
               ? 'bg-[#0B1D3A] text-white border-[#D97706] ring-2 ring-[#D97706]/40 shadow-md font-bold'
               : 'bg-white/95 text-[#0C1222] border-[#CBD5E1] hover:bg-[#F8F9FA] hover:border-[#94A3B8]'
           }">
-            <span class="font-mono text-[11px] font-bold ${
+            <span class="text-[11px] font-bold ${
               region.regionId === selectedRegionId ? 'text-[#F59E0B]' : 'text-[#D97706]'
             }">${region.count}</span>
             <span class="text-[11px] tracking-tight">${region.shortName}</span>
@@ -226,7 +226,14 @@ export default function MapLibreExplorer({
       }
     });
 
+    // Observe container resize so WebGL canvas stays full width/height
+    const resizeObserver = new ResizeObserver(() => {
+      map.resize();
+    });
+    resizeObserver.observe(mapContainerRef.current);
+
     return () => {
+      resizeObserver.disconnect();
       markersRef.current.forEach(m => m.remove());
       markersRef.current = [];
       map.remove();
@@ -299,17 +306,17 @@ export default function MapLibreExplorer({
   };
 
   return (
-    <div className="relative w-full h-full min-h-[420px] md:min-h-[560px] bg-[#F6F5F0] overflow-hidden rounded-xl border border-[#E2DFD8]">
+    <div className="relative w-full h-full bg-[#F6F5F0] overflow-hidden rounded-xl border border-[#0C2340]/15 shadow-xs">
       {/* MapLibre WebGL Canvas Container */}
       <div ref={mapContainerRef} className="w-full h-full absolute inset-0" />
 
-      {/* Felt-Style Minimal Map Control Toolbar (Top-Right) */}
-      <div className="absolute top-4 right-4 z-10 flex flex-col gap-1 bg-white/95 backdrop-blur-sm border border-[#D5D2C9] rounded-lg p-1 shadow-sm">
+      {/* Kontrol Zoom Minimalis (Kanan Atas) */}
+      <div className="absolute top-3.5 right-3.5 z-10 flex flex-col gap-1 bg-white/95 backdrop-blur-xs border border-[#0C2340]/15 rounded-lg p-1 shadow-sm">
         <button
           onClick={handleZoomIn}
           title="Perbesar Peta"
           aria-label="Perbesar Peta"
-          className="w-8 h-8 flex items-center justify-center rounded text-[#101F5B] hover:bg-[#F1EFEA] transition-colors"
+          className="w-8 h-8 flex items-center justify-center rounded text-[#0C2340] hover:bg-[#F3F1EA] transition-colors cursor-pointer"
         >
           <Plus className="w-4 h-4" />
         </button>
@@ -317,60 +324,45 @@ export default function MapLibreExplorer({
           onClick={handleZoomOut}
           title="Perkecil Peta"
           aria-label="Perkecil Peta"
-          className="w-8 h-8 flex items-center justify-center rounded text-[#101F5B] hover:bg-[#F1EFEA] transition-colors"
+          className="w-8 h-8 flex items-center justify-center rounded text-[#0C2340] hover:bg-[#F3F1EA] transition-colors cursor-pointer"
         >
           <Minus className="w-4 h-4" />
         </button>
-        <div className="w-full h-px bg-[#E2DFD8] my-0.5" />
+        <div className="w-full h-px bg-[#0C2340]/10 my-0.5" />
         <button
           onClick={handleResetView}
-          title="Reset Tampilan Jabodetabek"
-          aria-label="Reset Tampilan Jabodetabek"
-          className="w-8 h-8 flex items-center justify-center rounded text-[#101F5B] hover:bg-[#F1EFEA] transition-colors"
+          title="Tampilkan Seluruh Jabodetabek"
+          aria-label="Tampilkan Seluruh Jabodetabek"
+          className="w-8 h-8 flex items-center justify-center rounded text-[#0C2340] hover:bg-[#F3F1EA] transition-colors cursor-pointer"
         >
           <RotateCcw className="w-3.5 h-3.5" />
         </button>
       </div>
 
-      {/* Cartographic Badge & Source (Top-Left) */}
-      <div className="absolute top-4 left-4 z-10 hidden sm:flex items-center gap-2 bg-white/90 backdrop-blur-sm border border-[#D5D2C9] rounded-md px-3 py-1.5 shadow-xs">
-        <span className="w-2 h-2 rounded-full bg-[#102A54]" />
-        <span className="text-[11px] font-semibold text-[#0C1222] tracking-tight">
-          Peta Kartografi Spasial Jabodetabek
-        </span>
-        <span className="text-[10px] text-[#64748B] border-l border-[#CBD5E1] pl-2 font-mono">
-          BPS ADM2
-        </span>
-      </div>
-
-      {/* Felt-Style Compact Choropleth Legend (Bottom-Left) */}
-      <div className="absolute bottom-4 left-4 z-10 bg-white/95 backdrop-blur-sm border border-[#D5D2C9] rounded-lg p-3 shadow-sm max-w-xs">
-        <div className="flex items-center justify-between gap-3 mb-2">
-          <span className="text-[11px] font-semibold text-[#0C1222] tracking-tight">
-            Kepadatan Alumni Terdaftar
-          </span>
-          <span className="text-[10px] font-mono text-[#64748B]">
-            k ≥ 5
+      {/* Legenda Ringkas (Kiri Bawah) */}
+      <div className="absolute bottom-3 left-3 sm:bottom-3.5 sm:left-3.5 z-10 bg-white/95 backdrop-blur-xs border border-[#0C2340]/15 rounded-lg p-2.5 sm:p-3 shadow-sm max-w-[205px] sm:max-w-[240px]">
+        <div className="flex items-center justify-between gap-3 mb-1.5">
+          <span className="text-[11px] font-semibold text-[#0C2340]">
+            Jumlah Alumni per Wilayah
           </span>
         </div>
         
-        {/* Choropleth Bar */}
-        <div className="grid grid-cols-4 gap-1 h-2 rounded overflow-hidden mb-1.5">
-          <div className="bg-[#CBD8E6]" title="70 - 89 Alumni" />
-          <div className="bg-[#98B5D3]" title="90 - 109 Alumni" />
-          <div className="bg-[#4B76A6]" title="110 - 130 Alumni" />
-          <div className="bg-[#102A54]" title="> 130 Alumni" />
+        <div className="grid grid-cols-4 gap-1 h-2 rounded overflow-hidden mb-1">
+          <div className="bg-[#CBD8E6]" title="70 - 89 alumni" />
+          <div className="bg-[#98B5D3]" title="90 - 109 alumni" />
+          <div className="bg-[#4B76A6]" title="110 - 130 alumni" />
+          <div className="bg-[#102A54]" title="Di atas 130 alumni" />
         </div>
 
-        <div className="flex items-center justify-between text-[10px] text-[#52525B] font-mono">
-          <span>70 alumni</span>
+        <div className="flex items-center justify-between text-[10px] text-[#475569] font-medium">
+          <span>70</span>
           <span>100</span>
           <span>125</span>
-          <span className="font-bold text-[#102A54]">184+</span>
+          <span className="font-bold text-[#0C2340]">184+</span>
         </div>
 
-        <p className="text-[10px] text-[#71717A] mt-2 leading-tight border-t border-[#F1EFEA] pt-1.5">
-          Batas administrasi resmi BPS / geoBoundaries (CC BY 3.0 IGO).
+        <p className="text-[10px] text-[#64748B] mt-2 leading-tight border-t border-[#0C2340]/10 pt-1.5">
+          Batas wilayah resmi BPS · geoBoundaries (CC BY 3.0 IGO).
         </p>
       </div>
     </div>

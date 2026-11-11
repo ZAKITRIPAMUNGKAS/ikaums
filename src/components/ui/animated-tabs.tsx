@@ -37,7 +37,7 @@ export function AnimatedTabs({
     <div
       role="tablist"
       className={cn(
-        'inline-flex flex-wrap items-center gap-1.5 p-1 bg-[#F4F5F8] border border-[#18213D]/10 rounded-xl',
+        'inline-flex flex-wrap items-center gap-1 p-1 bg-[#F3F1EA] border border-[#0C2340]/10 rounded-xl',
         className
       )}
     >
@@ -51,10 +51,10 @@ export function AnimatedTabs({
             type="button"
             onClick={() => onChange(tab.id)}
             className={cn(
-              'relative z-10 px-3.5 py-1.5 text-xs font-mono uppercase tracking-wider transition-colors duration-150 rounded-lg flex items-center gap-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#101F5B]',
+              'relative z-10 px-3.5 py-2 text-xs sm:text-[13px] transition-colors duration-150 rounded-lg flex items-center gap-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C2340] cursor-pointer',
               isActive
-                ? 'text-white font-bold'
-                : 'text-[#5F6678] hover:text-[#101F5B] hover:bg-black/5 font-medium'
+                ? 'text-white font-semibold'
+                : 'text-[#475569] hover:text-[#0C2340] hover:bg-black/4 font-medium'
             )}
           >
             {isActive && (
@@ -62,7 +62,7 @@ export function AnimatedTabs({
                 layoutId={shouldReduceMotion ? undefined : layoutId}
                 transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                 className={cn(
-                  'absolute inset-0 bg-[#101F5B] rounded-lg -z-10 shadow-xs',
+                  'absolute inset-0 bg-[#0C2340] rounded-lg -z-10 shadow-xs',
                   pillClassName
                 )}
               />
@@ -71,10 +71,10 @@ export function AnimatedTabs({
             {tab.badge !== undefined && (
               <span
                 className={cn(
-                  'text-[10px] px-1.5 py-0.2 rounded-full font-bold leading-none',
+                  'text-[11px] px-1.5 py-0.5 rounded-md font-semibold leading-none',
                   isActive
-                    ? 'bg-white/20 text-[#F4C542]'
-                    : 'bg-[#18213D]/10 text-[#5F6678]'
+                    ? 'bg-white/20 text-[#F59E0B]'
+                    : 'bg-[#0C2340]/10 text-[#475569]'
                 )}
               >
                 {tab.badge}

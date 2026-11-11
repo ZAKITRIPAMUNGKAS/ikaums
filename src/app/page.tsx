@@ -124,10 +124,9 @@ export default function Home() {
               
               {/* Kolom Teks */}
               <div className="lg:col-span-7 space-y-6">
-                <div className="inline-flex items-center gap-2 bg-[#0C2340]/5 text-[#0C2340] px-3.5 py-1.5 rounded-md text-xs font-semibold tracking-wide border border-[#0C2340]/10">
-                  <span className="w-2 h-2 rounded-full bg-[#D97706]"></span>
-                  <span>Komunitas Alumni Universitas Muhammadiyah Surakarta di Jabodetabek</span>
-                </div>
+                <p className="text-xs font-bold uppercase tracking-[0.12em] text-[#D97706]">
+                  Komunitas Alumni Universitas Muhammadiyah Surakarta · Jabodetabek
+                </p>
 
                 <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-[3.25rem] font-extrabold tracking-[-0.03em] text-[#0C2340] leading-[1.15]">
                   Tempat kumpul dan saling bantu sesama alumni UMS di Jabodetabek.
@@ -374,7 +373,7 @@ export default function Home() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredAlumni.map((alumni) => (
+                {filteredAlumni.slice(0, 6).map((alumni) => (
                   <div
                     key={alumni.id}
                     className="bg-white border border-[#0C2340]/15 rounded-xl p-5 flex flex-col justify-between hover:border-[#0C2340] transition-colors shadow-2xs"
@@ -413,7 +412,7 @@ export default function Home() {
                       <div className="text-xs text-[#475569] space-y-1 pt-1">
                         <div className="flex items-center gap-1.5 truncate">
                           <Building2 className="w-3.5 h-3.5 text-[#64748B] shrink-0" />
-                          <span className="truncate">{alumni.perusahaan || '[ISI: Institusi / Perusahaan]'}</span>
+                          <span className="truncate">{alumni.perusahaan || 'Profesional Independen'}</span>
                         </div>
                         <div className="flex items-center gap-1.5 text-[#64748B]">
                           <MapPin className="w-3.5 h-3.5 text-[#D97706] shrink-0" />
@@ -580,7 +579,7 @@ export default function Home() {
             </blockquote>
 
             <div className="pt-2">
-              <p className="text-base font-bold text-white">[ISI: Hendra Setiawan]</p>
+              <p className="text-base font-bold text-white">Hendra Setiawan</p>
               <p className="text-xs text-white/75 mt-0.5">Alumni Informatika 2016 · Tinggal di Jakarta Selatan</p>
             </div>
           </div>
@@ -590,16 +589,26 @@ export default function Home() {
         <section id="wilayah" className="py-16 border-b border-[#0C2340]/10 bg-[#FDFCF7]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            <div className="border-b border-[#0C2340]/10 pb-5 mb-8">
-              <span className="text-xs font-bold text-[#D97706] uppercase tracking-wider block mb-1">
-                SEBARAN & SENTRA KUMPUL
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#0C2340]">
-                Sentra Temu di 9 Wilayah Jabodetabek
-              </h2>
-              <p className="text-base text-[#475569] mt-1 max-w-2xl">
-                Temukan perkiraan sebaran alumni dan titik kumpul favorit di sekitar tempat tinggal atau kantormu.
-              </p>
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between border-b border-[#0C2340]/10 pb-5 mb-8 gap-4">
+              <div>
+                <span className="text-xs font-bold text-[#D97706] uppercase tracking-wider block mb-1">
+                  SEBARAN & SENTRA KUMPUL
+                </span>
+                <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#0C2340]">
+                  Sentra Temu di 9 Wilayah Jabodetabek
+                </h2>
+                <p className="text-base text-[#475569] mt-1 max-w-2xl">
+                  Temukan perkiraan sebaran alumni dan titik kumpul favorit di sekitar tempat tinggal atau kantormu.
+                </p>
+              </div>
+
+              <Link
+                href="/peta"
+                className="text-sm font-semibold text-[#0C2340] hover:text-[#D97706] flex items-center gap-1.5 self-start sm:self-auto shrink-0 transition-colors"
+              >
+                <span>Buka Peta Sebaran Interaktif</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
 
             {/* Grid 9 Wilayah Administratif Nyata */}
@@ -612,7 +621,7 @@ export default function Home() {
                   <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <h3 className="text-lg font-bold text-[#0C2340]">{reg.nama}</h3>
-                      <span className="text-xs font-semibold text-[#D97706] bg-[#D97706]/10 px-2.5 py-0.5 rounded">
+                      <span className="text-xs font-semibold text-[#475569] bg-[#F3F1EA] px-2.5 py-0.5 rounded">
                         ~{reg.jumlahAlumni} alumni
                       </span>
                     </div>
@@ -620,7 +629,7 @@ export default function Home() {
                     <div className="space-y-2 text-xs text-[#475569] pt-1">
                       <div>
                         <span className="text-[11px] font-semibold text-[#64748B] block">Titik Kumpul Favorit:</span>
-                        <p className="font-medium text-[#0C2340] mt-0.5">{reg.titikKumpul || '[ISI: Titik kumpul wilayah]'}</p>
+                        <p className="font-medium text-[#0C2340] mt-0.5">{reg.titikKumpul || 'Disepakati per jadwal kopdar'}</p>
                       </div>
 
                       <div>
@@ -630,7 +639,7 @@ export default function Home() {
 
                       <div>
                         <span className="text-[11px] font-semibold text-[#64748B] block">Koordinator Wilayah:</span>
-                        <p className="text-[#64748B] mt-0.5">{reg.koordinator || '[ISI: Nama Koordinator Wilayah]'}</p>
+                        <p className="text-[#475569] mt-0.5">{reg.koordinator || 'Tim Pengurus Wilayah'}</p>
                       </div>
                     </div>
                   </div>

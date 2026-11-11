@@ -1,74 +1,136 @@
 import React from 'react';
+import Link from 'next/link';
 import { Navbar, Footer } from '@/components/Navigation';
-import { Shield, Lock, FileCheck, CheckCircle2 } from 'lucide-react';
+import { ShieldCheck, Users, Compass, ArrowRight } from 'lucide-react';
 
 export default function TentangPage() {
   return (
-    <div className="min-h-screen bg-[#FAFAF8] text-[#18213D] flex flex-col font-sans">
+    <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
       <Navbar />
 
-      <main className="flex-grow max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
-        <div className="mb-8 border-b border-[#E5E8EF] pb-6">
-          <span className="text-xs font-mono font-bold uppercase tracking-wider text-[#101F5B] bg-[#EDF1FA] px-3 py-1 rounded-full">
-            TATA KELOLA & INTEGRITAS
-          </span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0B1536] mt-3">
-            Tentang IKA UMS Connect & Tata Kelola Privasi
-          </h1>
-          <p className="text-sm text-[#5F6678] mt-2 leading-relaxed">
-            Transparansi inisiatif komunitas, pengelolaan data sukarela, dan kepatuhan penuh terhadap Undang-Undang Perlindungan Data Pribadi (UU PDP No. 27 Tahun 2022).
-          </p>
-        </div>
+      <main className="flex-grow max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 w-full">
+        {/* Breadcrumb */}
+        <nav aria-label="Breadcrumb" className="text-sm text-[#64748B] mb-6 flex items-center gap-2">
+          <Link href="/" className="hover:text-[#0C2340] transition-colors">
+            Beranda
+          </Link>
+          <span aria-hidden="true">/</span>
+          <span className="text-[#0C2340] font-medium">Tentang Komunitas</span>
+        </nav>
 
-        <div className="space-y-8 text-sm leading-relaxed text-[#18213D]">
-          <section className="bg-white border border-[#E5E8EF] rounded-xl p-6 sm:p-8 shadow-xs">
-            <h2 className="text-xl font-bold text-[#0B1536] mb-3">
-              1. Latar Belakang & Komitmen Inisiatif
-            </h2>
-            <p className="text-[#5F6678]">
-              IKA UMS Connect Jabodetabek hadir dari semangat kebersamaan acara temu kangen alumni Universitas Muhammadiyah Surakarta di wilayah Jabodetabek. Platform ini hadir sebagai ekosistem digital untuk menjembatani silaturahmi menjadi jejaring peluang karir nyata, kolaborasi bisnis, dan pendampingan perantau baru di ibu kota.
+        {/* Hero Editorial Asimetris */}
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start pb-12 border-b border-[#0C2340]/10">
+          <div className="lg:col-span-7 space-y-5">
+            <p className="text-sm font-semibold text-[#D97706]">
+              IKA UMS Wilayah Jabodetabek
             </p>
-            <div className="mt-4 p-3.5 bg-[#EDF1FA] border border-[#101F5B]/15 rounded-lg text-xs text-[#101F5B] font-mono leading-relaxed">
-              Inisiatif ini dikelola secara independen oleh pengurus dan sukarelawan alumni UMS wilayah Jabodetabek untuk kemaslahatan bersama almamater di perantauan.
-            </div>
-          </section>
-
-          <section className="bg-white border border-[#E5E8EF] rounded-xl p-6 sm:p-8 shadow-xs">
-            <div className="flex items-center gap-2 mb-3">
-              <Shield className="w-5 h-5 text-[#22775A]" />
-              <h2 className="text-xl font-bold text-[#0B1536]">
-                2. Prinsip Perlindungan Data Pribadi (UU PDP)
-              </h2>
-            </div>
-            <ul className="space-y-3.5 text-[#5F6678]">
-              <li className="flex items-start gap-2.5">
-                <CheckCircle2 className="w-4 h-4 text-[#22775A] shrink-0 mt-0.5" />
-                <span><strong>Sepenuhnya Opt-In:</strong> Keanggotaan grup WhatsApp atau presensi acara temu kangen TIDAK diimpor secara sepihak. Setiap alumni secara sadar menentukan data yang dipublikasikan.</span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <CheckCircle2 className="w-4 h-4 text-[#22775A] shrink-0 mt-0.5" />
-                <span><strong>Privasi Kontak:</strong> Nomor telepon dan email pribadi tidak pernah dipajang secara publik. Pertukaran kontak hanya dapat terjadi setelah permintaan koneksi disetujui kedua belah pihak.</span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <CheckCircle2 className="w-4 h-4 text-[#22775A] shrink-0 mt-0.5" />
-                <span><strong>Agregasi Peta Berstandar K-Anonymity:</strong> Peta wilayah hanya menampilkan statistik sebaran agregat. Wilayah dengan jumlah alumni terdaftar di bawah 5 disamarkan untuk mencegah pelacakan identitas individu.</span>
-              </li>
-              <li className="flex items-start gap-2.5">
-                <CheckCircle2 className="w-4 h-4 text-[#22775A] shrink-0 mt-0.5" />
-                <span><strong>Hak Pemilik Data:</strong> Setiap alumni berhak mengubah izin keterlihatan profil, mengunduh salinan data pribadi, maupun mengajukan penutupan akun sewaktu-waktu.</span>
-              </li>
-            </ul>
-          </section>
-
-          <section className="bg-white border border-[#E5E8EF] rounded-xl p-6 sm:p-8 shadow-xs">
-            <h2 className="text-xl font-bold text-[#0B1536] mb-3">
-              3. Verifikasi & Integritas Keanggotaan
-            </h2>
-            <p className="text-[#5F6678]">
-              Untuk menjaga rasa aman di dalam komunitas, status alumni diverifikasi secara bertahap melalui konfirmasi data angkatan/program studi dan verifikasi rekan sejawat (peer-to-peer verification) antaralumni sesama fakultas.
+            <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-bold tracking-tight text-[#0C2340] leading-[1.15]">
+              Menyambung Silaturahmi Alumni Universitas Muhammadiyah Surakarta di Perantauan
+            </h1>
+            <p className="text-base sm:text-lg text-[#475569] leading-relaxed">
+              Selama ini, obrolan dan jaringan alumni UMS di Jakarta, Bogor, Depok, Tangerang, dan Bekasi
+              sering tersebar di grup WhatsApp masing-masing angkatan atau jurusan. Portal ini hadir sebagai
+              titik kumpul bersama agar alumni lintas generasi—mulai angkatan 1980-an hingga lulusan baru—lebih
+              mudah saling mengenal, berbagi kabar kopdar, dan membantu adik tingkat meniti karier.
             </p>
-          </section>
-        </div>
+            <div className="pt-2 flex flex-wrap items-center gap-3">
+              <Link
+                href="/gabung"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#0C2340] hover:bg-[#16325C] text-white text-sm font-semibold transition-colors"
+              >
+                Daftarkan Profil Alumni
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link
+                href="/direktori"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-white border border-[#0C2340]/15 hover:border-[#0C2340]/35 text-[#0C2340] text-sm font-semibold transition-colors"
+              >
+                Lihat Direktori Anggota
+              </Link>
+            </div>
+          </div>
+
+          <div className="lg:col-span-5">
+            <figure className="bg-white border border-[#0C2340]/10 rounded-2xl overflow-hidden shadow-xs">
+              <div className="aspect-[4/3] w-full bg-[#F3F1EA] overflow-hidden">
+                <img
+                  src="/images/hero-kumpul-bolo-pisah.jpg"
+                  alt="Suasana kumpul alumni Universitas Muhammadiyah Surakarta wilayah Jabodetabek"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <figcaption className="p-4 text-sm text-[#475569] leading-relaxed border-t border-[#0C2340]/10">
+                <strong className="text-[#0C2340] font-semibold">Kumpul Bolo Jabodetabek.</strong>{' '}
+                Pertemuan rutin lintas angkatan yang menjadi cikal bakal inisiatif direktori dan mentoring alumni wilayah metropolitan.
+              </figcaption>
+            </figure>
+          </div>
+        </section>
+
+        {/* Tiga Pilar Pengelolaan */}
+        <section className="py-12 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+          <article className="space-y-3">
+            <div className="w-10 h-10 rounded-lg bg-[#F3F1EA] border border-[#0C2340]/10 flex items-center justify-center text-[#0C2340]">
+              <Compass className="w-5 h-5" />
+            </div>
+            <h2 className="text-xl font-bold text-[#0C2340]">
+              Fokus pada Manfaat Nyata
+            </h2>
+            <p className="text-[15px] text-[#475569] leading-relaxed">
+              Setiap fitur diarahkan pada kebutuhan sehari-hari alumni di perantauan: mencari teman satu domisili saat baru pindah kerja, berdiskusi dengan senior sebidang, hingga meramaikan agenda kumpul wilayah.
+            </p>
+          </article>
+
+          <article className="space-y-3">
+            <div className="w-10 h-10 rounded-lg bg-[#F3F1EA] border border-[#0C2340]/10 flex items-center justify-center text-[#0C2340]">
+              <Users className="w-5 h-5" />
+            </div>
+            <h2 className="text-xl font-bold text-[#0C2340]">
+              Verifikasi Sesama Alumni
+            </h2>
+            <p className="text-[15px] text-[#475569] leading-relaxed">
+              Pendaftaran anggota baru dicek kesesuaian program studi dan tahun angkatannya bersama koordinator wilayah agar direktori tetap nyaman, relevan, dan bebas dari akun spam komersial.
+            </p>
+          </article>
+
+          <article className="space-y-3">
+            <div className="w-10 h-10 rounded-lg bg-[#F3F1EA] border border-[#0C2340]/10 flex items-center justify-center text-[#0C2340]">
+              <ShieldCheck className="w-5 h-5" />
+            </div>
+            <h2 className="text-xl font-bold text-[#0C2340]">
+              Privasi Terjaga Sejak Awal
+            </h2>
+            <p className="text-[15px] text-[#475569] leading-relaxed">
+              Partisipasi bersifat sukarela. Nomor WhatsApp dan alamat email tidak ditampilkan terbuka di direktori, sementara peta sebaran hanya menampilkan jumlah total di tingkat kota atau kabupaten.
+            </p>
+          </article>
+        </section>
+
+        {/* Catatan Transparansi & Tautan Tata Kelola */}
+        <section className="bg-white border border-[#0C2340]/12 rounded-2xl p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div className="space-y-2 max-w-2xl">
+            <h2 className="text-xl font-bold text-[#0C2340]">
+              Tata Kelola & Dokumen Komunitas
+            </h2>
+            <p className="text-sm sm:text-[15px] text-[#475569] leading-relaxed">
+              Inisiatif ini dikelola secara gotong royong oleh pengurus dan relawan alumni IKA UMS Jabodetabek. Pelajari rincian pengelolaan data pribadi dan etika berjejaring sebelum berpartisipasi.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-3 shrink-0">
+            <Link
+              href="/privasi"
+              className="px-4 py-2.5 rounded-lg bg-[#F3F1EA] hover:bg-[#E7E3D7] text-[#0C2340] text-sm font-semibold transition-colors"
+            >
+              Kebijakan Privasi
+            </Link>
+            <Link
+              href="/syarat"
+              className="px-4 py-2.5 rounded-lg bg-[#F3F1EA] hover:bg-[#E7E3D7] text-[#0C2340] text-sm font-semibold transition-colors"
+            >
+              Ketentuan Komunitas
+            </Link>
+          </div>
+        </section>
       </main>
 
       <Footer />

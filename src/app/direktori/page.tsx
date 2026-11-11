@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { Navbar, Footer } from '@/components/Navigation';
@@ -14,16 +14,14 @@ import {
 } from '@/components/ui/dialog';
 import { DATA_ALUMNI_SIMULASI } from '@/data/simulasi';
 import { AlumniProfile } from '@/types';
-import { 
-  Search, 
-  MapPin, 
-  Briefcase, 
-  CheckCircle2, 
-  X, 
-  MessageSquare, 
-  ShieldCheck,
+import {
+  Search,
+  MapPin,
+  CheckCircle2,
+  MessageSquare,
   Building2,
-  UserPlus
+  UserPlus,
+  HeartHandshake
 } from 'lucide-react';
 
 const STORAGE_KEY_CONNECTIONS = 'ikaums_persisted_connections';
@@ -32,6 +30,7 @@ const STORAGE_KEY_MESSAGES = 'ikaums_persisted_messages';
 export default function DirektoriPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRegion, setSelectedRegion] = useState('Semua Wilayah');
+  const [mentorOnly, setMentorOnly] = useState(false);
   const [selectedAlumni, setSelectedAlumni] = useState<AlumniProfile | null>(null);
   const [connectionRequested, setConnectionRequested] = useState<Record<string, boolean>>({});
   const [messagesSent, setMessagesSent] = useState<Record<string, boolean>>({});
@@ -45,7 +44,7 @@ export default function DirektoriPage() {
     'Jakarta Barat',
     'Jakarta Timur',
     'Jakarta Utara',
-    'Tangerang',
+    'Tangerang Raya',
     'Bekasi',
     'Depok',
     'Bogor'
@@ -53,28 +52,29 @@ export default function DirektoriPage() {
 
   const profileTabs = [
     { id: 'tentang', label: 'Tentang' },
-    { id: 'pengalaman', label: 'Pengalaman' },
-    { id: 'keahlian', label: 'Keahlian' },
-    { id: 'kontribusi', label: 'Kontribusi' }
+    { id: 'pengalaman', label: 'Pekerjaan' },
+    { id: 'keahlian', label: 'Bidang Keahlian' },
+    { id: 'kontribusi', label: 'Kesediaan Bantu' }
   ];
 
-  // Client-side persistence for connections and messages
   useEffect(() => {
     try {
       const savedConn = localStorage.getItem(STORAGE_KEY_CONNECTIONS);
       if (savedConn) setConnectionRequested(JSON.parse(savedConn));
       const savedMsg = localStorage.getItem(STORAGE_KEY_MESSAGES);
       if (savedMsg) setMessagesSent(JSON.parse(savedMsg));
-    } catch (e) {}
+    } catch {}
 
-    // Synchronize filter from URL query param ?wilayah=...
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
       const paramWilayah = params.get('wilayah');
       if (paramWilayah) {
         const decoded = decodeURIComponent(paramWilayah).toLowerCase();
         const match = regions.find(
-          r => r.toLowerCase() === decoded || decoded.includes(r.toLowerCase()) || r.toLowerCase().includes(decoded)
+          r =>
+            r.toLowerCase() === decoded ||
+            decoded.includes(r.toLowerCase()) ||
+            r.toLowerCase().includes(decoded)
         );
         if (match) {
           setSelectedRegion(match);
@@ -89,7 +89,7 @@ export default function DirektoriPage() {
       const updated = { ...prev, [id]: !prev[id] };
       try {
         localStorage.setItem(STORAGE_KEY_CONNECTIONS, JSON.stringify(updated));
-      } catch (err) {}
+      } catch {}
       return updated;
     });
   };
@@ -99,202 +99,274 @@ export default function DirektoriPage() {
       const updated = { ...prev, [id]: true };
       try {
         localStorage.setItem(STORAGE_KEY_MESSAGES, JSON.stringify(updated));
-      } catch (err) {}
+      } catch {}
       return updated;
     });
   };
 
-  const filteredAlumni = DATA_ALUMNI_SIMULASI.filter(alumni => {
-    const matchesSearch = 
-      alumni.nama.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      alumni.prodi.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (alumni.perusahaan && alumni.perusahaan.toLowerCase().includes(searchTerm.toLowerCase())) ||
-      alumni.pekerjaan.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredAlumni = useMemo(() => {
+    return DATA_ALUMNI_SIMULASI.filter(alumni => {
+      const q = searchTerm.toLowerCase().trim();
+      const matchesSearch =
+        !q ||
+        alumni.nama.toLowerCase().includes(q) ||
+        alumni.prodi.toLowerCase().includes(q) ||
+        (alumni.perusahaan && alumni.perusahaan.toLowerCase().includes(q)) ||
+        alumni.pekerjaan.toLowerCase().includes(q) ||
+        alumni.industri.toLowerCase().includes(q);
 
-    const matchesRegion = 
-      selectedRegion === 'Semua Wilayah' || alumni.wilayah.toLowerCase().includes(selectedRegion.toLowerCase());
+      const matchesRegion =
+        selectedRegion === 'Semua Wilayah' ||
+        alumni.wilayah.toLowerCase().includes(selectedRegion.toLowerCase()) ||
+        selectedRegion.toLowerCase().includes(alumni.wilayah.toLowerCase());
 
-    return matchesSearch && matchesRegion;
-  });
+      const matchesMentor = !mentorOnly || alumni.bersediaMentoring;
+
+      return matchesSearch && matchesRegion && matchesMentor;
+    });
+  }, [searchTerm, selectedRegion, mentorOnly]);
 
   return (
-    <div className="min-h-screen bg-[#FAFAF8] text-[#18213D] flex flex-col font-sans">
+    <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans">
       <Navbar />
 
-      <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+      <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 w-full">
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-xs text-[#5F6678] mb-4 font-mono">
-          <Link href="/" className="hover:text-[#101F5B]">BERANDA</Link>
+        <nav className="flex items-center gap-2 text-xs text-[#64748B] mb-4">
+          <Link href="/" className="hover:text-[#0C2340] transition-colors">Beranda</Link>
           <span>/</span>
-          <span className="text-[#101F5B] font-bold">DIREKTORI ALUMNI</span>
+          <span className="text-[#0C2340] font-semibold">Direktori Alumni</span>
         </nav>
 
-        {/* Title */}
-        <div className="mb-8 border-b border-[#18213D]/10 pb-6">
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div>
-              <span className="text-[11px] font-mono uppercase tracking-wider text-[#101F5B] font-bold block mb-1">
-                JEJARING PROFESIONAL TERVERIFIKASI
-              </span>
-              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0B1536]">
-                Direktori Alumni Jabodetabek
-              </h1>
-              <p className="text-xs sm:text-sm text-[#5F6678] mt-1.5 max-w-2xl leading-relaxed">
-                Temukan alumni UMS berdasarkan wilayah perantauan, spesialisasi industri, atau kesediaan berbagi bimbingan karier di ibu kota.
-              </p>
-            </div>
-
-            <div className="flex items-center gap-2 bg-[#EDF1FA] border border-[#101F5B]/15 px-3 py-2 rounded-lg text-xs font-mono text-[#101F5B]">
-              <ShieldCheck className="w-4 h-4 text-[#10B981]" />
-              <span>Privasi Opt-In UU PDP Terjamin</span>
-            </div>
+        {/* Page Header */}
+        <div className="mb-8 border-b border-[#0C2340]/10 pb-6 flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wider text-[#D97706] mb-1.5">
+              Jejaring Perantauan Jabodetabek
+            </p>
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0C2340]">
+              Direktori Alumni UMS
+            </h1>
+            <p className="text-sm sm:text-base text-[#475569] mt-2 max-w-2xl leading-relaxed">
+              Cari teman satu jurusan, kenalan satu domisili, atau senior yang bersedia berbagi pengalaman kerja di Jabodetabek.
+            </p>
           </div>
+
+          <Link
+            href="/peta"
+            className="text-xs sm:text-sm font-semibold text-[#0C2340] hover:text-[#D97706] border border-[#0C2340]/20 bg-white px-4 py-2.5 rounded-lg self-start lg:self-auto transition-colors shrink-0"
+          >
+            Lihat Sebaran di Peta Wilayah
+          </Link>
         </div>
 
         {/* Search & Filter Toolbar */}
-        <div className="bg-white border border-[#E5E8EF] rounded-xl p-4 mb-6 shadow-xs flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="relative w-full md:w-96">
-            <Search className="w-4 h-4 text-[#5F6678] absolute left-3.5 top-3" />
-            <input
-              type="text"
-              placeholder="Cari nama, profesi, perusahaan, atau prodi..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-[#FAFAF8] border border-[#D1D5DB] rounded-lg text-xs text-[#18213D] focus:outline-none focus:border-[#101F5B]"
-            />
+        <div className="bg-white border border-[#0C2340]/12 rounded-xl p-4 sm:p-5 mb-8 shadow-2xs space-y-4">
+          <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3">
+            <div className="relative flex-1">
+              <Search className="w-4 h-4 text-[#64748B] absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder="Cari nama, program studi, profesi, atau bidang industri..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 bg-[#FDFCF7] border border-[#0C2340]/15 rounded-lg text-sm text-[#0C2340] placeholder:text-[#94A3B8] focus:outline-none focus:border-[#0C2340]"
+              />
+            </div>
+
+            <div className="flex flex-wrap items-center gap-3">
+              <select
+                value={selectedRegion}
+                onChange={(e) => setSelectedRegion(e.target.value)}
+                aria-label="Filter wilayah Jabodetabek"
+                className="bg-[#FDFCF7] border border-[#0C2340]/15 text-sm text-[#0C2340] font-medium px-3.5 py-2.5 rounded-lg focus:outline-none focus:border-[#0C2340]"
+              >
+                {regions.map((reg) => (
+                  <option key={reg} value={reg}>{reg}</option>
+                ))}
+              </select>
+
+              <label className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-lg border border-[#0C2340]/15 bg-[#FDFCF7] text-xs sm:text-sm font-medium text-[#0C2340] cursor-pointer select-none">
+                <input
+                  type="checkbox"
+                  checked={mentorOnly}
+                  onChange={(e) => setMentorOnly(e.target.checked)}
+                  className="rounded text-[#0C2340] focus:ring-[#0C2340]"
+                />
+                <span>Siap mentoring</span>
+              </label>
+            </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-3 w-full md:w-auto justify-between md:justify-end">
-            <select
-              value={selectedRegion}
-              onChange={(e) => setSelectedRegion(e.target.value)}
-              className="bg-[#FAFAF8] border border-[#D1D5DB] text-xs font-mono text-[#18213D] px-3 py-2 rounded-lg focus:outline-none focus:border-[#101F5B]"
-            >
-              {regions.map((reg) => (
-                <option key={reg} value={reg}>{reg}</option>
-              ))}
-            </select>
-
-            <span className="text-xs font-mono text-[#5F6678]">
-              {filteredAlumni.length} Profil Ditemukan
+          <div className="flex items-center justify-between text-xs text-[#64748B] pt-1 border-t border-[#0C2340]/8">
+            <span>
+              Menampilkan <strong className="text-[#0C2340]">{filteredAlumni.length}</strong> profil alumni contoh
+              {selectedRegion !== 'Semua Wilayah' ? ` di wilayah ${selectedRegion}` : ''}
             </span>
+            {(searchTerm || selectedRegion !== 'Semua Wilayah' || mentorOnly) && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchTerm('');
+                  setSelectedRegion('Semua Wilayah');
+                  setMentorOnly(false);
+                }}
+                className="text-[#0C2340] font-semibold hover:underline cursor-pointer"
+              >
+                Reset filter
+              </button>
+            )}
           </div>
         </div>
 
-        {/* Alumni List Items with AnimatePresence */}
-        <div className="space-y-3.5 max-w-5xl">
-          <AnimatePresence mode="popLayout">
-            {filteredAlumni.map((alumni) => {
-              const isRequested = connectionRequested[alumni.id];
-              return (
-                <motion.div
-                  key={alumni.id}
-                  layout={!shouldReduceMotion}
-                  initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.98 }}
-                  transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                  onClick={() => setSelectedAlumni(alumni)}
-                  className="bg-white border border-[#E5E8EF] hover:border-[#101F5B]/30 rounded-xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs hover:shadow-md cursor-pointer transition-all group"
-                >
-                  <div className="flex items-center gap-4">
-                    {/* Avatar */}
-                    <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 border-2 border-white shadow-xs bg-[#E8ECF2]">
-                      {alumni.avatarUrl ? (
-                        <img
-                          src={alumni.avatarUrl}
-                          alt={alumni.nama}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-[#101F5B] text-[#F4C542] font-mono font-bold text-base">
-                          {alumni.avatarInitials}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="space-y-0.5">
-                      <div className="flex items-center gap-2">
-                        <h3 className="text-base font-bold text-[#0B1536] group-hover:text-[#18213D] transition-colors leading-tight">
-                          {alumni.nama}
-                        </h3>
-                        {alumni.isVerified && (
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981]" />
-                        )}
-                        {alumni.bersediaMentoring && (
-                          <span className="bg-[#FEF3C7] text-[#92400E] text-[10px] font-mono px-2 py-0.2 rounded font-semibold hidden md:inline">
-                            Siap Mentoring
-                          </span>
+        {/* Alumni Grid */}
+        {filteredAlumni.length === 0 ? (
+          <div className="bg-white border border-dashed border-[#0C2340]/20 rounded-xl p-12 text-center space-y-3">
+            <p className="text-base font-semibold text-[#0C2340]">
+              Belum ada profil yang cocok dengan filter saat ini.
+            </p>
+            <p className="text-sm text-[#64748B]">
+              Coba pilih wilayah lain atau hapus kata kunci pencarian.
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                setSearchTerm('');
+                setSelectedRegion('Semua Wilayah');
+                setMentorOnly(false);
+              }}
+              className="mt-2 inline-flex items-center px-4 py-2 rounded-lg bg-[#0C2340] text-white text-xs font-semibold cursor-pointer"
+            >
+              Tampilkan Semua Alumni
+            </button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+            <AnimatePresence mode="popLayout">
+              {filteredAlumni.map((alumni) => {
+                const isRequested = connectionRequested[alumni.id];
+                return (
+                  <motion.div
+                    key={alumni.id}
+                    layout={!shouldReduceMotion}
+                    initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.98 }}
+                    transition={{ duration: 0.2 }}
+                    onClick={() => {
+                      setActiveProfileTab('tentang');
+                      setSelectedAlumni(alumni);
+                    }}
+                    className="bg-white border border-[#0C2340]/12 hover:border-[#0C2340]/40 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-2xs hover:shadow-sm cursor-pointer transition-all group"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 border border-[#0C2340]/10 bg-[#F3F1EA]">
+                        {alumni.avatarUrl ? (
+                          <img
+                            src={alumni.avatarUrl}
+                            alt={alumni.nama}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-[#0C2340] text-[#F59E0B] font-bold text-base">
+                            {alumni.avatarInitials}
+                          </div>
                         )}
                       </div>
-                      <p className="text-xs text-[#5F6678] font-mono">
-                        {alumni.prodi} • Angkatan {alumni.angkatan}
-                      </p>
-                      <p className="text-xs font-semibold text-[#18213D] pt-0.5">
-                        {alumni.perusahaan ? `${alumni.pekerjaan} — ${alumni.perusahaan}` : alumni.pekerjaan}
-                      </p>
-                      <div className="flex items-center gap-3 text-[11px] text-[#5F6678] font-mono pt-1">
-                        <span className="flex items-center gap-1">
-                          <MapPin className="w-3 h-3 text-[#101F5B]" />
+
+                      <div className="space-y-1 min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-2">
+                          <h3 className="text-base font-bold text-[#0C2340] group-hover:text-[#16325C] transition-colors">
+                            {alumni.nama}
+                          </h3>
+                          {alumni.bersediaMentoring && (
+                            <span className="inline-flex items-center gap-1 bg-[#FEF3C7] text-[#92400E] text-[11px] px-2 py-0.5 rounded font-semibold">
+                              <HeartHandshake className="w-3 h-3" />
+                              Siap Mentoring
+                            </span>
+                          )}
+                        </div>
+
+                        <p className="text-xs text-[#64748B]">
+                          {alumni.prodi} · Angkatan {alumni.angkatan}
+                        </p>
+
+                        <p className="text-sm font-semibold text-[#0C2340] pt-0.5">
+                          {alumni.pekerjaan}
+                        </p>
+
+                        {alumni.perusahaan && (
+                          <p className="text-xs text-[#475569] flex items-center gap-1.5">
+                            <Building2 className="w-3.5 h-3.5 text-[#64748B] shrink-0" />
+                            <span className="truncate">{alumni.perusahaan}</span>
+                          </p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap items-center justify-between gap-3 pt-3.5 border-t border-[#0C2340]/8">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-xs text-[#475569] flex items-center gap-1 mr-1">
+                          <MapPin className="w-3.5 h-3.5 text-[#D97706]" />
                           {alumni.wilayah}
                         </span>
-                        <span>•</span>
-                        <span>{alumni.industri}</span>
+                        {alumni.keahlian.slice(0, 2).map((skill, idx) => (
+                          <span
+                            key={idx}
+                            className="bg-[#F3F1EA] text-[#0C2340] text-[11px] px-2 py-0.5 rounded font-medium"
+                          >
+                            {skill}
+                          </span>
+                        ))}
                       </div>
+
+                      <button
+                        type="button"
+                        onClick={(e) => toggleConnection(alumni.id, e)}
+                        className={`text-xs font-semibold px-4 py-2 rounded-lg transition-colors flex items-center gap-1.5 shrink-0 cursor-pointer ${
+                          isRequested
+                            ? 'bg-[#F3F1EA] text-[#0C2340] border border-[#0C2340]/20'
+                            : 'bg-[#0C2340] hover:bg-[#16325C] text-white'
+                        }`}
+                      >
+                        {isRequested ? (
+                          <>
+                            <CheckCircle2 className="w-3.5 h-3.5 text-[#16A34A]" />
+                            <span>Permintaan Terkirim</span>
+                          </>
+                        ) : (
+                          <>
+                            <UserPlus className="w-3.5 h-3.5 text-[#F59E0B]" />
+                            <span>Ajak Terhubung</span>
+                          </>
+                        )}
+                      </button>
                     </div>
-                  </div>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          </div>
+        )}
 
-                  <div className="flex items-center justify-between sm:justify-end gap-3 pt-3 sm:pt-0 border-t sm:border-0 border-[#F0F2F6]">
-                    <motion.button
-                      whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
-                      type="button"
-                      onClick={(e) => toggleConnection(alumni.id, e)}
-                      className={`text-xs font-mono font-bold uppercase tracking-wider px-5 py-2.5 rounded-lg transition-all shadow-xs flex items-center gap-1.5 ${
-                        isRequested
-                          ? 'bg-[#EDF1FA] text-[#101F5B] border border-[#101F5B]/20'
-                          : 'bg-[#101F5B] hover:bg-[#18213D] text-white'
-                      }`}
-                    >
-                      {isRequested ? (
-                        <>
-                          <CheckCircle2 className="w-3.5 h-3.5 text-[#10B981]" />
-                          <span>Terkirim</span>
-                        </>
-                      ) : (
-                        <>
-                          <UserPlus className="w-3.5 h-3.5 text-[#F4C542]" />
-                          <span>Koneksi</span>
-                        </>
-                      )}
-                    </motion.button>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
-        </div>
-
-        {/* ACCESSIBLE SHADCN/UI DIALOG FOR ALUMNI PROFILE */}
+        {/* Modal Detail Profil Alumni */}
         <Dialog
           open={!!selectedAlumni}
           onOpenChange={(open) => !open && setSelectedAlumni(null)}
         >
           {selectedAlumni && (
             <DialogContent className="p-0 overflow-hidden max-w-xl max-h-[92vh]">
-              {/* Header Cover Photo */}
-              <div className="h-32 bg-[#101F5B] relative overflow-hidden">
+              <div className="h-28 bg-[#0C2340] relative overflow-hidden">
                 <img
                   src="/images/alumni-gathering-4.jpg"
-                  alt="Cover Acara Alumni"
-                  className="w-full h-full object-cover opacity-40 filter contrast-125"
+                  alt="Kegiatan alumni UMS"
+                  className="w-full h-full object-cover opacity-35"
                 />
               </div>
 
-              {/* Profile Details Container */}
-              <div className="px-6 pb-6 pt-0 relative overflow-y-auto max-h-[calc(92vh-8rem)]">
-                {/* Round Avatar overlapping cover */}
-                <div className="-mt-12 mb-3 flex justify-between items-end">
-                  <div className="w-20 h-20 rounded-full border-4 border-white shadow-md overflow-hidden bg-white">
+              <div className="px-6 pb-6 pt-0 relative overflow-y-auto max-h-[calc(92vh-7rem)]">
+                <div className="-mt-10 mb-4 flex justify-between items-end gap-3">
+                  <div className="w-20 h-20 rounded-full border-4 border-white shadow-md overflow-hidden bg-white shrink-0">
                     {selectedAlumni.avatarUrl ? (
                       <img
                         src={selectedAlumni.avatarUrl}
@@ -302,68 +374,62 @@ export default function DirektoriPage() {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-[#101F5B] text-[#F4C542] font-mono font-bold text-lg">
+                      <div className="w-full h-full flex items-center justify-center bg-[#0C2340] text-[#F59E0B] font-bold text-lg">
                         {selectedAlumni.avatarInitials}
                       </div>
                     )}
                   </div>
 
-                  {/* Actions: Koneksi & Hubungi */}
-                  <div className="flex items-center gap-2">
-                    <motion.button
-                      whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
+                  <div className="flex items-center gap-2 flex-wrap justify-end">
+                    <button
                       type="button"
                       onClick={() => toggleConnection(selectedAlumni.id)}
-                      className={`text-xs font-mono font-bold uppercase tracking-wider px-4 py-2 rounded-lg transition-all ${
+                      className={`text-xs font-semibold px-4 py-2 rounded-lg transition-colors cursor-pointer ${
                         connectionRequested[selectedAlumni.id]
-                          ? 'bg-[#EDF1FA] text-[#101F5B] border border-[#101F5B]/30'
-                          : 'bg-[#101F5B] hover:bg-[#18213D] text-white shadow-xs'
+                          ? 'bg-[#F3F1EA] text-[#0C2340] border border-[#0C2340]/20'
+                          : 'bg-[#0C2340] hover:bg-[#16325C] text-white shadow-xs'
                       }`}
                     >
-                      {connectionRequested[selectedAlumni.id] ? 'Terhubung' : 'Koneksi'}
-                    </motion.button>
-                    <motion.button
-                      whileTap={shouldReduceMotion ? undefined : { scale: 0.95 }}
+                      {connectionRequested[selectedAlumni.id] ? 'Permintaan Terkirim' : 'Ajak Terhubung'}
+                    </button>
+                    <button
                       type="button"
                       onClick={() => handleSendMessage(selectedAlumni.id)}
-                      className="text-xs font-mono font-semibold text-[#101F5B] border border-[#D1D5DB] px-3.5 py-2 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-1"
+                      className="text-xs font-semibold text-[#0C2340] border border-[#0C2340]/20 px-3.5 py-2 rounded-lg hover:bg-[#FDFCF7] transition-colors flex items-center gap-1.5 cursor-pointer"
                     >
                       <MessageSquare className="w-3.5 h-3.5" />
-                      <span>{messagesSent[selectedAlumni.id] ? 'Pesan Terkirim' : 'Kirim Pesan'}</span>
-                    </motion.button>
+                      <span>{messagesSent[selectedAlumni.id] ? 'Sapaan Terkirim' : 'Kirim Sapaan'}</span>
+                    </button>
                   </div>
                 </div>
 
-                {/* Identity */}
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-xl font-extrabold tracking-tight text-[#0B1536]">
-                      {selectedAlumni.nama}
-                    </h3>
-                    {selectedAlumni.isVerified && (
-                      <CheckCircle2 className="w-4 h-4 text-[#10B981]" />
-                    )}
-                  </div>
-                  <p className="text-xs text-[#5F6678] font-mono">
-                    Alumni {selectedAlumni.prodi} • Angkatan {selectedAlumni.angkatan}
+                <DialogHeader className="text-left space-y-1">
+                  <DialogTitle className="text-xl font-extrabold text-[#0C2340] flex items-center gap-2">
+                    <span>{selectedAlumni.nama}</span>
+                  </DialogTitle>
+                  <DialogDescription className="text-xs text-[#64748B]">
+                    {selectedAlumni.prodi} · Angkatan {selectedAlumni.angkatan}
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="mt-2 space-y-1 text-sm text-[#0C2340]">
+                  <p className="font-semibold">
+                    {selectedAlumni.pekerjaan}
+                    {selectedAlumni.perusahaan ? ` · ${selectedAlumni.perusahaan}` : ''}
                   </p>
-                  <p className="text-xs font-medium text-[#18213D]">
-                    {selectedAlumni.pekerjaan} di {selectedAlumni.perusahaan}
-                  </p>
-                  <p className="text-xs text-[#5F6678] flex items-center gap-1 font-mono pt-0.5">
-                    <MapPin className="w-3 h-3 text-[#101F5B]" />
-                    <span>{selectedAlumni.wilayah} • {selectedAlumni.industri}</span>
+                  <p className="text-xs text-[#475569] flex items-center gap-1.5">
+                    <MapPin className="w-3.5 h-3.5 text-[#D97706]" />
+                    <span>{selectedAlumni.wilayah} · {selectedAlumni.industri}</span>
                   </p>
                 </div>
 
                 {messagesSent[selectedAlumni.id] && (
-                  <div className="mt-3 bg-[#22775A]/10 border border-[#22775A]/20 p-3 rounded-lg text-xs text-[#22775A] flex items-center gap-2">
+                  <div className="mt-4 bg-[#F0FDF4] border border-[#16A34A]/25 p-3 rounded-lg text-xs text-[#15803D] flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 shrink-0" />
-                    <span>Pesan pengantar berhasil diteruskan via jalur terproteksi IKA UMS.</span>
+                    <span>Pesan perkenalanmu sudah diteruskan ke kontak terdaftar anggota ini.</span>
                   </div>
                 )}
 
-                {/* 21st.dev Animated Tabs for Profile Navigation */}
                 <div className="mt-5 mb-4">
                   <AnimatedTabs
                     tabs={profileTabs}
@@ -373,56 +439,48 @@ export default function DirektoriPage() {
                   />
                 </div>
 
-                {/* Tab Content */}
-                <div className="pt-2 text-xs text-[#5F6678] leading-relaxed">
+                <div className="pt-1 text-sm text-[#475569] leading-relaxed">
                   {activeProfileTab === 'tentang' && (
-                    <div className="space-y-2">
-                      <h4 className="font-bold text-[#0B1536] text-sm">Biografi Singkat</h4>
+                    <div className="space-y-1.5">
+                      <h4 className="font-bold text-[#0C2340] text-sm">Sekilas Tentang</h4>
                       <p>{selectedAlumni.bio}</p>
                     </div>
                   )}
                   {activeProfileTab === 'pengalaman' && (
-                    <div className="space-y-2">
-                      <h4 className="font-bold text-[#0B1536] text-sm">Jejak Karier & Institusi</h4>
-                      <div className="bg-[#FAFAF8] p-3.5 rounded-lg border border-[#E5E8EF] space-y-1">
-                        <p className="font-bold text-[#18213D] text-xs">{selectedAlumni.pekerjaan}</p>
-                        <p className="text-[11px] text-[#5F6678] font-mono">{selectedAlumni.perusahaan} • 2021 - Sekarang</p>
-                        <p className="text-[11px] text-[#5F6678] pt-1">
-                          Bertanggung jawab pada inisiatif strategis, kolaborasi lintas divisi, dan inovasi operasional di wilayah Jabodetabek.
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                  {activeProfileTab === 'keahlian' && (
-                    <div className="space-y-2">
-                      <h4 className="font-bold text-[#0B1536] text-sm">Keahlian & Domain Spesialisasi</h4>
-                      <div className="flex flex-wrap gap-1.5">
-                        {selectedAlumni.keahlian.map((skill, idx) => (
-                          <span key={idx} className="bg-[#EDF1FA] text-[#101F5B] px-3 py-1 rounded-md text-[11px] font-mono font-medium">
-                            {skill}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  {activeProfileTab === 'kontribusi' && (
-                    <div className="space-y-2">
-                      <h4 className="font-bold text-[#0B1536] text-sm">Dukungan Untuk Komunitas Alumni</h4>
-                      <p>
-                        {selectedAlumni.bersediaMentoring 
-                          ? 'Bersedia meluangkan waktu untuk konsultasi karir, review portofolio, dan bimbingan adaptasi perantauan bagi fresh graduates UMS.'
-                          : 'Terbuka untuk diskusi proyek kemitraan korporasi, riset bersama, dan jejaring wirausaha.'
-                        }
+                    <div className="bg-[#FDFCF7] p-4 rounded-lg border border-[#0C2340]/10 space-y-1">
+                      <p className="font-bold text-[#0C2340]">{selectedAlumni.pekerjaan}</p>
+                      <p className="text-xs text-[#64748B]">
+                        {selectedAlumni.perusahaan || 'Praktisi Independen'} · Domisili {selectedAlumni.wilayah}
+                      </p>
+                      <p className="text-xs text-[#475569] pt-1">
+                        Bidang industri: {selectedAlumni.industri}.
                       </p>
                     </div>
                   )}
+                  {activeProfileTab === 'keahlian' && (
+                    <div className="flex flex-wrap gap-2">
+                      {selectedAlumni.keahlian.map((skill, idx) => (
+                        <span
+                          key={idx}
+                          className="bg-[#F3F1EA] text-[#0C2340] px-3 py-1 rounded-md text-xs font-medium"
+                        >
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  {activeProfileTab === 'kontribusi' && (
+                    <p>
+                      {selectedAlumni.bersediaMentoring
+                        ? 'Bersedia meluangkan waktu untuk review CV, tanya jawab dunia kerja di Jabodetabek, atau ngobrol santai bersama adik tingkat UMS.'
+                        : 'Terbuka untuk silaturahmi sesama alumni, berbagi info lapangan kerja, atau kolaborasi usaha sewilayah.'}
+                    </p>
+                  )}
                 </div>
-
               </div>
             </DialogContent>
           )}
         </Dialog>
-
       </main>
 
       <Footer />

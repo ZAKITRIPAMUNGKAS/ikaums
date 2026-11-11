@@ -1,74 +1,114 @@
 import React from 'react';
+import Link from 'next/link';
 import { Navbar, Footer } from '@/components/Navigation';
-import { Shield, Lock, FileCheck, CheckCircle2 } from 'lucide-react';
 
-export default function TentangPage() {
+export default function PrivasiPage() {
   return (
-    <div className="min-h-screen bg-[#FAFAF8] text-[#18213D] flex flex-col font-sans">
+    <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
       <Navbar />
 
-      <main className="flex-grow max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
-        <div className="mb-8 border-b border-[#E5E8EF] pb-6">
-          <span className="text-xs font-bold uppercase tracking-wider text-[#101F5B] bg-[#EDF1FA] px-3 py-1 rounded-full">
-            Inisiatif & Kebijakan
-          </span>
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0B1536] mt-3">
-            Tentang IKA UMS Connect & Tata Kelola Privasi
-          </h1>
-          <p className="text-sm text-[#5F6678] mt-2 leading-relaxed">
-            Panduan transparansi inisiatif komunitas, pengelolaan data sukarela, dan kepatuhan terhadap Undang-Undang Perlindungan Data Pribadi (UU PDP).
+      <main className="flex-grow max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 w-full">
+        <nav aria-label="Breadcrumb" className="text-sm text-[#64748B] mb-6 flex items-center gap-2">
+          <Link href="/" className="hover:text-[#0C2340] transition-colors">
+            Beranda
+          </Link>
+          <span aria-hidden="true">/</span>
+          <span className="text-[#0C2340] font-medium">Kebijakan Privasi</span>
+        </nav>
+
+        <header className="pb-8 border-b border-[#0C2340]/12 space-y-3">
+          <p className="text-sm font-semibold text-[#D97706]">
+            Perlindungan Data Pribadi
           </p>
-        </div>
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#0C2340]">
+            Kebijakan Privasi Anggota IKA UMS Jabodetabek
+          </h1>
+          <p className="text-base text-[#475569] leading-relaxed">
+            Komitmen pengurus dalam menjaga kerahasiaan data pribadi alumni secara bertanggung jawab sesuai Undang-Undang Perlindungan Data Pribadi (UU No. 27 Tahun 2022).
+          </p>
+          <p className="text-sm text-[#64748B]">
+            Pembaruan terakhir: November 2026
+          </p>
+        </header>
 
-        <div className="space-y-8 text-sm leading-relaxed text-[#18213D]">
-          <section className="bg-white border border-[#E5E8EF] rounded-xl p-6 shadow-sm">
-            <h2 className="text-xl font-bold text-[#0B1536] mb-3">
-              1. Latar Belakang & Status Inisiatif
+        <div className="py-8 space-y-8 text-[15px] sm:text-base text-[#334155] leading-relaxed">
+          <section className="space-y-2.5">
+            <h2 className="text-xl font-bold text-[#0C2340]">
+              1. Data yang Dikumpulkan Secara Sukarela
             </h2>
-            <p className="text-[#5F6678]">
-              IKA UMS Connect digagas dari semangat kebersamaan acara temu kangen alumni Universitas Muhammadiyah Surakarta di wilayah Jabodetabek. Platform ini hadir sebagai usulan inisiatif digital (pilot project) untuk menghubungkan silaturahmi menjadi jejaring peluang karir, bisnis, dan pendampingan perantau baru.
-            </p>
-            <div className="mt-4 p-3 bg-[#EDF1FA] rounded-lg text-xs text-[#101F5B] font-medium">
-              Catatan: Status saat ini adalah prototipe konsep/pilot komunitas. Platform tidak mengklaim integrasi resmi atau penggunaan aset kampus tanpa persetujuan sah dari pengurus wilayah.
-            </div>
-          </section>
-
-          <section className="bg-white border border-[#E5E8EF] rounded-xl p-6 shadow-sm">
-            <div className="flex items-center gap-2 mb-3">
-              <Shield className="w-5 h-5 text-[#22775A]" />
-              <h2 className="text-xl font-bold text-[#0B1536]">
-                2. Prinsip Perlindungan Data Pribadi (UU PDP)
-              </h2>
-            </div>
-            <ul className="space-y-3 text-[#5F6678]">
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-[#22775A] shrink-0 mt-0.5" />
-                <span><strong>Sepenuhnya Opt-In:</strong> Keanggotaan grup WhatsApp atau presensi acara temu kangen TIDAK diimpor secara sepihak atau dianggap sebagai izin publikasi data.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-[#22775A] shrink-0 mt-0.5" />
-                <span><strong>Privasi Kontak:</strong> Nomor telepon dan email pribadi tidak pernah dipajang secara bebas di web. Saling tukar kontak hanya dapat terjadi setelah permintaan koneksi disetujui kedua belah pihak.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-[#22775A] shrink-0 mt-0.5" />
-                <span><strong>Agregasi Peta Berstandar K-Anonymity:</strong> Peta wilayah hanya menampilkan statistik agregat. Wilayah dengan jumlah alumni terdaftar di bawah 5 disembunyikan untuk mencegah identifikasi individu.</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <CheckCircle2 className="w-4 h-4 text-[#22775A] shrink-0 mt-0.5" />
-                <span><strong>Hak Pemilik Data:</strong> Setiap alumni berhak mengubah izin keterlihatan profil, mengunduh salinan data pribadi, maupun mengajukan penghapusan akun sewaktu-waktu.</span>
-              </li>
-            </ul>
-          </section>
-
-          <section className="bg-white border border-[#E5E8EF] rounded-xl p-6 shadow-sm">
-            <h2 className="text-xl font-bold text-[#0B1536] mb-3">
-              3. Verifikasi & Integritas Keanggotaan
-            </h2>
-            <p className="text-[#5F6678]">
-              Untuk menjaga rasa aman di dalam komunitas, status alumni diverifikasi secara bertahap melalui konfirmasi data angkatan/program studi dan verifikasi peer-to-peer antaralumni sesama fakultas.
+            <p>
+              Seluruh informasi anggota masuk melalui pendaftaran mandiri. Data yang diminta meliputi nama lengkap, program studi dan tahun angkatan di Universitas Muhammadiyah Surakarta, wilayah domisili tingkat kota atau kabupaten di Jabodetabek, bidang pekerjaan saat ini, serta alamat email dan nomor WhatsApp untuk verifikasi pengurus.
             </p>
           </section>
+
+          <section className="space-y-2.5">
+            <h2 className="text-xl font-bold text-[#0C2340]">
+              2. Pemisahan Informasi Publik dan Kontak Pribadi
+            </h2>
+            <div className="bg-white border border-[#0C2340]/12 rounded-xl p-5 grid grid-cols-1 sm:grid-cols-2 gap-5 my-3">
+              <div>
+                <h3 className="font-bold text-[#0C2340] mb-2 text-sm">
+                  Dapat Tampil di Direktori (Jika Diizinkan)
+                </h3>
+                <ul className="space-y-1.5 text-sm text-[#475569] list-disc pl-4">
+                  <li>Nama lengkap dan ringkasan peran profesional</li>
+                  <li>Program studi serta tahun masuk/lulus UMS</li>
+                  <li>Wilayah domisili tingkat kota/kabupaten</li>
+                  <li>Ketersediaan untuk sesi mentoring sukarela</li>
+                </ul>
+              </div>
+              <div>
+                <h3 className="font-bold text-[#0C2340] mb-2 text-sm">
+                  Selalu Disimpan Tertutup
+                </h3>
+                <ul className="space-y-1.5 text-sm text-[#475569] list-disc pl-4">
+                  <li>Nomor WhatsApp dan alamat email pribadi</li>
+                  <li>Alamat rumah atau titik lokasi spesifik</li>
+                  <li>Catatan verifikasi internal antar-pengurus</li>
+                  <li>Data komunikasi permintaan mentoring personal</li>
+                </ul>
+              </div>
+            </div>
+            <p>
+              Permintaan perkenalan atau penjadwalan mentoring diteruskan oleh sistem atau koordinator wilayah tanpa memajang nomor kontak langsung ke publik.
+            </p>
+          </section>
+
+          <section className="space-y-2.5">
+            <h2 className="text-xl font-bold text-[#0C2340]">
+              3. Penghitungan Peta Sebaran Wilayah
+            </h2>
+            <p>
+              Halaman Peta Sebaran hanya menghitung total alumni secara agregat pada level 9 wilayah administrasi Jabodetabek (Jakarta Selatan, Jakarta Pusat, Jakarta Barat, Jakarta Timur, Jakarta Utara, Tangerang Raya, Bekasi, Depok, dan Bogor). Portal ini tidak melacak koordinat GPS pengguna maupun memetakan titik tempat tinggal individu. Sumber batas wilayah merujuk pada rujukan BPS dan geoBoundaries IDN-ADM2 berlisensi CC BY 3.0 IGO.
+            </p>
+          </section>
+
+          <section className="space-y-2.5">
+            <h2 className="text-xl font-bold text-[#0C2340]">
+              4. Hak Pembaruan, Ekspor, dan Penghapusan Data
+            </h2>
+            <p>
+              Setiap anggota berhak meminta perbaikan profil, menarik persetujuan tampil di direktori, mengunduh salinan data pribadinya, atau meminta penghapusan akun secara permanen melalui menu{' '}
+              <Link href="/app" className="text-[#0C2340] font-semibold underline decoration-[#D97706] underline-offset-4">
+                Portal Anggota
+              </Link>{' '}
+              atau menghubungi sekretariat pengurus Jabodetabek.
+            </p>
+          </section>
+
+          <section className="bg-[#F3F1EA] border border-[#0C2340]/10 rounded-xl p-5 text-sm text-[#475569] leading-relaxed">
+            <strong className="text-[#0C2340]">Keterbukaan Pratinjau:</strong> Pada versi pratinjau lokal saat ini, profil alumni di direktori, jadwal acara, serta sebaran angka per wilayah masih menggunakan data contoh simulasi untuk uji tampilan sebelum diintegrasikan dengan basis data pendaftaran resmi.
+          </section>
         </div>
+
+        <footer className="pt-6 border-t border-[#0C2340]/10 flex flex-wrap items-center justify-between gap-4">
+          <Link href="/syarat" className="text-sm font-semibold text-[#0C2340] hover:text-[#D97706] transition-colors">
+            Baca Ketentuan & Etika Komunitas &rarr;
+          </Link>
+          <Link href="/tentang" className="text-sm text-[#64748B] hover:text-[#0C2340] transition-colors">
+            Kembali ke Tentang Komunitas
+          </Link>
+        </footer>
       </main>
 
       <Footer />
