@@ -3,7 +3,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { Navbar, Footer } from '@/components/Navigation';
-import { PatternSection, PatternDivider } from '@/components/PatternSection';
 import {
   WILAYAH_JABODETABEK,
   FAKULTAS_PRODI_UMS,
@@ -238,45 +237,34 @@ export default function GabungPage() {
       <main className="flex-grow page-grain-base w-full">
         {!submitted ? (
           <>
-            <PatternSection
-              as="section"
-              variant="dots"
-              tone="tint"
-              fade="right-focus"
-              patternOpacity={0.055}
-              patternSize="24px"
-              contentClassName="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 sm:pt-8 sm:pb-10"
-            >
-              <nav aria-label="Breadcrumb" className="text-sm text-[#475569] mb-4 flex items-center justify-between gap-2">
-                <div className="flex items-center gap-2">
-                  <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
-                    Beranda
-                  </Link>
-                  <span aria-hidden="true">/</span>
-                  <span className="text-[#0C2340] font-medium">Daftar Jadi Anggota</span>
-                </div>
-                {IS_DEMO_MODE && (
-                  <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-[#92400E] text-xs font-semibold">
-                    {DEMO_BADGE_LABEL}
-                  </span>
-                )}
-              </nav>
+            <section className="bg-[#FAF9F5] border-b border-[#0C2340]/10">
+              <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-7 sm:pt-8 sm:pb-8">
+                <nav aria-label="Breadcrumb" className="text-sm text-[#475569] mb-3 flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
+                      Beranda
+                    </Link>
+                    <span aria-hidden="true">/</span>
+                    <span className="text-[#0C2340] font-medium">Daftar Jadi Anggota</span>
+                  </div>
+                  {IS_DEMO_MODE && (
+                    <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-[#92400E] text-xs font-semibold">
+                      {DEMO_BADGE_LABEL}
+                    </span>
+                  )}
+                </nav>
 
-              <header className="space-y-3">
-                <p className="text-base font-semibold text-[#92400E]">
-                  Pendataan Awal Anggota
-                </p>
-                <h1 className="text-[clamp(1.75rem,1.3rem+1.8vw,2.5rem)] font-bold tracking-[-0.02em] text-[#0C2340] leading-[1.15]">
-                  Daftar Jadi Anggota IKA UMS Jabodetabek
-                </h1>
-                <p className="text-base text-[#475569] leading-[1.6] max-w-[44ch] sm:max-w-2xl">
-                  Cukup isi 5 data dasar di bawah agar pengurus bisa memverifikasi latar alumnimu dan
-                  mengabari jadwal kopdar di wilayah domisilimu. Gratis dan tanpa kata sandi.
-                </p>
-              </header>
-            </PatternSection>
-
-            <PatternDivider variant="curve" fromColor="#F3F1EA" toColor="#FDFCF7" />
+                <header className="space-y-2.5">
+                  <h1 className="text-[clamp(1.75rem,1.3rem+1.8vw,2.375rem)] font-bold tracking-[-0.02em] text-[#0C2340] leading-[1.15]">
+                    Daftar Jadi Anggota IKA UMS Jabodetabek
+                  </h1>
+                  <p className="text-base text-[#475569] leading-[1.6] max-w-[44ch] sm:max-w-2xl">
+                    Isi 5 data dasar di bawah agar pengurus bisa mencocokkan latar kuliahmu di UMS dan
+                    mengabari jadwal kopdar wilayahmu lewat WhatsApp. Gratis dan tanpa kata sandi.
+                  </p>
+                </header>
+              </div>
+            </section>
 
             <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 w-full relative z-[1]">
             <form
@@ -683,7 +671,7 @@ export default function GabungPage() {
 
               <div className="pt-2 border-t border-[#0C2340]/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <span className="text-sm sm:text-base text-[#475569] leading-[1.5]">
-                  Estimasi verifikasi pengurus: <span className="font-semibold text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.verificationSla}</span>
+                  Pemeriksaan data dilakukan {COMMUNITY_PLACEHOLDERS.verificationSla}.
                 </span>
                 <button
                   type="submit"
@@ -723,8 +711,7 @@ export default function GabungPage() {
               <p className="font-bold text-[#0C2340]">Apa langkah selanjutnya?</p>
               <ul className="list-disc pl-5 space-y-1.5 text-[#475569]">
                 <li>
-                  Tim sekretariat memeriksa kesesuaian data alumni dalam perkiraan{' '}
-                  <span className="font-medium text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.verificationSla}</span>.
+                  Pengurus wilayah akan memeriksa kesesuaian data alumni {COMMUNITY_PLACEHOLDERS.verificationSla}.
                 </li>
                 <li>
                   Setelah terdata, kamu akan dihubungi lewat WhatsApp ketika jadwal kopdar pertama di{' '}

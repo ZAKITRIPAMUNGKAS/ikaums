@@ -7,13 +7,11 @@ import { Navbar, Footer } from '@/components/Navigation';
 import { getAlumniList, getKegiatanList } from '@/data/simulasi';
 import { WILAYAH_JABODETABEK, normalizeIndonesianWhatsApp } from '@/data/ums-prodi';
 import { IS_DEMO_MODE, COMMUNITY_PLACEHOLDERS, DEMO_BADGE_LABEL } from '@/lib/config';
-import { PatternSection, PatternDivider } from '@/components/PatternSection';
+import { PatternSection } from '@/components/PatternSection';
 import {
   ArrowRight,
   CheckCircle2,
   AlertCircle,
-  MapPin,
-  Calendar,
   Share2,
   ChevronDown,
 } from 'lucide-react';
@@ -107,62 +105,55 @@ export default function HomePage() {
       <Navbar />
 
       <main className="flex-grow page-grain-base">
-        {/* 1. HERO - pattern-batik memudar ke sisi kanan, area teks kiri bersih, SATU CTA utama */}
+        {/* 1. HERO - pembuka editorial asimetris + foto pertemuan di De Terras */}
         <PatternSection
           variant="batik"
           tone="light"
           fade="right-focus"
-          patternOpacity={0.075}
+          patternOpacity={0.06}
           patternSize="64px"
-          contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12 sm:pt-10 lg:pt-16 lg:pb-16"
+          contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12 sm:pt-12 lg:pt-14 lg:pb-16"
         >
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-            <div className="lg:col-span-6 space-y-5 sm:space-y-6">
-              <span className="inline-block text-sm font-semibold tracking-wide text-[#92400E]">
-                Pendataan Awal · IKA UMS Wilayah Jabodetabek
-                {IS_DEMO_MODE && ` (${DEMO_BADGE_LABEL})`}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start lg:items-center">
+            <div className="lg:col-span-6 space-y-5">
+              <span className="inline-block text-sm font-semibold text-[#92400E]">
+                IKA UMS Wilayah Jabodetabek{IS_DEMO_MODE ? ` (${DEMO_BADGE_LABEL})` : ' · Pendataan Awal'}
               </span>
 
               <h1 className="text-[clamp(1.875rem,1.35rem+2.2vw,2.75rem)] font-extrabold tracking-[-0.025em] text-[#0C2340] leading-[1.12]">
-                Jaringan Alumni UMS di Wilayah Jabodetabek
+                Jaringan Alumni UMS di Jabodetabek
               </h1>
 
-              <p className="text-base sm:text-lg text-[#475569] leading-[1.6] max-w-[42ch] sm:max-w-xl">
-                Temukan sesama lulusan Universitas Muhammadiyah Surakarta yang tinggal atau bekerja
-                di sekitarmu. Mulai dari kopdar wilayah, ulas CV dan persiapan kerja, hingga info
-                lowongan antaralumni.
+              <p className="text-base sm:text-lg text-[#475569] leading-[1.65] max-w-[44ch] sm:max-w-xl">
+                Banyak lulusan Universitas Muhammadiyah Surakarta bekerja dan tinggal di Jakarta,
+                Bogor, Depok, Tangerang, dan Bekasi, namun komunikasinya masih tersebar di grup
+                jurusan dan angkatan masing-masing. Situs ini mengumpulkan data domisili supaya
+                pertemuan wilayah, mentoring karier, dan info lowongan kerja mudah diakses sesama alumni.
               </p>
 
               <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-5 pt-1">
                 <Link
                   href="/gabung"
-                  className="inline-flex items-center justify-center gap-2 min-h-[48px] px-6 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] active:scale-[0.99] text-white text-base font-semibold transition-all duration-150 shadow-xs"
+                  className="inline-flex items-center justify-center gap-2 min-h-[48px] px-6 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] active:scale-[0.99] text-white text-base font-semibold transition-all duration-150"
                 >
                   <span>Daftar jadi anggota</span>
                   <ArrowRight className="w-4 h-4 text-[#F59E0B]" />
                 </Link>
                 <Link
                   href="/masuk"
-                  className="inline-flex items-center justify-center sm:justify-start min-h-[44px] px-3 text-base font-semibold text-[#0C2340] hover:text-[#92400E] underline underline-offset-4 transition-colors"
+                  className="inline-flex items-center justify-center sm:justify-start min-h-[44px] px-2 text-base font-semibold text-[#0C2340] hover:text-[#92400E] underline underline-offset-4 transition-colors"
                 >
-                  Sudah terdaftar? Masuk
+                  Sudah mendaftar? Masuk
                 </Link>
               </div>
-
-              <p className="text-base text-[#475569] leading-[1.6] pt-1 max-w-[42ch] sm:max-w-none">
-                Status pendataan saat ini:{' '}
-                <span className="font-semibold text-[#0C2340]">
-                  {COMMUNITY_PLACEHOLDERS.coordinatorCount}
-                </span>
-              </p>
             </div>
 
             <div className="lg:col-span-6">
-              <figure className="surface-card rounded-xl overflow-hidden">
-                <div className="aspect-[16/10] w-full bg-[#F3F1EA] relative overflow-hidden">
+              <figure className="space-y-2.5">
+                <div className="aspect-[16/10] w-full rounded-lg border border-[#0C2340]/12 bg-[#F3F1EA] relative overflow-hidden">
                   <Image
                     src="/images/alumni-gathering-4.jpg"
-                    alt="Pertemuan alumni Universitas Muhammadiyah Surakarta di Jabodetabek"
+                    alt="Alumni Universitas Muhammadiyah Surakarta berjabat tangan di meja registrasi De Terras"
                     width={1200}
                     height={750}
                     priority
@@ -171,160 +162,167 @@ export default function HomePage() {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <figcaption className="px-4 py-3 text-sm text-[#475569] border-t border-[#0C2340]/10 leading-relaxed bg-[#FDFCF7]">
-                  {COMMUNITY_PLACEHOLDERS.documentationCaption}
+                <figcaption className="text-sm text-[#475569] leading-relaxed">
+                  {COMMUNITY_PLACEHOLDERS.heroPhotoCaption}
                 </figcaption>
               </figure>
             </div>
           </div>
         </PatternSection>
 
-        <PatternDivider variant="curve" fromColor="#FDFCF7" toColor="#F3F1EA" />
-
-        {/* 2. APA YANG KAMU DAPAT - tata letak split editorial dengan daftar bertipografi bersih */}
+        {/* 2. LATAR PENDATAAN & PERAN PENGURUS - batas datar editorial tanpa gelombang SVG */}
         <PatternSection
-          aria-labelledby="manfaat-heading"
+          aria-labelledby="pendataan-heading"
           variant="dots"
           tone="tint"
           fade="soft-edges"
-          patternOpacity={0.06}
+          patternOpacity={0.055}
           patternSize="24px"
+          className="border-y border-[#0C2340]/10"
           contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16"
         >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-            <div className="lg:col-span-4 space-y-3">
-              <h2 id="manfaat-heading" className="text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em] text-[#0C2340]">
-                Apa yang Kamu Dapatkan
+            <div className="lg:col-span-5 space-y-3">
+              <h2
+                id="pendataan-heading"
+                className="text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em] text-[#0C2340]"
+              >
+                Kenapa Didata Terlebih Dulu?
               </h2>
-              <p className="text-base text-[#475569] leading-[1.6] max-w-[40ch]">
-                Tiga kebutuhan utama yang disiapkan agar jaringan alumni di perantauan mudah diakses sehari-hari.
+              <p className="text-base text-[#475569] leading-[1.65] max-w-[44ch]">
+                Sebelum membuka daftar anggota terbuka atau memasang angka perkiraan, pengurus lebih
+                dulu menghimpun pendaftar awal per kota agar jadwal kopdar pertama benar-benar sesuai
+                tempat tinggal dan waktu luang alumni di lapangan.
               </p>
             </div>
 
-            <dl className="lg:col-span-8 divide-y divide-[#0C2340]/15 border-y border-[#0C2340]/15">
-              <div className="py-5 sm:py-6 grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-6 items-baseline">
-                <dt className="sm:col-span-4 text-lg font-bold text-[#0C2340]">
-                  Kenalan Satu Wilayah
+            <dl className="lg:col-span-7 divide-y divide-[#0C2340]/12 border-y border-[#0C2340]/12">
+              <div className="py-5 sm:py-6 space-y-1.5">
+                <dt className="text-lg font-bold text-[#0C2340]">
+                  Kenalan Sewilayah &amp; Kopdar Kota
                 </dt>
-                <dd className="sm:col-span-8 text-base text-[#475569] leading-[1.6] max-w-[52ch]">
-                  Temukan alumni lintas fakultas dan angkatan di sekitar wilayah tinggal atau
-                  kantormu di Jakarta, Bogor, Depok, Tangerang, maupun Bekasi.
+                <dd className="text-base text-[#475569] leading-[1.6] max-w-[56ch]">
+                  Pengurus mengelompokkan domisili kerja dan tempat tinggal ke sembilan wilayah Jabodetabek
+                  supaya pertemuan perdana tidak terpusat di satu titik saja.
                 </dd>
               </div>
 
-              <div className="py-5 sm:py-6 grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-6 items-baseline">
-                <dt className="sm:col-span-4 text-lg font-bold text-[#0C2340]">
-                  Mentoring CV &amp; Interview
+              <div className="py-5 sm:py-6 space-y-1.5">
+                <dt className="text-lg font-bold text-[#0C2340]">
+                  Mentoring CV &amp; Persiapan Wawancara
                 </dt>
-                <dd className="sm:col-span-8 text-base text-[#475569] leading-[1.6] max-w-[52ch]">
-                  Jadwalkan diskusi singkat dengan senior yang bekerja di bidang sejenis untuk
-                  membahas portofolio, pindah industri, atau persiapan wawancara kerja.
+                <dd className="text-base text-[#475569] leading-[1.6] max-w-[56ch]">
+                  Alumni yang sudah lebih lama bekerja dapat mencantumkan kesediaan membantu lulusan baru
+                  atau rekan yang sedang pindah bidang industri. Kontak hanya diteruskan jika disetujui.
                 </dd>
               </div>
 
-              <div className="py-5 sm:py-6 grid grid-cols-1 sm:grid-cols-12 gap-2 sm:gap-6 items-baseline">
-                <dt className="sm:col-span-4 text-lg font-bold text-[#0C2340]">
-                  Info Kerja &amp; Usaha Antaralumni
+              <div className="py-5 sm:py-6 space-y-1.5">
+                <dt className="text-lg font-bold text-[#0C2340]">
+                  Verifikasi Manual &amp; Daftar Anggota Tertutup
                 </dt>
-                <dd className="sm:col-span-8 text-base text-[#475569] leading-[1.6] max-w-[52ch]">
-                  Akses informasi kebutuhan tim, lowongan internal perusahaan alumni, serta peluang
-                  kerja sama usaha yang dibagikan secara langsung.
+                <dd className="text-base text-[#475569] leading-[1.6] max-w-[56ch]">
+                  Setiap isian dicocokkan nama, prodi, dan tahun masuk UMS oleh pengurus wilayah. Nomor
+                  WhatsApp maupun email tidak pernah dibuka ke halaman publik.
                 </dd>
               </div>
             </dl>
           </div>
         </PatternSection>
 
-        <PatternDivider variant="curve" fromColor="#F3F1EA" toColor="#FDFCF7" />
-
-        {/* 3. CARA KERJANYA - langkah bernomor editorial bergaris atas tipis (tanpa kotak kartu berulang) */}
+        {/* 3. DOKUMENTASI "KUMPUL BOLO PISAH" & CAKUPAN 9 WILAYAH */}
         <section
-          aria-labelledby="cara-kerja-heading"
-          className="py-12 sm:py-16 relative z-[1]"
+          id="wilayah"
+          aria-labelledby="dokumentasi-heading"
+          className="relative z-[1] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16"
         >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 id="cara-kerja-heading" className="text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em] text-[#0C2340] mb-8">
-              Cara Kerjanya
-            </h2>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            <div className="lg:col-span-7">
+              <figure className="space-y-2.5">
+                <div className="aspect-[16/9] w-full rounded-lg overflow-hidden border border-[#0C2340]/12 bg-[#F3F1EA] relative">
+                  <Image
+                    src="/images/hero-kumpul-bolo-pisah.jpg"
+                    alt="Foto bersama alumni Universitas Muhammadiyah Surakarta di aula Kumpul Bolo Pisah"
+                    width={1200}
+                    height={675}
+                    loading="lazy"
+                    sizes="(max-width: 1024px) 100vw, 55vw"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <figcaption className="text-sm text-[#475569] leading-relaxed">
+                  {COMMUNITY_PLACEHOLDERS.documentationCaption}
+                </figcaption>
+              </figure>
+            </div>
 
-            <ol className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
-              <li className="border-t-2 border-[#0C2340] pt-4 space-y-2">
-                <span className="block text-sm font-bold text-[#92400E] tracking-wider uppercase">
-                  01 · Data Awal
-                </span>
-                <h3 className="text-xl font-bold text-[#0C2340]">
-                  Isi Pendaftaran Singkat
-                </h3>
-                <p className="text-base text-[#475569] leading-[1.6] max-w-[42ch]">
-                  Masukkan nama lengkap, tahun masuk, prodi UMS, wilayah Jabodetabek, dan nomor WhatsApp aktif.
-                </p>
-              </li>
-
-              <li className="border-t-2 border-[#92400E] pt-4 space-y-2">
-                <span className="block text-sm font-bold text-[#92400E] tracking-wider uppercase">
-                  02 · Verifikasi Pengurus
-                </span>
-                <h3 className="text-xl font-bold text-[#0C2340]">
-                  Cocokkan Data &amp; Wilayah
-                </h3>
-                <p className="text-base text-[#475569] leading-[1.6] max-w-[42ch]">
-                  Pengurus mencocokkan data alumnimu dan mencatat wilayah domisili tanpa memajang kontak pribadimu ke publik.
-                </p>
-              </li>
-
-              <li className="border-t-2 border-[#0C2340]/45 pt-4 space-y-2">
-                <span className="block text-sm font-bold text-[#92400E] tracking-wider uppercase">
-                  03 · Pertemuan Perdana
-                </span>
-                <h3 className="text-xl font-bold text-[#0C2340]">
-                  Terima Kabar Kopdar Pertama
-                </h3>
-                <p className="text-base text-[#475569] leading-[1.6] max-w-[42ch]">
-                  Begitu jadwal pertemuan di wilayahmu ditetapkan, pengurus mengirimkan undangan lokasi lewat WhatsApp.
-                </p>
-              </li>
-            </ol>
+            <div className="lg:col-span-5 space-y-4">
+              <h2
+                id="dokumentasi-heading"
+                className="text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em] text-[#0C2340]"
+              >
+                Sembilan Wilayah Pendataan
+              </h2>
+              <p className="text-base text-[#475569] leading-[1.6]">
+                Pendataan membagi jangkauan komunitas ke sembilan kota dan kabupaten agar koordinasi
+                kopdar lebih dekat dari rumah atau kantormu:
+              </p>
+              <ul className="grid grid-cols-2 gap-x-4 gap-y-1.5 text-base text-[#0C2340] font-medium pt-1">
+                {WILAYAH_JABODETABEK.map((reg) => (
+                  <li key={reg.id} className="py-0.5 border-b border-[#0C2340]/8">
+                    {reg.nama}
+                  </li>
+                ))}
+              </ul>
+              <div className="pt-1">
+                <Link
+                  href="/peta"
+                  className="inline-flex items-center gap-2 min-h-[44px] px-1 text-base font-semibold text-[#0C2340] hover:text-[#92400E] underline underline-offset-4 transition-colors"
+                >
+                  <span>Lihat peta cakupan wilayah</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
           </div>
         </section>
 
-        <PatternDivider variant="curve" fromColor="#FDFCF7" toColor="#F3F1EA" />
-
-        {/* 4. KOPDAR PERTAMA & PEMILIH WILAYAH - pattern-contour memudar dari kanan atas */}
+        {/* 4. USULAN JADWAL KOPDAR PERTAMA & MENTORING - latar contour ringan */}
         <PatternSection
           id="kopdar"
           aria-labelledby="kopdar-heading"
           variant="contour"
           tone="tint"
           fade="top-right"
-          patternOpacity={0.085}
+          patternOpacity={0.075}
           patternSize="180px"
-          contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16"
+          className="border-y border-[#0C2340]/10"
+          contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16"
         >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
-            <div className="lg:col-span-5 space-y-4">
-              <h2 id="kopdar-heading" className="text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em] text-[#0C2340]">
-                Usulkan Minat Kopdar Pertama
-              </h2>
-              <p className="text-base text-[#475569] leading-[1.6] max-w-[42ch]">
-                Jadwal kopdar perdana tiap wilayah disusun berdasarkan domisili dan waktu luang terbanyak dari pendaftar awal. Pilih wilayah dan hari yang paling cocok buat kamu.
-              </p>
-
-              <div className="surface-card rounded-xl p-5 space-y-2.5">
-                <p className="text-base font-bold text-[#0C2340] flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-[#92400E] shrink-0" />
-                  <span>Jadwal &amp; Lokasi Terdekat</span>
-                </p>
+            <div className="lg:col-span-5 space-y-5">
+              <div className="space-y-3">
+                <h2
+                  id="kopdar-heading"
+                  className="text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em] text-[#0C2340]"
+                >
+                  Usulkan Minat Kopdar Pertama
+                </h2>
                 <p className="text-base text-[#475569] leading-[1.6]">
-                  Tanggal: <strong className="text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.firstKopdarDate}</strong>
+                  Tanggal dan lokasi pertemuan perdana memang belum dikunci. Pengurus memilih hari
+                  serta titik kumpul paling masuk akal setelah suara wilayah dari pendaftar awal masuk.
                 </p>
-                <p className="text-base text-[#475569] leading-[1.6] flex items-start gap-2">
-                  <MapPin className="w-4 h-4 text-[#92400E] shrink-0 mt-1" />
-                  <span>{COMMUNITY_PLACEHOLDERS.firstKopdarLocation}</span>
-                </p>
+                <Link
+                  href="/kegiatan"
+                  className="inline-flex items-center gap-2 min-h-[44px] px-1 text-base font-semibold text-[#0C2340] hover:text-[#92400E] underline underline-offset-4 transition-colors"
+                >
+                  <span>Lihat status jadwal kopdar</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
 
               {IS_DEMO_MODE && demoEvents.length > 0 && (
-                <div className="surface-card-soft rounded-xl p-4 space-y-1.5">
+                <div className="bg-white border border-[#0C2340]/12 rounded-xl p-4 space-y-1.5">
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-sm font-bold text-[#0C2340]">Pratinjau Jadwal</span>
                     <span className="px-2.5 py-0.5 rounded-md bg-amber-100 text-[#92400E] text-xs font-semibold">
@@ -336,18 +334,50 @@ export default function HomePage() {
                 </div>
               )}
 
-              <div>
-                <Link
-                  href="/kegiatan"
-                  className="inline-flex items-center gap-2 min-h-[44px] px-1 text-base font-semibold text-[#0C2340] hover:text-[#92400E] transition-colors"
-                >
-                  Lihat halaman Jadwal Kopdar
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
+              <div className="pt-5 border-t border-[#0C2340]/12 space-y-3">
+                <h3 className="text-lg font-bold text-[#0C2340]">
+                  Mentoring CV &amp; Berbagi Lowongan
+                </h3>
+                <p className="text-base text-[#475569] leading-[1.6]">
+                  Butuh teman diskusi sebelum melamar kerja, atau bersedia meluangkan waktu untuk
+                  mengulas CV adik tingkat?
+                </p>
+                <div className="flex flex-wrap items-center gap-3">
+                  <Link
+                    href="/peluang#mentoring"
+                    className="inline-flex items-center justify-center min-h-[44px] px-4 py-2 rounded-lg bg-[#0C2340] hover:bg-[#08182E] text-white text-base font-semibold transition-colors"
+                  >
+                    Cari mentor
+                  </Link>
+                  <Link
+                    href="/gabung?mentor=ya"
+                    className="inline-flex items-center justify-center min-h-[44px] px-4 py-2 rounded-lg bg-white border border-[#0C2340]/20 hover:border-[#0C2340]/45 text-[#0C2340] text-base font-semibold transition-colors"
+                  >
+                    Daftar jadi mentor
+                  </Link>
+                </div>
               </div>
+
+              {IS_DEMO_MODE && demoMentors.length > 0 && (
+                <div className="space-y-3 pt-2">
+                  <span className="inline-block px-2.5 py-0.5 rounded-md bg-amber-100 text-[#92400E] text-xs font-semibold">
+                    {DEMO_BADGE_LABEL}
+                  </span>
+                  <div className="space-y-2.5">
+                    {demoMentors.map((m) => (
+                      <div key={m.id} className="bg-white border border-[#0C2340]/12 rounded-xl p-4 space-y-1">
+                        <h4 className="text-base font-bold text-[#0C2340]">{m.nama}</h4>
+                        <p className="text-base text-[#475569]">
+                          {m.prodi} &apos;{String(m.angkatan).slice(-2)} · {m.wilayah}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
 
-            <div className="lg:col-span-7 surface-card rounded-2xl p-6 sm:p-8">
+            <div className="lg:col-span-7 bg-white border border-[#0C2340]/12 rounded-xl p-6 sm:p-8 shadow-2xs">
               {!kopdarSubmitted ? (
                 <form onSubmit={handleKopdarSubmit} className="space-y-4" noValidate>
                   {/* Honeypot */}
@@ -367,7 +397,7 @@ export default function HomePage() {
                   {kopdarErrors.form && (
                     <div
                       role="alert"
-                      className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-800 text-xs flex items-center gap-2"
+                      className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-800 text-sm flex items-center gap-2"
                     >
                       <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
                       <span>{kopdarErrors.form}</span>
@@ -516,233 +546,119 @@ export default function HomePage() {
           </div>
         </PatternSection>
 
-        <PatternDivider variant="curve" fromColor="#F3F1EA" toColor="#FDFCF7" />
-
-        {/* 5. DOKUMENTASI PERTEMUAN - Tetap bersih (latar putih krem + grain kertas dasar) */}
+        {/* 5. TANYA JAWAB & PENUTUP RINGKAS DI ATAS KERTAS KREM (tanpa kotak dark CTA di atas footer) */}
         <section
-          aria-labelledby="dokumentasi-heading"
-          className="relative z-[1] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14"
-        >
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            <div className="lg:col-span-7">
-              <div className="aspect-[16/9] w-full rounded-xl overflow-hidden bg-[#F3F1EA] surface-card relative">
-                <Image
-                  src="/images/hero-kumpul-bolo-pisah.jpg"
-                  alt="Dokumentasi kumpul alumni Universitas Muhammadiyah Surakarta"
-                  width={1200}
-                  height={675}
-                  loading="lazy"
-                  sizes="(max-width: 1024px) 100vw, 55vw"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </div>
-            <div className="lg:col-span-5 space-y-4">
-              <h2 id="dokumentasi-heading" className="text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em] text-[#0C2340]">
-                Dokumentasi Pertemuan Alumni
-              </h2>
-              <p className="text-base text-[#475569] leading-[1.6] max-w-[42ch]">
-                {COMMUNITY_PLACEHOLDERS.documentationCaption}
-              </p>
-              <p className="text-base text-[#475569] leading-[1.6] max-w-[42ch]">
-                Foto kegiatan tiap wilayah akan terus dilengkapi seiring bergulirnya kopdar pertama
-                di sembilan wilayah Jabodetabek.
-              </p>
-              <Link
-                href="/peta"
-                className="inline-flex items-center gap-2 min-h-[44px] px-1 text-base font-semibold text-[#0C2340] hover:text-[#92400E] transition-colors"
-              >
-                Lihat cakupan 9 wilayah Jabodetabek
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-          </div>
-        </section>
-
-        <PatternDivider variant="gradient" />
-
-        {/* 6. MENTORING ALUMNI - Bersih tanpa pola geometris */}
-        <PatternSection
-          aria-labelledby="mentoring-heading"
-          variant="grain"
-          tone="tint"
-          fade="none"
-          patternOpacity={0.03}
-          contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 space-y-8"
-        >
-          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-            <div className="max-w-2xl space-y-3">
-              <h2 id="mentoring-heading" className="text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em] text-[#0C2340]">
-                Mentoring Alumni
-              </h2>
-              <p className="text-base text-[#475569] leading-[1.6] max-w-[48ch]">
-                Lulusan baru bisa meminta masukan CV dan persiapan wawancara, sementara alumni
-                berpengalaman bisa mendaftarkan diri sebagai mentor sukarela di bidang masing-masing.
-              </p>
-            </div>
-
-            <div className="flex flex-wrap items-center gap-3 shrink-0">
-              <Link
-                href="/peluang#mentoring"
-                className="inline-flex items-center justify-center gap-2 min-h-[48px] px-5 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] active:scale-[0.99] text-white text-base font-semibold transition-all duration-150 shadow-xs"
-              >
-                Cari Mentor
-              </Link>
-              <Link
-                href="/gabung?mentor=ya"
-                className="inline-flex items-center justify-center gap-2 min-h-[48px] px-5 py-3 rounded-lg bg-white border border-[#0C2340]/20 hover:border-[#0C2340]/45 active:scale-[0.99] text-[#0C2340] text-base font-semibold transition-all duration-150 shadow-2xs"
-              >
-                Daftar Jadi Mentor
-              </Link>
-            </div>
-          </div>
-
-          {IS_DEMO_MODE && demoMentors.length > 0 && (
-            <div className="space-y-3">
-              <span className="inline-block px-2.5 py-0.5 rounded-md bg-amber-100 text-[#92400E] text-xs font-semibold">
-                {DEMO_BADGE_LABEL}
-              </span>
-              <div className="space-y-3 max-w-3xl">
-                {demoMentors.map((m) => (
-                  <div key={m.id} className="surface-card rounded-xl p-5 space-y-1.5">
-                    <h3 className="text-lg font-bold text-[#0C2340]">{m.nama}</h3>
-                    <p className="text-base text-[#475569]">
-                      {m.prodi} &apos;{String(m.angkatan).slice(-2)} · {m.wilayah}
-                    </p>
-                    <p className="text-base text-[#0C2340] font-medium pt-0.5">
-                      {m.mentoringFokus || m.pekerjaan}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </PatternSection>
-
-        <PatternDivider variant="curve" fromColor="#F3F1EA" toColor="#FDFCF7" />
-
-        {/* 7. FAQ PENDEK - Benar-benar polos agar teks mudah dibaca */}
-        <section
+          id="tanya-jawab"
           aria-labelledby="faq-heading"
-          className="bg-[#FDFCF7] relative z-[1] py-14"
+          className="bg-[#FDFCF7] relative z-[1] py-12 sm:py-16"
         >
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 id="faq-heading" className="text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em] text-[#0C2340] mb-6">
-              Pertanyaan yang Sering Diajukan
-            </h2>
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+            <div>
+              <h2
+                id="faq-heading"
+                className="text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em] text-[#0C2340] mb-6"
+              >
+                Soal Pendaftaran &amp; Data Kamu
+              </h2>
 
-            <div className="divide-y divide-[#0C2340]/12 border-y border-[#0C2340]/12">
-              <details className="group py-2">
-                <summary className="list-none flex items-center justify-between gap-4 min-h-[44px] py-2 font-semibold text-base text-[#0C2340] cursor-pointer">
-                  <span>Apakah mendaftar di IKA UMS Jabodetabek berbayar?</span>
-                  <ChevronDown className="w-4 h-4 shrink-0 text-[#475569] transition-transform duration-150 group-open:rotate-180" />
-                </summary>
-                <p className="pb-4 text-base text-[#475569] leading-[1.6] max-w-[60ch]">
-                  Gratis. Pendaftaran keanggotaan dan partisipasi awal komunitas tidak memungut iuran wajib.
+              <div className="divide-y divide-[#0C2340]/12 border-y border-[#0C2340]/12">
+                <details className="group py-2">
+                  <summary className="list-none flex items-center justify-between gap-4 min-h-[44px] py-2 font-semibold text-base text-[#0C2340] cursor-pointer">
+                    <span>Apakah mendaftar di IKA UMS Jabodetabek berbayar?</span>
+                    <ChevronDown className="w-4 h-4 shrink-0 text-[#475569] transition-transform duration-150 group-open:rotate-180" />
+                  </summary>
+                  <p className="pb-4 text-base text-[#475569] leading-[1.6] max-w-[60ch]">
+                    Tidak ada iuran wajib atau biaya pendaftaran.
+                  </p>
+                </details>
+
+                <details className="group py-2">
+                  <summary className="list-none flex items-center justify-between gap-4 min-h-[44px] py-2 font-semibold text-base text-[#0C2340] cursor-pointer">
+                    <span>Apakah nomor WhatsApp dan email saya ditampilkan terbuka?</span>
+                    <ChevronDown className="w-4 h-4 shrink-0 text-[#475569] transition-transform duration-150 group-open:rotate-180" />
+                  </summary>
+                  <div className="pb-4 space-y-2">
+                    <p className="text-base text-[#475569] leading-[1.6] max-w-[60ch]">
+                      Tidak. Kontak dipakai pengurus untuk mencocokkan latar alumni dan mengirim info
+                      kopdar. Pilihan tampil di Daftar Anggota juga bawaan Tidak aktif sampai kamu menyetujuinya sendiri.
+                    </p>
+                    <Link
+                      href="/privasi"
+                      className="inline-flex items-center gap-1.5 min-h-[44px] px-1 font-semibold text-base text-[#0C2340] hover:text-[#92400E] underline underline-offset-4"
+                    >
+                      <span>Kebijakan Privasi</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </div>
+                </details>
+
+                <details className="group py-2">
+                  <summary className="list-none flex items-center justify-between gap-4 min-h-[44px] py-2 font-semibold text-base text-[#0C2340] cursor-pointer">
+                    <span>Siapa yang mengelola komunitas ini?</span>
+                    <ChevronDown className="w-4 h-4 shrink-0 text-[#475569] transition-transform duration-150 group-open:rotate-180" />
+                  </summary>
+                  <div className="pb-4 space-y-2">
+                    <p className="text-base text-[#475569] leading-[1.6] max-w-[60ch]">
+                      Pengurus wilayah Jabodetabek bersama perwakilan koordinator sembilan kota dan kabupaten.
+                    </p>
+                    <Link
+                      href="/kepengurusan"
+                      className="inline-flex items-center gap-1.5 min-h-[44px] px-1 font-semibold text-base text-[#0C2340] hover:text-[#92400E] underline underline-offset-4"
+                    >
+                      <span>Susunan Pengurus &amp; Korwil</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </div>
+                </details>
+
+                <details className="group py-2">
+                  <summary className="list-none flex items-center justify-between gap-4 min-h-[44px] py-2 font-semibold text-base text-[#0C2340] cursor-pointer">
+                    <span>Bagaimana hubungannya dengan PP IKA UMS Pusat?</span>
+                    <ChevronDown className="w-4 h-4 shrink-0 text-[#475569] transition-transform duration-150 group-open:rotate-180" />
+                  </summary>
+                  <div className="pb-4 space-y-2">
+                    <p className="text-base text-[#475569] leading-[1.6] max-w-[60ch]">
+                      Jaringan wilayah Jakarta, Bogor, Depok, Tangerang, dan Bekasi disiapkan sebagai
+                      simpul daerah alumni Universitas Muhammadiyah Surakarta ({COMMUNITY_PLACEHOLDERS.ppIkaUmsStatus}).
+                    </p>
+                    <Link
+                      href="/tentang"
+                      className="inline-flex items-center gap-1.5 min-h-[44px] px-1 font-semibold text-base text-[#0C2340] hover:text-[#92400E] underline underline-offset-4"
+                    >
+                      <span>Tentang Komunitas</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                  </div>
+                </details>
+              </div>
+            </div>
+
+            <div className="pt-8 border-t border-[#0C2340]/12 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
+              <div className="space-y-1 max-w-lg">
+                <h2 className="text-xl font-bold text-[#0C2340]">
+                  Catat Data Alumnimu di Wilayah Jabodetabek
+                </h2>
+                <p className="text-base text-[#475569] leading-[1.6]">
+                  Isi data singkat agar pengurus bisa menghubungi domisili wilayahmu saat kopdar perdana dijadwalkan.
                 </p>
-              </details>
-
-              <details className="group py-2">
-                <summary className="list-none flex items-center justify-between gap-4 min-h-[44px] py-2 font-semibold text-base text-[#0C2340] cursor-pointer">
-                  <span>Apakah nomor WhatsApp dan email saya ditampilkan terbuka?</span>
-                  <ChevronDown className="w-4 h-4 shrink-0 text-[#475569] transition-transform duration-150 group-open:rotate-180" />
-                </summary>
-                <div className="pb-4 space-y-2">
-                  <p className="text-base text-[#475569] leading-[1.6] max-w-[60ch]">
-                    Tidak. Nomor WhatsApp dan email disimpan tertutup untuk verifikasi pengurus serta info
-                    kopdar. Saat mendaftar, pilihan tampil di Daftar Anggota juga bawaan Tidak aktif
-                    kecuali kamu menyetujuinya sendiri.
-                  </p>
-                  <Link
-                    href="/privasi"
-                    className="inline-flex items-center gap-1.5 min-h-[44px] px-1 font-semibold text-base text-[#0C2340] hover:text-[#92400E] underline underline-offset-4"
-                  >
-                    <span>Baca Kebijakan Privasi</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              </details>
-
-              <details className="group py-2">
-                <summary className="list-none flex items-center justify-between gap-4 min-h-[44px] py-2 font-semibold text-base text-[#0C2340] cursor-pointer">
-                  <span>Siapa yang mengelola komunitas ini?</span>
-                  <ChevronDown className="w-4 h-4 shrink-0 text-[#475569] transition-transform duration-150 group-open:rotate-180" />
-                </summary>
-                <div className="pb-4 space-y-2">
-                  <p className="text-base text-[#475569] leading-[1.6] max-w-[60ch]">
-                    Komunitas dikelola oleh tim pengurus wilayah dan koordinator dari 9 kota/kabupaten di
-                    Jabodetabek. Susunan jabatan dan kontak resmi dapat dilihat langsung.
-                  </p>
-                  <Link
-                    href="/kepengurusan"
-                    className="inline-flex items-center gap-1.5 min-h-[44px] px-1 font-semibold text-base text-[#0C2340] hover:text-[#92400E] underline underline-offset-4"
-                  >
-                    <span>Lihat Pengurus &amp; Kontak</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              </details>
-
-              <details className="group py-2">
-                <summary className="list-none flex items-center justify-between gap-4 min-h-[44px] py-2 font-semibold text-base text-[#0C2340] cursor-pointer">
-                  <span>Bagaimana hubungannya dengan IKA UMS Pusat?</span>
-                  <ChevronDown className="w-4 h-4 shrink-0 text-[#475569] transition-transform duration-150 group-open:rotate-180" />
-                </summary>
-                <div className="pb-4 space-y-2">
-                  <p className="text-base text-[#475569] leading-[1.6] max-w-[60ch]">
-                    Jaringan ini ditujukan sebagai simpul wilayah Jakarta, Bogor, Depok, Tangerang, dan
-                    Bekasi bagi alumni Universitas Muhammadiyah Surakarta ({COMMUNITY_PLACEHOLDERS.ppIkaUmsStatus}).
-                  </p>
-                  <Link
-                    href="/tentang"
-                    className="inline-flex items-center gap-1.5 min-h-[44px] px-1 font-semibold text-base text-[#0C2340] hover:text-[#92400E] underline underline-offset-4"
-                  >
-                    <span>Baca Tentang Komunitas</span>
-                    <ArrowRight className="w-4 h-4" />
-                  </Link>
-                </div>
-              </details>
+              </div>
+              <div className="flex flex-wrap items-center gap-3 shrink-0">
+                <Link
+                  href="/gabung"
+                  className="inline-flex items-center justify-center gap-2 min-h-[48px] px-6 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] active:scale-[0.99] text-white text-base font-semibold transition-all duration-150"
+                >
+                  <span>Daftar jadi anggota</span>
+                  <ArrowRight className="w-4 h-4 text-[#F59E0B]" />
+                </Link>
+                <Link
+                  href="/kepengurusan"
+                  className="inline-flex items-center justify-center min-h-[48px] px-4 py-3 text-base font-semibold text-[#0C2340] hover:text-[#92400E] underline underline-offset-4 transition-colors"
+                >
+                  Pengurus &amp; kontak
+                </Link>
+              </div>
             </div>
           </div>
-        </section>
-
-        {/* 8. CTA PENUTUP - Tone brand tua (#0C2340) + pattern-batik terang memudar */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14 relative z-[1]">
-          <PatternSection
-            as="div"
-            variant="batik"
-            tone="brand"
-            fade="radial-soft"
-            patternOpacity={0.08}
-            patternSize="68px"
-            className="rounded-2xl p-6 sm:p-10 border border-[#0C2340] shadow-[0_14px_34px_-12px_rgba(12,35,64,0.28)]"
-            contentClassName="flex flex-col md:flex-row md:items-center justify-between gap-6"
-          >
-            <div className="space-y-2.5 max-w-xl">
-              <h2 className="text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em]">
-                Ikut Mendata Dirimu di Wilayah Jabodetabek
-              </h2>
-              <p className="text-base text-white/90 leading-[1.6]">
-                Semakin lengkap data awal tiap kota dan kabupaten, semakin cepat jadwal kopdar
-                perdana dan grup wilayah dapat disusun bersama.
-              </p>
-            </div>
-            <div className="flex flex-wrap items-center gap-3 shrink-0">
-              <Link
-                href="/gabung"
-                className="inline-flex items-center justify-center gap-2 min-h-[48px] px-6 py-3 rounded-lg bg-[#F59E0B] hover:bg-[#FBBF24] active:scale-[0.99] text-[#0C2340] text-base font-bold transition-all duration-150"
-              >
-                Daftar jadi anggota
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                href="/kepengurusan"
-                className="inline-flex items-center justify-center min-h-[48px] px-5 py-3 rounded-lg border border-white/25 hover:bg-white/10 active:scale-[0.99] text-white text-base font-semibold transition-all duration-150"
-              >
-                Hubungi pengurus
-              </Link>
-            </div>
-          </PatternSection>
         </section>
       </main>
 
