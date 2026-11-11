@@ -124,33 +124,33 @@ export function PatternDivider({
         style={{ backgroundColor: fromColor }}
       >
         <svg
-          className="block w-full h-5"
+          className="block w-full h-[10px]"
           width="100%"
-          height="20"
+          height="10"
           focusable="false"
         >
           <defs>
             <pattern
               id={`batik-rim-${patternId}`}
-              width="36"
-              height="20"
+              width="32"
+              height="10"
               patternUnits="userSpaceOnUse"
             >
               <path
-                d="M0 20L9 8Q18 0 27 8L36 20Z"
+                d="M0 10C7 10 10 2 16 2C22 2 25 10 32 10Z"
                 fill={toColor}
               />
-              <circle cx="18" cy="11.5" r="1.6" fill="#F59E0B" fillOpacity="0.6" />
               <path
-                d="M9 8.5L18 17L27 8.5"
+                d="M0 10C7 10 10 2 16 2C22 2 25 10 32 10"
                 fill="none"
                 stroke="#F59E0B"
                 strokeOpacity="0.28"
-                strokeWidth="0.9"
+                strokeWidth="0.85"
               />
+              <circle cx="16" cy="7.2" r="1.05" fill="#F59E0B" fillOpacity="0.52" />
             </pattern>
           </defs>
-          <rect width="100%" height="20" fill={`url(#batik-rim-${patternId})`} />
+          <rect width="100%" height="10" fill={`url(#batik-rim-${patternId})`} />
         </svg>
       </div>
     );
