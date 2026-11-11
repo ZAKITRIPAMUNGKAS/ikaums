@@ -13,7 +13,11 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog';
 import { getAlumniList } from '@/data/simulasi';
-import { normalizeIndonesianWhatsApp } from '@/data/ums-prodi';
+import {
+  ANGKATAN_OPTIONS,
+  FAKULTAS_PRODI_UMS,
+  normalizeIndonesianWhatsApp,
+} from '@/data/ums-prodi';
 import { IS_DEMO_MODE, COMMUNITY_PLACEHOLDERS, DEMO_BADGE_LABEL } from '@/lib/config';
 import { AlumniProfile } from '@/types';
 import {
@@ -25,6 +29,13 @@ import {
   Briefcase,
 } from 'lucide-react';
 
+interface MentorFieldErrors {
+  nama?: string;
+  whatsapp?: string;
+  mentorContactConsent?: string;
+  form?: string;
+}
+
 export default function PeluangPage() {
   const mentors = useMemo(
     () => getAlumniList().filter((a) => a.bersediaMentoring).slice(0, 4),
@@ -35,35 +46,78 @@ export default function PeluangPage() {
   const [selectedMentor, setSelectedMentor] = useState<AlumniProfile | null>(null);
   const [requestForm, setRequestForm] = useState({
     nama: '',
-    angkatanProdi: '',
+    prodi: '',
+    angkatan: '',
     whatsapp: '',
     topik: 'Ulas CV & Portofolio',
     catatan: '',
+    mentorContactConsent: false,
+    website: '', // honeypot anti-spam
   });
-  const [formError, setFormError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState<MentorFieldErrors>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [bookingDone, setBookingDone] = useState(false);
+
+  const clearMentorError = (field: keyof MentorFieldErrors) => {
+    setFieldErrors((prev) => {
+      if (!prev[field] && !prev.form) return prev;
+      const next = { ...prev };
+      delete next[field];
+      delete next.form;
+      return next;
+    });
+  };
 
   const handleOpenBooking = (mentor: AlumniProfile | null) => {
     setSelectedMentor(mentor);
-    setFormError('');
+    setFieldErrors({});
+    setIsSubmitting(false);
     setBookingDone(false);
     setMentorModalOpen(true);
   };
 
   const handleMentorSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (requestForm.nama.trim().length < 3) {
-      setFormError('Tuliskan nama lengkapmu minimal 3 huruf.');
+    if (isSubmitting) return;
+
+    if (requestForm.website.trim().length > 0) {
+      setFieldErrors({
+        form: 'Permintaan tidak dapat diproses. Silakan muat ulang halaman lalu coba lagi.',
+      });
       return;
+    }
+
+    const errors: MentorFieldErrors = {};
+    if (requestForm.nama.trim().length < 3) {
+      errors.nama = 'Tuliskan nama lengkapmu minimal 3 huruf.';
     }
     const validWa = normalizeIndonesianWhatsApp(requestForm.whatsapp);
     if (!validWa) {
-      setFormError('Masukkan nomor WhatsApp Indonesia yang valid (misalnya 081234567890).');
+      errors.whatsapp = 'Masukkan nomor WhatsApp Indonesia yang valid (misalnya 081234567890).';
+    }
+    if (!requestForm.mentorContactConsent) {
+      errors.mentorContactConsent =
+        'Centang izin penerusan nomor WhatsApp agar pengurus dapat menghubungkanmu dengan mentor.';
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      const firstId = errors.nama
+        ? 'mentor-req-nama'
+        : errors.whatsapp
+        ? 'mentor-req-wa'
+        : 'mentor-req-consent';
+      setTimeout(() => document.getElementById(firstId)?.focus(), 0);
       return;
     }
-    setRequestForm((prev) => ({ ...prev, whatsapp: validWa }));
-    setFormError('');
-    setBookingDone(true);
+
+    setIsSubmitting(true);
+    setRequestForm((prev) => ({ ...prev, whatsapp: validWa! }));
+    setFieldErrors({});
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setBookingDone(true);
+    }, 180);
   };
 
   return (
@@ -103,7 +157,7 @@ export default function PeluangPage() {
               Mentoring Alumni serta Info Kerja &amp; Usaha
             </h1>
             <p className="text-sm sm:text-base text-[#475569] max-w-2xl leading-relaxed">
-              Ruang untuk mencocokkan kebutuhan bimbingan karier lulusan baru dengan praktisi
+              Ruang untuk mencocokkan kebutuhan mentoring karier lulusan baru dengan praktisi
               alumni serta membagikan info lowongan atau kerja sama usaha yang terverifikasi.
             </p>
           </header>
@@ -120,7 +174,7 @@ export default function PeluangPage() {
                 Mentoring Alumni
               </h2>
               <p className="text-sm sm:text-base text-[#475569] leading-relaxed">
-                Sesi 1-on-1 singkat untuk ulas CV, persiapan wawancara, atau bertukar pikiran soal
+                Sesi mentoring singkat untuk ulas CV, persiapan wawancara, atau bertukar pikiran soal
                 jalur industri di Jabodetabek.
               </p>
             </div>
@@ -165,7 +219,7 @@ export default function PeluangPage() {
                 onClick={() => handleOpenBooking(null)}
                 className="inline-flex items-center justify-center min-h-[44px] px-5 py-2.5 rounded-lg bg-[#F3F1EA] hover:bg-[#E7E3D7] text-[#0C2340] text-sm font-semibold transition-colors shrink-0 cursor-pointer"
               >
-                Ajukan Topik Bimbingan
+                Ajukan Topik Mentoring
               </button>
             </div>
           ) : (
@@ -273,67 +327,140 @@ export default function PeluangPage() {
 
           {!bookingDone ? (
             <form onSubmit={handleMentorSubmit} className="space-y-4 mt-2" noValidate>
-              {formError && (
+              {/* Honeypot anti-spam */}
+              <div className="sr-only" aria-hidden="true">
+                <label htmlFor="mentor-req-website">Kosongkan kolom ini</label>
+                <input
+                  id="mentor-req-website"
+                  type="text"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={requestForm.website}
+                  onChange={(e) => setRequestForm({ ...requestForm, website: e.target.value })}
+                />
+              </div>
+
+              {fieldErrors.form && (
                 <div
                   role="alert"
                   className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-800 text-xs flex items-center gap-2"
                 >
                   <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
-                  <span>{formError}</span>
+                  <span>{fieldErrors.form}</span>
                 </div>
               )}
 
               <div>
                 <label htmlFor="mentor-req-nama" className="block text-sm font-semibold text-[#0C2340] mb-1">
-                  Nama Lengkap *
+                  Nama Lengkap <span className="text-[#92400E]">*</span>
                 </label>
                 <input
                   id="mentor-req-nama"
                   type="text"
                   required
                   autoComplete="name"
+                  aria-invalid={fieldErrors.nama ? 'true' : undefined}
+                  aria-describedby={fieldErrors.nama ? 'err-mentor-nama' : undefined}
                   placeholder="Nama lengkap kamu"
                   value={requestForm.nama}
-                  onChange={(e) => setRequestForm({ ...requestForm, nama: e.target.value })}
-                  className="w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-sm text-[#0C2340]"
+                  onChange={(e) => {
+                    setRequestForm({ ...requestForm, nama: e.target.value });
+                    clearMentorError('nama');
+                  }}
+                  className={`w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border text-sm text-[#0C2340] focus:outline-hidden focus:ring-2 ${
+                    fieldErrors.nama
+                      ? 'border-red-500 focus:ring-red-200'
+                      : 'border-[#0C2340]/20 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
+                  }`}
                 />
+                {fieldErrors.nama && (
+                  <p id="err-mentor-nama" className="mt-1 text-xs text-red-700 font-medium">
+                    {fieldErrors.nama}
+                  </p>
+                )}
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div>
                   <label htmlFor="mentor-req-prodi" className="block text-sm font-semibold text-[#0C2340] mb-1">
-                    Prodi &amp; Angkatan
+                    Program Studi UMS
                   </label>
-                  <input
+                  <select
                     id="mentor-req-prodi"
-                    type="text"
-                    placeholder="Contoh: Manajemen '22"
-                    value={requestForm.angkatanProdi}
-                    onChange={(e) => setRequestForm({ ...requestForm, angkatanProdi: e.target.value })}
-                    className="w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-sm text-[#0C2340]"
-                  />
+                    value={requestForm.prodi}
+                    onChange={(e) => setRequestForm({ ...requestForm, prodi: e.target.value })}
+                    className="w-full min-h-[44px] px-3 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-sm text-[#0C2340]"
+                  >
+                    <option value="">Pilih Prodi (Opsional)</option>
+                    {FAKULTAS_PRODI_UMS.map((group) => (
+                      <optgroup key={group.fakultas} label={group.fakultas}>
+                        {group.prodi.map((item) => (
+                          <option key={item} value={item}>
+                            {item}
+                          </option>
+                        ))}
+                      </optgroup>
+                    ))}
+                  </select>
                 </div>
                 <div>
-                  <label htmlFor="mentor-req-wa" className="block text-sm font-semibold text-[#0C2340] mb-1">
-                    Nomor WhatsApp *
+                  <label htmlFor="mentor-req-angkatan" className="block text-sm font-semibold text-[#0C2340] mb-1">
+                    Tahun Angkatan
                   </label>
-                  <input
-                    id="mentor-req-wa"
-                    type="tel"
-                    inputMode="tel"
-                    autoComplete="tel"
-                    required
-                    placeholder="081234567890"
-                    value={requestForm.whatsapp}
-                    onChange={(e) => setRequestForm({ ...requestForm, whatsapp: e.target.value })}
-                    className="w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-sm text-[#0C2340]"
-                  />
+                  <select
+                    id="mentor-req-angkatan"
+                    value={requestForm.angkatan}
+                    onChange={(e) => setRequestForm({ ...requestForm, angkatan: e.target.value })}
+                    className="w-full min-h-[44px] px-3 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-sm text-[#0C2340]"
+                  >
+                    <option value="">Pilih Angkatan (Opsional)</option>
+                    {ANGKATAN_OPTIONS.map((tahun) => (
+                      <option key={tahun} value={tahun}>
+                        Angkatan {tahun}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
 
               <div>
+                <label htmlFor="mentor-req-wa" className="block text-sm font-semibold text-[#0C2340] mb-1">
+                  Nomor WhatsApp <span className="text-[#92400E]">*</span>
+                </label>
+                <input
+                  id="mentor-req-wa"
+                  type="tel"
+                  inputMode="tel"
+                  autoComplete="tel"
+                  required
+                  aria-invalid={fieldErrors.whatsapp ? 'true' : undefined}
+                  aria-describedby={fieldErrors.whatsapp ? 'hint-mentor-wa err-mentor-wa' : 'hint-mentor-wa'}
+                  placeholder="081234567890"
+                  value={requestForm.whatsapp}
+                  onChange={(e) => {
+                    setRequestForm({ ...requestForm, whatsapp: e.target.value });
+                    clearMentorError('whatsapp');
+                  }}
+                  className={`w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border text-sm text-[#0C2340] focus:outline-hidden focus:ring-2 ${
+                    fieldErrors.whatsapp
+                      ? 'border-red-500 focus:ring-red-200'
+                      : 'border-[#0C2340]/20 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
+                  }`}
+                />
+                <p id="hint-mentor-wa" className="mt-1 text-xs text-[#475569]">
+                  Tidak ditampilkan publik; hanya diteruskan jika kamu menyetujui izin di bawah.
+                </p>
+                {fieldErrors.whatsapp && (
+                  <p id="err-mentor-wa" className="mt-1 text-xs text-red-700 font-medium">
+                    {fieldErrors.whatsapp}
+                  </p>
+                )}
+              </div>
+
+              <div>
                 <label htmlFor="mentor-req-topik" className="block text-sm font-semibold text-[#0C2340] mb-1">
-                  Topik Bimbingan
+                  Topik Mentoring
                 </label>
                 <select
                   id="mentor-req-topik"
@@ -362,6 +489,35 @@ export default function PeluangPage() {
                 />
               </div>
 
+              <div className="bg-[#F3F1EA]/75 border border-[#0C2340]/12 rounded-xl p-3.5">
+                <label
+                  htmlFor="mentor-req-consent"
+                  className="flex items-start gap-2.5 min-h-[44px] cursor-pointer text-xs sm:text-sm text-[#0C2340]"
+                >
+                  <input
+                    id="mentor-req-consent"
+                    type="checkbox"
+                    aria-invalid={fieldErrors.mentorContactConsent ? 'true' : undefined}
+                    aria-describedby={fieldErrors.mentorContactConsent ? 'err-mentor-consent' : undefined}
+                    checked={requestForm.mentorContactConsent}
+                    onChange={(e) => {
+                      setRequestForm({ ...requestForm, mentorContactConsent: e.target.checked });
+                      clearMentorError('mentorContactConsent');
+                    }}
+                    className="mt-1 w-4 h-4 rounded border-[#0C2340]/30 accent-[#0C2340] shrink-0"
+                  />
+                  <span>
+                    Saya mengizinkan pengurus meneruskan nomor WhatsApp ini kepada mentor yang cocok agar dapat menghubungi saya.{' '}
+                    <span className="text-[#92400E] font-semibold">*</span>
+                  </span>
+                </label>
+                {fieldErrors.mentorContactConsent && (
+                  <p id="err-mentor-consent" className="mt-1 pl-6 text-xs text-red-700 font-medium">
+                    {fieldErrors.mentorContactConsent}
+                  </p>
+                )}
+              </div>
+
               <div className="flex justify-end gap-2.5 pt-2">
                 <button
                   type="button"
@@ -372,9 +528,10 @@ export default function PeluangPage() {
                 </button>
                 <button
                   type="submit"
-                  className="min-h-[44px] px-5 py-2 rounded-lg bg-[#0C2340] text-white text-sm font-semibold hover:bg-[#16325C] cursor-pointer"
+                  disabled={isSubmitting}
+                  className="min-h-[44px] px-5 py-2 rounded-lg bg-[#0C2340] text-white text-sm font-semibold hover:bg-[#16325C] disabled:opacity-60 cursor-pointer"
                 >
-                  Kirim Permintaan
+                  {isSubmitting ? 'Mengirim...' : 'Kirim permintaan mentoring'}
                 </button>
               </div>
             </form>

@@ -103,7 +103,8 @@ export default function PrivasiPage() {
               Secara bawaan (<em>default</em>), pilihan untuk tampil di Daftar Anggota berstatus{' '}
               <strong className="text-[#0C2340]">Tidak</strong>. Profilmu hanya akan terlihat oleh
               sesama anggota yang sudah masuk apabila kamu memberi izin secara eksplisit. Nomor
-              WhatsApp dan email tidak pernah dipajang di halaman terbuka.
+              WhatsApp dan email tidak pernah dipajang di halaman terbuka, serta tidak diteruskan ke
+              mentor maupun pemohon mentoring tanpa persetujuan terpisah yang kamu centang sendiri.
             </p>
           </section>
 

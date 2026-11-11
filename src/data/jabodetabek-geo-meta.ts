@@ -36,7 +36,7 @@ export const REGIONS_METADATA: RegionMetadata[] = [
       "Legal & Advokasi",
       "Software Tech"
     ],
-    "agenda": "Sarasehan Akbar Kuningan & SCBD",
+    "agenda": "Kopdar Alumni UMS Jabodetabek",
     "titikKumpul": "Kawasan Tebet, Blok M, & TB Simatupang",
     "center": [
       106.80208,
@@ -65,7 +65,7 @@ export const REGIONS_METADATA: RegionMetadata[] = [
       "BUMN & Korporat",
       "Konsultan ESG"
     ],
-    "agenda": "Diskusi Karier Menteng & Thamrin",
+    "agenda": "Sesi Mentoring Karier Digital & Korporasi",
     "titikKumpul": "Menteng, Cikini, & Bundaran HI",
     "center": [
       106.83691,
@@ -94,7 +94,7 @@ export const REGIONS_METADATA: RegionMetadata[] = [
       "F&B Retail",
       "Distribusi"
     ],
-    "agenda": "Kopdar Santai Tomang & Grogol",
+    "agenda": "Jadwal kopdar wilayah disusun setelah anggota awal terdata",
     "titikKumpul": "Tomang, Tanjung Duren, & Puri Indah",
     "center": [
       106.75726,
@@ -123,7 +123,7 @@ export const REGIONS_METADATA: RegionMetadata[] = [
       "Industri Dirgantara",
       "Kesehatan"
     ],
-    "agenda": "Silaturahmi Santai Rawamangun",
+    "agenda": "Jadwal kopdar wilayah disusun setelah anggota awal terdata",
     "titikKumpul": "Rawamangun, Cawang, & Buaran",
     "center": [
       106.90509,
@@ -152,7 +152,7 @@ export const REGIONS_METADATA: RegionMetadata[] = [
       "Maritim",
       "Perdagangan Besar"
     ],
-    "agenda": "Temu Industri Maritim & Logistik Tanjung Priok",
+    "agenda": "Jadwal kopdar wilayah disusun setelah anggota awal terdata",
     "titikKumpul": "Kelapa Gading & Pluit",
     "center": [
       106.8421,
@@ -181,7 +181,7 @@ export const REGIONS_METADATA: RegionMetadata[] = [
       "Manufaktur & Logistik",
       "Properti"
     ],
-    "agenda": "Bincang Bisnis & Kolaborasi BSD",
+    "agenda": "Kopdar Usaha & UMKM Alumni di BSD",
     "titikKumpul": "BSD City, Gading Serpong, & Bintaro",
     "center": [
       106.55964,
@@ -210,7 +210,7 @@ export const REGIONS_METADATA: RegionMetadata[] = [
       "FMCG",
       "Rantai Pasok"
     ],
-    "agenda": "Temu Alumni Summarecon Bekasi",
+    "agenda": "Jadwal kopdar wilayah disusun setelah anggota awal terdata",
     "titikKumpul": "Summarecon Bekasi & Harapan Indah",
     "center": [
       107.09718,
@@ -239,7 +239,7 @@ export const REGIONS_METADATA: RegionMetadata[] = [
       "EdTech",
       "Kreatif Digital"
     ],
-    "agenda": "Kopdar Santai Margonda",
+    "agenda": "Jadwal kopdar wilayah disusun setelah anggota awal terdata",
     "titikKumpul": "Margonda Raya & Sawangan",
     "center": [
       106.8178,
@@ -268,7 +268,7 @@ export const REGIONS_METADATA: RegionMetadata[] = [
       "Pariwisata & Hospitaliti",
       "Kehutanan"
     ],
-    "agenda": "Jalan Santai Kebun Raya & Dialog Hijau",
+    "agenda": "Jadwal kopdar wilayah disusun setelah anggota awal terdata",
     "titikKumpul": "Pajajaran & Baranangsiang",
     "center": [
       106.81413,

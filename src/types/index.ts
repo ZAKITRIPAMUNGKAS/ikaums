@@ -60,7 +60,7 @@ export interface EventKegiatan {
   lokasi?: string;
   lokasiSpesifik?: string;
   wilayah: WilayahJabodetabek | string;
-  jenis: 'Temu Kangen' | 'Workshop & Karir' | 'Silaturahmi' | 'Bisnis' | 'Kopdar Rutin' | 'Eksplorasi Karir' | 'Bisnis Alumni' | string;
+  jenis: 'Kopdar Wilayah' | 'Mentoring Alumni' | 'Info Kerja & Usaha' | string;
   penyelenggara?: string;
   penanggungJawab?: string;
   deskripsi: string;

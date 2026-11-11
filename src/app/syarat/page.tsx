@@ -60,7 +60,7 @@ export default function SyaratPage() {
         <div className="py-8 space-y-8 text-[15px] sm:text-base text-[#334155] leading-relaxed">
           <section className="space-y-2.5">
             <h2 className="text-xl font-bold text-[#0C2340]">
-              1. Siapa yang Dapat Bergabung
+              1. Siapa yang Dapat Mendaftar
             </h2>
             <p>
               Komunitas ini ditujukan bagi lulusan maupun alumni Universitas Muhammadiyah Surakarta
@@ -98,7 +98,7 @@ export default function SyaratPage() {
             </h2>
             <p>
               Alumni yang bersedia menjadi mentor meluangkan waktu secara sukarela di sela kesibukan kerja.
-              Pemohon bimbingan diharapkan menyiapkan pertanyaan spesifik sejak awal (misalnya ulas CV atau
+              Pemohon mentoring diharapkan menyiapkan pertanyaan spesifik sejak awal (misalnya ulas CV atau
               persiapan wawancara), menghormati jadwal yang disepakati, dan tidak memaksa di luar kesediaan mentor.
             </p>
           </section>

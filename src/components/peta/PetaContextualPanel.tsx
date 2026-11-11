@@ -82,7 +82,7 @@ export default function PetaContextualPanel({ region }: PetaContextualPanelProps
         <div>
           <div className="flex flex-col gap-2">
             <Link
-              href="/gabung"
+              href={`/gabung?wilayah=${encodeURIComponent(region.regionName)}`}
               className="w-full min-h-[44px] inline-flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[#0C2340] hover:bg-[#16325C] text-white text-xs sm:text-sm font-semibold transition-colors shadow-xs group"
             >
               <span>Daftar jadi anggota ({region.shortName})</span>

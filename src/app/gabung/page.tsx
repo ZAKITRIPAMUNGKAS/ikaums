@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { Navbar, Footer } from '@/components/Navigation';
 import { PatternSection, PatternDivider } from '@/components/PatternSection';
@@ -23,6 +23,7 @@ interface FieldErrors {
   wilayah?: string;
   whatsapp?: string;
   email?: string;
+  mentorContactConsent?: string;
   agreeConsent?: string;
   form?: string;
 }
@@ -45,6 +46,7 @@ export default function GabungPage() {
     pekerjaan: '',
     perusahaan: '',
     siapMentoring: false,
+    mentorContactConsent: false,
     tampilDiDirektori: false,
     agreeConsent: false,
     website: '', // honeypot anti-spam
@@ -56,6 +58,38 @@ export default function GabungPage() {
   const [submitted, setSubmitted] = useState(false);
   const [normalizedWa, setNormalizedWa] = useState('');
   const submittingRef = useRef(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const mentorParam = params.get('mentor');
+    const wilayahParam = params.get('wilayah');
+
+    const wantsMentor = mentorParam?.toLowerCase() === 'ya';
+    const cleanWilayahParam = wilayahParam?.trim().toLowerCase();
+    const matchedWilayah = cleanWilayahParam
+      ? WILAYAH_JABODETABEK.find(
+          (item) =>
+            item.nama.toLowerCase() === cleanWilayahParam ||
+            item.id.toLowerCase() === cleanWilayahParam ||
+            item.nama.toLowerCase().includes(cleanWilayahParam)
+        )
+      : undefined;
+
+    if (!wantsMentor && !matchedWilayah) return;
+
+    const timer = setTimeout(() => {
+      if (wantsMentor) {
+        setShowOptional(true);
+      }
+      setFormData((prev) => ({
+        ...prev,
+        ...(wantsMentor ? { siapMentoring: true } : {}),
+        ...(matchedWilayah ? { wilayah: matchedWilayah.nama } : {}),
+      }));
+    }, 0);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const clearError = (field: keyof FieldErrors) => {
     setFieldErrors((prev) => {
@@ -109,6 +143,11 @@ export default function GabungPage() {
       errors.email = 'Format alamat email belum benar, misalnya nama@domain.com.';
     }
 
+    if (formData.siapMentoring && !formData.mentorContactConsent) {
+      errors.mentorContactConsent =
+        'Centang izin penerusan kontak mentor kepada pemohon mentoring terverifikasi, atau matikan opsi menjadi mentor.';
+    }
+
     if (!formData.agreeConsent) {
       errors.agreeConsent =
         'Centang persetujuan pemrosesan data dan Kebijakan Privasi sebelum mengirim pendaftaran.';
@@ -116,6 +155,23 @@ export default function GabungPage() {
 
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
+      if (errors.mentorContactConsent) {
+        setShowOptional(true);
+      }
+      const order: Array<[keyof FieldErrors, string]> = [
+        ['namaLengkap', 'namaLengkap'],
+        ['angkatan', 'angkatan'],
+        ['prodi', 'prodi'],
+        ['wilayah', 'wilayah'],
+        ['whatsapp', 'whatsapp'],
+        ['email', 'email'],
+        ['mentorContactConsent', 'mentorContactConsent'],
+        ['agreeConsent', 'agreeConsent'],
+      ];
+      const firstTarget = order.find(([key]) => Boolean(errors[key]))?.[1];
+      if (firstTarget) {
+        setTimeout(() => document.getElementById(firstTarget)?.focus(), 0);
+      }
       return;
     }
 
@@ -268,8 +324,8 @@ export default function GabungPage() {
                       type="text"
                       required
                       autoComplete="name"
-                      aria-invalid={Boolean(fieldErrors.namaLengkap)}
-                      aria-describedby={fieldErrors.namaLengkap ? 'err-nama' : 'hint-nama'}
+                      aria-invalid={fieldErrors.namaLengkap ? 'true' : undefined}
+                      aria-describedby={fieldErrors.namaLengkap ? 'hint-nama err-nama' : 'hint-nama'}
                       placeholder="Contoh: Ir. Bagus Prasetyo, S.T., M.T."
                       value={formData.namaLengkap}
                       onChange={(e) => {
@@ -282,13 +338,12 @@ export default function GabungPage() {
                           : 'border-[#0C2340]/20 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
                       }`}
                     />
-                    {fieldErrors.namaLengkap ? (
-                      <p id="err-nama" className="mt-1.5 text-xs text-red-700 font-medium">
+                    <p id="hint-nama" className="mt-1.5 text-xs text-[#475569]">
+                      Boleh cantumkan gelar akademik atau profesi sesuai penulisan resmi.
+                    </p>
+                    {fieldErrors.namaLengkap && (
+                      <p id="err-nama" className="mt-1 text-xs text-red-700 font-medium">
                         {fieldErrors.namaLengkap}
-                      </p>
-                    ) : (
-                      <p id="hint-nama" className="mt-1.5 text-xs text-[#475569]">
-                        Boleh cantumkan gelar akademik atau profesi sesuai penulisan resmi.
                       </p>
                     )}
                   </div>
@@ -300,7 +355,7 @@ export default function GabungPage() {
                     <select
                       id="angkatan"
                       required
-                      aria-invalid={Boolean(fieldErrors.angkatan)}
+                      aria-invalid={fieldErrors.angkatan ? 'true' : undefined}
                       aria-describedby={fieldErrors.angkatan ? 'err-angkatan' : undefined}
                       value={formData.angkatan}
                       onChange={(e) => {
@@ -334,7 +389,7 @@ export default function GabungPage() {
                     <select
                       id="prodi"
                       required
-                      aria-invalid={Boolean(fieldErrors.prodi)}
+                      aria-invalid={fieldErrors.prodi ? 'true' : undefined}
                       aria-describedby={fieldErrors.prodi ? 'err-prodi' : undefined}
                       value={formData.prodi}
                       onChange={(e) => {
@@ -372,7 +427,7 @@ export default function GabungPage() {
                     <select
                       id="wilayah"
                       required
-                      aria-invalid={Boolean(fieldErrors.wilayah)}
+                      aria-invalid={fieldErrors.wilayah ? 'true' : undefined}
                       value={formData.wilayah}
                       onChange={(e) => {
                         setFormData({ ...formData, wilayah: e.target.value });
@@ -398,8 +453,8 @@ export default function GabungPage() {
                       inputMode="tel"
                       autoComplete="tel"
                       required
-                      aria-invalid={Boolean(fieldErrors.whatsapp)}
-                      aria-describedby={fieldErrors.whatsapp ? 'err-wa' : 'hint-wa'}
+                      aria-invalid={fieldErrors.whatsapp ? 'true' : undefined}
+                      aria-describedby={fieldErrors.whatsapp ? 'hint-wa err-wa' : 'hint-wa'}
                       placeholder="Contoh: 081234567890 atau +62812..."
                       value={formData.whatsapp}
                       onChange={(e) => {
@@ -412,13 +467,12 @@ export default function GabungPage() {
                           : 'border-[#0C2340]/20 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
                       }`}
                     />
-                    {fieldErrors.whatsapp ? (
-                      <p id="err-wa" className="mt-1.5 text-xs text-red-700 font-medium">
+                    <p id="hint-wa" className="mt-1.5 text-xs text-[#475569]">
+                      Hanya untuk verifikasi dan undangan kopdar wilayah. Tidak tampil ke publik.
+                    </p>
+                    {fieldErrors.whatsapp && (
+                      <p id="err-wa" className="mt-1 text-xs text-red-700 font-medium">
                         {fieldErrors.whatsapp}
-                      </p>
-                    ) : (
-                      <p id="hint-wa" className="mt-1.5 text-xs text-[#475569]">
-                        Hanya untuk verifikasi dan undangan kopdar wilayah. Tidak tampil ke publik.
                       </p>
                     )}
                   </div>
@@ -432,8 +486,8 @@ export default function GabungPage() {
                       type="email"
                       inputMode="email"
                       autoComplete="email"
-                      aria-invalid={Boolean(fieldErrors.email)}
-                      aria-describedby={fieldErrors.email ? 'err-email' : 'hint-email'}
+                      aria-invalid={fieldErrors.email ? 'true' : undefined}
+                      aria-describedby={fieldErrors.email ? 'hint-email err-email' : 'hint-email'}
                       placeholder="nama@email.com"
                       value={formData.email}
                       onChange={(e) => {
@@ -446,13 +500,12 @@ export default function GabungPage() {
                           : 'border-[#0C2340]/20 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
                       }`}
                     />
-                    {fieldErrors.email ? (
-                      <p id="err-email" className="mt-1.5 text-xs text-red-700 font-medium">
+                    <p id="hint-email" className="mt-1.5 text-xs text-[#475569]">
+                      Disiapkan jika nanti ingin masuk akun lewat tautan email.
+                    </p>
+                    {fieldErrors.email && (
+                      <p id="err-email" className="mt-1 text-xs text-red-700 font-medium">
                         {fieldErrors.email}
-                      </p>
-                    ) : (
-                      <p id="hint-email" className="mt-1.5 text-xs text-[#475569]">
-                        Disiapkan jika nanti ingin masuk akun lewat tautan email.
                       </p>
                     )}
                   </div>
@@ -503,19 +556,63 @@ export default function GabungPage() {
                         className="w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 focus:border-[#0C2340] focus:outline-hidden text-sm text-[#0C2340]"
                       />
                     </div>
-                    <div className="sm:col-span-2">
+                    <div className="sm:col-span-2 space-y-2">
                       <label htmlFor="siapMentoring" className="flex items-start gap-3 min-h-[44px] py-2 cursor-pointer text-sm text-[#334155]">
                         <input
                           id="siapMentoring"
                           type="checkbox"
                           checked={formData.siapMentoring}
-                          onChange={(e) => setFormData({ ...formData, siapMentoring: e.target.checked })}
+                          onChange={(e) => {
+                            const checked = e.target.checked;
+                            setFormData({
+                              ...formData,
+                              siapMentoring: checked,
+                              mentorContactConsent: checked ? formData.mentorContactConsent : false,
+                            });
+                            if (!checked) clearError('mentorContactConsent');
+                          }}
                           className="mt-1 w-4 h-4 rounded border-[#0C2340]/30 accent-[#0C2340]"
                         />
                         <span>
                           Saya bersedia menjadi mentor sukarela (ulas CV, persiapan wawancara, atau diskusi bidang kerja) untuk sesama alumni UMS.
                         </span>
                       </label>
+
+                      {formData.siapMentoring && (
+                        <div className="ml-0 sm:ml-7 bg-[#F3F1EA]/80 border border-[#0C2340]/12 rounded-xl p-3.5">
+                          <label
+                            htmlFor="mentorContactConsent"
+                            className="flex items-start gap-3 min-h-[44px] py-1 cursor-pointer text-xs sm:text-sm text-[#0C2340]"
+                          >
+                            <input
+                              id="mentorContactConsent"
+                              type="checkbox"
+                              aria-invalid={fieldErrors.mentorContactConsent ? 'true' : undefined}
+                              aria-describedby={
+                                fieldErrors.mentorContactConsent ? 'err-mentor-contact' : undefined
+                              }
+                              checked={formData.mentorContactConsent}
+                              onChange={(e) => {
+                                setFormData({
+                                  ...formData,
+                                  mentorContactConsent: e.target.checked,
+                                });
+                                clearError('mentorContactConsent');
+                              }}
+                              className="mt-1 w-4 h-4 rounded border-[#0C2340]/30 accent-[#0C2340]"
+                            />
+                            <span>
+                              Saya mengizinkan pengurus meneruskan nomor WhatsApp atau email saya kepada pemohon mentoring terverifikasi saat dijadwalkan.{' '}
+                              <span className="text-[#92400E] font-semibold">*</span>
+                            </span>
+                          </label>
+                          {fieldErrors.mentorContactConsent && (
+                            <p id="err-mentor-contact" className="mt-1 pl-7 text-xs text-red-700 font-medium">
+                              {fieldErrors.mentorContactConsent}
+                            </p>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
@@ -531,6 +628,8 @@ export default function GabungPage() {
                   <input
                     id="agreeConsent"
                     type="checkbox"
+                    aria-invalid={fieldErrors.agreeConsent ? 'true' : undefined}
+                    aria-describedby={fieldErrors.agreeConsent ? 'err-consent' : undefined}
                     checked={formData.agreeConsent}
                     onChange={(e) => {
                       setFormData({ ...formData, agreeConsent: e.target.checked });
@@ -540,19 +639,19 @@ export default function GabungPage() {
                   />
                   <span>
                     Saya menyetujui{' '}
-                    <Link href="/privasi" className="underline decoration-[#B45309] underline-offset-4 hover:text-[#B45309]">
+                    <Link href="/privasi" className="underline decoration-[#92400E] underline-offset-4 hover:text-[#92400E]">
                       Kebijakan Privasi
                     </Link>{' '}
                     dan{' '}
-                    <Link href="/syarat" className="underline decoration-[#B45309] underline-offset-4 hover:text-[#B45309]">
+                    <Link href="/syarat" className="underline decoration-[#92400E] underline-offset-4 hover:text-[#92400E]">
                       Ketentuan Komunitas
                     </Link>{' '}
                     agar data ini dicatat pengurus untuk verifikasi alumni dan kabar kopdar.{' '}
-                    <span className="text-[#B45309]">*</span>
+                    <span className="text-[#92400E]">*</span>
                   </span>
                 </label>
                 {fieldErrors.agreeConsent && (
-                  <p className="text-xs text-red-700 font-medium pl-7">
+                  <p id="err-consent" className="text-xs text-red-700 font-medium pl-7">
                     {fieldErrors.agreeConsent}
                   </p>
                 )}

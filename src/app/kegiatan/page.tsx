@@ -22,9 +22,9 @@ export default function KegiatanPage() {
 
   const categories = [
     { id: 'Semua', label: 'Semua Kopdar' },
-    { id: 'Kopdar Rutin', label: 'Kopdar Wilayah' },
-    { id: 'Berbagi Pengalaman', label: 'Berbagi Pengalaman' },
-    { id: 'Kumpul Wirausaha', label: 'Temu Wirausaha' },
+    { id: 'Kopdar Wilayah', label: 'Kopdar Wilayah' },
+    { id: 'Mentoring Alumni', label: 'Mentoring Alumni' },
+    { id: 'Info Kerja & Usaha', label: 'Info Kerja & Usaha' },
   ];
 
   useEffect(() => {
@@ -253,10 +253,10 @@ export default function KegiatanPage() {
                 {isFeaturedRsvp ? (
                   <>
                     <CheckCircle2 className="w-4 h-4" />
-                    <span>Hadir (Simulasi)</span>
+                    <span>Tercatat ikut (Simulasi)</span>
                   </>
                 ) : (
-                  <span>Daftar Hadir ({DEMO_BADGE_LABEL})</span>
+                  <span>Daftar ikut ({DEMO_BADGE_LABEL})</span>
                 )}
               </button>
             </div>
@@ -317,7 +317,7 @@ export default function KegiatanPage() {
                           : 'bg-[#F3F1EA] text-[#0C2340] hover:bg-[#0C2340] hover:text-white'
                       }`}
                     >
-                      {isRsvped ? 'Tercatat Hadir' : 'Tandai Berminat Hadir'}
+                      {isRsvped ? 'Tercatat ikut' : 'Daftar ikut'}
                     </button>
                   </div>
                 </motion.article>

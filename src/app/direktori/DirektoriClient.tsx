@@ -23,9 +23,6 @@ import {
   MapPin,
   CheckCircle2,
   MessageSquare,
-  Building2,
-  UserPlus,
-  HeartHandshake,
   Lock,
   ArrowRight,
 } from 'lucide-react';
@@ -340,98 +337,59 @@ export default function DirektoriPage() {
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
             <AnimatePresence mode="popLayout">
-              {filteredAlumni.map((alumni) => {
-                const isRequested = connectionRequested[alumni.id];
-                return (
-                  <motion.article
-                    key={alumni.id}
-                    layout={!shouldReduceMotion}
-                    initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.98 }}
-                    transition={{ duration: 0.2 }}
-                    className="bg-white border border-[#0C2340]/12 hover:border-[#0C2340]/40 rounded-2xl p-4 sm:p-5 flex flex-col justify-between gap-4 shadow-2xs transition-all"
-                  >
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setActiveProfileTab('tentang');
-                        setSelectedAlumni(alumni);
-                      }}
-                      className="text-left w-full space-y-3 cursor-pointer"
-                    >
-                      <div className="flex items-start gap-3.5">
-                        <div className="w-12 h-12 rounded-full overflow-hidden border border-[#0C2340]/10 bg-[#F3F1EA] shrink-0 relative">
-                          {alumni.avatarUrl ? (
-                            <Image
-                              src={alumni.avatarUrl}
-                              alt={`Foto profil ${alumni.nama}`}
-                              fill
-                              sizes="48px"
-                              className="object-cover"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-[#0C2340] text-[#F59E0B] font-bold text-sm">
-                              {alumni.avatarInitials}
-                            </div>
-                          )}
+              {filteredAlumni.map((alumni) => (
+                <motion.article
+                  key={alumni.id}
+                  layout={!shouldReduceMotion}
+                  initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.2 }}
+                  className="bg-white border border-[#0C2340]/12 hover:border-[#0C2340]/40 rounded-2xl p-4 sm:p-5 flex flex-col justify-between gap-4 shadow-2xs transition-all"
+                >
+                  <div className="flex items-start gap-3.5">
+                    <div className="w-12 h-12 rounded-full overflow-hidden border border-[#0C2340]/10 bg-[#F3F1EA] shrink-0 relative">
+                      {alumni.avatarUrl ? (
+                        <Image
+                          src={alumni.avatarUrl}
+                          alt={`Foto profil ${alumni.nama}`}
+                          fill
+                          sizes="48px"
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-[#0C2340] text-[#F59E0B] font-bold text-sm">
+                          {alumni.avatarInitials}
                         </div>
-
-                        <div className="space-y-1 min-w-0 flex-1">
-                          <div className="flex flex-wrap items-center gap-1.5">
-                            <h2 className="text-base font-bold text-[#0C2340] truncate max-w-full">
-                              {alumni.nama}
-                            </h2>
-                            {alumni.bersediaMentoring && (
-                              <span className="inline-flex items-center gap-1 bg-[#FEF3C7] text-[#92400E] text-[11px] px-2 py-0.5 rounded font-semibold">
-                                <HeartHandshake className="w-3 h-3" />
-                                Mentor
-                              </span>
-                            )}
-                          </div>
-
-                          <p className="text-xs text-[#475569] truncate">
-                            {alumni.prodi} · &apos;{String(alumni.angkatan).slice(-2)}
-                          </p>
-                          <p className="text-xs text-[#0C2340] font-medium flex items-center gap-1 pt-0.5 truncate">
-                            <Building2 className="w-3.5 h-3.5 text-[#475569] shrink-0" />
-                            <span className="truncate">{alumni.pekerjaan}</span>
-                          </p>
-                        </div>
-                      </div>
-                    </button>
-
-                    <div className="flex items-center justify-between gap-2 pt-3 border-t border-[#0C2340]/10 text-xs">
-                      <span className="inline-flex items-center gap-1 text-[#475569] truncate">
-                        <MapPin className="w-3.5 h-3.5 text-[#B45309] shrink-0" />
-                        <span className="truncate">{alumni.wilayah}</span>
-                      </span>
-
-                      <button
-                        type="button"
-                        onClick={(e) => toggleConnection(alumni.id, e)}
-                        className={`inline-flex items-center gap-1 min-h-[44px] px-3 py-1.5 rounded-lg font-semibold transition-colors cursor-pointer shrink-0 ${
-                          isRequested
-                            ? 'bg-[#0C2340]/10 text-[#0C2340]'
-                            : 'bg-[#F3F1EA] hover:bg-[#0C2340] text-[#0C2340] hover:text-white'
-                        }`}
-                      >
-                        {isRequested ? (
-                          <>
-                            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-700" />
-                            <span>Diminta</span>
-                          </>
-                        ) : (
-                          <>
-                            <UserPlus className="w-3.5 h-3.5" />
-                            <span>Sapa Rekan</span>
-                          </>
-                        )}
-                      </button>
+                      )}
                     </div>
-                  </motion.article>
-                );
-              })}
+
+                    <div className="space-y-1 min-w-0 flex-1">
+                      <h2 className="text-base font-bold text-[#0C2340] truncate">
+                        {alumni.nama}
+                      </h2>
+                      <p className="text-xs text-[#475569] truncate">
+                        {alumni.prodi} · &apos;{String(alumni.angkatan).slice(-2)}
+                      </p>
+                      <p className="text-xs text-[#0C2340] font-medium truncate">
+                        {alumni.industri}
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveProfileTab('tentang');
+                      setSelectedAlumni(alumni);
+                    }}
+                    className="w-full inline-flex items-center justify-center gap-1.5 min-h-[44px] px-4 py-2 rounded-lg bg-[#F3F1EA] hover:bg-[#0C2340] text-[#0C2340] hover:text-white text-xs font-semibold transition-colors cursor-pointer"
+                  >
+                    <span>Lihat profil</span>
+                    <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+                  </button>
+                </motion.article>
+              ))}
             </AnimatePresence>
           </div>
         )}
