@@ -7,6 +7,7 @@ import { Navbar, Footer } from '@/components/Navigation';
 import { getAlumniList, getKegiatanList } from '@/data/simulasi';
 import { WILAYAH_JABODETABEK, normalizeIndonesianWhatsApp } from '@/data/ums-prodi';
 import { IS_DEMO_MODE, COMMUNITY_PLACEHOLDERS, DEMO_BADGE_LABEL } from '@/lib/config';
+import { PatternSection, PatternDivider } from '@/components/PatternSection';
 import {
   ArrowRight,
   CheckCircle2,
@@ -105,12 +106,19 @@ export default function HomePage() {
     <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
       <Navbar />
 
-      <main className="flex-grow">
-        {/* 1. HERO — Janji jelas, SATU CTA utama, foto dokumentasi tunggal */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-14 lg:pt-16 lg:pb-20">
+      <main className="flex-grow page-grain-base">
+        {/* 1. HERO — pattern-batik memudar ke sisi kanan, area teks kiri bersih, SATU CTA utama */}
+        <PatternSection
+          variant="batik"
+          tone="light"
+          fade="right-focus"
+          patternOpacity={0.075}
+          patternSize="64px"
+          contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-12 lg:pt-16 lg:pb-16"
+        >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             <div className="lg:col-span-6 space-y-6">
-              <div className="inline-flex flex-wrap items-center gap-2 text-xs font-semibold text-[#92400E] bg-[#FEF3C7]/75 border border-[#B45309]/20 px-3 py-1 rounded-full">
+              <div className="inline-flex flex-wrap items-center gap-2 text-xs font-semibold text-[#92400E] bg-[#FEF3C7]/85 border border-[#B45309]/20 px-3 py-1 rounded-full">
                 <span>Pendataan Awal · IKA UMS Wilayah Jabodetabek</span>
                 {IS_DEMO_MODE && <span className="underline">({DEMO_BADGE_LABEL})</span>}
               </div>
@@ -135,7 +143,7 @@ export default function HomePage() {
                 </Link>
                 <Link
                   href="/masuk"
-                  className="inline-flex items-center justify-center sm:justify-start min-h-[44px] px-2 text-sm font-semibold text-[#0C2340] hover:text-[#B45309] underline underline-offset-4 transition-colors"
+                  className="inline-flex items-center justify-center sm:justify-start min-h-[44px] px-2 text-sm font-semibold text-[#0C2340] hover:text-[#92400E] underline underline-offset-4 transition-colors"
                 >
                   Sudah terdaftar? Masuk
                 </Link>
@@ -150,7 +158,7 @@ export default function HomePage() {
             </div>
 
             <div className="lg:col-span-6">
-              <figure className="bg-white border border-[#0C2340]/12 rounded-2xl overflow-hidden shadow-xs">
+              <figure className="surface-card rounded-2xl overflow-hidden">
                 <div className="aspect-[16/10] w-full bg-[#F3F1EA] relative overflow-hidden">
                   <Image
                     src="/images/alumni-gathering-4.jpg"
@@ -163,18 +171,25 @@ export default function HomePage() {
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <figcaption className="px-4 py-3 text-xs sm:text-sm text-[#475569] border-t border-[#0C2340]/10 leading-relaxed">
+                <figcaption className="px-4 py-3 text-xs sm:text-sm text-[#475569] border-t border-[#0C2340]/10 leading-relaxed bg-white">
                   {COMMUNITY_PLACEHOLDERS.documentationCaption}
                 </figcaption>
               </figure>
             </div>
           </div>
-        </section>
+        </PatternSection>
 
-        {/* 2. APA YANG KAMU DAPAT — Tata letak garis editorial tanpa kartu berat */}
-        <section
+        <PatternDivider variant="curve" fromColor="#FDFCF7" toColor="#F3F1EA" />
+
+        {/* 2. APA YANG KAMU DAPAT — pattern-dots sangat halus di atas latar krem hangat */}
+        <PatternSection
           aria-labelledby="manfaat-heading"
-          className="border-t border-[#0C2340]/10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16"
+          variant="dots"
+          tone="tint"
+          fade="soft-edges"
+          patternOpacity={0.06}
+          patternSize="24px"
+          contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16"
         >
           <div className="mb-8 sm:mb-10 max-w-xl">
             <h2 id="manfaat-heading" className="text-2xl sm:text-3xl font-bold tracking-tight text-[#0C2340]">
@@ -182,8 +197,8 @@ export default function HomePage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
-            <div className="pt-4 border-t-2 border-[#0C2340] space-y-2">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            <div className="surface-card rounded-xl p-5 sm:p-6 border-t-2 border-t-[#0C2340] space-y-2">
               <h3 className="text-lg font-bold text-[#0C2340]">
                 Kenalan Satu Wilayah
               </h3>
@@ -193,7 +208,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="pt-4 border-t-2 border-[#B45309] space-y-2">
+            <div className="surface-card rounded-xl p-5 sm:p-6 border-t-2 border-t-[#92400E] space-y-2">
               <h3 className="text-lg font-bold text-[#0C2340]">
                 Mentoring CV &amp; Interview
               </h3>
@@ -203,7 +218,7 @@ export default function HomePage() {
               </p>
             </div>
 
-            <div className="pt-4 border-t-2 border-[#0C2340]/40 space-y-2">
+            <div className="surface-card rounded-xl p-5 sm:p-6 border-t-2 border-t-[#0C2340]/45 space-y-2">
               <h3 className="text-lg font-bold text-[#0C2340]">
                 Info Kerja &amp; Usaha Antaralumni
               </h3>
@@ -213,12 +228,14 @@ export default function HomePage() {
               </p>
             </div>
           </div>
-        </section>
+        </PatternSection>
 
-        {/* 3. CARA KERJANYA — Strip datar berlatar krem hangat */}
+        <PatternDivider variant="curve" fromColor="#F3F1EA" toColor="#FDFCF7" />
+
+        {/* 3. CARA KERJANYA — Polos (ritme berselang dari section berpola dots) */}
         <section
           aria-labelledby="cara-kerja-heading"
-          className="bg-[#F3F1EA] border-y border-[#0C2340]/10 py-12 sm:py-14"
+          className="py-12 sm:py-16 relative z-[1]"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 id="cara-kerja-heading" className="text-2xl font-bold tracking-tight text-[#0C2340] mb-8">
@@ -226,7 +243,7 @@ export default function HomePage() {
             </h2>
 
             <ol className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-              <li className="space-y-1.5">
+              <li className="surface-card-soft rounded-xl p-5 sm:p-6 space-y-1.5">
                 <p className="text-xs font-bold text-[#92400E] tracking-wider uppercase">
                   Langkah 01
                 </p>
@@ -238,7 +255,7 @@ export default function HomePage() {
                 </p>
               </li>
 
-              <li className="space-y-1.5">
+              <li className="surface-card-soft rounded-xl p-5 sm:p-6 space-y-1.5">
                 <p className="text-xs font-bold text-[#92400E] tracking-wider uppercase">
                   Langkah 02
                 </p>
@@ -250,7 +267,7 @@ export default function HomePage() {
                 </p>
               </li>
 
-              <li className="space-y-1.5">
+              <li className="surface-card-soft rounded-xl p-5 sm:p-6 space-y-1.5">
                 <p className="text-xs font-bold text-[#92400E] tracking-wider uppercase">
                   Langkah 03
                 </p>
@@ -265,11 +282,18 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* 4. KOPDAR PERTAMA — Form minat wilayah + hari yang cocok (menggantikan 9 kartu panjang) */}
-        <section
+        <PatternDivider variant="curve" fromColor="#FDFCF7" toColor="#F3F1EA" />
+
+        {/* 4. KOPDAR PERTAMA & PEMILIH WILAYAH — pattern-contour memudar dari kanan atas, kartu form putih bersih */}
+        <PatternSection
           id="kopdar"
           aria-labelledby="kopdar-heading"
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16"
+          variant="contour"
+          tone="tint"
+          fade="top-right"
+          patternOpacity={0.085}
+          patternSize="180px"
+          contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 sm:py-16"
         >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
             <div className="lg:col-span-5 space-y-4">
@@ -280,22 +304,22 @@ export default function HomePage() {
                 Jadwal kopdar perdana tiap wilayah disusun berdasarkan domisili dan waktu luang terbanyak dari pendaftar awal. Pilih wilayah dan hari yang paling cocok buat kamu.
               </p>
 
-              <div className="bg-white border border-[#0C2340]/12 rounded-xl p-4 sm:p-5 space-y-2 text-sm">
+              <div className="surface-card rounded-xl p-4 sm:p-5 space-y-2 text-sm">
                 <p className="font-bold text-[#0C2340] flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-[#B45309] shrink-0" />
+                  <Calendar className="w-4 h-4 text-[#92400E] shrink-0" />
                   <span>Jadwal &amp; Lokasi Terdekat</span>
                 </p>
                 <p className="text-[#475569]">
                   Tanggal: <strong className="text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.firstKopdarDate}</strong>
                 </p>
                 <p className="text-[#475569] flex items-start gap-2">
-                  <MapPin className="w-4 h-4 text-[#B45309] shrink-0 mt-0.5" />
+                  <MapPin className="w-4 h-4 text-[#92400E] shrink-0 mt-0.5" />
                   <span>{COMMUNITY_PLACEHOLDERS.firstKopdarLocation}</span>
                 </p>
               </div>
 
               {IS_DEMO_MODE && demoEvents.length > 0 && (
-                <div className="bg-[#F3F1EA] border border-[#0C2340]/12 rounded-xl p-4 space-y-2">
+                <div className="surface-card-soft rounded-xl p-4 space-y-2">
                   <div className="flex items-center justify-between gap-2">
                     <span className="text-xs font-bold text-[#0C2340]">Pratinjau Jadwal</span>
                     <span className="px-2 py-0.5 rounded-full bg-amber-100 text-[#92400E] text-[11px] font-semibold">
@@ -310,7 +334,7 @@ export default function HomePage() {
               <div>
                 <Link
                   href="/kegiatan"
-                  className="inline-flex items-center gap-1.5 min-h-[44px] text-sm font-semibold text-[#0C2340] hover:text-[#B45309] transition-colors"
+                  className="inline-flex items-center gap-1.5 min-h-[44px] text-sm font-semibold text-[#0C2340] hover:text-[#92400E] transition-colors"
                 >
                   Lihat halaman Jadwal Kopdar
                   <ArrowRight className="w-4 h-4" />
@@ -318,7 +342,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="lg:col-span-7 bg-white border border-[#0C2340]/12 rounded-2xl p-6 sm:p-8 shadow-xs">
+            <div className="lg:col-span-7 surface-card rounded-2xl p-6 sm:p-8">
               {!kopdarSubmitted ? (
                 <form onSubmit={handleKopdarSubmit} className="space-y-4" noValidate>
                   {/* Honeypot */}
@@ -485,16 +509,18 @@ export default function HomePage() {
               )}
             </div>
           </div>
-        </section>
+        </PatternSection>
 
-        {/* 5. DOKUMENTASI PERTEMUAN */}
+        <PatternDivider variant="curve" fromColor="#F3F1EA" toColor="#FDFCF7" />
+
+        {/* 5. DOKUMENTASI PERTEMUAN — Tetap bersih (latar putih hangat + grain kertas dasar) */}
         <section
           aria-labelledby="dokumentasi-heading"
-          className="border-t border-[#0C2340]/10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14"
+          className="relative z-[1] max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14"
         >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-7">
-              <div className="aspect-[16/9] w-full rounded-2xl overflow-hidden bg-[#F3F1EA] border border-[#0C2340]/12 relative">
+              <div className="aspect-[16/9] w-full rounded-2xl overflow-hidden bg-[#F3F1EA] surface-card relative">
                 <Image
                   src="/images/hero-kumpul-bolo-pisah.jpg"
                   alt="Dokumentasi kumpul alumni Universitas Muhammadiyah Surakarta"
@@ -518,7 +544,7 @@ export default function HomePage() {
               </p>
               <Link
                 href="/peta"
-                className="inline-flex items-center gap-1.5 min-h-[44px] text-sm font-semibold text-[#0C2340] hover:text-[#B45309] transition-colors"
+                className="inline-flex items-center gap-1.5 min-h-[44px] text-sm font-semibold text-[#0C2340] hover:text-[#92400E] transition-colors"
               >
                 Lihat cakupan 9 wilayah Jabodetabek
                 <ArrowRight className="w-4 h-4" />
@@ -527,136 +553,153 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* 6. MENTORING ALUMNI — Dua tombol jelas (Cari Mentor & Daftar Jadi Mentor) */}
-        <section
-          aria-labelledby="mentoring-heading"
-          className="bg-[#F3F1EA] border-y border-[#0C2340]/10 py-14"
-        >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
-              <div className="max-w-2xl space-y-2.5">
-                <h2 id="mentoring-heading" className="text-2xl sm:text-3xl font-bold tracking-tight text-[#0C2340]">
-                  Mentoring Alumni
-                </h2>
-                <p className="text-sm sm:text-base text-[#475569] leading-relaxed">
-                  Lulusan baru bisa meminta masukan CV dan persiapan wawancara, sementara alumni
-                  berpengalaman bisa mendaftarkan diri sebagai mentor sukarela di bidang masing-masing.
-                </p>
-              </div>
+        <PatternDivider variant="gradient" />
 
-              <div className="flex flex-wrap items-center gap-3 shrink-0">
-                <Link
-                  href="/peluang#mentoring"
-                  className="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 py-2.5 rounded-xl bg-[#0C2340] hover:bg-[#16325C] text-white text-sm font-semibold transition-colors"
-                >
-                  Cari Mentor
-                </Link>
-                <Link
-                  href="/gabung?mentor=ya"
-                  className="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 py-2.5 rounded-xl bg-white border border-[#0C2340]/20 hover:border-[#0C2340]/45 text-[#0C2340] text-sm font-semibold transition-colors"
-                >
-                  Daftar Jadi Mentor
-                </Link>
-              </div>
+        {/* 6. MENTORING ALUMNI — Bersih tanpa pola geometris (hanya tone krem ringan & grain halus) */}
+        <PatternSection
+          aria-labelledby="mentoring-heading"
+          variant="grain"
+          tone="tint"
+          fade="none"
+          patternOpacity={0.03}
+          contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 space-y-8"
+        >
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div className="max-w-2xl space-y-2.5">
+              <h2 id="mentoring-heading" className="text-2xl sm:text-3xl font-bold tracking-tight text-[#0C2340]">
+                Mentoring Alumni
+              </h2>
+              <p className="text-sm sm:text-base text-[#475569] leading-relaxed">
+                Lulusan baru bisa meminta masukan CV dan persiapan wawancara, sementara alumni
+                berpengalaman bisa mendaftarkan diri sebagai mentor sukarela di bidang masing-masing.
+              </p>
             </div>
 
-            {IS_DEMO_MODE && demoMentors.length > 0 && (
-              <div className="space-y-3">
-                <span className="inline-block px-2.5 py-0.5 rounded-full bg-amber-100 text-[#92400E] text-xs font-semibold">
-                  {DEMO_BADGE_LABEL}
-                </span>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {demoMentors.map((m) => (
-                    <div key={m.id} className="bg-white border border-[#0C2340]/12 rounded-xl p-5 space-y-1.5">
-                      <h3 className="text-base font-bold text-[#0C2340]">{m.nama}</h3>
-                      <p className="text-xs text-[#475569]">
-                        {m.prodi} &apos;{String(m.angkatan).slice(-2)} · {m.wilayah}
-                      </p>
-                      <p className="text-sm text-[#0C2340] font-medium pt-1">
-                        {m.mentoringFokus || m.pekerjaan}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+            <div className="flex flex-wrap items-center gap-3 shrink-0">
+              <Link
+                href="/peluang#mentoring"
+                className="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 py-2.5 rounded-xl bg-[#0C2340] hover:bg-[#16325C] text-white text-sm font-semibold transition-colors shadow-xs"
+              >
+                Cari Mentor
+              </Link>
+              <Link
+                href="/gabung?mentor=ya"
+                className="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 py-2.5 rounded-xl bg-white border border-[#0C2340]/20 hover:border-[#0C2340]/45 text-[#0C2340] text-sm font-semibold transition-colors shadow-2xs"
+              >
+                Daftar Jadi Mentor
+              </Link>
+            </div>
           </div>
-        </section>
 
-        {/* 7. FAQ PENDEK — Pertanyaan yang sering diajukan alumni sebelum mendaftar */}
+          {IS_DEMO_MODE && demoMentors.length > 0 && (
+            <div className="space-y-3">
+              <span className="inline-block px-2.5 py-0.5 rounded-full bg-amber-100 text-[#92400E] text-xs font-semibold">
+                {DEMO_BADGE_LABEL}
+              </span>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {demoMentors.map((m) => (
+                  <div key={m.id} className="surface-card rounded-xl p-5 space-y-1.5">
+                    <h3 className="text-base font-bold text-[#0C2340]">{m.nama}</h3>
+                    <p className="text-xs text-[#475569]">
+                      {m.prodi} &apos;{String(m.angkatan).slice(-2)} · {m.wilayah}
+                    </p>
+                    <p className="text-sm text-[#0C2340] font-medium pt-1">
+                      {m.mentoringFokus || m.pekerjaan}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </PatternSection>
+
+        <PatternDivider variant="curve" fromColor="#F3F1EA" toColor="#FDFCF7" />
+
+        {/* 7. FAQ PENDEK — Benar-benar polos agar teks mudah dibaca */}
         <section
           aria-labelledby="faq-heading"
-          className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-14"
+          className="bg-[#FDFCF7] relative z-[1] py-14"
         >
-          <h2 id="faq-heading" className="text-2xl sm:text-3xl font-bold tracking-tight text-[#0C2340] mb-6">
-            Pertanyaan yang Sering Diajukan
-          </h2>
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 id="faq-heading" className="text-2xl sm:text-3xl font-bold tracking-tight text-[#0C2340] mb-6">
+              Pertanyaan yang Sering Diajukan
+            </h2>
 
-          <div className="divide-y divide-[#0C2340]/12 border-y border-[#0C2340]/12">
-            <details className="group py-2">
-              <summary className="list-none flex items-center justify-between gap-4 min-h-[44px] py-2 font-semibold text-sm sm:text-base text-[#0C2340] cursor-pointer">
-                <span>Apakah bergabung di IKA UMS Jabodetabek berbayar?</span>
-                <ChevronDown className="w-4 h-4 shrink-0 text-[#475569] transition-transform group-open:rotate-180" />
-              </summary>
-              <p className="pb-4 text-sm text-[#475569] leading-relaxed">
-                Gratis. Pendaftaran keanggotaan dan partisipasi awal komunitas tidak memungut iuran wajib.
-              </p>
-            </details>
+            <div className="divide-y divide-[#0C2340]/12 border-y border-[#0C2340]/12">
+              <details className="group py-2">
+                <summary className="list-none flex items-center justify-between gap-4 min-h-[44px] py-2 font-semibold text-sm sm:text-base text-[#0C2340] cursor-pointer">
+                  <span>Apakah bergabung di IKA UMS Jabodetabek berbayar?</span>
+                  <ChevronDown className="w-4 h-4 shrink-0 text-[#475569] transition-transform group-open:rotate-180" />
+                </summary>
+                <p className="pb-4 text-sm text-[#475569] leading-relaxed">
+                  Gratis. Pendaftaran keanggotaan dan partisipasi awal komunitas tidak memungut iuran wajib.
+                </p>
+              </details>
 
-            <details className="group py-2">
-              <summary className="list-none flex items-center justify-between gap-4 min-h-[44px] py-2 font-semibold text-sm sm:text-base text-[#0C2340] cursor-pointer">
-                <span>Apakah nomor WhatsApp dan email saya ditampilkan terbuka?</span>
-                <ChevronDown className="w-4 h-4 shrink-0 text-[#475569] transition-transform group-open:rotate-180" />
-              </summary>
-              <p className="pb-4 text-sm text-[#475569] leading-relaxed">
-                Tidak. Nomor WhatsApp dan email disimpan tertutup untuk verifikasi pengurus serta info
-                kopdar. Saat mendaftar, pilihan tampil di Daftar Anggota juga bawaan Tidak aktif
-                kecuali kamu menyetujuinya sendiri. Selengkapnya di{' '}
-                <Link href="/privasi" className="font-semibold text-[#0C2340] underline underline-offset-4">
-                  Kebijakan Privasi
-                </Link>.
-              </p>
-            </details>
+              <details className="group py-2">
+                <summary className="list-none flex items-center justify-between gap-4 min-h-[44px] py-2 font-semibold text-sm sm:text-base text-[#0C2340] cursor-pointer">
+                  <span>Apakah nomor WhatsApp dan email saya ditampilkan terbuka?</span>
+                  <ChevronDown className="w-4 h-4 shrink-0 text-[#475569] transition-transform group-open:rotate-180" />
+                </summary>
+                <p className="pb-4 text-sm text-[#475569] leading-relaxed">
+                  Tidak. Nomor WhatsApp dan email disimpan tertutup untuk verifikasi pengurus serta info
+                  kopdar. Saat mendaftar, pilihan tampil di Daftar Anggota juga bawaan Tidak aktif
+                  kecuali kamu menyetujuinya sendiri. Selengkapnya di{' '}
+                  <Link href="/privasi" className="font-semibold text-[#0C2340] underline underline-offset-4">
+                    Kebijakan Privasi
+                  </Link>.
+                </p>
+              </details>
 
-            <details className="group py-2">
-              <summary className="list-none flex items-center justify-between gap-4 min-h-[44px] py-2 font-semibold text-sm sm:text-base text-[#0C2340] cursor-pointer">
-                <span>Siapa yang mengelola komunitas ini?</span>
-                <ChevronDown className="w-4 h-4 shrink-0 text-[#475569] transition-transform group-open:rotate-180" />
-              </summary>
-              <p className="pb-4 text-sm text-[#475569] leading-relaxed">
-                Komunitas dikelola oleh tim pengurus wilayah dan koordinator dari 9 kota/kabupaten di
-                Jabodetabek. Susunan jabatan dan kontak resmi tersedia di halaman{' '}
-                <Link href="/kepengurusan" className="font-semibold text-[#0C2340] underline underline-offset-4">
-                  Pengurus &amp; Kontak
-                </Link>.
-              </p>
-            </details>
+              <details className="group py-2">
+                <summary className="list-none flex items-center justify-between gap-4 min-h-[44px] py-2 font-semibold text-sm sm:text-base text-[#0C2340] cursor-pointer">
+                  <span>Siapa yang mengelola komunitas ini?</span>
+                  <ChevronDown className="w-4 h-4 shrink-0 text-[#475569] transition-transform group-open:rotate-180" />
+                </summary>
+                <p className="pb-4 text-sm text-[#475569] leading-relaxed">
+                  Komunitas dikelola oleh tim pengurus wilayah dan koordinator dari 9 kota/kabupaten di
+                  Jabodetabek. Susunan jabatan dan kontak resmi tersedia di halaman{' '}
+                  <Link href="/kepengurusan" className="font-semibold text-[#0C2340] underline underline-offset-4">
+                    Pengurus &amp; Kontak
+                  </Link>.
+                </p>
+              </details>
 
-            <details className="group py-2">
-              <summary className="list-none flex items-center justify-between gap-4 min-h-[44px] py-2 font-semibold text-sm sm:text-base text-[#0C2340] cursor-pointer">
-                <span>Bagaimana hubungannya dengan IKA UMS Pusat?</span>
-                <ChevronDown className="w-4 h-4 shrink-0 text-[#475569] transition-transform group-open:rotate-180" />
-              </summary>
-              <p className="pb-4 text-sm text-[#475569] leading-relaxed">
-                Jaringan ini ditujukan sebagai simpul wilayah Jakarta, Bogor, Depok, Tangerang, dan
-                Bekasi bagi alumni Universitas Muhammadiyah Surakarta ({COMMUNITY_PLACEHOLDERS.ppIkaUmsStatus}).
-                Informasi lanjut mengenai koordinasi resmi tersedia di halaman{' '}
-                <Link href="/tentang" className="font-semibold text-[#0C2340] underline underline-offset-4">
-                  Tentang Komunitas
-                </Link>.
-              </p>
-            </details>
+              <details className="group py-2">
+                <summary className="list-none flex items-center justify-between gap-4 min-h-[44px] py-2 font-semibold text-sm sm:text-base text-[#0C2340] cursor-pointer">
+                  <span>Bagaimana hubungannya dengan IKA UMS Pusat?</span>
+                  <ChevronDown className="w-4 h-4 shrink-0 text-[#475569] transition-transform group-open:rotate-180" />
+                </summary>
+                <p className="pb-4 text-sm text-[#475569] leading-relaxed">
+                  Jaringan ini ditujukan sebagai simpul wilayah Jakarta, Bogor, Depok, Tangerang, dan
+                  Bekasi bagi alumni Universitas Muhammadiyah Surakarta ({COMMUNITY_PLACEHOLDERS.ppIkaUmsStatus}).
+                  Informasi lanjut mengenai koordinasi resmi tersedia di halaman{' '}
+                  <Link href="/tentang" className="font-semibold text-[#0C2340] underline underline-offset-4">
+                    Tentang Komunitas
+                  </Link>.
+                </p>
+              </details>
+            </div>
           </div>
         </section>
 
-        {/* 8. CTA PENUTUP */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14">
-          <div className="bg-[#0C2340] text-white rounded-2xl p-6 sm:p-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        {/* 8. CTA PENUTUP — Tone brand tua (#0C2340) + pattern-batik terang memudar */}
+        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-14 relative z-[1]">
+          <PatternSection
+            as="div"
+            variant="batik"
+            tone="brand"
+            fade="radial-soft"
+            patternOpacity={0.08}
+            patternSize="68px"
+            className="rounded-2xl p-6 sm:p-10 border border-[#0C2340] shadow-[0_14px_34px_-12px_rgba(12,35,64,0.28)]"
+            contentClassName="flex flex-col md:flex-row md:items-center justify-between gap-6"
+          >
             <div className="space-y-2 max-w-xl">
               <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
                 Ikut Mendata Dirimu di Wilayah Jabodetabek
               </h2>
-              <p className="text-sm sm:text-base text-white/80 leading-relaxed">
+              <p className="text-sm sm:text-base text-white/85 leading-relaxed">
                 Semakin lengkap data awal tiap kota dan kabupaten, semakin cepat jadwal kopdar
                 perdana dan grup wilayah dapat disusun bersama.
               </p>
@@ -676,7 +719,7 @@ export default function HomePage() {
                 Hubungi pengurus
               </Link>
             </div>
-          </div>
+          </PatternSection>
         </section>
       </main>
 

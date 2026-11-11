@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { Menu, X, ArrowRight, ChevronDown, ExternalLink } from 'lucide-react';
 import { IS_DEMO_MODE, COMMUNITY_PLACEHOLDERS } from '@/lib/config';
+import { PatternSection, PatternDivider } from '@/components/PatternSection';
 
 interface NavSubItem {
   label: string;
@@ -443,8 +444,17 @@ export function Navbar() {
 
 export function Footer() {
   return (
-    <footer className="bg-[#0C2340] text-[#FDFCF7] border-t border-white/10 font-sans">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+    <footer className="text-[#FDFCF7] font-sans">
+      <PatternDivider variant="batik-rim" fromColor="#FDFCF7" toColor="#08182E" />
+      <PatternSection
+        as="div"
+        variant="batik"
+        tone="brand-deep"
+        fade="bottom-soft"
+        patternOpacity={0.045}
+        patternSize="88px"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10">
           <div className="md:col-span-6 space-y-3 sm:space-y-4">
             <Link
@@ -562,7 +572,8 @@ export function Footer() {
             Kanal resmi PP IKA UMS: {COMMUNITY_PLACEHOLDERS.ppIkaUmsChannelLabel}
           </p>
         </div>
-      </div>
+        </div>
+      </PatternSection>
     </footer>
   );
 }
