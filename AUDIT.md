@@ -161,3 +161,65 @@ Hasil pemindaian codebase menemukan pengulangan klise tinggi yang membuat situs 
 ## Catatan Infrastruktur Belum Ada (Scope Blockers untuk Frontend-Only)
 Karena proyek saat ini adalah situs statis/client-side tanpa database atau layanan autentikasi aktif:
 - Penyimpanan pendaftaran, OTP/magic link email & WhatsApp sungguhan, proteksi rate-limit sisi server, serta sesi login `/app` dan `/admin` memerlukan backend API/database (misalnya Next.js Route Handlers + Supabase/Postgres/Auth) sebelum rilis publik penuh. Pada Fase 2 ini, seluruh UI, validasi, gerbang privasi, flag `NEXT_PUBLIC_DEMO_MODE`, metadata SEO/OG, aksesibilitas, dan placeholder `[ISI: ...]` disiapkan agar siap disambungkan tanpa menampilkan satu pun klaim palsu.
+
+---
+
+## Lanjutan Audit (11 November 2026)
+
+Dokumen ini melanjutkan audit Fase 1/2 setelah perbaikan sebelumnya mendarat di riwayat commit (`9f1ab48`, `42c645e`, `88f19ce`, `f3ccb7b`, `2b34eee`, `90f2322`, `1c6c7b0`, dan seri pola visual `bec922e`..`4b93b73`). Bagian berikut merangkum celah tersisa yang terverifikasi di kode sumber sebelum perbaikan lanjutan dikerjakan.
+
+### Temuan Lanjutan
+
+1. **[Tinggi] Belum Ada Autentikasi Sisi Server & Isolasi Bundel Klien pada `/admin`, `/app`, dan `/direktori`**
+   - **Lokasi**: `src/app/admin/page.tsx`, `src/app/app/page.tsx`, `src/app/direktori/page.tsx`, belum adanya `src/proxy.ts` maupun `src/app/direktori/layout.tsx`
+   - **Masalah**: Ketiga rute saat ini dirender sebagai `'use client'` penuh. Permintaan HTTP tanpa sesi tetap menerima bundel halaman klien yang memuat referensi data simulasi (`DEMO_ANTREAN`, `DATA_ALUMNI_SIMULASI`, profil dummy), tidak ada verifikasi sesi cookie di sisi server maupun header `X-Robots-Tag: noindex, nofollow`, dan `/direktori` belum memblokir indeks mesin pencari melalui metadata `robots`.
+   - **Saran**: Tambahkan utilitas sesi server (`src/lib/server-auth.ts` dengan signed HTTP-only cookie HMAC-SHA256) dan `src/proxy.ts` (mekanisme Next.js 16) untuk menyisipkan `X-Robots-Tag: noindex, nofollow, noarchive` pada rute terproteksi serta gerbang sesi. Ubah entry `/admin`, `/app`, dan `/direktori` menjadi Server Component dengan `<Suspense>` (selaras `cacheComponents: true`) yang memisahkan komponen klien terproteksi agar tidak dikirim sebelum sesi terverifikasi, serta tambahkan `src/app/direktori/layout.tsx` (`robots: { index: false, follow: false }`).
+
+2. **[Tinggi] Formulir Mentoring Belum Memisahkan Persetujuan Berbagi Kontak ke Mentor**
+   - **Lokasi**: `src/app/peluang/page.tsx` (baris 275-393) & `src/app/gabung/page.tsx` (baris 507-575)
+   - **Masalah**: Modal permintaan mentoring di `/peluang` mengumpulkan nomor WhatsApp pendaftar tanpa checkbox persetujuan terpisah yang mengizinkan pengurus meneruskan nomor tersebut ke mentor terpilih; kolom `angkatanProdi` juga masih berupa teks bebas tanpa struktur fakultas/prodi; serta belum ada honeypot maupun pengunci klik kirim ganda. Di `/gabung`, mencentang `siapMentoring` juga belum meminta persetujuan eksplisit terpisah sebelum kontak mentor dibagikan ke pemohon mentoring terverifikasi.
+   - **Saran**: Tambahkan checkbox persetujuan kontak terpisah (default `false`) di modal `/peluang` dan di bawah opsi `siapMentoring` pada `/gabung`, ubah input bebas `angkatanProdi` di `/peluang` menjadi pemilih Prodi (`FAKULTAS_PRODI_UMS`) dan Angkatan (`ANGKATAN_OPTIONS`), tambahkan kolom honeypot tersembunyi (`tabIndex={-1}`, `aria-hidden="true"`), proteksi pengiriman ganda saat submit valid, dan fokus otomatis ke input tidak valid pertama saat gagal validasi.
+
+3. **[Tinggi] Sisa Frasa Klise, Nama Agenda Wilayah Tidak Konsisten, dan Filter `/kegiatan` Selalu Kosong**
+   - **Lokasi**: `src/data/jabodetabek-geo-meta.ts` (baris 39, 97, 126, 155, 184, 213, 242, 271) & `src/app/kegiatan/page.tsx` (baris 23-28, 146-149, 259)
+   - **Masalah**: Metadata wilayah di `jabodetabek-geo-meta.ts` masih berisi frasa klise dan nama kegiatan yang berbeda dari 3 item sumber tunggal `DATA_KEGIATAN_SIMULASI` (`"Kopdar Santai Tomang & Grogol"`, `"Silaturahmi Santai Rawamangun"`, `"Kopdar Santai Margonda"`, `"Jalan Santai Kebun Raya"`, `"Temu..."`, `"Bincang Bisnis..."`, `"Sarasehan Akbar..."`). Sementara itu, tab filter `/kegiatan` memakai label `'Kopdar Rutin'`, `'Berbagi Pengalaman'`, `'Kumpul Wirausaha'` (`"Temu Wirausaha"`) yang tidak pernah cocok dengan `DATA_KEGIATAN_SIMULASI[i].jenis` (`'Kopdar Wilayah'`, `'Mentoring Alumni'`, `'Info Kerja & Usaha'`), serta tombol aksi masih bertuliskan `"Daftar Hadir"`.
+   - **Saran**: Samakan referensi kegiatan demo wilayah dengan sumber `DATA_KEGIATAN_SIMULASI` tanpa frasa klise, selaraskan kategori filter `/kegiatan` dengan nilai `jenis` sebenarnya, dan ganti label tombol menjadi `"Daftar ikut"`.
+
+4. **[Sedang] Parameter Query `?mentor=ya` dan `?wilayah=...` Belum Mengisi Awal `/gabung`**
+   - **Lokasi**: `src/app/gabung/page.tsx` (tautan dari `src/app/page.tsx:586`, `src/app/peluang/page.tsx:138`, dan `src/components/peta/PetaContextualPanel.tsx`)
+   - **Masalah**: Mengklik `"Daftar jadi mentor"` (`/gabung?mentor=ya`) atau tautan daftar per wilayah dari `/peta` hanya membuka `/gabung` kosong tanpa mencentang opsi kesediaan mentor atau memilih domisili wilayah terkait.
+   - **Saran**: Baca query parameter `mentor` dan `wilayah` secara aman saat komponen dimuat (dicocokkan terhadap `WILAYAH_JABODETABEK`), buka blok opsional pekerjaan, dan aktifkan `siapMentoring` bila `mentor=ya`.
+
+5. **[Sedang] Kartu `/direktori` Masih Terlalu Padat Saat Mode Demo**
+   - **Lokasi**: `src/app/direktori/page.tsx` (baris 355-431)
+   - **Masalah**: Kartu direktori menampilkan badge peran, jabatan/perusahaan, wilayah, serta interaksi bertingkat (`Sapa Rekan` + tombol buka detail) sehingga padat dibaca di layar ponsel 390px.
+   - **Saran**: Sederhanakan isi kartu menjadi 5 elemen ringkas: foto, nama, prodi + angkatan, bidang kerja (`industri`), dan satu tombol (`Lihat profil`).
+
+6. **[Sedang] Penyimpangan Glosarium Tersisa & Kejelasan Status Tautan Footer**
+   - **Lokasi**: `src/app/peluang/page.tsx` (baris 106, 123, 168, 336, 377), `src/app/syarat/page.tsx` (baris 63, 101), `src/app/page.tsx` (baris 631), `src/app/cerita/page.tsx` (baris 209), `src/components/Navigation.tsx`
+   - **Masalah**: Masih terdapat kata `bimbingan`, `bergabung`, `"Sesi 1-on-1 singkat"`, `"Kirim Permintaan"`, dan `"Baca"` yang belum seragam dengan glosarium (`mentoring`, `mendaftar`, `Baca cerita`). Pada footer, tautan ke fitur anggota (`/direktori`, `/peluang`, `/peta`) saat pra-launch perlu penanda jujur agar pengunjung tidak mengira data direktori publik sudah tersedia.
+   - **Saran**: Terapkan istilah glosarium yang konsisten pada seluruh teks & CTA terkait, serta perjelas label tautan khusus anggota di footer bila `IS_DEMO_MODE` nonaktif.
+
+7. **[Sedang] Sisa Warna Kontras Rendah `#B45309` & Target Sentuh Mobile `< 44px` pada Dialog/Tab**
+   - **Lokasi**: Pemakaian `#B45309` pada teks/tautan di `Navigation.tsx:239`, `admin`, `app`, `cerita`, `direktori`, `gabung`, `kegiatan`, `kepengurusan`, `masuk`, `peluang`, `privasi`, `syarat`, `tentang`; komponen `src/components/ui/dialog.tsx:37,43` (`p-1.5`) & `src/components/ui/animated-tabs.tsx:54`
+   - **Masalah**: Nilai `#B45309` pada latar `#F3F1EA` berpola berada di bawah rasio kontras WCAG AA `4.5:1` untuk teks berukuran kecil. Tombol tutup modal (`p-1.5`) dan tombol tab belum menjamin tinggi sentuh minimum nyaman `44px`, dan modal belum mengatur `overscroll-behavior: contain`.
+   - **Saran**: Ubah ke `#92400E` (rasio kontras `>= 5.28:1`), terapkan `min-w-[44px] min-h-[44px]` pada tombol tutup dialog serta `min-h-[44px]` pada tombol tab, beri margin aman mobile `w-[calc(100%-2rem)]` pada konten dialog, dan tambahkan `overscroll-behavior: contain`.
+
+8. **[Rendah] Aset Foto Lama Tidak Terpakai di `public/images/` & Union Type Lama**
+   - **Lokasi**: `public/images/` (`hero-alumni.jpg`, `IMG_*.jpg`, dan file foto stok lain), `src/types/index.ts:63`
+   - **Masalah**: Sejumlah foto stok/mentah masih tersimpan di `public/images/` walau tidak lagi ditampilkan pada tampilan pra-launch jujur; union type lama masih menyisakan label lama.
+   - **Saran**: Catat pembersihan aset tidak terpakai ke `TODO-DATA.md` dan rapikan tipe union pada `src/types/index.ts`.
+
+---
+
+### Lanjutan Tabel Copywriting: Sebelum -> Sesudah (Baris 16-22)
+
+| # | Lokasi | Sebelum | Sesudah |
+|---:|---|---|---|
+| 16 | `src/data/jabodetabek-geo-meta.ts` | `"Kopdar Santai Tomang & Grogol"`, `"Silaturahmi Santai Rawamangun"`, `"Jalan Santai Kebun Raya"` | `[Belum ada jadwal]` di produksi; saat demo memakai judul seragam dari `DATA_KEGIATAN_SIMULASI` tanpa klise |
+| 17 | `src/app/kegiatan/page.tsx` | Filter `"Temu Wirausaha"` (`'Kumpul Wirausaha'`) & tombol `"Daftar Hadir"` | Filter `"Info Kerja & Usaha"` (cocok `DATA_KEGIATAN_SIMULASI.jenis`) & tombol `"Daftar ikut"` |
+| 18 | `src/app/peluang/page.tsx` | `"Sesuaikan dengan kebutuhan bimbingan karier atau usahamu."` & `"Sesi 1-on-1 singkat"` | `"Pilih fokus mentoring yang paling dekat dengan kondisi kerja atau usahamu."` & `"Sesi mentoring singkat"` |
+| 19 | `src/app/peluang/page.tsx` | `"Ajukan Topik Bimbingan"` & tombol `"Kirim Permintaan"` | `"Ajukan topik mentoring"` & tombol `"Kirim permintaan mentoring"` + checkbox persetujuan teruskan WhatsApp terpisah |
+| 20 | `src/app/syarat/page.tsx` | `"1. Siapa yang Dapat Bergabung"` & `"Pemohon bimbingan"` | `"1. Siapa yang Dapat Mendaftar"` & `"Pemohon mentoring"` |
+| 21 | `src/app/page.tsx` | `"Apakah bergabung di IKA UMS Jabodetabek berbayar?"` | `"Apakah mendaftar di IKA UMS Jabodetabek berbayar?"` |
+| 22 | `src/app/direktori/page.tsx` & `src/app/cerita/page.tsx` | Tombol kartu `"Sapa Rekan"` & `"Baca"` | Tombol kartu tunggal `"Lihat profil"` & `"Baca cerita"` |

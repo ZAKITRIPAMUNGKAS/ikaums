@@ -92,3 +92,13 @@ Lengkapi nama koordinator resmi beserta kontak WhatsApp / rencana lokasi temu pe
 
 - [ ] Sambungkan formulir `/gabung`, form minat kopdar (`/#kopdar`), dan form permintaan mentoring (`/peluang`) ke endpoint server/database (misalnya Supabase / API Route Next.js + notifikasi WhatsApp/Email pengurus) karena saat ini isian hanya tersimpan sementara di peramban pengguna (`localStorage`).
 - [ ] Pasang autentikasi sisi server (OTP WhatsApp / magic link email + session cookie `httpOnly` + middleware Next.js) untuk rute `/app` (`Profil Saya`), `/direktori` (`Daftar Anggota`), dan `/admin` (`Kelola Pendaftaran`, wajib role pengurus) sebelum mengaktifkan login publik.
+
+
+## Tambahan Lanjutan Audit (11 November 2026)
+
+### Keamanan, Autentikasi & Infrastruktur Sesi
+- `[ ]` **[ISI: AUTH_SESSION_SECRET / OTP Provider]**: Menentukan secret signing cookie sisi server (`AUTH_SESSION_SECRET`) dan layanan OTP/magic-link email atau WhatsApp untuk menerbitkan sesi terverifikasi menuju `/app`, `/direktori`, dan `/admin` (saat ini gerbang server sudah aktif menolak sesi tanpa cookie bertanda tangan valid).
+- `[ ]` **[ISI: Alur Persetujuan Kontak Mentoring]**: Menghubungkan endpoint penyimpanan persetujuan eksplisit terpisah (`mentorContactConsent`) baik dari formulir `/peluang` (penerusan WhatsApp pendaftar ke mentor) maupun `/gabung` (penerusan kontak mentor ke pemohon mentoring terverifikasi).
+
+### Pembersihan Aset Pra-Launch
+- `[ ]` **[ISI: Audit Foto `public/images/`]**: Menghapus atau mengganti file foto lama/stok di `public/images/` yang tidak terpakai pada tampilan pra-launch (`hero-alumni.jpg`, `IMG_*.jpg`, dan aset ilustrasi simulasi lain) setelah dokumentasi kopdar resmi tersedia.
