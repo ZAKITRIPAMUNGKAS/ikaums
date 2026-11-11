@@ -167,17 +167,20 @@ export default function GabungPage() {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div className="sm:col-span-2">
                   <label htmlFor="namaLengkap" className="block text-sm font-semibold text-[#0C2340] mb-1.5">
-                    Nama Lengkap <span className="text-[#D97706]">*</span>
+                    Nama Lengkap dengan Gelar <span className="text-[#D97706]">*</span>
                   </label>
                   <input
                     id="namaLengkap"
                     type="text"
                     required
-                    placeholder="Contoh: Bagus Prasetyo"
+                    placeholder="Contoh: Ir. Bagus Prasetyo, S.T., M.T."
                     value={formData.namaLengkap}
                     onChange={(e) => setFormData({ ...formData, namaLengkap: e.target.value })}
                     className="w-full px-4 py-2.5 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 focus:border-[#0C2340] focus:outline-hidden focus:ring-2 focus:ring-[#0C2340]/10 text-sm text-[#0C2340]"
                   />
+                  <p className="mt-1 text-xs text-[#64748B]">
+                    Cantumkan gelar akademik atau profesi di depan/belakang nama sesuai penulisan resmi Anda.
+                  </p>
                 </div>
 
                 <div>
