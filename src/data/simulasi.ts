@@ -1,130 +1,128 @@
 import { WilayahStatistik, AlumniProfile, EventKegiatan, CeritaDampak } from '../types';
-
-// Dataset demonstrasi resmi IKA UMS Connect Jabodetabek (data contoh untuk purwarupa komunitas).
-// Angka agregat disajikan dengan prinsip perlindungan privasi UU PDP No. 27/2022.
+import { IS_DEMO_MODE } from '../lib/config';
 
 export const DATASET_DISCLOSURE = {
   isDemonstrationData: true,
-  governanceModel: 'Inisiatif Komunitas Alumni UMS Jabodetabek',
-  privacyProtocol: 'Opt-In Consent & Agregasi Wilayah',
-  lastAuditDate: '2026-11-11'
+  governanceModel: 'Pengurus Inisiatif IKA UMS Wilayah Jabodetabek',
+  privacyProtocol: 'Persetujuan eksplisit sebelum tampil di Daftar Anggota',
 };
 
+// Konsisten dengan penjumlahan 9 wilayah contoh: 184+126+121+118+117+94+93+86+72 = 1011
 export const STATS_JABODETABEK = {
-  totalAlumni: 1248,
+  totalAlumni: 1011,
   totalWilayah: 9,
-  profesionalAktif: 326
+  totalMentor: 210,
 };
 
 export const DATA_WILAYAH_SIMULASI: WilayahStatistik[] = [
-  { 
-    id: 'jkt-selatan', 
-    nama: 'Jakarta Selatan', 
-    provinsi: 'DKI Jakarta', 
-    jumlahAlumni: 184, 
-    keteranganAman: '184 alumni tercatat', 
-    agendaTerdekat: 'Kopdar Bulanan di Cilandak', 
+  {
+    id: 'jkt-selatan',
+    nama: 'Jakarta Selatan',
+    provinsi: 'DKI Jakarta',
+    jumlahAlumni: 184,
+    keteranganAman: '184 contoh catatan wilayah',
+    agendaTerdekat: 'Kopdar Bulanan di Cilandak',
     isDataTerbatas: false,
-    titikKumpul: 'Kawasan Tebet, Blok M, & TB Simatupang',
-    koordinator: 'Fajar Nugroho (Hukum ’15)',
-    kontakWa: 'Grup WhatsApp Korwil Jaksel'
+    titikKumpul: 'Tebet, Blok M, & TB Simatupang',
+    koordinator: '[Contoh] Fajar Nugroho (Ilmu Hukum ’15)',
+    kontakWa: '[Contoh] Grup WA Wilayah Jaksel',
   },
-  { 
-    id: 'tangerang', 
-    nama: 'Tangerang Raya', 
-    provinsi: 'Banten', 
-    jumlahAlumni: 126, 
-    keteranganAman: '126 alumni tercatat', 
-    agendaTerdekat: 'Bincang Bisnis & Wirausaha BSD', 
+  {
+    id: 'tangerang',
+    nama: 'Tangerang Raya',
+    provinsi: 'Banten',
+    jumlahAlumni: 126,
+    keteranganAman: '126 contoh catatan wilayah',
+    agendaTerdekat: 'Kopdar Usaha & Karier BSD',
     isDataTerbatas: false,
     titikKumpul: 'BSD City, Gading Serpong, & Bintaro',
-    koordinator: 'Nurul Hidayati (Arsitektur ’17)',
-    kontakWa: 'Grup WhatsApp Korwil Tangerang'
+    koordinator: '[Contoh] Nurul Hidayati (Arsitektur ’17)',
+    kontakWa: '[Contoh] Grup WA Wilayah Tangerang',
   },
-  { 
-    id: 'jkt-timur', 
-    nama: 'Jakarta Timur', 
-    provinsi: 'DKI Jakarta', 
-    jumlahAlumni: 121, 
-    keteranganAman: '121 alumni tercatat', 
-    agendaTerdekat: 'Silaturahmi Santai Rawamangun', 
+  {
+    id: 'jkt-timur',
+    nama: 'Jakarta Timur',
+    provinsi: 'DKI Jakarta',
+    jumlahAlumni: 121,
+    keteranganAman: '121 contoh catatan wilayah',
+    agendaTerdekat: 'Kopdar Bulanan Rawamangun',
     isDataTerbatas: false,
     titikKumpul: 'Rawamangun, Cawang, & Buaran',
-    koordinator: 'Rizal Maulana (Manajemen ’17)',
-    kontakWa: 'Grup WhatsApp Korwil Jaktim'
+    koordinator: '[Contoh] Rizal Maulana (Manajemen ’17)',
+    kontakWa: '[Contoh] Grup WA Wilayah Jaktim',
   },
-  { 
-    id: 'jkt-barat', 
-    nama: 'Jakarta Barat', 
-    provinsi: 'DKI Jakarta', 
-    jumlahAlumni: 118, 
-    keteranganAman: '118 alumni tercatat', 
-    agendaTerdekat: 'Ngopi Sore Tomang & Grogol', 
+  {
+    id: 'jkt-barat',
+    nama: 'Jakarta Barat',
+    provinsi: 'DKI Jakarta',
+    jumlahAlumni: 118,
+    keteranganAman: '118 contoh catatan wilayah',
+    agendaTerdekat: 'Pertemuan Anggota Tomang & Grogol',
     isDataTerbatas: false,
     titikKumpul: 'Tomang, Tanjung Duren, & Puri Indah',
-    koordinator: 'Bagus Saputro (Ilmu Komunikasi ’16)',
-    kontakWa: 'Grup WhatsApp Korwil Jakbar'
+    koordinator: '[Contoh] Bagus Saputro (Ilmu Komunikasi ’16)',
+    kontakWa: '[Contoh] Grup WA Wilayah Jakbar',
   },
-  { 
-    id: 'bekasi', 
-    nama: 'Bekasi', 
-    provinsi: 'Jawa Barat', 
-    jumlahAlumni: 117, 
-    keteranganAman: '117 alumni tercatat', 
-    agendaTerdekat: 'Temu Alumni Summarecon Bekasi', 
+  {
+    id: 'bekasi',
+    nama: 'Bekasi',
+    provinsi: 'Jawa Barat',
+    jumlahAlumni: 117,
+    keteranganAman: '117 contoh catatan wilayah',
+    agendaTerdekat: 'Kopdar Summarecon Bekasi',
     isDataTerbatas: false,
     titikKumpul: 'Summarecon Bekasi & Harapan Indah',
-    koordinator: 'Dian Anggraini (Farmasi ’20)',
-    kontakWa: 'Grup WhatsApp Korwil Bekasi'
+    koordinator: '[Contoh] Dian Anggraini (Farmasi ’20)',
+    kontakWa: '[Contoh] Grup WA Wilayah Bekasi',
   },
-  { 
-    id: 'jkt-pusat', 
-    nama: 'Jakarta Pusat', 
-    provinsi: 'DKI Jakarta', 
-    jumlahAlumni: 94, 
-    keteranganAman: '94 alumni tercatat', 
-    agendaTerdekat: 'Diskusi Karier Korporasi & BUMN', 
+  {
+    id: 'jkt-pusat',
+    nama: 'Jakarta Pusat',
+    provinsi: 'DKI Jakarta',
+    jumlahAlumni: 94,
+    keteranganAman: '94 contoh catatan wilayah',
+    agendaTerdekat: 'Diskusi Karier Korporasi & BUMN',
     isDataTerbatas: false,
     titikKumpul: 'Menteng, Cikini, & Bundaran HI',
-    koordinator: 'Amalia Mumtazah (Teknik Sipil ’19)',
-    kontakWa: 'Grup WhatsApp Korwil Jakpus'
+    koordinator: '[Contoh] Amalia Mumtazah (Teknik Sipil ’19)',
+    kontakWa: '[Contoh] Grup WA Wilayah Jakpus',
   },
-  { 
-    id: 'depok', 
-    nama: 'Depok', 
-    provinsi: 'Jawa Barat', 
-    jumlahAlumni: 93, 
-    keteranganAman: '93 alumni tercatat', 
-    agendaTerdekat: 'Kopdar Santai Margonda', 
+  {
+    id: 'depok',
+    nama: 'Depok',
+    provinsi: 'Jawa Barat',
+    jumlahAlumni: 93,
+    keteranganAman: '93 contoh catatan wilayah',
+    agendaTerdekat: 'Kopdar Wilayah Margonda',
     isDataTerbatas: false,
     titikKumpul: 'Margonda Raya & Sawangan',
-    koordinator: 'Taufik Hidayat (Pendidikan Matematika ’15)',
-    kontakWa: 'Grup WhatsApp Korwil Depok'
+    koordinator: '[Contoh] Taufik Hidayat (Pendidikan Matematika ’15)',
+    kontakWa: '[Contoh] Grup WA Wilayah Depok',
   },
-  { 
-    id: 'bogor', 
-    nama: 'Bogor', 
-    provinsi: 'Jawa Barat', 
-    jumlahAlumni: 86, 
-    keteranganAman: '86 alumni tercatat', 
-    agendaTerdekat: 'Jalan Santai Kebun Raya', 
+  {
+    id: 'bogor',
+    nama: 'Bogor',
+    provinsi: 'Jawa Barat',
+    jumlahAlumni: 86,
+    keteranganAman: '86 contoh catatan wilayah',
+    agendaTerdekat: 'Jalan Pagi Kebun Raya',
     isDataTerbatas: false,
     titikKumpul: 'Pajajaran & Baranangsiang',
-    koordinator: 'Ratna Kusuma (Psikologi ’16)',
-    kontakWa: 'Grup WhatsApp Korwil Bogor'
+    koordinator: '[Contoh] Ratna Kusuma (Psikologi ’16)',
+    kontakWa: '[Contoh] Grup WA Wilayah Bogor',
   },
-  { 
-    id: 'jkt-utara', 
-    nama: 'Jakarta Utara', 
-    provinsi: 'DKI Jakarta', 
-    jumlahAlumni: 72, 
-    keteranganAman: '72 alumni tercatat', 
-    agendaTerdekat: 'Temu Industri Maritim & Logistik', 
+  {
+    id: 'jkt-utara',
+    nama: 'Jakarta Utara',
+    provinsi: 'DKI Jakarta',
+    jumlahAlumni: 72,
+    keteranganAman: '72 contoh catatan wilayah',
+    agendaTerdekat: 'Kopdar Industri Maritim & Logistik',
     isDataTerbatas: false,
     titikKumpul: 'Kelapa Gading & Pluit',
-    koordinator: 'Arif Wicaksono (Teknik Industri ’13)',
-    kontakWa: 'Grup WhatsApp Korwil Jakut'
-  }
+    koordinator: '[Contoh] Arif Wicaksono (Teknik Industri ’13)',
+    kontakWa: '[Contoh] Grup WA Wilayah Jakut',
+  },
 ];
 
 export const DATA_ALUMNI_SIMULASI: AlumniProfile[] = [
@@ -137,12 +135,13 @@ export const DATA_ALUMNI_SIMULASI: AlumniProfile[] = [
     industri: 'Teknologi & Digital',
     pekerjaan: 'Product Engineer',
     perusahaan: 'Ruang Digital Nusantara',
-    bio: 'Menangani arsitektur backend dan layanan pembayaran digital. Senang bantu review CV serta ngobrol seputar transisi karier IT bagi adik tingkat dari UMS.',
+    bio: 'Menangani arsitektur backend dan sistem pembayaran. Terbuka untuk ulas CV dan latihan wawancara kerja bidang IT bagi lulusan UMS.',
     keahlian: ['Backend & API', 'Mentoring Karier'],
+    mentoringFokus: 'Ulas CV/portofolio IT & latihan wawancara teknis',
     isVerified: true,
     bersediaMentoring: true,
     avatarInitials: 'AP',
-    avatarUrl: '/images/avatar-aditya.jpg'
+    avatarUrl: '/images/avatar-aditya.jpg',
   },
   {
     id: 'alm-amalia',
@@ -153,28 +152,13 @@ export const DATA_ALUMNI_SIMULASI: AlumniProfile[] = [
     industri: 'Teknik & Lingkungan',
     pekerjaan: 'Environmental Consultant',
     perusahaan: 'Bina Karya Konsultan',
-    bio: 'Menangani kajian AMDAL dan kepatuhan lingkungan proyek infrastruktur. Terbuka untuk diskusi sertifikasi keinsinyuran dan peluang kerja teknik di Jakarta.',
+    bio: 'Menangani kajian AMDAL dan kepatuhan lingkungan proyek infrastruktur. Siap berbagi info sertifikasi keinsinyuran di Jakarta.',
     keahlian: ['Kajian AMDAL', 'Manajemen Proyek'],
+    mentoringFokus: 'Karier konsultan lingkungan & jalur sertifikasi AMDAL',
     isVerified: true,
     bersediaMentoring: true,
     avatarInitials: 'AM',
-    avatarUrl: '/images/avatar-amalia.jpg'
-  },
-  {
-    id: 'alm-rizal',
-    nama: 'Rizal Maulana',
-    prodi: 'Manajemen',
-    angkatan: 2017,
-    wilayah: 'Jakarta Timur',
-    industri: 'Manajemen & Bisnis',
-    pekerjaan: 'Business Strategist',
-    perusahaan: 'Telkom Sigma Jakarta',
-    bio: 'Aktif mengurus pengembangan kemitraan B2B sejak 2020. Sering ikut agenda kumpul alumni di Rawamangun dan senang menghubungkan vendor UMKM alumni.',
-    keahlian: ['Kemitraan B2B', 'Pengembangan Usaha'],
-    isVerified: true,
-    bersediaMentoring: false,
-    avatarInitials: 'RM',
-    avatarUrl: '/images/avatar-rizal.jpg'
+    avatarUrl: '/images/avatar-amalia.jpg',
   },
   {
     id: 'alm-dian',
@@ -185,12 +169,13 @@ export const DATA_ALUMNI_SIMULASI: AlumniProfile[] = [
     industri: 'Kesehatan & Farmasi',
     pekerjaan: 'Apoteker Penanggung Jawab',
     perusahaan: 'Apotek Sentosa Bekasi',
-    bio: 'Mengurus perizinan apotek dan layanan farmasi klinis di kawasan Bekasi Timur. Siap berbagi cerita seputar ujian kompetensi apoteker dan dunia kerja farmasi.',
+    bio: 'Mengurus perizinan apotek dan layanan farmasi klinis di Bekasi Timur. Bersedia berbagi pengalaman ujian kompetensi apoteker.',
     keahlian: ['Farmasi Klinis', 'Regulasi Obat'],
+    mentoringFokus: 'Uji kompetensi apoteker & praktik farmasi klinis',
     isVerified: true,
     bersediaMentoring: true,
     avatarInitials: 'DA',
-    avatarUrl: '/images/avatar-dian.jpg'
+    avatarUrl: '/images/avatar-dian.jpg',
   },
   {
     id: 'alm-fajar',
@@ -201,11 +186,28 @@ export const DATA_ALUMNI_SIMULASI: AlumniProfile[] = [
     industri: 'Hukum & Korporasi',
     pekerjaan: 'Corporate Legal Counsel',
     perusahaan: 'Kantor Hukum Setia & Rekan',
-    bio: 'Berpengalaman menangani kontrak komersial dan legalitas usaha rintisan. Bersedia memberi masukan awal buat alumni yang baru merintis usaha di Jabodetabek.',
+    bio: 'Menangani kontrak komersial dan legalitas usaha rintisan. Bersedia memberi masukan awal bagi alumni yang merintis usaha.',
     keahlian: ['Kontrak Komersial', 'Legalitas UMKM'],
+    mentoringFokus: 'Legalitas usaha kecil & dasar kontrak kerja',
     isVerified: true,
     bersediaMentoring: true,
-    avatarInitials: 'FN'
+    avatarInitials: 'FN',
+  },
+  {
+    id: 'alm-rizal',
+    nama: 'Rizal Maulana',
+    prodi: 'Manajemen',
+    angkatan: 2017,
+    wilayah: 'Jakarta Timur',
+    industri: 'Manajemen & Bisnis',
+    pekerjaan: 'Business Strategist',
+    perusahaan: 'Telkom Sigma Jakarta',
+    bio: 'Mengurus pengembangan kemitraan B2B sejak 2020 dan ikut mengoordinasikan jejaring vendor UMKM alumni.',
+    keahlian: ['Kemitraan B2B', 'Pengembangan Usaha'],
+    isVerified: true,
+    bersediaMentoring: false,
+    avatarInitials: 'RM',
+    avatarUrl: '/images/avatar-rizal.jpg',
   },
   {
     id: 'alm-nurul',
@@ -216,12 +218,13 @@ export const DATA_ALUMNI_SIMULASI: AlumniProfile[] = [
     industri: 'Arsitektur & Desain',
     pekerjaan: 'Project Architect',
     perusahaan: 'Studio Ruang BSD',
-    bio: 'Mengerjakan desain hunian tropis dan ruang komersial di Serpong & Bintaro. Terbuka untuk bedah portofolio mahasiswa tingkat akhir dan lulusan baru Arsitektur.',
-    keahlian: ['Desain Hunian', 'Review Portofolio'],
+    bio: 'Mengerjakan desain hunian tropis dan ruang komersial di Serpong & Bintaro. Terbuka untuk ulas portofolio lulusan baru Arsitektur.',
+    keahlian: ['Desain Hunian', 'Ulas Portofolio'],
+    mentoringFokus: 'Ulas portofolio arsitektur & karier biro desain',
     isVerified: true,
     bersediaMentoring: true,
     avatarInitials: 'NH',
-    avatarUrl: '/images/avatar-nurul.jpg'
+    avatarUrl: '/images/avatar-nurul.jpg',
   },
   {
     id: 'alm-bambang',
@@ -232,11 +235,13 @@ export const DATA_ALUMNI_SIMULASI: AlumniProfile[] = [
     industri: 'Keuangan & Pajak',
     pekerjaan: 'Tax Consultant',
     perusahaan: 'KAP Triyono & Partners',
-    bio: 'Menangani pendampingan pajak dan pembukuan perusahaan menengah. Senang bantu teman-teman pemilik bisnis kecil merapikan laporan pajak tahunan.',
+    bio: 'Menangani pendampingan pajak dan pembukuan perusahaan menengah.',
     keahlian: ['Perpajakan', 'Audit Keuangan'],
+    mentoringFokus: 'Karier konsultan pajak & pembukuan UMKM',
     isVerified: true,
     bersediaMentoring: true,
-    avatarInitials: 'BT'
+    avatarInitials: 'BT',
+    avatarUrl: '/images/avatar-bambang.jpg',
   },
   {
     id: 'alm-bagus',
@@ -247,11 +252,11 @@ export const DATA_ALUMNI_SIMULASI: AlumniProfile[] = [
     industri: 'Media & Periklanan',
     pekerjaan: 'Brand Campaign Lead',
     perusahaan: 'Studio Kreatif Palmerah',
-    bio: 'Bekerja di industri media dan kampanye brand di Jakarta Barat. Sering janjian ngopi sore bareng alumni sekitar Tomang dan Tanjung Duren.',
+    bio: 'Bekerja di industri media dan kampanye brand di Jakarta Barat.',
     keahlian: ['Komunikasi Brand', 'Produksi Konten'],
     isVerified: true,
     bersediaMentoring: false,
-    avatarInitials: 'BS'
+    avatarInitials: 'BS',
   },
   {
     id: 'alm-taufik',
@@ -262,11 +267,12 @@ export const DATA_ALUMNI_SIMULASI: AlumniProfile[] = [
     industri: 'Pendidikan & Riset',
     pekerjaan: 'Curriculum Specialist',
     perusahaan: 'Platform Belajar Cerdas',
-    bio: 'Mengembangkan materi ajar digital dan asesmen siswa di Depok. Terbuka diskusi soal karier di dunia edtech dan manajemen sekolah.',
+    bio: 'Mengembangkan materi ajar digital dan asesmen siswa di Depok.',
     keahlian: ['Desain Kurikulum', 'Teknologi Pendidikan'],
+    mentoringFokus: 'Karier teknologi pendidikan & penyusunan kurikulum',
     isVerified: true,
     bersediaMentoring: true,
-    avatarInitials: 'TH'
+    avatarInitials: 'TH',
   },
   {
     id: 'alm-ratna',
@@ -277,11 +283,12 @@ export const DATA_ALUMNI_SIMULASI: AlumniProfile[] = [
     industri: 'Sumber Daya Manusia',
     pekerjaan: 'People Partner',
     perusahaan: 'Jaringan Ritel Bogor',
-    bio: 'Menangani rekrutmen dan pembinaan karyawan di kawasan Bogor Raya. Dengan senang hati membantu simulasi wawancara kerja untuk lulusan baru UMS.',
-    keahlian: ['Simulasi Interview', 'Pengembangan SDM'],
+    bio: 'Menangani rekrutmen dan pembinaan karyawan di kawasan Bogor.',
+    keahlian: ['Latihan Interview', 'Pengembangan SDM'],
+    mentoringFokus: 'Simulasi wawancara HR & penulisan CV ATS',
     isVerified: true,
     bersediaMentoring: true,
-    avatarInitials: 'RK'
+    avatarInitials: 'RK',
   },
   {
     id: 'alm-arif',
@@ -292,103 +299,105 @@ export const DATA_ALUMNI_SIMULASI: AlumniProfile[] = [
     industri: 'Logistik & Pelabuhan',
     pekerjaan: 'Supply Chain Manager',
     perusahaan: 'Logistik Nusantara Pelabuhan',
-    bio: 'Menangani operasional rantai pasok dan pergudangan di kawasan Tanjung Priok & Marunda. Siap berbagi informasi seputar manajemen logistik industri.',
+    bio: 'Menangani operasional rantai pasok dan pergudangan di kawasan Tanjung Priok & Marunda.',
     keahlian: ['Rantai Pasok', 'Operasional Gudang'],
     isVerified: true,
     bersediaMentoring: false,
-    avatarInitials: 'AW'
-  }
+    avatarInitials: 'AW',
+  },
 ];
 
 export const DATA_KEGIATAN_SIMULASI: EventKegiatan[] = [
   {
     id: 'ev-1',
-    judul: 'Kopdar Akbar Alumni UMS Jabodetabek',
-    slug: 'kopdar-akbar-alumni-jabodetabek',
-    jenis: 'Kopdar Rutin',
+    judul: 'Kopdar Alumni UMS Jabodetabek',
+    slug: 'kopdar-alumni-jabodetabek',
+    jenis: 'Kopdar Wilayah',
     tanggalWIB: 'Sabtu, 28 Nov 2026',
     jamWIB: '09.00 - 13.00 WIB',
     wilayah: 'Jakarta Selatan',
     lokasiSpesifik: 'Aula Pertemuan Cilandak, TB Simatupang, Jakarta Selatan',
-    deskripsi: 'Kumpul santai lintas angkatan dan fakultas. Sekalian kenalan antaralumni yang baru pindah ke Jakarta, tukar info kerja, dan makan siang bareng.',
+    deskripsi: 'Pertemuan lintas angkatan dan fakultas untuk kenalan dengan alumni baru di Jakarta serta bertukar informasi kerja.',
     kapasitas: 80,
     terdaftarCount: 54,
-    penanggungJawab: 'Panitia Kopdar Wilayah Jakarta Selatan',
-    gambar: '/images/alumni-gathering-5.jpg'
+    penanggungJawab: 'Panitia Kopdar Jakarta Selatan',
+    gambar: '/images/alumni-gathering-5.jpg',
   },
   {
     id: 'ev-2',
-    judul: 'Bincang Santai Karier Digital & Korporasi',
-    slug: 'bincang-karier-digital',
-    jenis: 'Berbagi Pengalaman',
+    judul: 'Sesi Mentoring Karier Digital & Korporasi',
+    slug: 'mentoring-karier-digital',
+    jenis: 'Mentoring Alumni',
     tanggalWIB: 'Minggu, 06 Des 2026',
     jamWIB: '13.00 - 16.30 WIB',
     wilayah: 'Jakarta Pusat',
     lokasiSpesifik: 'Ruang Diskusi Cikini, Jakarta Pusat (dan Zoom)',
-    deskripsi: 'Ngobrol langsung bersama 4 alumni UMS yang bekerja di perbankan, telekomunikasi, dan startup. Bawa CV kalau mau dibantu review langsung di tempat.',
+    deskripsi: 'Tanya jawab langsung dengan empat praktisi alumni UMS. Bawa CV bila ingin diulas bersama.',
     kapasitas: 120,
     terdaftarCount: 89,
-    penanggungJawab: 'Tim Berbagi Karier IKA UMS Jabodetabek',
-    gambar: '/images/event-diskusi.jpg'
+    penanggungJawab: 'Tim Mentoring IKA UMS Jabodetabek',
+    gambar: '/images/event-diskusi.jpg',
   },
   {
     id: 'ev-3',
-    judul: 'Temu Usaha & UMKM Alumni UMS di BSD',
-    slug: 'temu-usaha-alumni-bsd',
-    jenis: 'Kumpul Wirausaha',
+    judul: 'Kopdar Usaha & UMKM Alumni di BSD',
+    slug: 'kopdar-usaha-alumni-bsd',
+    jenis: 'Info Kerja & Usaha',
     tanggalWIB: 'Sabtu, 19 Des 2026',
     jamWIB: '10.00 - 15.00 WIB',
     wilayah: 'Tangerang Raya',
     lokasiSpesifik: 'Ruang Komunitas BSD City, Tangerang Selatan',
-    deskripsi: 'Pertemuan pemilik usaha kecil dan rintisan sesama alumni: saling kenal produk, berbagi info pengadaan bahan baku, hingga konsultasi izin usaha.',
+    deskripsi: 'Pertemuan pemilik usaha kecil dan rintisan sesama alumni: tukar kontak pemasok, kolaborasi produk, dan diskusi perizinan.',
     kapasitas: 60,
     terdaftarCount: 42,
-    penanggungJawab: 'Korwil Tangerang Raya',
-    gambar: '/images/alumni-gathering-3.jpg'
-  }
+    penanggungJawab: 'Koordinator Tangerang Raya',
+    gambar: '/images/alumni-gathering-3.jpg',
+  },
 ];
 
 export const DATA_CERITA_SIMULASI: CeritaDampak[] = [
   {
     id: 'cr-1',
-    judul: 'Berawal dari Numpang Kos Alumni Senior, Hendra Kini Buka Kerja bagi Puluhan Lulusan Solo',
+    judul: 'Contoh Cerita: Memulai Karier di Jakarta Berkat Koneksi Alumni Satu Almamater',
     slug: 'alumni-ums-startup-edukasi',
     tokoh: 'Hendra Setiawan',
     prodiAngkatan: 'Informatika 2016 · Pendiri EduNusa',
     alumniNama: 'Hendra Setiawan',
     jurusanAngkatan: 'Teknik Informatika ’16 · 5 menit baca',
-    ringkasan: 'Waktu pertama merantau ke Jakarta dengan ijazah dari Pabelan, Hendra dibantu alumni senior mencari tempat tinggal dan wawancara kerja pertamanya. Kini usahanya ikut menampung rekan dari UMS.',
-    kutipan: 'Modal terbesar anak rantau Solo bukan cuma ijazah, tapi rasa saling percaya. Waktu baru datang ke Jakarta, alumni senior yang duluan ngasih tumpangan dan rujukan kerja pertama.',
-    dampak: 'Hingga akhir tahun ini, timnya mempekerjakan lebih dari 30 alumnus muda Solo Raya dan rutin mengadakan kelas persiapan kerja.',
+    ringkasan: 'Saat baru pindah ke Jakarta dari Pabelan, Hendra mendapat info tempat tinggal dan kesempatan wawancara pertama lewat kenalan senior UMS.',
+    kutipan: 'Waktu baru tiba di Jakarta, senior satu almamater yang lebih dulu membantu menunjukkan info kerja dan tempat tinggal sementara.',
+    dampak: 'Hingga kini aktif membantu membuka kesempatan magang dan wawancara bagi lulusan muda Solo Raya.',
     gambar: '/images/cerita-startup.jpg',
-    kategori: 'Wirausaha & Edukasi'
+    kategori: 'Karier & Usaha',
   },
   {
     id: 'cr-2',
-    judul: 'Perjalanan Amalia Menembus Proyek Kajian Lingkungan Nasional',
+    judul: 'Contoh Cerita: Menjalani Sertifikasi Lingkungan Melalui Mentoring Senior',
     slug: 'amalia-audit-lingkungan-esg',
     tokoh: 'Amalia Mumtazah',
     prodiAngkatan: 'Teknik Sipil 2019 · Konsultan Lingkungan',
     alumniNama: 'Amalia Mumtazah',
     jurusanAngkatan: 'Teknik Sipil ’19 · 4 menit baca',
-    ringkasan: 'Menjalani sertifikasi auditor AMDAL tidak mudah saat baru lulus. Lewat kenalan kakak tingkat di Jakarta Pusat, Amalia menempuh jalur magang hingga memimpin tim kajian di berbagai pabrik.',
-    kutipan: 'Komunitas alumni di Jakarta jadi tempat bertanya yang aman. Kalau ada proyek lapangan, kami sering ngajak teman-teman arsitektur dan sipil sesama UMS.',
-    dampak: 'Aktif membimbing belasan adik tingkat jurusan teknik menempuh ujian sertifikasi keahlian lingkungan.',
+    ringkasan: 'Lewat arahan alumni Teknik Sipil di Jakarta Pusat, Amalia menempuh jalur magang hingga memimpin kajian lapangan.',
+    kutipan: 'Komunitas alumni membantu lulusan baru tahu alur sertifikasi dan gambaran kerja lapangan yang sebenarnya.',
+    dampak: 'Membuka sesi tanya jawab sertifikasi teknik secara berkala untuk lulusan baru UMS.',
     gambar: '/images/alumni-gathering-4.jpg',
-    kategori: 'Karier Teknik'
+    kategori: 'Mentoring',
   },
-  {
-    id: 'cr-3',
-    judul: 'Saling Beli dan Jadi Vendor: Cara Rizal Menjaga Roda Usaha Sesama Alumni',
-    slug: 'rizal-transformasi-b2b',
-    tokoh: 'Rizal Maulana',
-    prodiAngkatan: 'Manajemen 2017 · Jakarta Timur',
-    alumniNama: 'Rizal Maulana',
-    jurusanAngkatan: 'Manajemen ’17 · 4 menit baca',
-    ringkasan: 'Dimulai dari grup ngopi di Rawamangun, beberapa alumni pelaku usaha katering, konveksi, dan percetakan mulai saling memesan kebutuhan kantor satu sama lain.',
-    kutipan: 'Silaturahmi itu paling kerasa manfaatnya kalau saling bantu di pekerjaan. Kalau kantor butuh vendor atau suvenir acara, kami usahakan cek teman alumni dulu.',
-    dampak: 'Menghubungkan belasan pemilik usaha kecil alumni dengan kebutuhan pengadaan korporasi di Jabodetabek.',
-    gambar: '/images/alumni-gathering-5.jpg',
-    kategori: 'Jaringan Usaha'
-  }
 ];
+
+export function getAlumniList(): AlumniProfile[] {
+  return IS_DEMO_MODE ? DATA_ALUMNI_SIMULASI : [];
+}
+
+export function getKegiatanList(): EventKegiatan[] {
+  return IS_DEMO_MODE ? DATA_KEGIATAN_SIMULASI : [];
+}
+
+export function getCeritaList(): CeritaDampak[] {
+  return IS_DEMO_MODE ? DATA_CERITA_SIMULASI : [];
+}
+
+export function getWilayahDemoList(): WilayahStatistik[] {
+  return IS_DEMO_MODE ? DATA_WILAYAH_SIMULASI : [];
+}

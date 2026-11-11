@@ -44,6 +44,7 @@ export interface AlumniProfile {
   perusahaan?: string;
   bio: string;
   keahlian: string[];
+  mentoringFokus?: string;
   isVerified: boolean;
   bersediaMentoring: boolean;
   avatarInitials: string;
