@@ -167,7 +167,7 @@ export default function MapLibreExplorer({
 
         if (IS_DEMO_MODE) {
           const countSpan = document.createElement('span');
-          countSpan.className = `text-[11px] font-bold ${
+          countSpan.className = `text-xs font-bold ${
             region.regionId === initialSelectedRef.current ? 'text-[#F59E0B]' : 'text-[#92400E]'
           }`;
           countSpan.textContent = String(region.count);
@@ -175,7 +175,7 @@ export default function MapLibreExplorer({
         }
 
         const labelSpan = document.createElement('span');
-        labelSpan.className = 'text-[11px] tracking-tight';
+        labelSpan.className = 'text-xs tracking-tight';
         labelSpan.textContent = region.shortName;
         btn.appendChild(labelSpan);
 
@@ -319,11 +319,11 @@ export default function MapLibreExplorer({
         </button>
       </div>
 
-      <div className="absolute bottom-3 left-3 sm:bottom-3.5 sm:left-3.5 z-10 bg-white/95 backdrop-blur-xs border border-[#0C2340]/15 rounded-lg p-2.5 sm:p-3 shadow-sm max-w-[230px]">
+      <div className="absolute bottom-3 left-3 sm:bottom-3.5 sm:left-3.5 z-10 bg-white/95 backdrop-blur-xs border border-[#0C2340]/15 rounded-lg p-2.5 sm:p-3 shadow-sm max-w-[250px]">
         {IS_DEMO_MODE ? (
           <>
             <div className="flex items-center justify-between gap-3 mb-1.5">
-              <span className="text-[11px] font-semibold text-[#0C2340]">
+              <span className="text-xs font-semibold text-[#0C2340]">
                 Contoh Sebaran Alumni
               </span>
             </div>
@@ -333,7 +333,7 @@ export default function MapLibreExplorer({
               <div className="bg-[#4B76A6]" />
               <div className="bg-[#102A54]" />
             </div>
-            <div className="flex items-center justify-between text-[10px] text-[#475569] font-medium">
+            <div className="flex items-center justify-between text-xs text-[#475569] font-medium">
               <span>70</span>
               <span>100</span>
               <span>125</span>
@@ -341,14 +341,14 @@ export default function MapLibreExplorer({
             </div>
           </>
         ) : (
-          <p className="text-[11px] font-semibold text-[#0C2340] leading-snug">
+          <span className="block text-xs font-semibold text-[#0C2340] leading-snug">
             Cakupan 9 Wilayah Jabodetabek · Angka per wilayah tampil setelah data terverifikasi.
-          </p>
+          </span>
         )}
 
-        <p className="text-[10px] text-[#475569] mt-2 leading-tight border-t border-[#0C2340]/10 pt-1.5">
+        <span className="block text-xs text-[#475569] mt-2 leading-snug border-t border-[#0C2340]/10 pt-1.5">
           Batas wilayah resmi BPS · geoBoundaries (CC BY 3.0 IGO).
-        </p>
+        </span>
       </div>
     </div>
   );

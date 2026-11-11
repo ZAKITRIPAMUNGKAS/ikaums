@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { Navbar, Footer } from '@/components/Navigation';
-import { PatternSection, PatternDivider } from '@/components/PatternSection';
+import { PatternSection } from '@/components/PatternSection';
 import { AnimatedTabs } from '@/components/ui/animated-tabs';
 import {
   Dialog,
@@ -157,7 +157,7 @@ export default function DirektoriPage() {
             </div>
 
             <div className="space-y-2.5">
-              <span className="inline-block text-sm font-bold uppercase tracking-wider text-[#92400E]">
+              <span className="inline-block text-sm font-semibold text-[#92400E]">
                 Khusus Anggota Terdaftar
               </span>
               <h1 className="text-[clamp(1.625rem,1.25rem+1.5vw,2.25rem)] font-extrabold tracking-[-0.02em] text-[#0C2340]">
@@ -214,6 +214,7 @@ export default function DirektoriPage() {
           fade="right-focus"
           patternOpacity={0.055}
           patternSize="24px"
+          className="border-b border-[#0C2340]/10"
           contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 md:pt-8 md:pb-10"
         >
           <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-2 text-xs text-[#475569] mb-4">
@@ -231,7 +232,7 @@ export default function DirektoriPage() {
 
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
             <div>
-              <span className="inline-block text-sm font-bold uppercase tracking-wider text-[#92400E] mb-1.5">
+              <span className="inline-block text-sm font-semibold text-[#92400E] mb-1.5">
                 Jaringan Alumni Jabodetabek ({DEMO_BADGE_LABEL})
               </span>
               <h1 className="text-[clamp(1.75rem,1.3rem+1.8vw,2.5rem)] font-extrabold tracking-[-0.02em] text-[#0C2340]">
@@ -250,8 +251,6 @@ export default function DirektoriPage() {
             </Link>
           </div>
         </PatternSection>
-
-        <PatternDivider variant="curve" fromColor="#F3F1EA" toColor="#FDFCF7" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 w-full relative z-[1]">
         {/* Search & Filter Toolbar */}
@@ -385,9 +384,9 @@ export default function DirektoriPage() {
                       <p className="text-base text-[#475569] truncate">
                         {alumni.prodi} · &apos;{String(alumni.angkatan).slice(-2)} · {alumni.wilayah}
                       </p>
-                      <p className="text-sm text-[#0C2340] font-medium truncate">
+                      <span className="block text-sm text-[#0C2340] font-medium truncate">
                         {alumni.industri}
-                      </p>
+                      </span>
                     </div>
                   </div>
 
@@ -471,24 +470,24 @@ export default function DirektoriPage() {
                   <DialogTitle className="text-xl font-extrabold text-[#0C2340] flex items-center gap-2">
                     <span>{selectedAlumni.nama}</span>
                   </DialogTitle>
-                  <DialogDescription className="text-xs text-[#475569]">
+                  <DialogDescription className="text-sm text-[#475569]">
                     {selectedAlumni.prodi} · Angkatan {selectedAlumni.angkatan} ({DEMO_BADGE_LABEL})
                   </DialogDescription>
                 </DialogHeader>
 
-                <div className="mt-2 space-y-1 text-sm text-[#0C2340]">
+                <div className="mt-2 space-y-1 text-base text-[#0C2340]">
                   <p className="font-semibold">
                     {selectedAlumni.pekerjaan}
                     {selectedAlumni.perusahaan ? ` · ${selectedAlumni.perusahaan}` : ''}
                   </p>
-                  <p className="text-xs text-[#475569] flex items-center gap-1.5">
-                    <MapPin className="w-3.5 h-3.5 text-[#92400E]" />
+                  <span className="text-sm text-[#475569] flex items-center gap-1.5">
+                    <MapPin className="w-4 h-4 text-[#92400E]" />
                     <span>{selectedAlumni.wilayah} · {selectedAlumni.industri}</span>
-                  </p>
+                  </span>
                 </div>
 
                 {messagesSent[selectedAlumni.id] && (
-                  <div className="mt-4 bg-[#F0FDF4] border border-[#16A34A]/25 p-3 rounded-lg text-xs text-[#15803D] flex items-center gap-2">
+                  <div className="mt-4 bg-[#F0FDF4] border border-[#16A34A]/25 p-3 rounded-lg text-sm text-[#15803D] flex items-center gap-2">
                     <CheckCircle2 className="w-4 h-4 shrink-0" />
                     <span>Pesan perkenalanmu dicatat dalam mode simulasi.</span>
                   </div>
@@ -503,22 +502,22 @@ export default function DirektoriPage() {
                   />
                 </div>
 
-                <div className="pt-1 text-sm text-[#475569] leading-relaxed">
+                <div className="pt-1 text-base text-[#475569] leading-relaxed">
                   {activeProfileTab === 'tentang' && (
                     <div className="space-y-1.5">
-                      <h3 className="font-bold text-[#0C2340] text-sm">Sekilas Profil</h3>
+                      <h3 className="font-bold text-[#0C2340] text-base">Sekilas Profil</h3>
                       <p>{selectedAlumni.bio}</p>
                     </div>
                   )}
                   {activeProfileTab === 'pengalaman' && (
                     <div className="bg-[#FDFCF7] p-4 rounded-lg border border-[#0C2340]/10 space-y-1">
                       <p className="font-bold text-[#0C2340]">{selectedAlumni.pekerjaan}</p>
-                      <p className="text-xs text-[#475569]">
+                      <span className="block text-sm text-[#475569]">
                         {selectedAlumni.perusahaan || 'Praktisi Independen'} · Domisili {selectedAlumni.wilayah}
-                      </p>
-                      <p className="text-xs text-[#475569] pt-1">
+                      </span>
+                      <span className="block text-sm text-[#475569] pt-1">
                         Bidang industri: {selectedAlumni.industri}.
-                      </p>
+                      </span>
                     </div>
                   )}
                   {activeProfileTab === 'keahlian' && (

@@ -2,7 +2,7 @@ import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Navbar, Footer } from '@/components/Navigation';
-import { PatternSection, PatternDivider } from '@/components/PatternSection';
+import { PatternSection } from '@/components/PatternSection';
 import { MapInteractiveSection } from '@/components/MapInteractiveSection';
 import { IS_DEMO_MODE, COMMUNITY_PLACEHOLDERS, DEMO_BADGE_LABEL } from '@/lib/config';
 import { STATS_JABODETABEK } from '@/data/simulasi';
@@ -28,6 +28,7 @@ export default function PetaPage() {
           fade="top-right"
           patternOpacity={0.095}
           patternSize="180px"
+          className="border-b border-[#0C2340]/10"
           contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 md:pt-8 md:pb-10"
         >
           {/* Breadcrumb */}
@@ -48,7 +49,7 @@ export default function PetaPage() {
 
           {/* Page Header */}
           <div>
-            <span className="inline-block text-sm font-bold uppercase tracking-wider text-[#92400E] mb-1.5">
+            <span className="inline-block text-sm font-semibold text-[#92400E] mb-1.5">
               Cakupan Wilayah Jabodetabek
             </span>
 
@@ -82,23 +83,21 @@ export default function PetaPage() {
                 </div>
               ) : (
                 <div className="flex flex-wrap items-center gap-3 shrink-0">
-                  <span className="text-xs text-[#475569]">
-                    Pendaftar terdata: <strong className="text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.coordinatorCount}</strong>
+                  <span className="text-sm text-[#475569]">
+                    {COMMUNITY_PLACEHOLDERS.coordinatorCount}
                   </span>
                   <Link
                     href="/gabung"
-                    className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 rounded-lg bg-[#0C2340] hover:bg-[#16325C] text-white text-xs sm:text-sm font-semibold transition-colors"
+                    className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 rounded-lg bg-[#0C2340] hover:bg-[#16325C] text-white text-sm font-semibold transition-colors"
                   >
                     Daftar jadi anggota
-                    <ArrowRight className="w-3.5 h-3.5 text-[#F59E0B]" />
+                    <ArrowRight className="w-4 h-4 text-[#F59E0B]" />
                   </Link>
                 </div>
               )}
             </div>
           </div>
         </PatternSection>
-
-        <PatternDivider variant="curve" fromColor="#F3F1EA" toColor="#FDFCF7" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 w-full relative z-[1]">
           {/* Map & Regional Panel */}

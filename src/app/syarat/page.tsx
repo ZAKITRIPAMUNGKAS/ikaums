@@ -2,7 +2,7 @@ import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Navbar, Footer } from '@/components/Navigation';
-import { PatternSection, PatternDivider } from '@/components/PatternSection';
+import { PatternSection } from '@/components/PatternSection';
 import { COMMUNITY_PLACEHOLDERS } from '@/lib/config';
 
 export const metadata: Metadata = {
@@ -24,6 +24,7 @@ export default function SyaratPage() {
           fade="right-focus"
           patternOpacity={0.05}
           patternSize="24px"
+          className="border-b border-[#0C2340]/10"
           contentClassName="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 sm:pt-8 sm:pb-10"
         >
           <nav aria-label="Breadcrumb" className="text-sm text-[#475569] mb-4 flex items-center gap-2">
@@ -53,8 +54,6 @@ export default function SyaratPage() {
             </p>
           </header>
         </PatternSection>
-
-        <PatternDivider variant="curve" fromColor="#F3F1EA" toColor="#FDFCF7" />
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-14 w-full relative z-[1]">
         <div className="py-8 space-y-8 text-base text-[#334155] leading-[1.6]">
@@ -111,7 +110,14 @@ export default function SyaratPage() {
               Pengurus wilayah berhak memeriksa kesesuaian data alumni saat pendaftaran serta menonaktifkan
               atau menghapus profil yang melanggar etika komunitas, menyalahgunakan data anggota lain, atau
               terbukti memalsukan identitas alumni UMS. Pertanyaan atau laporan pelanggaran dapat disampaikan
-              ke <span className="font-medium text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.contactEmail}</span>.
+              melalui saluran resmi pengurus di halaman{' '}
+              <Link
+                href="/kepengurusan"
+                className="text-[#0C2340] font-semibold underline decoration-[#92400E] underline-offset-4"
+              >
+                Pengurus &amp; Kontak
+              </Link>
+              .
             </p>
           </section>
         </div>

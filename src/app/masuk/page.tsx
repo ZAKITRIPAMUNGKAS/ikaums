@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Navbar, Footer } from '@/components/Navigation';
 import { normalizeIndonesianWhatsApp, isValidEmail } from '@/data/ums-prodi';
-import { COMMUNITY_PLACEHOLDERS, IS_DEMO_MODE, DEMO_BADGE_LABEL } from '@/lib/config';
+import { IS_DEMO_MODE, DEMO_BADGE_LABEL } from '@/lib/config';
 import { CheckCircle2, ArrowRight, AlertCircle, HelpCircle } from 'lucide-react';
 
 export default function MasukPage() {
@@ -159,8 +159,15 @@ export default function MasukPage() {
                   <>
                     Fitur masuk anggota via OTP WhatsApp dan tautan email untuk{' '}
                     <strong>{identifier}</strong> sedang disiapkan menjelang peluncuran penuh.
-                    Jika kamu sudah mendaftar dan ingin memeriksa status, hubungi pengurus di{' '}
-                    <strong className="text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.contactWhatsapp}</strong>.
+                    Jika kamu sudah mendaftar dan ingin memeriksa status, lihat saluran resmi pengurus
+                    di halaman{' '}
+                    <Link
+                      href="/kepengurusan"
+                      className="font-semibold text-[#0C2340] underline decoration-[#92400E] underline-offset-4"
+                    >
+                      Pengurus &amp; Kontak
+                    </Link>
+                    .
                   </>
                 )}
               </p>
@@ -194,10 +201,13 @@ export default function MasukPage() {
               </span>
             </summary>
             <p className="pt-2 pb-1 leading-[1.6] text-base text-[#475569]">
-              Hubungi sekretariat pengurus melalui{' '}
-              <span className="font-medium text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.contactEmail}</span>{' '}
-              atau WhatsApp{' '}
-              <span className="font-medium text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.contactWhatsapp}</span>{' '}
+              Sampaikan lewat saluran resmi pengurus di halaman{' '}
+              <Link
+                href="/kepengurusan"
+                className="font-semibold text-[#0C2340] underline decoration-[#92400E] underline-offset-4"
+              >
+                Pengurus &amp; Kontak
+              </Link>{' '}
               dengan menyertakan nama lengkap, program studi, dan tahun angkatan UMS untuk pembaruan data.
             </p>
           </details>

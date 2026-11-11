@@ -18,12 +18,12 @@ export default function MobileRegionList({
   return (
     <div className="bg-white border border-[#0C2340]/15 rounded-xl p-4 shadow-xs">
       <div className="flex items-center justify-between mb-3 pb-2 border-b border-[#0C2340]/10">
-        <h2 className="text-xs font-bold uppercase tracking-wider text-[#0C2340] flex items-center gap-1.5">
-          <MapPin className="w-3.5 h-3.5 text-[#92400E]" />
+        <h2 className="text-sm font-bold text-[#0C2340] flex items-center gap-1.5">
+          <MapPin className="w-4 h-4 text-[#92400E]" />
           Daftar 9 Wilayah Jabodetabek
         </h2>
         {IS_DEMO_MODE && (
-          <span className="text-[11px] font-semibold text-[#92400E] bg-amber-100 px-2 py-0.5 rounded">
+          <span className="text-xs font-semibold text-[#92400E] bg-amber-100 px-2 py-0.5 rounded">
             {DEMO_BADGE_LABEL}
           </span>
         )}
@@ -52,8 +52,8 @@ export default function MobileRegionList({
                   }`}
                 />
                 <div className="min-w-0">
-                  <div className="text-sm font-semibold text-[#0C2340]">{r.regionName}</div>
-                  <div className="text-xs text-[#475569] truncate">
+                  <div className="text-base font-semibold text-[#0C2340]">{r.regionName}</div>
+                  <div className="text-sm text-[#475569] truncate">
                     {IS_DEMO_MODE
                       ? `${r.mentorCount} mentor · ${r.activePercent} aktif kopdar`
                       : master?.cakupan || 'Wilayah Jabodetabek'}

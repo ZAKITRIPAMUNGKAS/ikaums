@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Navbar, Footer } from '@/components/Navigation';
-import { IS_DEMO_MODE, COMMUNITY_PLACEHOLDERS, DEMO_BADGE_LABEL } from '@/lib/config';
+import { IS_DEMO_MODE, DEMO_BADGE_LABEL } from '@/lib/config';
 import {
   CheckCircle2,
   MapPin,
@@ -31,25 +31,29 @@ export default function ProfilSayaPage() {
             </div>
 
             <div className="space-y-2">
-              <p className="text-xs font-bold uppercase tracking-wider text-[#92400E]">
+              <span className="inline-block text-sm font-semibold text-[#92400E]">
                 Profil Saya
-              </p>
+              </span>
               <h1 className="text-2xl sm:text-3xl font-bold text-[#0C2340]">
                 Masuk Diperlukan untuk Mengakses Profil Saya
               </h1>
-              <p className="text-sm sm:text-base text-[#475569] leading-relaxed">
+              <p className="text-base text-[#475569] leading-[1.6]">
                 Halaman pengaturan profil, perubahan domisili, dan kontrol persetujuan tampil di
                 Daftar Anggota akan aktif setelah fitur masuk anggota dibuka di peluncuran penuh.
               </p>
             </div>
 
-            <div className="bg-[#F3F1EA] border border-[#0C2340]/10 rounded-xl p-4 text-sm text-[#475569] space-y-1.5">
+            <div className="bg-[#F3F1EA] border border-[#0C2340]/10 rounded-xl p-4 text-base text-[#475569] space-y-1.5 leading-[1.6]">
               <p className="font-semibold text-[#0C2340]">Ingin memperbarui atau menghapus data pra-launch?</p>
               <p>
-                Hubungi sekretariat pengurus melalui{' '}
-                <span className="font-medium text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.contactEmail}</span>{' '}
-                atau WhatsApp{' '}
-                <span className="font-medium text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.contactWhatsapp}</span>.
+                Hubungi sekretariat pengurus melalui saluran resmi di halaman{' '}
+                <Link
+                  href="/kepengurusan"
+                  className="font-semibold text-[#0C2340] underline decoration-[#92400E] underline-offset-4"
+                >
+                  Pengurus &amp; Kontak
+                </Link>
+                .
               </p>
             </div>
 
@@ -111,7 +115,7 @@ export default function ProfilSayaPage() {
                   Rizal Hakim ({DEMO_BADGE_LABEL})
                 </h1>
               </div>
-              <p className="text-sm text-[#475569] flex flex-wrap items-center gap-x-4 gap-y-1">
+              <div className="text-sm text-[#475569] flex flex-wrap items-center gap-x-4 gap-y-1">
                 <span className="inline-flex items-center gap-1.5">
                   <Briefcase className="w-4 h-4 text-[#92400E]" />
                   Engineering Manager · Teknik Informatika &apos;11
@@ -120,7 +124,7 @@ export default function ProfilSayaPage() {
                   <MapPin className="w-4 h-4 text-[#475569]" />
                   Jakarta Selatan
                 </span>
-              </p>
+              </div>
             </div>
           </div>
 
@@ -148,10 +152,10 @@ export default function ProfilSayaPage() {
           <div className="space-y-4 divide-y divide-[#0C2340]/10">
             <label htmlFor="pref-direktori" className="flex items-start justify-between gap-4 pt-2 cursor-pointer">
               <div>
-                <p className="text-sm font-semibold text-[#0C2340]">Tampilkan di Daftar Anggota</p>
-                <p className="text-xs text-[#475569]">
+                <span className="block text-base font-semibold text-[#0C2340]">Tampilkan di Daftar Anggota</span>
+                <span className="block text-sm text-[#475569]">
                   Default adalah Tidak. Hanya anggota yang masuk yang bisa melihat bila diaktifkan.
-                </p>
+                </span>
               </div>
               <input
                 id="pref-direktori"
@@ -167,10 +171,10 @@ export default function ProfilSayaPage() {
 
             <label htmlFor="pref-mentoring" className="flex items-start justify-between gap-4 pt-4 cursor-pointer">
               <div>
-                <p className="text-sm font-semibold text-[#0C2340]">Bersedia Jadi Mentor Alumni</p>
-                <p className="text-xs text-[#475569]">
+                <span className="block text-base font-semibold text-[#0C2340]">Bersedia Jadi Mentor Alumni</span>
+                <span className="block text-sm text-[#475569]">
                   Menampilkan kesiapan berbagi pengalaman karier untuk alumni UMS lainnya.
-                </p>
+                </span>
               </div>
               <input
                 id="pref-mentoring"

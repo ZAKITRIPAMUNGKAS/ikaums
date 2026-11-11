@@ -2,7 +2,7 @@ import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Navbar, Footer } from '@/components/Navigation';
-import { PatternSection, PatternDivider } from '@/components/PatternSection';
+import { PatternSection } from '@/components/PatternSection';
 import { COMMUNITY_PLACEHOLDERS } from '@/lib/config';
 
 export const metadata: Metadata = {
@@ -24,6 +24,7 @@ export default function PrivasiPage() {
           fade="right-focus"
           patternOpacity={0.05}
           patternSize="24px"
+          className="border-b border-[#0C2340]/10"
           contentClassName="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 sm:pt-8 sm:pb-10"
         >
           <nav aria-label="Breadcrumb" className="text-sm text-[#475569] mb-4 flex items-center gap-2">
@@ -54,8 +55,6 @@ export default function PrivasiPage() {
           </header>
         </PatternSection>
 
-        <PatternDivider variant="curve" fromColor="#F3F1EA" toColor="#FDFCF7" />
-
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-14 w-full relative z-[1]">
         <div className="py-8 space-y-8 text-base text-[#334155] leading-[1.6]">
           <section className="space-y-2.5">
@@ -77,10 +76,10 @@ export default function PrivasiPage() {
             </h2>
             <div className="bg-white border border-[#0C2340]/12 rounded-xl p-5 grid grid-cols-1 sm:grid-cols-2 gap-5 my-3">
               <div>
-                <h3 className="font-bold text-[#0C2340] mb-2 text-sm">
+                <h3 className="font-bold text-[#0C2340] mb-2 text-base">
                   Boleh Tampil di Daftar Anggota (Hanya Jika Kamu Pilih)
                 </h3>
-                <ul className="space-y-1.5 text-sm text-[#475569] list-disc pl-4">
+                <ul className="space-y-1.5 text-base text-[#475569] list-disc pl-5">
                   <li>Nama lengkap serta program studi &amp; angkatan UMS</li>
                   <li>Wilayah domisili tingkat kota/kabupaten di Jabodetabek</li>
                   <li>Profesi atau bidang kerja (jika kamu isi)</li>
@@ -88,10 +87,10 @@ export default function PrivasiPage() {
                 </ul>
               </div>
               <div>
-                <h3 className="font-bold text-[#0C2340] mb-2 text-sm">
+                <h3 className="font-bold text-[#0C2340] mb-2 text-base">
                   Selalu Tertutup untuk Umum
                 </h3>
-                <ul className="space-y-1.5 text-sm text-[#475569] list-disc pl-4">
+                <ul className="space-y-1.5 text-base text-[#475569] list-disc pl-5">
                   <li>Nomor WhatsApp dan alamat email pribadi</li>
                   <li>Catatan verifikasi pengurus</li>
                   <li>Alasan atau pesan pribadi saat mengajukan mentoring</li>
@@ -139,11 +138,14 @@ export default function PrivasiPage() {
             </h2>
             <p>
               Kamu dapat meminta perbaikan data, menarik izin tampil di Daftar Anggota, atau meminta
-              penghapusan penuh data pendaftaranmu kapan saja dengan menghubungi pengurus melalui
-              email <span className="font-medium text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.contactEmail}</span>{' '}
-              atau WhatsApp{' '}
-              <span className="font-medium text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.contactWhatsapp}</span>.
-              Setelah halaman akun anggota aktif di peluncuran penuh, pengaturan ini juga dapat
+              penghapusan penuh data pendaftaranmu kapan saja melalui saluran resmi pengurus di halaman{' '}
+              <Link
+                href="/kepengurusan"
+                className="text-[#0C2340] font-semibold underline decoration-[#92400E] underline-offset-4"
+              >
+                Pengurus &amp; Kontak
+              </Link>
+              . Setelah halaman akun anggota aktif di peluncuran penuh, pengaturan ini juga dapat
               diubah langsung melalui halaman{' '}
               <Link
                 href="/app"
@@ -155,8 +157,8 @@ export default function PrivasiPage() {
             </p>
           </section>
 
-          <section className="bg-[#F3F1EA] border border-[#0C2340]/12 rounded-xl p-5 text-sm text-[#475569] leading-relaxed">
-            <h2 className="text-base font-bold text-[#0C2340] mb-1.5">
+          <section className="bg-[#F3F1EA] border border-[#0C2340]/12 rounded-xl p-5 text-base text-[#475569] leading-[1.6]">
+            <h2 className="text-lg font-bold text-[#0C2340] mb-1.5">
               Keterbukaan Pengelolaan Situs
             </h2>
             <p>

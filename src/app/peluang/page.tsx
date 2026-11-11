@@ -4,7 +4,7 @@ import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Navbar, Footer } from '@/components/Navigation';
-import { PatternSection, PatternDivider } from '@/components/PatternSection';
+import { PatternSection } from '@/components/PatternSection';
 import {
   Dialog,
   DialogContent,
@@ -132,6 +132,7 @@ export default function PeluangPage() {
           fade="right-focus"
           patternOpacity={0.055}
           patternSize="24px"
+          className="border-b border-[#0C2340]/10"
           contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 md:pt-8 md:pb-10"
         >
           <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-2 text-xs text-[#475569] mb-4">
@@ -150,7 +151,7 @@ export default function PeluangPage() {
           </nav>
 
           <header className="space-y-2.5">
-            <span className="inline-block text-sm font-bold uppercase tracking-wider text-[#92400E]">
+            <span className="inline-block text-sm font-semibold text-[#92400E]">
               Pengembangan Karier Alumni
             </span>
             <h1 className="text-[clamp(1.75rem,1.3rem+1.8vw,2.5rem)] font-extrabold tracking-[-0.02em] text-[#0C2340]">
@@ -162,8 +163,6 @@ export default function PeluangPage() {
             </p>
           </header>
         </PatternSection>
-
-        <PatternDivider variant="curve" fromColor="#F3F1EA" toColor="#FDFCF7" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 w-full space-y-12 relative z-[1]">
         {/* Bagian 1: Mentoring Alumni */}
@@ -247,19 +246,19 @@ export default function PeluangPage() {
                         )}
                       </div>
                       <div className="min-w-0">
-                        <h3 className="text-sm font-bold text-[#0C2340] truncate">{m.nama}</h3>
-                        <p className="text-xs text-[#475569] truncate">
+                        <h3 className="text-base font-bold text-[#0C2340] truncate">{m.nama}</h3>
+                        <span className="block text-sm text-[#475569] truncate">
                           {m.prodi} &apos;{String(m.angkatan).slice(-2)}
-                        </p>
+                        </span>
                       </div>
                     </div>
-                    <p className="text-xs font-semibold text-[#0C2340]">
+                    <p className="text-base font-semibold text-[#0C2340] leading-[1.5]">
                       {m.mentoringFokus || m.pekerjaan}
                     </p>
-                    <p className="text-xs text-[#475569] flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5 text-[#92400E]" />
+                    <span className="text-sm text-[#475569] flex items-center gap-1.5">
+                      <MapPin className="w-4 h-4 text-[#92400E] shrink-0" />
                       {m.wilayah}
-                    </p>
+                    </span>
                   </div>
 
                   <button
@@ -295,8 +294,9 @@ export default function PeluangPage() {
               <p className="text-base text-[#475569] leading-[1.6]">
                 Pada tahap prapeluncuran ini, daftar lowongan maupun penawaran usaha anggota belum
                 dipublikasikan agar hanya informasi nyata dari anggota terverifikasi yang tampil.
-                Jika kamu memiliki info lowongan untuk dibagikan ke sesama alumni, kirimkan melalui
-                kontak pengurus ({COMMUNITY_PLACEHOLDERS.contactWhatsapp}).
+                Jika kamu memiliki info lowongan atau peluang kerja sama yang terverifikasi untuk
+                dibagikan ke sesama alumni, kirimkan melalui saluran resmi pengurus di halaman
+                Pengurus &amp; Kontak.
               </p>
             </div>
             <Link
@@ -543,9 +543,9 @@ export default function PeluangPage() {
                   Permintaan Mentoring Dicatat
                 </h3>
                 <p className="text-base text-[#475569] leading-[1.6]">
-                  Terima kasih, {requestForm.nama}. Permintaan topik <strong>{requestForm.topik}</strong> akan
-                  ditindaklanjuti pengurus bidang karier ke WhatsApp <strong>{requestForm.whatsapp}</strong> dalam{' '}
-                  {COMMUNITY_PLACEHOLDERS.verificationSla}.
+                  Terima kasih, {requestForm.nama}. Permintaan topik <strong>{requestForm.topik}</strong> sudah
+                  dicatat dan akan ditindaklanjuti ke WhatsApp <strong>{requestForm.whatsapp}</strong> (
+                  {COMMUNITY_PLACEHOLDERS.verificationSla}).
                 </p>
               </div>
               <button

@@ -5,11 +5,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { Navbar, Footer } from '@/components/Navigation';
-import { PatternSection, PatternDivider } from '@/components/PatternSection';
+import { PatternSection } from '@/components/PatternSection';
 import { AnimatedTabs } from '@/components/ui/animated-tabs';
 import { getKegiatanList } from '@/data/simulasi';
 import { IS_DEMO_MODE, COMMUNITY_PLACEHOLDERS, DEMO_BADGE_LABEL } from '@/lib/config';
-import { Calendar, MapPin, CheckCircle2, Clock, Building2, ArrowRight } from 'lucide-react';
+import { Calendar, MapPin, CheckCircle2, Clock, Building2 } from 'lucide-react';
 
 const STORAGE_KEY_RSVP = 'ikaums_persisted_rsvp';
 
@@ -67,9 +67,10 @@ export default function KegiatanPage() {
             fade="top-right"
             patternOpacity={0.075}
             patternSize="180px"
+            className="border-b border-[#0C2340]/10"
             contentClassName="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 sm:pt-8 sm:pb-10"
           >
-            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-[#475569] mb-4">
+            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-[#475569] mb-4">
               <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
                 Beranda
               </Link>
@@ -78,59 +79,56 @@ export default function KegiatanPage() {
             </nav>
 
             <header className="space-y-3">
-              <span className="inline-block text-sm font-bold uppercase tracking-wider text-[#92400E]">
-                Tahap Prapeluncuran
+              <span className="inline-block text-sm font-semibold text-[#92400E]">
+                IKA UMS Jabodetabek · Agenda Wilayah
               </span>
               <h1 className="text-[clamp(1.75rem,1.3rem+1.8vw,2.5rem)] font-extrabold tracking-[-0.02em] text-[#0C2340] leading-[1.15]">
                 Jadwal Kopdar IKA UMS Jabodetabek
               </h1>
               <p className="text-base text-[#475569] leading-[1.6] max-w-[44ch] sm:max-w-2xl">
-                Belum ada jadwal kopdar terbuka yang ditetapkan karena kami sedang menghimpun minat hari dan domisili dari pendaftar awal.
+                Tanggal dan tempat temu perdana di sembilan wilayah belum dikunci karena pengurus sedang
+                menghimpun usulan hari luang serta domisili pendaftar awal.
               </p>
             </header>
           </PatternSection>
 
-          <PatternDivider variant="curve" fromColor="#F3F1EA" toColor="#FDFCF7" />
-
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 w-full relative z-[1]">
-            <section className="surface-card rounded-2xl p-6 sm:p-8 space-y-5">
+            <section className="surface-card rounded-xl p-6 sm:p-8 space-y-5">
             <div className="space-y-2">
               <h2 className="text-xl font-bold text-[#0C2340]">
-                Rencana Kopdar Pertama Wilayah Jabodetabek
+                Penyusunan Kopdar Pertama
               </h2>
-              <p className="text-base text-[#475569] leading-[1.6] max-w-[48ch]">
-                Lokasi dan tanggal pasti akan diumumkan lewat WhatsApp kepada anggota yang sudah terdaftar.
+              <p className="text-base text-[#475569] leading-[1.6] max-w-[52ch]">
+                Begitu data domisili dan pilihan waktu luang per kota cukup, pengurus wilayah akan menetapkan
+                tempat bertemu yang dekat stasiun atau area kerja terbanyak lalu mengabari lewat WhatsApp.
               </p>
             </div>
 
-            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-base">
-              <div className="bg-[#F3F1EA] rounded-xl p-4 space-y-1">
-                <dt className="text-sm font-semibold text-[#475569] flex items-center gap-1.5">
-                  <Calendar className="w-4 h-4 text-[#92400E]" />
-                  <span>Tanggal &amp; Jam</span>
+            <dl className="divide-y divide-[#0C2340]/10 border-y border-[#0C2340]/10 text-base">
+              <div className="py-3.5 flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4">
+                <dt className="sm:w-44 text-sm font-semibold text-[#475569] shrink-0">
+                  Waktu Pertemuan
                 </dt>
-                <dd className="font-semibold text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.firstKopdarDate}</dd>
+                <dd className="font-medium text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.firstKopdarDate}</dd>
               </div>
-              <div className="bg-[#F3F1EA] rounded-xl p-4 space-y-1">
-                <dt className="text-sm font-semibold text-[#475569] flex items-center gap-1.5">
-                  <MapPin className="w-4 h-4 text-[#92400E]" />
-                  <span>Lokasi Pertemuan</span>
+              <div className="py-3.5 flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4">
+                <dt className="sm:w-44 text-sm font-semibold text-[#475569] shrink-0">
+                  Titik Lokasi
                 </dt>
-                <dd className="font-semibold text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.firstKopdarLocation}</dd>
+                <dd className="font-medium text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.firstKopdarLocation}</dd>
               </div>
             </dl>
 
-            <div className="flex flex-wrap items-center gap-3 pt-2">
+            <div className="flex flex-wrap items-center gap-3 pt-1">
               <Link
                 href="/#kopdar"
-                className="inline-flex items-center gap-2 min-h-[48px] px-5 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] active:scale-[0.99] text-white text-base font-semibold transition-all duration-150"
+                className="inline-flex items-center justify-center min-h-[48px] px-5 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] active:scale-[0.99] text-white text-base font-semibold transition-all duration-150"
               >
                 Usulkan hari &amp; wilayah kopdar
-                <ArrowRight className="w-4 h-4 text-[#F59E0B]" />
               </Link>
               <Link
                 href="/gabung"
-                className="inline-flex items-center min-h-[48px] px-5 py-3 rounded-lg bg-white border border-[#0C2340]/20 hover:border-[#0C2340]/45 active:scale-[0.99] text-[#0C2340] text-base font-semibold transition-all duration-150"
+                className="inline-flex items-center justify-center min-h-[48px] px-5 py-3 rounded-lg bg-white border border-[#0C2340]/20 hover:border-[#0C2340]/45 active:scale-[0.99] text-[#0C2340] text-base font-semibold transition-all duration-150"
               >
                 Daftar jadi anggota
               </Link>
@@ -164,9 +162,10 @@ export default function KegiatanPage() {
           fade="top-right"
           patternOpacity={0.075}
           patternSize="180px"
+          className="border-b border-[#0C2340]/10"
           contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 md:pt-8 md:pb-10"
         >
-          <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-2 text-xs text-[#475569] mb-4">
+          <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-2 text-sm text-[#475569] mb-4">
             <div className="flex items-center gap-2">
               <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
                 Beranda
@@ -180,19 +179,17 @@ export default function KegiatanPage() {
           </nav>
 
           <div>
-            <span className="inline-block text-sm font-bold uppercase tracking-wider text-[#92400E] mb-1.5">
+            <span className="inline-block text-sm font-semibold text-[#92400E] mb-1.5">
               Jadwal Pertemuan ({DEMO_BADGE_LABEL})
             </span>
             <h1 className="text-[clamp(1.75rem,1.3rem+1.8vw,2.5rem)] font-extrabold tracking-[-0.02em] text-[#0C2340]">
               Jadwal Kopdar Alumni Jabodetabek
             </h1>
             <p className="text-base text-[#475569] mt-2 max-w-[44ch] sm:max-w-2xl leading-[1.6]">
-              Dari kopdar per wilayah hingga sesi berbagi pengalaman kerja. Tandai kehadiranmu agar koordinator mudah memperkirakan tempat.
+              Saring jadwal pertemuan wilayah dan sesi berbagi kerja di bawah ini. Konfirmasi hadir membantu koordinator memperkirakan tempat.
             </p>
           </div>
         </PatternSection>
-
-        <PatternDivider variant="curve" fromColor="#F3F1EA" toColor="#FDFCF7" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 w-full relative z-[1]">
           {/* Highlight Acara */}

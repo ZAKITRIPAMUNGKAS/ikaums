@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/dialog';
 import { getKegiatanList, STATS_JABODETABEK } from '@/data/simulasi';
 import { WILAYAH_JABODETABEK } from '@/data/ums-prodi';
-import { IS_DEMO_MODE, COMMUNITY_PLACEHOLDERS, DEMO_BADGE_LABEL } from '@/lib/config';
+import { IS_DEMO_MODE, DEMO_BADGE_LABEL } from '@/lib/config';
 import { CheckCircle2, Plus, QrCode, Lock, ArrowRight } from 'lucide-react';
 
 interface PendaftarMenunggu {
@@ -152,24 +152,30 @@ export default function KelolaPendaftaranPage() {
               <Lock className="w-5 h-5" />
             </div>
             <div className="space-y-2">
-              <p className="text-xs font-bold uppercase tracking-wider text-[#92400E]">
+              <span className="inline-block text-sm font-semibold text-[#92400E]">
                 Halaman Internal Pengurus
-              </p>
+              </span>
               <h1 className="text-2xl sm:text-3xl font-bold text-[#0C2340]">
                 Kelola Pendaftaran Belum Dibuka di Publik
               </h1>
-              <p className="text-sm sm:text-base text-[#475569] leading-relaxed">
+              <p className="text-base text-[#475569] leading-[1.6]">
                 Untuk menjaga data pribadi pendaftar, halaman verifikasi anggota hanya akan
                 diaktifkan setelah autentikasi pengurus di sisi server terpasang.
               </p>
             </div>
 
-            <div className="bg-[#F3F1EA] border border-[#0C2340]/10 rounded-xl p-4 text-sm text-[#475569] space-y-1.5">
+            <div className="bg-[#F3F1EA] border border-[#0C2340]/10 rounded-xl p-4 text-base text-[#475569] space-y-1.5 leading-[1.6]">
               <p className="font-semibold text-[#0C2340]">Koordinasi Pengurus Saat Pra-Launch</p>
               <p>
-                Pengajuan verifikasi atau pembaruan data anggota sementara ditangani melalui{' '}
-                <span className="font-medium text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.contactEmail}</span>{' '}
-                atau <span className="font-medium text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.contactWhatsapp}</span>.
+                Pengajuan verifikasi atau pembaruan data anggota sementara ditangani melalui saluran
+                resmi di halaman{' '}
+                <Link
+                  href="/kepengurusan"
+                  className="font-semibold text-[#0C2340] underline decoration-[#92400E] underline-offset-4"
+                >
+                  Pengurus &amp; Kontak
+                </Link>
+                .
               </p>
             </div>
 
@@ -215,9 +221,9 @@ export default function KelolaPendaftaranPage() {
         </nav>
 
         <header className="space-y-2">
-          <p className="text-sm font-semibold text-[#92400E]">
+          <span className="inline-block text-sm font-semibold text-[#92400E]">
             Koordinasi Pengurus Jabodetabek
-          </p>
+          </span>
           <h1 className="text-3xl font-bold tracking-tight text-[#0C2340]">
             Kelola Pendaftaran &amp; Jadwal Kopdar
           </h1>
@@ -228,20 +234,20 @@ export default function KelolaPendaftaranPage() {
 
         <section className="grid grid-cols-2 lg:grid-cols-4 gap-4" aria-label="Ringkasan demo">
           <div className="bg-white border border-[#0C2340]/12 rounded-xl p-5">
-            <p className="text-xs font-medium text-[#475569]">Menunggu Verifikasi</p>
-            <p className="text-2xl font-bold text-[#0C2340] mt-1">{antrean.length}</p>
+            <span className="block text-sm font-medium text-[#475569]">Menunggu Verifikasi</span>
+            <span className="block text-2xl font-bold text-[#0C2340] mt-1">{antrean.length}</span>
           </div>
           <div className="bg-white border border-[#0C2340]/12 rounded-xl p-5">
-            <p className="text-xs font-medium text-[#475569]">Anggota Contoh</p>
-            <p className="text-2xl font-bold text-[#0C2340] mt-1">{totalDisetujui.toLocaleString('id-ID')}</p>
+            <span className="block text-sm font-medium text-[#475569]">Anggota Contoh</span>
+            <span className="block text-2xl font-bold text-[#0C2340] mt-1">{totalDisetujui.toLocaleString('id-ID')}</span>
           </div>
           <div className="bg-white border border-[#0C2340]/12 rounded-xl p-5">
-            <p className="text-xs font-medium text-[#475569]">Jadwal Kopdar</p>
-            <p className="text-2xl font-bold text-[#0C2340] mt-1">{agendaList.length}</p>
+            <span className="block text-sm font-medium text-[#475569]">Jadwal Kopdar</span>
+            <span className="block text-2xl font-bold text-[#0C2340] mt-1">{agendaList.length}</span>
           </div>
           <div className="bg-white border border-[#0C2340]/12 rounded-xl p-5">
-            <p className="text-xs font-medium text-[#475569]">Cakupan Wilayah</p>
-            <p className="text-2xl font-bold text-[#0C2340] mt-1">{WILAYAH_JABODETABEK.length} Wilayah</p>
+            <span className="block text-sm font-medium text-[#475569]">Cakupan Wilayah</span>
+            <span className="block text-2xl font-bold text-[#0C2340] mt-1">{WILAYAH_JABODETABEK.length} Wilayah</span>
           </div>
         </section>
 
@@ -306,10 +312,10 @@ export default function KelolaPendaftaranPage() {
                           {item.prodi} &apos;{String(item.angkatan).slice(2)}
                         </span>
                       </div>
-                      <p className="text-sm text-[#475569]">
+                      <p className="text-base text-[#475569]">
                         {item.pekerjaan} · Domisili <span className="font-medium text-[#0C2340]">{item.wilayah}</span>
                       </p>
-                      <p className="text-xs text-[#475569]">Mendaftar {item.tanggalDaftar}</p>
+                      <span className="block text-xs text-[#475569]">Mendaftar {item.tanggalDaftar}</span>
                     </div>
 
                     <div className="flex items-center gap-2.5 shrink-0">
@@ -357,7 +363,7 @@ export default function KelolaPendaftaranPage() {
                 >
                   <div className="space-y-1">
                     <h3 className="text-base font-bold text-[#0C2340]">{ag.judul}</h3>
-                    <p className="text-sm text-[#475569]">
+                    <p className="text-base text-[#475569]">
                       {ag.tanggalWIB} · {ag.lokasi} ({ag.wilayah})
                     </p>
                   </div>
@@ -387,8 +393,8 @@ export default function KelolaPendaftaranPage() {
               {WILAYAH_JABODETABEK.map((reg) => (
                 <div key={reg.id} className="bg-white border border-[#0C2340]/12 rounded-xl p-5 space-y-2">
                   <h3 className="text-base font-bold text-[#0C2340]">{reg.nama}</h3>
-                  <p className="text-xs text-[#475569]">{reg.provinsi}</p>
-                  <p className="text-xs text-[#475569]">{reg.cakupan}</p>
+                  <span className="block text-sm font-medium text-[#92400E]">{reg.provinsi}</span>
+                  <p className="text-base text-[#475569] leading-[1.5]">{reg.cakupan}</p>
                 </div>
               ))}
             </div>
@@ -418,7 +424,7 @@ export default function KelolaPendaftaranPage() {
                 placeholder="Misalnya: Kopdar Alumni UMS Bekasi Barat"
                 value={judulAgenda}
                 onChange={(e) => setJudulAgenda(e.target.value)}
-                className="w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-sm text-[#0C2340]"
+                className="w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-base text-[#0C2340]"
               />
             </div>
             <div>
@@ -432,7 +438,7 @@ export default function KelolaPendaftaranPage() {
                 placeholder="Misalnya: Sabtu, 19 Desember 2026 · 10.00 WIB"
                 value={tanggalAgenda}
                 onChange={(e) => setTanggalAgenda(e.target.value)}
-                className="w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-sm text-[#0C2340]"
+                className="w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-base text-[#0C2340]"
               />
             </div>
             <div>
@@ -446,7 +452,7 @@ export default function KelolaPendaftaranPage() {
                 placeholder="Misalnya: Kafe Sekitar Stasiun Bekasi"
                 value={lokasiAgenda}
                 onChange={(e) => setLokasiAgenda(e.target.value)}
-                className="w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-sm text-[#0C2340]"
+                className="w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-base text-[#0C2340]"
               />
             </div>
             <div>
@@ -457,7 +463,7 @@ export default function KelolaPendaftaranPage() {
                 id="admin-wilayah-kopdar"
                 value={wilayahAgenda}
                 onChange={(e) => setWilayahAgenda(e.target.value)}
-                className="w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-sm text-[#0C2340]"
+                className="w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-base text-[#0C2340]"
               >
                 {WILAYAH_JABODETABEK.map((r) => (
                   <option key={r.id} value={r.nama}>

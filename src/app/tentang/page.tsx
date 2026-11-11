@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Navbar, Footer } from '@/components/Navigation';
-import { PatternSection, PatternDivider } from '@/components/PatternSection';
+import { PatternSection } from '@/components/PatternSection';
 import { COMMUNITY_PLACEHOLDERS } from '@/lib/config';
 import { ShieldCheck, Users, Compass, ArrowRight, ExternalLink, Landmark } from 'lucide-react';
 
@@ -27,6 +27,7 @@ export default function TentangPage() {
           fade="right-focus"
           patternOpacity={0.055}
           patternSize="64px"
+          className="border-b border-[#0C2340]/10"
           contentClassName="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12 sm:pt-8"
         >
           {/* Breadcrumb */}
@@ -43,9 +44,9 @@ export default function TentangPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
             <div className="lg:col-span-7 space-y-5">
-              <p className="text-sm font-semibold text-[#92400E]">
+              <span className="inline-block text-sm font-semibold text-[#92400E]">
                 IKA UMS Wilayah Jabodetabek
-              </p>
+              </span>
               <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-bold tracking-tight text-[#0C2340] leading-[1.15]">
                 Menghubungkan Alumni Universitas Muhammadiyah Surakarta di Jabodetabek
               </h1>
@@ -91,8 +92,6 @@ export default function TentangPage() {
             </div>
           </div>
         </PatternSection>
-
-        <PatternDivider variant="gradient" />
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-[1]">
         {/* Tiga Prinsip Komunitas */}
@@ -141,7 +140,6 @@ export default function TentangPage() {
         </section>
 
         {/* Hubungan dengan IKA UMS Pusat & Dokumen */}
-        <PatternDivider variant="gradient" />
         <section className="py-12 space-y-6">
           <div className="surface-card-soft rounded-2xl p-6 sm:p-8 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div className="space-y-2.5 max-w-2xl">
