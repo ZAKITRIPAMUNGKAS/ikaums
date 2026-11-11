@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { Navbar, Footer } from '@/components/Navigation';
+import { PatternSection, PatternDivider } from '@/components/PatternSection';
 import { AnimatedTabs } from '@/components/ui/animated-tabs';
 import { getKegiatanList } from '@/data/simulasi';
 import { IS_DEMO_MODE, COMMUNITY_PLACEHOLDERS, DEMO_BADGE_LABEL } from '@/lib/config';
@@ -57,28 +58,41 @@ export default function KegiatanPage() {
       <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans">
         <Navbar />
 
-        <main className="flex-grow max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 w-full space-y-8">
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-[#475569]">
-            <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
-              Beranda
-            </Link>
-            <span aria-hidden="true">/</span>
-            <span className="text-[#0C2340] font-semibold">Jadwal Kopdar</span>
-          </nav>
+        <main className="flex-grow page-grain-base w-full">
+          <PatternSection
+            as="section"
+            variant="contour"
+            tone="tint"
+            fade="top-right"
+            patternOpacity={0.075}
+            patternSize="180px"
+            contentClassName="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 sm:pt-8 sm:pb-10"
+          >
+            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-[#475569] mb-4">
+              <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
+                Beranda
+              </Link>
+              <span aria-hidden="true">/</span>
+              <span className="text-[#0C2340] font-semibold">Jadwal Kopdar</span>
+            </nav>
 
-          <header className="border-b border-[#0C2340]/10 pb-6 space-y-2.5">
-            <p className="text-xs font-bold uppercase tracking-wider text-[#B45309]">
-              Tahap Pra-Launch
-            </p>
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0C2340]">
-              Jadwal Kopdar IKA UMS Jabodetabek
-            </h1>
-            <p className="text-sm sm:text-base text-[#475569] leading-relaxed">
-              Belum ada jadwal kopdar terbuka yang ditetapkan karena kami sedang menghimpun minat hari dan domisili dari pendaftar awal.
-            </p>
-          </header>
+            <header className="space-y-2.5">
+              <p className="text-xs font-bold uppercase tracking-wider text-[#92400E]">
+                Tahap Pra-Launch
+              </p>
+              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0C2340]">
+                Jadwal Kopdar IKA UMS Jabodetabek
+              </h1>
+              <p className="text-sm sm:text-base text-[#475569] leading-relaxed">
+                Belum ada jadwal kopdar terbuka yang ditetapkan karena kami sedang menghimpun minat hari dan domisili dari pendaftar awal.
+              </p>
+            </header>
+          </PatternSection>
 
-          <section className="bg-white border border-[#0C2340]/12 rounded-2xl p-6 sm:p-8 shadow-xs space-y-5">
+          <PatternDivider variant="curve" fromColor="#F3F1EA" toColor="#FDFCF7" />
+
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 w-full relative z-[1]">
+            <section className="surface-card rounded-2xl p-6 sm:p-8 space-y-5">
             <div className="space-y-2">
               <h2 className="text-xl font-bold text-[#0C2340]">
                 Rencana Kopdar Pertama Wilayah Jabodetabek
@@ -120,7 +134,8 @@ export default function KegiatanPage() {
                 Daftar jadi anggota
               </Link>
             </div>
-          </section>
+            </section>
+          </div>
         </main>
 
         <Footer />
@@ -140,35 +155,48 @@ export default function KegiatanPage() {
     <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans">
       <Navbar />
 
-      <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 w-full">
-        <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-2 text-xs text-[#475569] mb-4">
-          <div className="flex items-center gap-2">
-            <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
-              Beranda
-            </Link>
-            <span aria-hidden="true">/</span>
-            <span className="text-[#0C2340] font-semibold">Jadwal Kopdar</span>
+      <main className="flex-grow page-grain-base w-full">
+        <PatternSection
+          as="section"
+          variant="contour"
+          tone="tint"
+          fade="top-right"
+          patternOpacity={0.075}
+          patternSize="180px"
+          contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 md:pt-8 md:pb-10"
+        >
+          <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-2 text-xs text-[#475569] mb-4">
+            <div className="flex items-center gap-2">
+              <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
+                Beranda
+              </Link>
+              <span aria-hidden="true">/</span>
+              <span className="text-[#0C2340] font-semibold">Jadwal Kopdar</span>
+            </div>
+            <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-[#92400E] font-semibold">
+              {DEMO_BADGE_LABEL}
+            </span>
+          </nav>
+
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wider text-[#92400E] mb-1.5">
+              Jadwal Pertemuan ({DEMO_BADGE_LABEL})
+            </p>
+            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0C2340]">
+              Jadwal Kopdar Alumni Jabodetabek
+            </h1>
+            <p className="text-sm sm:text-base text-[#475569] mt-2 max-w-2xl leading-relaxed">
+              Dari kopdar per wilayah hingga sesi berbagi pengalaman kerja. Tandai kehadiranmu agar koordinator mudah memperkirakan tempat.
+            </p>
           </div>
-          <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-[#92400E] font-semibold">
-            {DEMO_BADGE_LABEL}
-          </span>
-        </nav>
+        </PatternSection>
 
-        <div className="mb-8 border-b border-[#0C2340]/10 pb-6">
-          <p className="text-xs font-bold uppercase tracking-wider text-[#B45309] mb-1.5">
-            Jadwal Pertemuan ({DEMO_BADGE_LABEL})
-          </p>
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0C2340]">
-            Jadwal Kopdar Alumni Jabodetabek
-          </h1>
-          <p className="text-sm sm:text-base text-[#475569] mt-2 max-w-2xl leading-relaxed">
-            Dari kopdar per wilayah hingga sesi berbagi pengalaman kerja. Tandai kehadiranmu agar koordinator mudah memperkirakan tempat.
-          </p>
-        </div>
+        <PatternDivider variant="curve" fromColor="#F3F1EA" toColor="#FDFCF7" />
 
-        {/* Highlight Acara */}
-        <section className="mb-12">
-          <div className="bg-white border border-[#0C2340]/15 rounded-2xl overflow-hidden shadow-xs grid grid-cols-1 lg:grid-cols-12">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 w-full relative z-[1]">
+          {/* Highlight Acara */}
+          <section className="mb-12">
+            <div className="surface-card rounded-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12">
             <div className="lg:col-span-7 relative min-h-[260px] lg:min-h-[380px] bg-[#0C2340] overflow-hidden">
               <Image
                 src={featuredEvent.gambar || '/images/hero-kumpul-bolo-pisah.jpg'}
@@ -296,6 +324,7 @@ export default function KegiatanPage() {
               );
             })}
           </AnimatePresence>
+          </div>
         </div>
       </main>
 

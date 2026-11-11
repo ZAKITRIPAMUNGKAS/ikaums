@@ -37,9 +37,9 @@ export default function PetaContextualPanel({ region }: PetaContextualPanelProps
 
   if (!IS_DEMO_MODE) {
     return (
-      <aside className="bg-white border border-[#0C2340]/15 rounded-xl p-5 md:p-6 shadow-xs flex flex-col justify-between h-full">
+      <aside className="surface-card rounded-xl p-5 md:p-6 flex flex-col justify-between h-full">
         <div>
-          <p className="text-[11px] font-bold uppercase tracking-wider text-[#B45309] mb-1">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-[#92400E] mb-1">
             {scopeLabel}
           </p>
 
@@ -109,10 +109,10 @@ export default function PetaContextualPanel({ region }: PetaContextualPanelProps
   }
 
   return (
-    <aside className="bg-white border border-[#0C2340]/15 rounded-xl p-5 md:p-6 shadow-xs flex flex-col justify-between h-full">
+    <aside className="surface-card rounded-xl p-5 md:p-6 flex flex-col justify-between h-full">
       <div>
         <div className="flex items-center justify-between gap-2 mb-1">
-          <p className="text-[11px] font-bold uppercase tracking-wider text-[#B45309]">
+          <p className="text-[11px] font-bold uppercase tracking-wider text-[#92400E]">
             {scopeLabel}
           </p>
           <span className="px-2 py-0.5 rounded bg-amber-100 text-[#92400E] text-[10px] font-semibold">

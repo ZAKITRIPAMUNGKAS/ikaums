@@ -42,8 +42,8 @@ export default function MasukPage() {
     <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
       <Navbar />
 
-      <main className="flex-grow flex items-center justify-center px-4 py-12 sm:py-16">
-        <div className="bg-white border border-[#0C2340]/12 rounded-2xl p-6 sm:p-8 max-w-md w-full shadow-xs space-y-6">
+      <main className="flex-grow page-grain-base pattern-surface pattern-dots pattern-tone-light pattern-fade-soft-edges flex items-center justify-center px-4 py-12 sm:py-16">
+        <div className="surface-card rounded-2xl p-6 sm:p-8 max-w-md w-full space-y-6 relative z-[1]">
           <div className="text-center space-y-2">
             <Image
               src="/images/logo-emblem.png"

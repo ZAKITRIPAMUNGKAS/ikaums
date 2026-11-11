@@ -2,6 +2,7 @@ import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Navbar, Footer } from '@/components/Navigation';
+import { PatternSection, PatternDivider } from '@/components/PatternSection';
 import { COMMUNITY_PLACEHOLDERS } from '@/lib/config';
 
 export const metadata: Metadata = {
@@ -15,34 +16,47 @@ export default function PrivasiPage() {
     <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
       <Navbar />
 
-      <main className="flex-grow max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 w-full">
-        <nav aria-label="Breadcrumb" className="text-sm text-[#475569] mb-6 flex items-center gap-2">
-          <Link
-            href="/"
-            className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]"
-          >
-            Beranda
-          </Link>
-          <span aria-hidden="true">/</span>
-          <span className="text-[#0C2340] font-medium">Kebijakan Privasi</span>
-        </nav>
+      <main className="flex-grow page-grain-base w-full">
+        <PatternSection
+          as="section"
+          variant="dots"
+          tone="tint"
+          fade="right-focus"
+          patternOpacity={0.05}
+          patternSize="24px"
+          contentClassName="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 sm:pt-8 sm:pb-10"
+        >
+          <nav aria-label="Breadcrumb" className="text-sm text-[#475569] mb-4 flex items-center gap-2">
+            <Link
+              href="/"
+              className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]"
+            >
+              Beranda
+            </Link>
+            <span aria-hidden="true">/</span>
+            <span className="text-[#0C2340] font-medium">Kebijakan Privasi</span>
+          </nav>
 
-        <header className="pb-8 border-b border-[#0C2340]/12 space-y-3">
-          <p className="text-sm font-semibold text-[#B45309]">
-            Privasi &amp; Data Pendaftar
-          </p>
-          <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#0C2340]">
-            Kebijakan Privasi IKA UMS Wilayah Jabodetabek
-          </h1>
-          <p className="text-base text-[#475569] leading-relaxed">
-            Dokumen ini menjelaskan secara apa adanya data apa yang kami minta saat kamu mendaftar,
-            bagaimana data itu digunakan pengurus, dan hak kamu untuk mengubah atau menghapusnya.
-          </p>
-          <p className="text-sm text-[#475569]">
-            Pembaruan terakhir: November 2026 (Tahap Prapeluncuran)
-          </p>
-        </header>
+          <header className="space-y-3">
+            <p className="text-sm font-semibold text-[#92400E]">
+              Privasi &amp; Data Pendaftar
+            </p>
+            <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#0C2340]">
+              Kebijakan Privasi IKA UMS Wilayah Jabodetabek
+            </h1>
+            <p className="text-base text-[#475569] leading-relaxed">
+              Dokumen ini menjelaskan secara apa adanya data apa yang kami minta saat kamu mendaftar,
+              bagaimana data itu digunakan pengurus, dan hak kamu untuk mengubah atau menghapusnya.
+            </p>
+            <p className="text-sm text-[#475569]">
+              Pembaruan terakhir: November 2026 (Tahap Prapeluncuran)
+            </p>
+          </header>
+        </PatternSection>
 
+        <PatternDivider variant="curve" fromColor="#F3F1EA" toColor="#FDFCF7" />
+
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pb-12 sm:pb-14 w-full relative z-[1]">
         <div className="py-8 space-y-8 text-[15px] sm:text-base text-[#334155] leading-relaxed">
           <section className="space-y-2.5">
             <h2 className="text-xl font-bold text-[#0C2340]">
@@ -163,6 +177,7 @@ export default function PrivasiPage() {
           >
             Daftar jadi anggota
           </Link>
+        </div>
         </div>
       </main>
 

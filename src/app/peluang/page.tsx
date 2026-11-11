@@ -4,6 +4,7 @@ import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Navbar, Footer } from '@/components/Navigation';
+import { PatternSection, PatternDivider } from '@/components/PatternSection';
 import {
   Dialog,
   DialogContent,
@@ -69,8 +70,16 @@ export default function PeluangPage() {
     <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans">
       <Navbar />
 
-      <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 w-full space-y-12">
-        <div>
+      <main className="flex-grow page-grain-base w-full">
+        <PatternSection
+          as="section"
+          variant="dots"
+          tone="tint"
+          fade="right-focus"
+          patternOpacity={0.055}
+          patternSize="24px"
+          contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 md:pt-8 md:pb-10"
+        >
           <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-2 text-xs text-[#475569] mb-4">
             <div className="flex items-center gap-2">
               <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
@@ -86,8 +95,8 @@ export default function PeluangPage() {
             )}
           </nav>
 
-          <header className="border-b border-[#0C2340]/10 pb-6 space-y-2.5">
-            <p className="text-xs font-bold uppercase tracking-wider text-[#B45309]">
+          <header className="space-y-2.5">
+            <p className="text-xs font-bold uppercase tracking-wider text-[#92400E]">
               Pengembangan Karier Alumni
             </p>
             <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0C2340]">
@@ -98,8 +107,11 @@ export default function PeluangPage() {
               alumni serta membagikan info lowongan atau kerja sama usaha yang terverifikasi.
             </p>
           </header>
-        </div>
+        </PatternSection>
 
+        <PatternDivider variant="curve" fromColor="#F3F1EA" toColor="#FDFCF7" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 w-full space-y-12 relative z-[1]">
         {/* Bagian 1: Mentoring Alumni */}
         <section id="mentoring" aria-labelledby="heading-mentoring" className="space-y-6">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -242,6 +254,7 @@ export default function PeluangPage() {
             </Link>
           </div>
         </section>
+        </div>
       </main>
 
       {/* Dialog Ajukan Mentoring */}

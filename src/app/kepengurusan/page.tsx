@@ -2,6 +2,7 @@ import React from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Navbar, Footer } from '@/components/Navigation';
+import { PatternSection, PatternDivider } from '@/components/PatternSection';
 import { getWilayahDemoList } from '@/data/simulasi';
 import { WILAYAH_JABODETABEK } from '@/data/ums-prodi';
 import { IS_DEMO_MODE, COMMUNITY_PLACEHOLDERS, DEMO_BADGE_LABEL } from '@/lib/config';
@@ -103,52 +104,65 @@ export default function KepengurusanPage() {
     <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
       <Navbar />
 
-      <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 w-full">
-        {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-[#475569] mb-4">
-          <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
-            Beranda
-          </Link>
-          <span aria-hidden="true">/</span>
-          <Link href="/tentang" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
-            Tentang
-          </Link>
-          <span aria-hidden="true">/</span>
-          <span className="text-[#0C2340] font-semibold">Pengurus &amp; Kontak</span>
-        </nav>
-
-        {/* Page Header */}
-        <header className="mb-10 border-b border-[#0C2340]/10 pb-8 flex flex-col lg:flex-row lg:items-end justify-between gap-6">
-          <div className="max-w-2xl space-y-2.5">
-            <p className="text-xs font-bold uppercase tracking-wider text-[#B45309]">
-              Struktur &amp; Kontak Resmi
-            </p>
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0C2340] leading-[1.15]">
-              Pengurus &amp; Koordinator Wilayah
-            </h1>
-            <p className="text-sm sm:text-base text-[#475569] leading-relaxed">
-              IKA UMS Wilayah Jabodetabek dijalankan secara gotong royong oleh pengurus harian,
-              bidang kerja, dan perwakilan di sembilan wilayah domisili agar koordinasi kopdar tetap dekat.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2.5 sm:gap-3 shrink-0 w-full sm:w-auto">
-            <Link
-              href="/tentang"
-              className="inline-flex items-center justify-center min-h-[44px] px-3.5 sm:px-4 py-2.5 rounded-xl bg-white border border-[#0C2340]/15 hover:border-[#0C2340]/35 text-[#0C2340] text-xs sm:text-sm font-semibold text-center transition-colors"
-            >
-              Tentang Komunitas
+      <main className="flex-grow page-grain-base w-full">
+        <PatternSection
+          as="section"
+          variant="dots"
+          tone="tint"
+          fade="right-focus"
+          patternOpacity={0.055}
+          patternSize="24px"
+          contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 md:pt-8 md:pb-10"
+        >
+          {/* Breadcrumb */}
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-[#475569] mb-4">
+            <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
+              Beranda
             </Link>
-            <Link
-              href="/gabung"
-              className="inline-flex items-center justify-center gap-1.5 sm:gap-2 min-h-[44px] px-3.5 sm:px-4 py-2.5 rounded-xl bg-[#0C2340] hover:bg-[#16325C] text-white text-xs sm:text-sm font-semibold transition-colors"
-            >
-              <span>Daftar jadi anggota</span>
-              <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#F59E0B] shrink-0" />
+            <span aria-hidden="true">/</span>
+            <Link href="/tentang" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
+              Tentang
             </Link>
-          </div>
-        </header>
+            <span aria-hidden="true">/</span>
+            <span className="text-[#0C2340] font-semibold">Pengurus &amp; Kontak</span>
+          </nav>
 
+          {/* Page Header */}
+          <header className="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+            <div className="max-w-2xl space-y-2.5">
+              <p className="text-xs font-bold uppercase tracking-wider text-[#92400E]">
+                Struktur &amp; Kontak Resmi
+              </p>
+              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0C2340] leading-[1.15]">
+                Pengurus &amp; Koordinator Wilayah
+              </h1>
+              <p className="text-sm sm:text-base text-[#475569] leading-relaxed">
+                IKA UMS Wilayah Jabodetabek dijalankan secara gotong royong oleh pengurus harian,
+                bidang kerja, dan perwakilan di sembilan wilayah domisili agar koordinasi kopdar tetap dekat.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2.5 sm:gap-3 shrink-0 w-full sm:w-auto">
+              <Link
+                href="/tentang"
+                className="inline-flex items-center justify-center min-h-[44px] px-3.5 sm:px-4 py-2.5 rounded-xl bg-white border border-[#0C2340]/15 hover:border-[#0C2340]/35 text-[#0C2340] text-xs sm:text-sm font-semibold text-center transition-colors"
+              >
+                Tentang Komunitas
+              </Link>
+              <Link
+                href="/gabung"
+                className="inline-flex items-center justify-center gap-1.5 sm:gap-2 min-h-[44px] px-3.5 sm:px-4 py-2.5 rounded-xl bg-[#0C2340] hover:bg-[#16325C] text-white text-xs sm:text-sm font-semibold transition-colors"
+              >
+                <span>Daftar jadi anggota</span>
+                <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#F59E0B] shrink-0" />
+              </Link>
+            </div>
+          </header>
+        </PatternSection>
+
+        <PatternDivider variant="curve" fromColor="#F3F1EA" toColor="#FDFCF7" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 w-full relative z-[1]">
         {/* Kontak Sekretariat & Hubungan PP IKA UMS */}
         <section
           aria-labelledby="heading-kontak-resmi"
@@ -445,7 +459,16 @@ export default function KepengurusanPage() {
         </section>
 
         {/* Banner Ajakan Partisipasi Pengurus */}
-        <section className="bg-[#0C2340] text-white rounded-2xl p-6 sm:p-8 lg:p-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <PatternSection
+          as="section"
+          variant="batik"
+          tone="brand"
+          fade="radial-soft"
+          patternOpacity={0.075}
+          patternSize="68px"
+          className="rounded-2xl p-6 sm:p-8 lg:p-10 shadow-[0_14px_34px_-12px_rgba(12,35,64,0.25)]"
+          contentClassName="flex flex-col md:flex-row md:items-center justify-between gap-6"
+        >
           <div className="space-y-2 max-w-xl">
             <h2 className="text-xl sm:text-2xl font-bold tracking-tight">
               Bersedia Jadi Penghubung Wilayahmu?
@@ -462,7 +485,8 @@ export default function KepengurusanPage() {
             Daftar jadi anggota
             <ArrowRight className="w-4 h-4" />
           </Link>
-        </section>
+        </PatternSection>
+        </div>
       </main>
 
       <Footer />

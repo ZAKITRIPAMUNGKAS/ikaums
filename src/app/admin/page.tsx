@@ -145,8 +145,9 @@ export default function KelolaPendaftaranPage() {
     return (
       <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
         <Navbar />
-        <main className="flex-grow max-w-2xl mx-auto px-4 sm:px-6 py-12 sm:py-16 w-full">
-          <div className="bg-white border border-[#0C2340]/12 rounded-2xl p-6 sm:p-8 shadow-xs space-y-5">
+        <main className="flex-grow pattern-surface pattern-dots pattern-tone-light pattern-fade-soft-edges py-12 sm:py-16 w-full">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 relative z-[1]">
+            <div className="surface-card rounded-2xl p-6 sm:p-8 space-y-5">
             <div className="w-11 h-11 rounded-xl bg-[#F3F1EA] border border-[#0C2340]/12 flex items-center justify-center text-[#0C2340]">
               <Lock className="w-5 h-5" />
             </div>
@@ -187,6 +188,7 @@ export default function KelolaPendaftaranPage() {
                 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
+            </div>
           </div>
         </main>
         <Footer />
@@ -198,7 +200,7 @@ export default function KelolaPendaftaranPage() {
     <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
       <Navbar />
 
-      <main className="flex-grow max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 w-full space-y-8">
+      <main className="flex-grow page-grain-base max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 w-full space-y-8">
         <nav aria-label="Breadcrumb" className="text-sm text-[#475569] flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">

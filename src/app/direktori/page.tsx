@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { Navbar, Footer } from '@/components/Navigation';
+import { PatternSection, PatternDivider } from '@/components/PatternSection';
 import { AnimatedTabs } from '@/components/ui/animated-tabs';
 import {
   Dialog,
@@ -142,16 +143,17 @@ export default function DirektoriPage() {
       <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans">
         <Navbar />
 
-        <main className="flex-grow max-w-3xl mx-auto px-4 sm:px-6 py-10 sm:py-16 w-full space-y-6">
-          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-[#475569]">
-            <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
-              Beranda
-            </Link>
-            <span aria-hidden="true">/</span>
-            <span className="text-[#0C2340] font-semibold">Daftar Anggota</span>
-          </nav>
+        <main className="flex-grow page-grain-base pattern-surface pattern-dots pattern-tone-light pattern-fade-soft-edges w-full py-10 sm:py-16">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 space-y-6 relative z-[1]">
+            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-[#475569]">
+              <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
+                Beranda
+              </Link>
+              <span aria-hidden="true">/</span>
+              <span className="text-[#0C2340] font-semibold">Daftar Anggota</span>
+            </nav>
 
-          <section className="bg-white border border-[#0C2340]/12 rounded-2xl p-6 sm:p-10 shadow-xs space-y-6">
+            <section className="surface-card rounded-2xl p-6 sm:p-10 space-y-6">
             <div className="w-12 h-12 rounded-xl bg-[#F3F1EA] border border-[#0C2340]/12 flex items-center justify-center text-[#0C2340]">
               <Lock className="w-5 h-5" />
             </div>
@@ -193,7 +195,8 @@ export default function DirektoriPage() {
                 Masuk ke akun
               </Link>
             </div>
-          </section>
+            </section>
+          </div>
         </main>
 
         <Footer />
@@ -205,43 +208,56 @@ export default function DirektoriPage() {
     <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans">
       <Navbar />
 
-      <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 w-full">
-        <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-2 text-xs text-[#475569] mb-4">
-          <div className="flex items-center gap-2">
-            <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
-              Beranda
+      <main className="flex-grow page-grain-base w-full">
+        <PatternSection
+          as="section"
+          variant="dots"
+          tone="tint"
+          fade="right-focus"
+          patternOpacity={0.055}
+          patternSize="24px"
+          contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 md:pt-8 md:pb-10"
+        >
+          <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-2 text-xs text-[#475569] mb-4">
+            <div className="flex items-center gap-2">
+              <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
+                Beranda
+              </Link>
+              <span aria-hidden="true">/</span>
+              <span className="text-[#0C2340] font-semibold">Daftar Anggota</span>
+            </div>
+            <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-[#92400E] font-semibold">
+              {DEMO_BADGE_LABEL}
+            </span>
+          </nav>
+
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-wider text-[#92400E] mb-1.5">
+                Jaringan Alumni Jabodetabek ({DEMO_BADGE_LABEL})
+              </p>
+              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0C2340]">
+                Daftar Anggota IKA UMS
+              </h1>
+              <p className="text-sm sm:text-base text-[#475569] mt-2 max-w-2xl leading-relaxed">
+                Cari teman satu jurusan, rekan sewilayah domisili, atau senior yang bersedia berbagi pengalaman kerja.
+              </p>
+            </div>
+
+            <Link
+              href="/peta"
+              className="inline-flex items-center justify-center min-h-[44px] text-xs sm:text-sm font-semibold text-[#0C2340] hover:text-[#92400E] border border-[#0C2340]/20 bg-white px-4 py-2.5 rounded-lg self-start lg:self-auto transition-colors shrink-0"
+            >
+              Lihat Sebaran Wilayah
             </Link>
-            <span aria-hidden="true">/</span>
-            <span className="text-[#0C2340] font-semibold">Daftar Anggota</span>
           </div>
-          <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-[#92400E] font-semibold">
-            {DEMO_BADGE_LABEL}
-          </span>
-        </nav>
+        </PatternSection>
 
-        <div className="mb-8 border-b border-[#0C2340]/10 pb-6 flex flex-col lg:flex-row lg:items-end justify-between gap-4">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-wider text-[#B45309] mb-1.5">
-              Jaringan Alumni Jabodetabek ({DEMO_BADGE_LABEL})
-            </p>
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0C2340]">
-              Daftar Anggota IKA UMS
-            </h1>
-            <p className="text-sm sm:text-base text-[#475569] mt-2 max-w-2xl leading-relaxed">
-              Cari teman satu jurusan, rekan sewilayah domisili, atau senior yang bersedia berbagi pengalaman kerja.
-            </p>
-          </div>
+        <PatternDivider variant="curve" fromColor="#F3F1EA" toColor="#FDFCF7" />
 
-          <Link
-            href="/peta"
-            className="inline-flex items-center justify-center min-h-[44px] text-xs sm:text-sm font-semibold text-[#0C2340] hover:text-[#B45309] border border-[#0C2340]/20 bg-white px-4 py-2.5 rounded-lg self-start lg:self-auto transition-colors shrink-0"
-          >
-            Lihat Sebaran Wilayah
-          </Link>
-        </div>
-
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 w-full relative z-[1]">
         {/* Search & Filter Toolbar */}
-        <div className="bg-white border border-[#0C2340]/12 rounded-xl p-4 sm:p-5 mb-8 shadow-2xs space-y-4">
+        <div className="surface-card rounded-xl p-4 sm:p-5 mb-8 space-y-4">
           <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3">
             <div className="relative flex-1">
               <Search className="w-4 h-4 text-[#475569] absolute left-3.5 top-1/2 -translate-y-1/2" />
@@ -545,6 +561,7 @@ export default function DirektoriPage() {
             </DialogContent>
           )}
         </Dialog>
+        </div>
       </main>
 
       <Footer />

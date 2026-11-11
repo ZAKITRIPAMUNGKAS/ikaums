@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Navbar, Footer } from '@/components/Navigation';
+import { PatternSection, PatternDivider } from '@/components/PatternSection';
 import { COMMUNITY_PLACEHOLDERS } from '@/lib/config';
 import { ShieldCheck, Users, Compass, ArrowRight, ExternalLink, Landmark } from 'lucide-react';
 
@@ -17,72 +18,85 @@ export default function TentangPage() {
     <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
       <Navbar />
 
-      <main className="flex-grow max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 w-full">
-        {/* Breadcrumb */}
-        <nav aria-label="Breadcrumb" className="text-sm text-[#475569] mb-6 flex items-center gap-2">
-          <Link
-            href="/"
-            className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]"
-          >
-            Beranda
-          </Link>
-          <span aria-hidden="true">/</span>
-          <span className="text-[#0C2340] font-medium">Tentang Komunitas</span>
-        </nav>
+      <main className="flex-grow page-grain-base w-full">
+        {/* Hero Editorial Asimetris — pattern-batik ringan memudar di kanan */}
+        <PatternSection
+          as="section"
+          variant="batik"
+          tone="light"
+          fade="right-focus"
+          patternOpacity={0.055}
+          patternSize="64px"
+          contentClassName="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12 sm:pt-8"
+        >
+          {/* Breadcrumb */}
+          <nav aria-label="Breadcrumb" className="text-sm text-[#475569] mb-4 flex items-center gap-2">
+            <Link
+              href="/"
+              className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]"
+            >
+              Beranda
+            </Link>
+            <span aria-hidden="true">/</span>
+            <span className="text-[#0C2340] font-medium">Tentang Komunitas</span>
+          </nav>
 
-        {/* Hero Editorial Asimetris */}
-        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start pb-12 border-b border-[#0C2340]/10">
-          <div className="lg:col-span-7 space-y-5">
-            <p className="text-sm font-semibold text-[#B45309]">
-              IKA UMS Wilayah Jabodetabek
-            </p>
-            <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-bold tracking-tight text-[#0C2340] leading-[1.15]">
-              Menghubungkan Alumni Universitas Muhammadiyah Surakarta di Jabodetabek
-            </h1>
-            <p className="text-base sm:text-lg text-[#475569] leading-relaxed">
-              Selama ini, komunikasi alumni UMS di Jakarta, Bogor, Depok, Tangerang, dan Bekasi banyak
-              tersebar di grup WhatsApp jurusan atau angkatan masing-masing. Situs ini disiapkan sebagai
-              titik temu lintas angkatan agar alumni lebih mudah saling kenal berdasarkan domisili,
-              menggelar kopdar wilayah, dan berbagi pengalaman kerja.
-            </p>
-            <div className="pt-2 flex flex-wrap items-center gap-3">
-              <Link
-                href="/gabung"
-                className="inline-flex items-center gap-2 min-h-[44px] px-5 py-2.5 rounded-lg bg-[#0C2340] hover:bg-[#16325C] text-white text-sm font-semibold transition-colors"
-              >
-                Daftar jadi anggota
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                href="/kepengurusan"
-                className="inline-flex items-center gap-2 min-h-[44px] px-5 py-2.5 rounded-lg bg-white border border-[#0C2340]/15 hover:border-[#0C2340]/35 text-[#0C2340] text-sm font-semibold transition-colors"
-              >
-                Lihat Pengurus &amp; Kontak
-              </Link>
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+            <div className="lg:col-span-7 space-y-5">
+              <p className="text-sm font-semibold text-[#92400E]">
+                IKA UMS Wilayah Jabodetabek
+              </p>
+              <h1 className="text-3xl sm:text-4xl lg:text-[42px] font-bold tracking-tight text-[#0C2340] leading-[1.15]">
+                Menghubungkan Alumni Universitas Muhammadiyah Surakarta di Jabodetabek
+              </h1>
+              <p className="text-base sm:text-lg text-[#475569] leading-relaxed">
+                Selama ini, komunikasi alumni UMS di Jakarta, Bogor, Depok, Tangerang, dan Bekasi banyak
+                tersebar di grup WhatsApp jurusan atau angkatan masing-masing. Situs ini disiapkan sebagai
+                titik temu lintas angkatan agar alumni lebih mudah saling kenal berdasarkan domisili,
+                menggelar kopdar wilayah, dan berbagi pengalaman kerja.
+              </p>
+              <div className="pt-2 flex flex-wrap items-center gap-3">
+                <Link
+                  href="/gabung"
+                  className="inline-flex items-center gap-2 min-h-[44px] px-5 py-2.5 rounded-lg bg-[#0C2340] hover:bg-[#16325C] text-white text-sm font-semibold transition-colors"
+                >
+                  Daftar jadi anggota
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
+                  href="/kepengurusan"
+                  className="inline-flex items-center gap-2 min-h-[44px] px-5 py-2.5 rounded-lg bg-white border border-[#0C2340]/15 hover:border-[#0C2340]/35 text-[#0C2340] text-sm font-semibold transition-colors"
+                >
+                  Lihat Pengurus &amp; Kontak
+                </Link>
+              </div>
+            </div>
+
+            <div className="lg:col-span-5">
+              <figure className="surface-card rounded-2xl overflow-hidden">
+                <div className="aspect-[4/3] w-full bg-[#F3F1EA] relative overflow-hidden">
+                  <Image
+                    src="/images/hero-kumpul-bolo-pisah.jpg"
+                    alt="Dokumentasi pertemuan alumni Universitas Muhammadiyah Surakarta"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 40vw"
+                    className="object-cover"
+                  />
+                </div>
+                <figcaption className="p-4 text-sm text-[#475569] leading-relaxed border-t border-[#0C2340]/10 bg-white">
+                  <strong className="text-[#0C2340] font-semibold">Dokumentasi Pertemuan Alumni.</strong>{' '}
+                  {COMMUNITY_PLACEHOLDERS.documentationCaption}
+                </figcaption>
+              </figure>
             </div>
           </div>
+        </PatternSection>
 
-          <div className="lg:col-span-5">
-            <figure className="bg-white border border-[#0C2340]/10 rounded-2xl overflow-hidden shadow-xs">
-              <div className="aspect-[4/3] w-full bg-[#F3F1EA] relative overflow-hidden">
-                <Image
-                  src="/images/hero-kumpul-bolo-pisah.jpg"
-                  alt="Dokumentasi pertemuan alumni Universitas Muhammadiyah Surakarta"
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 40vw"
-                  className="object-cover"
-                />
-              </div>
-              <figcaption className="p-4 text-sm text-[#475569] leading-relaxed border-t border-[#0C2340]/10">
-                <strong className="text-[#0C2340] font-semibold">Dokumentasi Pertemuan Alumni.</strong>{' '}
-                {COMMUNITY_PLACEHOLDERS.documentationCaption}
-              </figcaption>
-            </figure>
-          </div>
-        </section>
+        <PatternDivider variant="gradient" />
 
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-[1]">
         {/* Tiga Prinsip Komunitas */}
-        <section className="py-12 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 border-b border-[#0C2340]/10">
+        <section className="py-12 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
           <article className="space-y-3">
             <div className="w-10 h-10 rounded-lg bg-[#F3F1EA] border border-[#0C2340]/10 flex items-center justify-center text-[#0C2340]">
               <Compass className="w-5 h-5" />
@@ -121,8 +135,9 @@ export default function TentangPage() {
         </section>
 
         {/* Hubungan dengan IKA UMS Pusat & Dokumen */}
+        <PatternDivider variant="gradient" />
         <section className="py-12 space-y-6">
-          <div className="bg-[#F3F1EA] border border-[#0C2340]/12 rounded-2xl p-6 sm:p-8 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+          <div className="surface-card-soft rounded-2xl p-6 sm:p-8 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div className="space-y-2.5 max-w-2xl">
               <div className="flex items-center gap-2 text-sm font-bold text-[#0C2340]">
                 <Landmark className="w-4 h-4 text-[#B45309] shrink-0" />
@@ -167,6 +182,7 @@ export default function TentangPage() {
             </div>
           </div>
         </section>
+        </div>
       </main>
 
       <Footer />

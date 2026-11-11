@@ -3,6 +3,7 @@
 import React, { useState, useRef } from 'react';
 import Link from 'next/link';
 import { Navbar, Footer } from '@/components/Navigation';
+import { PatternSection, PatternDivider } from '@/components/PatternSection';
 import {
   WILAYAH_JABODETABEK,
   FAKULTAS_PRODI_UMS,
@@ -178,40 +179,53 @@ export default function GabungPage() {
     <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
       <Navbar />
 
-      <main className="flex-grow max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 w-full">
-        <nav aria-label="Breadcrumb" className="text-sm text-[#475569] mb-6 flex items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
-              Beranda
-            </Link>
-            <span aria-hidden="true">/</span>
-            <span className="text-[#0C2340] font-medium">Daftar Jadi Anggota</span>
-          </div>
-          {IS_DEMO_MODE && (
-            <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-[#92400E] text-xs font-semibold">
-              {DEMO_BADGE_LABEL}
-            </span>
-          )}
-        </nav>
-
+      <main className="flex-grow page-grain-base w-full">
         {!submitted ? (
           <>
-            <header className="mb-8 space-y-3">
-              <p className="text-sm font-semibold text-[#B45309]">
-                Pendataan Awal Anggota
-              </p>
-              <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#0C2340] leading-tight">
-                Daftar Jadi Anggota IKA UMS Jabodetabek
-              </h1>
-              <p className="text-base text-[#475569] leading-relaxed">
-                Cukup isi 5 data dasar di bawah agar pengurus bisa memverifikasi latar alumnimu dan
-                mengabari jadwal kopdar di wilayah domisilimu. Gratis dan tanpa kata sandi.
-              </p>
-            </header>
+            <PatternSection
+              as="section"
+              variant="dots"
+              tone="tint"
+              fade="right-focus"
+              patternOpacity={0.055}
+              patternSize="24px"
+              contentClassName="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 sm:pt-8 sm:pb-10"
+            >
+              <nav aria-label="Breadcrumb" className="text-sm text-[#475569] mb-4 flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
+                    Beranda
+                  </Link>
+                  <span aria-hidden="true">/</span>
+                  <span className="text-[#0C2340] font-medium">Daftar Jadi Anggota</span>
+                </div>
+                {IS_DEMO_MODE && (
+                  <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-[#92400E] text-xs font-semibold">
+                    {DEMO_BADGE_LABEL}
+                  </span>
+                )}
+              </nav>
 
+              <header className="space-y-3">
+                <p className="text-sm font-semibold text-[#92400E]">
+                  Pendataan Awal Anggota
+                </p>
+                <h1 className="text-3xl sm:text-4xl font-bold tracking-tight text-[#0C2340] leading-tight">
+                  Daftar Jadi Anggota IKA UMS Jabodetabek
+                </h1>
+                <p className="text-base text-[#475569] leading-relaxed">
+                  Cukup isi 5 data dasar di bawah agar pengurus bisa memverifikasi latar alumnimu dan
+                  mengabari jadwal kopdar di wilayah domisilimu. Gratis dan tanpa kata sandi.
+                </p>
+              </header>
+            </PatternSection>
+
+            <PatternDivider variant="curve" fromColor="#F3F1EA" toColor="#FDFCF7" />
+
+            <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 w-full relative z-[1]">
             <form
               onSubmit={handleSubmit}
-              className="bg-white border border-[#0C2340]/12 rounded-2xl p-6 sm:p-8 shadow-xs space-y-6"
+              className="surface-card rounded-2xl p-6 sm:p-8 space-y-6"
               noValidate
             >
               {/* Honeypot anti-spam */}
@@ -574,9 +588,12 @@ export default function GabungPage() {
                 </button>
               </div>
             </form>
+            </div>
           </>
         ) : (
-          <section className="bg-white border border-[#0C2340]/12 rounded-2xl p-6 sm:p-10 text-center max-w-2xl mx-auto shadow-xs space-y-6">
+          <div className="pattern-surface pattern-dots pattern-tone-light pattern-fade-soft-edges py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-3xl mx-auto relative z-[1]">
+              <section className="surface-card rounded-2xl p-6 sm:p-10 text-center max-w-2xl mx-auto space-y-6">
             <div className="w-12 h-12 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center mx-auto">
               <CheckCircle2 className="w-6 h-6" />
             </div>
@@ -644,6 +661,8 @@ export default function GabungPage() {
               </Link>
             </div>
           </section>
+            </div>
+          </div>
         )}
       </main>
 
