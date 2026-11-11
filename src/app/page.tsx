@@ -158,6 +158,7 @@ export default function HomePage() {
                     width={1200}
                     height={750}
                     priority
+                    fetchPriority="high"
                     sizes="(max-width: 1024px) 100vw, 48vw"
                     className="w-full h-full object-cover"
                   />
@@ -226,7 +227,7 @@ export default function HomePage() {
 
             <ol className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
               <li className="space-y-1.5">
-                <p className="text-xs font-bold text-[#B45309] tracking-wider uppercase">
+                <p className="text-xs font-bold text-[#92400E] tracking-wider uppercase">
                   Langkah 01
                 </p>
                 <h3 className="text-base sm:text-lg font-bold text-[#0C2340]">
@@ -238,7 +239,7 @@ export default function HomePage() {
               </li>
 
               <li className="space-y-1.5">
-                <p className="text-xs font-bold text-[#B45309] tracking-wider uppercase">
+                <p className="text-xs font-bold text-[#92400E] tracking-wider uppercase">
                   Langkah 02
                 </p>
                 <h3 className="text-base sm:text-lg font-bold text-[#0C2340]">
@@ -250,7 +251,7 @@ export default function HomePage() {
               </li>
 
               <li className="space-y-1.5">
-                <p className="text-xs font-bold text-[#B45309] tracking-wider uppercase">
+                <p className="text-xs font-bold text-[#92400E] tracking-wider uppercase">
                   Langkah 03
                 </p>
                 <h3 className="text-base sm:text-lg font-bold text-[#0C2340]">
@@ -663,7 +664,7 @@ export default function HomePage() {
             <div className="flex flex-wrap items-center gap-3 shrink-0">
               <Link
                 href="/gabung"
-                className="inline-flex items-center justify-center gap-2 min-h-[48px] px-6 py-3 rounded-xl bg-[#D97706] hover:bg-[#F59E0B] text-white text-sm font-semibold transition-colors"
+                className="inline-flex items-center justify-center gap-2 min-h-[48px] px-6 py-3 rounded-xl bg-[#F59E0B] hover:bg-[#FBBF24] text-[#0C2340] text-sm font-bold transition-colors"
               >
                 Daftar jadi anggota
                 <ArrowRight className="w-4 h-4" />

@@ -155,7 +155,7 @@ export default function KepengurusanPage() {
           className="mb-12 bg-[#F3F1EA] border border-[#0C2340]/12 rounded-2xl p-5 sm:p-7 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
         >
           <div className="lg:col-span-5 space-y-2">
-            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#B45309]">
+            <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#92400E]">
               <PhoneCall className="w-4 h-4 shrink-0" />
               <span>Sekretariat &amp; Izin Organisasi</span>
             </div>
@@ -457,7 +457,7 @@ export default function KepengurusanPage() {
           </div>
           <Link
             href="/gabung"
-            className="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 py-3 rounded-lg bg-[#D97706] hover:bg-[#F59E0B] text-white font-semibold text-sm transition-colors shrink-0"
+            className="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 py-3 rounded-lg bg-[#F59E0B] hover:bg-[#FBBF24] text-[#0C2340] font-bold text-sm transition-colors shrink-0"
           >
             Daftar jadi anggota
             <ArrowRight className="w-4 h-4" />
