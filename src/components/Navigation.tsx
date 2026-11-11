@@ -442,23 +442,16 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10">
           
           <div className="md:col-span-6 space-y-3 sm:space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center p-1.5 border border-white/15">
-                <img
-                  src="/images/logo-emblem.png"
-                  alt="Emblem IKA UMS"
-                  className="w-full h-full object-contain brightness-125"
-                />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-extrabold text-xl text-white leading-none tracking-tight">
-                  IKA UMS
-                </span>
-                <span className="text-[11px] font-semibold uppercase tracking-wider text-[#F59E0B] mt-1">
-                  Wilayah Jabodetabek
-                </span>
-              </div>
-            </div>
+            <Link
+              href="/"
+              className="inline-block focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F59E0B] rounded-md"
+            >
+              <img
+                src="/images/logo-white-text.png"
+                alt="Logo Ikatan Alumni UMS"
+                className="h-14 sm:h-16 w-auto object-contain"
+              />
+            </Link>
             <p className="text-sm text-white/80 max-w-md leading-relaxed">
               Wadah silaturahmi, rujukan karier, dan saling bantu sesama alumni Universitas Muhammadiyah Surakarta yang berdomisili atau berkarya di Jakarta, Bogor, Depok, Tangerang, dan Bekasi.
             </p>
