@@ -105,14 +105,14 @@ export default function KegiatanPage() {
             <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
               <div className="bg-[#F3F1EA] rounded-xl p-4 space-y-1">
                 <dt className="text-xs font-semibold text-[#475569] flex items-center gap-1.5">
-                  <Calendar className="w-4 h-4 text-[#B45309]" />
+                  <Calendar className="w-4 h-4 text-[#92400E]" />
                   <span>Tanggal &amp; Jam</span>
                 </dt>
                 <dd className="font-semibold text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.firstKopdarDate}</dd>
               </div>
               <div className="bg-[#F3F1EA] rounded-xl p-4 space-y-1">
                 <dt className="text-xs font-semibold text-[#475569] flex items-center gap-1.5">
-                  <MapPin className="w-4 h-4 text-[#B45309]" />
+                  <MapPin className="w-4 h-4 text-[#92400E]" />
                   <span>Lokasi Pertemuan</span>
                 </dt>
                 <dd className="font-semibold text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.firstKopdarLocation}</dd>
@@ -225,11 +225,11 @@ export default function KegiatanPage() {
 
                 <div className="space-y-2 text-xs text-[#475569]">
                   <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-[#B45309] shrink-0" />
+                    <Calendar className="w-4 h-4 text-[#92400E] shrink-0" />
                     <span className="font-semibold text-[#0C2340]">{featuredEvent.tanggalWIB}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-[#B45309] shrink-0" />
+                    <MapPin className="w-4 h-4 text-[#92400E] shrink-0" />
                     <span>{featuredEvent.lokasi || featuredEvent.lokasiSpesifik} · {featuredEvent.wilayah}</span>
                   </div>
                   <div className="flex items-center gap-2">

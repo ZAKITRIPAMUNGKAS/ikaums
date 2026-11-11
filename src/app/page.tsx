@@ -118,7 +118,7 @@ export default function HomePage() {
         >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             <div className="lg:col-span-6 space-y-6">
-              <div className="inline-flex flex-wrap items-center gap-2 text-xs font-semibold text-[#92400E] bg-[#FEF3C7]/85 border border-[#B45309]/20 px-3 py-1 rounded-full">
+              <div className="inline-flex flex-wrap items-center gap-2 text-xs font-semibold text-[#92400E] bg-[#FEF3C7]/85 border border-[#92400E]/20 px-3 py-1 rounded-full">
                 <span>Pendataan Awal · IKA UMS Wilayah Jabodetabek</span>
                 {IS_DEMO_MODE && <span className="underline">({DEMO_BADGE_LABEL})</span>}
               </div>
@@ -408,7 +408,7 @@ export default function HomePage() {
 
                     <div>
                       <label htmlFor="kopdar-nama" className="block text-sm font-semibold text-[#0C2340] mb-1.5">
-                        Nama Lengkap <span className="text-[#B45309]">*</span>
+                        Nama Lengkap <span className="text-[#92400E]">*</span>
                       </label>
                       <input
                         id="kopdar-nama"
@@ -433,7 +433,7 @@ export default function HomePage() {
 
                     <div>
                       <label htmlFor="kopdar-wa" className="block text-sm font-semibold text-[#0C2340] mb-1.5">
-                        Nomor WhatsApp <span className="text-[#B45309]">*</span>
+                        Nomor WhatsApp <span className="text-[#92400E]">*</span>
                       </label>
                       <input
                         id="kopdar-wa"
@@ -628,7 +628,7 @@ export default function HomePage() {
             <div className="divide-y divide-[#0C2340]/12 border-y border-[#0C2340]/12">
               <details className="group py-2">
                 <summary className="list-none flex items-center justify-between gap-4 min-h-[44px] py-2 font-semibold text-sm sm:text-base text-[#0C2340] cursor-pointer">
-                  <span>Apakah bergabung di IKA UMS Jabodetabek berbayar?</span>
+                  <span>Apakah mendaftar di IKA UMS Jabodetabek berbayar?</span>
                   <ChevronDown className="w-4 h-4 shrink-0 text-[#475569] transition-transform group-open:rotate-180" />
                 </summary>
                 <p className="pb-4 text-sm text-[#475569] leading-relaxed">

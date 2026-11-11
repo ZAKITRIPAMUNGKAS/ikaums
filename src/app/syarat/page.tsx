@@ -119,7 +119,7 @@ export default function SyaratPage() {
         <div className="pt-6 border-t border-[#0C2340]/10 flex flex-wrap items-center justify-between gap-4">
           <Link
             href="/privasi"
-            className="inline-flex items-center min-h-[44px] text-sm font-semibold text-[#0C2340] hover:text-[#B45309] transition-colors"
+            className="inline-flex items-center min-h-[44px] text-sm font-semibold text-[#0C2340] hover:text-[#92400E] transition-colors"
           >
             &larr; Baca Kebijakan Privasi
           </Link>

@@ -31,7 +31,7 @@ export default function ProfilSayaPage() {
             </div>
 
             <div className="space-y-2">
-              <p className="text-xs font-bold uppercase tracking-wider text-[#B45309]">
+              <p className="text-xs font-bold uppercase tracking-wider text-[#92400E]">
                 Profil Saya
               </p>
               <h1 className="text-2xl sm:text-3xl font-bold text-[#0C2340]">
@@ -113,7 +113,7 @@ export default function ProfilSayaPage() {
               </div>
               <p className="text-sm text-[#475569] flex flex-wrap items-center gap-x-4 gap-y-1">
                 <span className="inline-flex items-center gap-1.5">
-                  <Briefcase className="w-4 h-4 text-[#B45309]" />
+                  <Briefcase className="w-4 h-4 text-[#92400E]" />
                   Engineering Manager · Teknik Informatika &apos;11
                 </span>
                 <span className="inline-flex items-center gap-1.5">
@@ -141,7 +141,7 @@ export default function ProfilSayaPage() {
 
         <section className="bg-white border border-[#0C2340]/12 rounded-2xl p-6 sm:p-8 space-y-5">
           <div className="flex items-center gap-2">
-            <ShieldCheck className="w-5 h-5 text-[#B45309]" />
+            <ShieldCheck className="w-5 h-5 text-[#92400E]" />
             <h2 className="text-lg font-bold text-[#0C2340]">Pengaturan Privasi Tampilan ({DEMO_BADGE_LABEL})</h2>
           </div>
 

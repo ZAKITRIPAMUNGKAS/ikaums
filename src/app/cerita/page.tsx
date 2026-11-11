@@ -41,7 +41,7 @@ export default function CeritaPage() {
               <BookOpen className="w-5 h-5" />
             </div>
             <div className="space-y-2">
-              <p className="text-xs font-bold uppercase tracking-wider text-[#B45309]">
+              <p className="text-xs font-bold uppercase tracking-wider text-[#92400E]">
                 Segera Hadir
               </p>
               <h1 className="text-2xl sm:text-3xl font-extrabold text-[#0C2340]">
@@ -148,7 +148,7 @@ export default function CeritaPage() {
                 {featured.judul}
               </h2>
 
-              <blockquote className="pl-4 border-l-2 border-[#B45309] text-sm text-[#475569] italic leading-relaxed py-0.5">
+              <blockquote className="pl-4 border-l-2 border-[#92400E] text-sm text-[#475569] italic leading-relaxed py-0.5">
                 &ldquo;{featured.kutipan}&rdquo;
               </blockquote>
 
@@ -163,7 +163,7 @@ export default function CeritaPage() {
               <button
                 type="button"
                 onClick={() => setSelectedStory(featured)}
-                className="inline-flex items-center gap-1 min-h-[44px] font-semibold text-[#0C2340] hover:text-[#B45309] cursor-pointer"
+                className="inline-flex items-center gap-1 min-h-[44px] font-semibold text-[#0C2340] hover:text-[#92400E] cursor-pointer"
               >
                 <span>Baca Kisah Lengkap</span>
                 <ArrowRight className="w-4 h-4" />
@@ -204,9 +204,9 @@ export default function CeritaPage() {
                 <button
                   type="button"
                   onClick={() => setSelectedStory(cerita)}
-                  className="inline-flex items-center gap-1 min-h-[44px] text-xs font-semibold text-[#0C2340] hover:text-[#B45309] cursor-pointer"
+                  className="inline-flex items-center gap-1 min-h-[44px] text-xs font-semibold text-[#0C2340] hover:text-[#92400E] cursor-pointer"
                 >
-                  <span>Baca</span>
+                  <span>Baca cerita</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>

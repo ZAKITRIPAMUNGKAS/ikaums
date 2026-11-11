@@ -189,7 +189,7 @@ export default function MasukPage() {
           <details className="pt-4 border-t border-[#0C2340]/10 text-xs text-[#475569] group">
             <summary className="list-none flex items-center justify-between gap-2 min-h-[44px] font-semibold text-[#0C2340] cursor-pointer">
               <span className="inline-flex items-center gap-1.5">
-                <HelpCircle className="w-4 h-4 text-[#B45309]" />
+                <HelpCircle className="w-4 h-4 text-[#92400E]" />
                 Lupa akses atau nomor WhatsApp berubah?
               </span>
             </summary>
@@ -206,7 +206,7 @@ export default function MasukPage() {
             Belum terdaftar sebagai anggota?{' '}
             <Link
               href="/gabung"
-              className="inline-flex items-center min-h-[44px] text-[#0C2340] font-semibold hover:text-[#B45309] underline underline-offset-4"
+              className="inline-flex items-center min-h-[44px] text-[#0C2340] font-semibold hover:text-[#92400E] underline underline-offset-4"
             >
               Daftar jadi anggota
             </Link>

@@ -50,7 +50,7 @@ export default function PetaContextualPanel({ region }: PetaContextualPanelProps
           <div className="space-y-3 mb-6">
             <div className="bg-[#FDFCF7] border border-[#0C2340]/10 rounded-lg p-3.5">
               <div className="text-xs font-bold text-[#0C2340] mb-1 flex items-center gap-1.5">
-                <MapPin className="w-3.5 h-3.5 text-[#B45309]" />
+                <MapPin className="w-3.5 h-3.5 text-[#92400E]" />
                 <span>Cakupan Area</span>
               </div>
               <p className="text-xs text-[#475569] leading-relaxed">
@@ -164,7 +164,7 @@ export default function PetaContextualPanel({ region }: PetaContextualPanelProps
         <div className="space-y-3 mb-6">
           <div className="bg-[#FDFCF7] border border-[#0C2340]/10 rounded-lg p-3.5">
             <div className="text-xs font-bold text-[#0C2340] mb-1 flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-[#B45309]" />
+              <MapPin className="w-3.5 h-3.5 text-[#92400E]" />
               <span>Titik Kumpul</span>
             </div>
             <p className="text-xs text-[#475569] leading-relaxed">{region.titikKumpul}</p>

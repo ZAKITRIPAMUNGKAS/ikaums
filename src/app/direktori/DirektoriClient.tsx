@@ -156,7 +156,7 @@ export default function DirektoriPage() {
             </div>
 
             <div className="space-y-2.5">
-              <p className="text-xs font-bold uppercase tracking-wider text-[#B45309]">
+              <p className="text-xs font-bold uppercase tracking-wider text-[#92400E]">
                 Khusus Anggota Terdaftar
               </p>
               <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#0C2340]">
@@ -456,7 +456,7 @@ export default function DirektoriPage() {
                     {selectedAlumni.perusahaan ? ` · ${selectedAlumni.perusahaan}` : ''}
                   </p>
                   <p className="text-xs text-[#475569] flex items-center gap-1.5">
-                    <MapPin className="w-3.5 h-3.5 text-[#B45309]" />
+                    <MapPin className="w-3.5 h-3.5 text-[#92400E]" />
                     <span>{selectedAlumni.wilayah} · {selectedAlumni.industri}</span>
                   </p>
                 </div>

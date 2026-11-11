@@ -202,7 +202,7 @@ export function Navbar() {
                           {item.label}
                         </span>
                         {active && (
-                          <span className="w-1.5 h-1.5 rounded-full bg-[#B45309] shrink-0" aria-hidden="true" />
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#92400E] shrink-0" aria-hidden="true" />
                         )}
                       </div>
                       <p className="text-[12px] text-[#475569] mt-0.5 leading-snug">
@@ -236,7 +236,7 @@ export function Navbar() {
               <span className="text-base sm:text-[17px] font-extrabold tracking-[-0.03em] text-[#0C2340] leading-none">
                 IKA UMS
               </span>
-              <span className="text-[10px] font-semibold tracking-[0.12em] text-[#B45309] uppercase leading-none mt-1">
+              <span className="text-[10px] font-semibold tracking-[0.12em] text-[#92400E] uppercase leading-none mt-1">
                 Wilayah Jabodetabek
               </span>
             </div>
@@ -518,12 +518,12 @@ export function Footer() {
                 </li>
                 <li>
                   <Link href="/peta" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
-                    Sebaran Wilayah
+                    Sebaran Wilayah{!IS_DEMO_MODE && ' (Pra-Launch)'}
                   </Link>
                 </li>
                 <li>
                   <Link href="/direktori" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
-                    Daftar Anggota
+                    Daftar Anggota (Khusus Anggota)
                   </Link>
                 </li>
               </ul>

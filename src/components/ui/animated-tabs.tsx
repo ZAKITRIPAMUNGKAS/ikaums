@@ -51,7 +51,7 @@ export function AnimatedTabs({
             type="button"
             onClick={() => onChange(tab.id)}
             className={cn(
-              'relative z-10 px-3.5 py-2 text-xs sm:text-[13px] transition-colors duration-150 rounded-lg flex items-center gap-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#0C2340] cursor-pointer',
+              'relative z-10 min-h-[44px] px-3.5 py-2 text-xs sm:text-[13px] transition-colors duration-150 rounded-lg flex items-center gap-1.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] cursor-pointer',
               isActive
                 ? 'text-white font-semibold'
                 : 'text-[#475569] hover:text-[#0C2340] hover:bg-black/4 font-medium'

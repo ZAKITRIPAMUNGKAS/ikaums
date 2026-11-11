@@ -140,7 +140,7 @@ export default function TentangPage() {
           <div className="surface-card-soft rounded-2xl p-6 sm:p-8 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
             <div className="space-y-2.5 max-w-2xl">
               <div className="flex items-center gap-2 text-sm font-bold text-[#0C2340]">
-                <Landmark className="w-4 h-4 text-[#B45309] shrink-0" />
+                <Landmark className="w-4 h-4 text-[#92400E] shrink-0" />
                 <span>Kedudukan &amp; Koordinasi IKA UMS Pusat</span>
               </div>
               <h2 className="text-xl font-bold text-[#0C2340]">
@@ -155,7 +155,7 @@ export default function TentangPage() {
                   href={COMMUNITY_PLACEHOLDERS.ppIkaUmsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 min-h-[44px] font-semibold text-[#0C2340] hover:text-[#B45309] underline underline-offset-4"
+                  className="inline-flex items-center gap-1.5 min-h-[44px] font-semibold text-[#0C2340] hover:text-[#92400E] underline underline-offset-4"
                 >
                   Situs Resmi UMS
                   <ExternalLink className="w-3.5 h-3.5" />

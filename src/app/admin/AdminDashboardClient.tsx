@@ -152,7 +152,7 @@ export default function KelolaPendaftaranPage() {
               <Lock className="w-5 h-5" />
             </div>
             <div className="space-y-2">
-              <p className="text-xs font-bold uppercase tracking-wider text-[#B45309]">
+              <p className="text-xs font-bold uppercase tracking-wider text-[#92400E]">
                 Halaman Internal Pengurus
               </p>
               <h1 className="text-2xl sm:text-3xl font-bold text-[#0C2340]">
@@ -215,7 +215,7 @@ export default function KelolaPendaftaranPage() {
         </nav>
 
         <header className="space-y-2">
-          <p className="text-sm font-semibold text-[#B45309]">
+          <p className="text-sm font-semibold text-[#92400E]">
             Koordinasi Pengurus Jabodetabek
           </p>
           <h1 className="text-3xl font-bold tracking-tight text-[#0C2340]">

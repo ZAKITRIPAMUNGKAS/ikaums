@@ -19,7 +19,7 @@ export default function MobileRegionList({
     <div className="bg-white border border-[#0C2340]/15 rounded-xl p-4 shadow-xs">
       <div className="flex items-center justify-between mb-3 pb-2 border-b border-[#0C2340]/10">
         <h2 className="text-xs font-bold uppercase tracking-wider text-[#0C2340] flex items-center gap-1.5">
-          <MapPin className="w-3.5 h-3.5 text-[#B45309]" />
+          <MapPin className="w-3.5 h-3.5 text-[#92400E]" />
           Daftar 9 Wilayah Jabodetabek
         </h2>
         {IS_DEMO_MODE && (
@@ -48,7 +48,7 @@ export default function MobileRegionList({
               <div className="flex items-center gap-2.5 min-w-0">
                 <span
                   className={`w-2 h-2 rounded-full shrink-0 ${
-                    isSelected ? 'bg-[#B45309]' : 'bg-[#CBD5E1]'
+                    isSelected ? 'bg-[#92400E]' : 'bg-[#CBD5E1]'
                   }`}
                 />
                 <div className="min-w-0">

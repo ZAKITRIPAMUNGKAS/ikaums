@@ -147,7 +147,7 @@ export default function PrivasiPage() {
               diubah langsung melalui halaman{' '}
               <Link
                 href="/app"
-                className="text-[#0C2340] font-semibold underline decoration-[#B45309] underline-offset-4"
+                className="text-[#0C2340] font-semibold underline decoration-[#92400E] underline-offset-4"
               >
                 Profil Saya
               </Link>
@@ -168,7 +168,7 @@ export default function PrivasiPage() {
         <div className="pt-6 border-t border-[#0C2340]/10 flex flex-wrap items-center justify-between gap-4">
           <Link
             href="/syarat"
-            className="inline-flex items-center min-h-[44px] text-sm font-semibold text-[#0C2340] hover:text-[#B45309] transition-colors"
+            className="inline-flex items-center min-h-[44px] text-sm font-semibold text-[#0C2340] hover:text-[#92400E] transition-colors"
           >
             Baca Ketentuan Komunitas &rarr;
           </Link>

@@ -119,7 +119,7 @@ export default function MapLibreExplorer({
             id: 'jabodetabek-hover-border',
             type: 'line',
             source: 'jabodetabek-alumni',
-            paint: { 'line-color': '#B45309', 'line-width': 2.5 },
+            paint: { 'line-color': '#92400E', 'line-width': 2.5 },
             filter: ['==', ['get', 'regionId'], ''],
           },
           {
@@ -168,7 +168,7 @@ export default function MapLibreExplorer({
         if (IS_DEMO_MODE) {
           const countSpan = document.createElement('span');
           countSpan.className = `text-[11px] font-bold ${
-            region.regionId === initialSelectedRef.current ? 'text-[#F59E0B]' : 'text-[#B45309]'
+            region.regionId === initialSelectedRef.current ? 'text-[#F59E0B]' : 'text-[#92400E]'
           }`;
           countSpan.textContent = String(region.count);
           btn.appendChild(countSpan);

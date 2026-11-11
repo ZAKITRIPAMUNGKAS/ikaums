@@ -317,7 +317,7 @@ export default function GabungPage() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div className="sm:col-span-2">
                     <label htmlFor="namaLengkap" className="block text-sm font-semibold text-[#0C2340] mb-1.5">
-                      Nama Lengkap dengan Gelar <span className="text-[#B45309]">*</span>
+                      Nama Lengkap dengan Gelar <span className="text-[#92400E]">*</span>
                     </label>
                     <input
                       id="namaLengkap"
@@ -350,7 +350,7 @@ export default function GabungPage() {
 
                   <div>
                     <label htmlFor="angkatan" className="block text-sm font-semibold text-[#0C2340] mb-1.5">
-                      Tahun Angkatan Masuk UMS <span className="text-[#B45309]">*</span>
+                      Tahun Angkatan Masuk UMS <span className="text-[#92400E]">*</span>
                     </label>
                     <select
                       id="angkatan"
@@ -384,7 +384,7 @@ export default function GabungPage() {
 
                   <div>
                     <label htmlFor="prodi" className="block text-sm font-semibold text-[#0C2340] mb-1.5">
-                      Program Studi di UMS <span className="text-[#B45309]">*</span>
+                      Program Studi di UMS <span className="text-[#92400E]">*</span>
                     </label>
                     <select
                       id="prodi"
@@ -422,7 +422,7 @@ export default function GabungPage() {
 
                   <div>
                     <label htmlFor="wilayah" className="block text-sm font-semibold text-[#0C2340] mb-1.5">
-                      Wilayah Domisili Jabodetabek <span className="text-[#B45309]">*</span>
+                      Wilayah Domisili Jabodetabek <span className="text-[#92400E]">*</span>
                     </label>
                     <select
                       id="wilayah"
@@ -445,7 +445,7 @@ export default function GabungPage() {
 
                   <div>
                     <label htmlFor="whatsapp" className="block text-sm font-semibold text-[#0C2340] mb-1.5">
-                      Nomor WhatsApp Aktif <span className="text-[#B45309]">*</span>
+                      Nomor WhatsApp Aktif <span className="text-[#92400E]">*</span>
                     </label>
                     <input
                       id="whatsapp"
@@ -518,7 +518,7 @@ export default function GabungPage() {
                   type="button"
                   onClick={() => setShowOptional((v) => !v)}
                   aria-expanded={showOptional}
-                  className="w-full min-h-[44px] flex items-center justify-between text-left text-sm font-bold text-[#0C2340] hover:text-[#B45309] transition-colors cursor-pointer"
+                  className="w-full min-h-[44px] flex items-center justify-between text-left text-sm font-bold text-[#0C2340] hover:text-[#92400E] transition-colors cursor-pointer"
                 >
                   <span>Pekerjaan &amp; Kesediaan Mentoring (Opsional — bisa diisi nanti)</span>
                   <ChevronDown
@@ -698,7 +698,7 @@ export default function GabungPage() {
             </div>
 
             <div className="space-y-2.5">
-              <p className="text-sm font-semibold text-[#B45309]">
+              <p className="text-sm font-semibold text-[#92400E]">
                 Pendaftaran Tercatat
               </p>
               <h1 className="text-2xl sm:text-3xl font-bold text-[#0C2340]">

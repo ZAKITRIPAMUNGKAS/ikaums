@@ -205,7 +205,7 @@ export default function KepengurusanPage() {
                   href={COMMUNITY_PLACEHOLDERS.ppIkaUmsUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 min-h-[44px] font-semibold text-[#0C2340] hover:text-[#B45309] underline underline-offset-4"
+                  className="inline-flex items-center gap-1 min-h-[44px] font-semibold text-[#0C2340] hover:text-[#92400E] underline underline-offset-4"
                 >
                   Situs Resmi UMS (ums.ac.id)
                   <ExternalLink className="w-3.5 h-3.5" />
@@ -233,7 +233,7 @@ export default function KepengurusanPage() {
 
             <div className="bg-[#F3F1EA] border border-[#0C2340]/10 rounded-xl p-4 space-y-1.5">
               <div className="flex items-center gap-2 text-xs font-bold text-[#0C2340]">
-                <Info className="w-4 h-4 text-[#B45309] shrink-0" />
+                <Info className="w-4 h-4 text-[#92400E] shrink-0" />
                 <span>Catatan Data Pra-Launch</span>
               </div>
               <p className="text-[13px] text-[#475569] leading-relaxed">
@@ -303,7 +303,7 @@ export default function KepengurusanPage() {
                 >
                   <div className="space-y-2.5">
                     <div className="flex items-center gap-2.5">
-                      <span className="text-xs font-extrabold text-[#B45309]">
+                      <span className="text-xs font-extrabold text-[#92400E]">
                         {bidang.nomor}
                       </span>
                       <span className="h-px w-5 bg-[#0C2340]/15" aria-hidden="true" />
@@ -350,9 +350,9 @@ export default function KepengurusanPage() {
             </div>
             <Link
               href="/peta"
-              className="inline-flex items-center gap-1.5 min-h-[44px] text-sm font-semibold text-[#0C2340] hover:text-[#B45309] transition-colors shrink-0"
+              className="inline-flex items-center gap-1.5 min-h-[44px] text-sm font-semibold text-[#0C2340] hover:text-[#92400E] transition-colors shrink-0"
             >
-              <MapPin className="w-4 h-4 text-[#B45309]" />
+              <MapPin className="w-4 h-4 text-[#92400E]" />
               Lihat Sebaran Wilayah
             </Link>
           </div>
@@ -444,7 +444,7 @@ export default function KepengurusanPage() {
                       <td className="py-4 px-6 text-right align-top">
                         <Link
                           href={`/direktori?wilayah=${w.id}`}
-                          className="inline-flex items-center gap-1 min-h-[44px] text-xs font-semibold text-[#0C2340] hover:text-[#B45309]"
+                          className="inline-flex items-center gap-1 min-h-[44px] text-xs font-semibold text-[#0C2340] hover:text-[#92400E]"
                         >
                           Lihat Anggota
                           <ArrowRight className="w-3.5 h-3.5" />

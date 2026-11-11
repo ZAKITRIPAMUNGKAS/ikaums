@@ -200,7 +200,7 @@ export default function PeluangPage() {
           {!IS_DEMO_MODE ? (
             <div className="bg-white border border-[#0C2340]/12 rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
               <div className="space-y-2 max-w-xl">
-                <div className="inline-flex items-center gap-2 text-xs font-bold text-[#B45309]">
+                <div className="inline-flex items-center gap-2 text-xs font-bold text-[#92400E]">
                   <HeartHandshake className="w-4 h-4" />
                   <span>Pencocokan Mentor Pra-Launch</span>
                 </div>
@@ -257,7 +257,7 @@ export default function PeluangPage() {
                       {m.mentoringFokus || m.pekerjaan}
                     </p>
                     <p className="text-xs text-[#475569] flex items-center gap-1">
-                      <MapPin className="w-3.5 h-3.5 text-[#B45309]" />
+                      <MapPin className="w-3.5 h-3.5 text-[#92400E]" />
                       {m.wilayah}
                     </p>
                   </div>
@@ -289,7 +289,7 @@ export default function PeluangPage() {
           <div className="bg-[#F3F1EA] border border-[#0C2340]/10 rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
             <div className="space-y-2 max-w-xl">
               <div className="inline-flex items-center gap-2 text-xs font-bold text-[#0C2340]">
-                <Briefcase className="w-4 h-4 text-[#B45309]" />
+                <Briefcase className="w-4 h-4 text-[#92400E]" />
                 <span>Belum Ada Kiriman Aktif</span>
               </div>
               <p className="text-sm text-[#475569] leading-relaxed">
