@@ -174,19 +174,19 @@ export default function DirektoriPage() {
               />
             </div>
 
-            <div className="flex flex-wrap items-center gap-3">
+            <div className="grid grid-cols-2 md:flex md:flex-wrap items-center gap-2.5 sm:gap-3">
               <select
                 value={selectedRegion}
                 onChange={(e) => setSelectedRegion(e.target.value)}
                 aria-label="Filter wilayah Jabodetabek"
-                className="bg-[#FDFCF7] border border-[#0C2340]/15 text-sm text-[#0C2340] font-medium px-3.5 py-2.5 rounded-lg focus:outline-none focus:border-[#0C2340]"
+                className="w-full md:w-auto bg-[#FDFCF7] border border-[#0C2340]/15 text-xs sm:text-sm text-[#0C2340] font-medium px-3 sm:px-3.5 py-2.5 rounded-lg focus:outline-none focus:border-[#0C2340]"
               >
                 {regions.map((reg) => (
                   <option key={reg} value={reg}>{reg}</option>
                 ))}
               </select>
 
-              <label className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-lg border border-[#0C2340]/15 bg-[#FDFCF7] text-xs sm:text-sm font-medium text-[#0C2340] cursor-pointer select-none">
+              <label className="w-full md:w-auto inline-flex items-center justify-center md:justify-start gap-2 px-3 sm:px-3.5 py-2.5 rounded-lg border border-[#0C2340]/15 bg-[#FDFCF7] text-xs sm:text-sm font-medium text-[#0C2340] cursor-pointer select-none">
                 <input
                   type="checkbox"
                   checked={mentorOnly}
@@ -241,7 +241,7 @@ export default function DirektoriPage() {
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <div className="grid grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-5">
             <AnimatePresence mode="popLayout">
               {filteredAlumni.map((alumni) => {
                 const isRequested = connectionRequested[alumni.id];
@@ -257,46 +257,54 @@ export default function DirektoriPage() {
                       setActiveProfileTab('tentang');
                       setSelectedAlumni(alumni);
                     }}
-                    className="bg-white border border-[#0C2340]/12 hover:border-[#0C2340]/40 rounded-xl p-5 flex flex-col justify-between gap-4 shadow-2xs hover:shadow-sm cursor-pointer transition-all group"
+                    className="bg-white border border-[#0C2340]/12 hover:border-[#0C2340]/40 rounded-2xl p-3 sm:p-5 flex flex-col justify-between gap-3 sm:gap-4 shadow-2xs hover:shadow-sm cursor-pointer transition-all group"
                   >
-                    <div className="flex items-start gap-4">
-                      <div className="w-14 h-14 rounded-full overflow-hidden shrink-0 border border-[#0C2340]/10 bg-[#F3F1EA]">
-                        {alumni.avatarUrl ? (
-                          <img
-                            src={alumni.avatarUrl}
-                            alt={alumni.nama}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center bg-[#0C2340] text-[#F59E0B] font-bold text-base">
-                            {alumni.avatarInitials}
-                          </div>
+                    <div className="flex flex-col sm:flex-row sm:items-start gap-2.5 sm:gap-3.5">
+                      <div className="flex items-center justify-between sm:block shrink-0">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden border border-[#0C2340]/10 bg-[#F3F1EA]">
+                          {alumni.avatarUrl ? (
+                            <img
+                              src={alumni.avatarUrl}
+                              alt={alumni.nama}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center bg-[#0C2340] text-[#F59E0B] font-bold text-xs sm:text-sm">
+                              {alumni.avatarInitials}
+                            </div>
+                          )}
+                        </div>
+                        {alumni.bersediaMentoring && (
+                          <span className="sm:hidden inline-flex items-center gap-0.5 bg-[#FEF3C7] text-[#92400E] text-[10px] px-1.5 py-0.5 rounded font-semibold">
+                            <HeartHandshake className="w-2.5 h-2.5" />
+                            Mentor
+                          </span>
                         )}
                       </div>
 
-                      <div className="space-y-1 min-w-0 flex-1">
-                        <div className="flex flex-wrap items-center gap-2">
-                          <h3 className="text-base font-bold text-[#0C2340] group-hover:text-[#16325C] transition-colors">
+                      <div className="space-y-0.5 sm:space-y-1 min-w-0 flex-1">
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          <h3 className="text-[13px] sm:text-base font-bold text-[#0C2340] group-hover:text-[#16325C] transition-colors truncate max-w-full">
                             {alumni.nama}
                           </h3>
                           {alumni.bersediaMentoring && (
-                            <span className="inline-flex items-center gap-1 bg-[#FEF3C7] text-[#92400E] text-[11px] px-2 py-0.5 rounded font-semibold">
+                            <span className="hidden sm:inline-flex items-center gap-1 bg-[#FEF3C7] text-[#92400E] text-[11px] px-2 py-0.5 rounded font-semibold">
                               <HeartHandshake className="w-3 h-3" />
                               Siap Mentoring
                             </span>
                           )}
                         </div>
 
-                        <p className="text-xs text-[#64748B]">
-                          {alumni.prodi} · Angkatan {alumni.angkatan}
+                        <p className="text-[11px] sm:text-xs text-[#64748B] truncate">
+                          {alumni.prodi} · &apos;{String(alumni.angkatan).slice(-2)}
                         </p>
 
-                        <p className="text-sm font-semibold text-[#0C2340] pt-0.5">
+                        <p className="text-xs sm:text-sm font-semibold text-[#0C2340] truncate">
                           {alumni.pekerjaan}
                         </p>
 
                         {alumni.perusahaan && (
-                          <p className="text-xs text-[#475569] flex items-center gap-1.5">
+                          <p className="hidden sm:flex text-xs text-[#475569] items-center gap-1.5">
                             <Building2 className="w-3.5 h-3.5 text-[#64748B] shrink-0" />
                             <span className="truncate">{alumni.perusahaan}</span>
                           </p>
@@ -304,16 +312,18 @@ export default function DirektoriPage() {
                       </div>
                     </div>
 
-                    <div className="flex flex-wrap items-center justify-between gap-3 pt-3.5 border-t border-[#0C2340]/8">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-xs text-[#475569] flex items-center gap-1 mr-1">
-                          <MapPin className="w-3.5 h-3.5 text-[#D97706]" />
-                          {alumni.wilayah}
+                    <div className="flex flex-col gap-2 sm:gap-2.5 pt-2.5 sm:pt-3 border-t border-[#0C2340]/8">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className="text-[11px] sm:text-xs text-[#475569] flex items-center gap-1 truncate">
+                          <MapPin className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#D97706] shrink-0" />
+                          <span className="truncate">{alumni.wilayah}</span>
                         </span>
                         {alumni.keahlian.slice(0, 2).map((skill, idx) => (
                           <span
                             key={idx}
-                            className="bg-[#F3F1EA] text-[#0C2340] text-[11px] px-2 py-0.5 rounded font-medium"
+                            className={`bg-[#F3F1EA] text-[#0C2340] text-[11px] px-2 py-0.5 rounded font-medium truncate max-w-full ${
+                              idx === 1 ? 'hidden sm:inline-block' : 'hidden md:inline-block'
+                            }`}
                           >
                             {skill}
                           </span>
@@ -323,7 +333,7 @@ export default function DirektoriPage() {
                       <button
                         type="button"
                         onClick={(e) => toggleConnection(alumni.id, e)}
-                        className={`text-xs font-semibold px-4 py-2 rounded-lg transition-colors flex items-center gap-1.5 shrink-0 cursor-pointer ${
+                        className={`w-full text-[11px] sm:text-xs font-semibold px-3 py-2 rounded-xl transition-colors flex items-center justify-center gap-1.5 cursor-pointer ${
                           isRequested
                             ? 'bg-[#F3F1EA] text-[#0C2340] border border-[#0C2340]/20'
                             : 'bg-[#0C2340] hover:bg-[#16325C] text-white'
@@ -331,13 +341,13 @@ export default function DirektoriPage() {
                       >
                         {isRequested ? (
                           <>
-                            <CheckCircle2 className="w-3.5 h-3.5 text-[#16A34A]" />
-                            <span>Permintaan Terkirim</span>
+                            <CheckCircle2 className="w-3.5 h-3.5 text-[#16A34A] shrink-0" />
+                            <span className="truncate">Terkirim</span>
                           </>
                         ) : (
                           <>
-                            <UserPlus className="w-3.5 h-3.5 text-[#F59E0B]" />
-                            <span>Ajak Terhubung</span>
+                            <UserPlus className="w-3.5 h-3.5 text-[#F59E0B] shrink-0" />
+                            <span className="truncate">Terhubung</span>
                           </>
                         )}
                       </button>

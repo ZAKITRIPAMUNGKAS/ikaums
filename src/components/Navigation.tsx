@@ -333,14 +333,14 @@ export function Navbar() {
             className="lg:hidden border-b border-[#0C2340]/12 bg-[#FDFCF7] overflow-hidden shadow-lg"
           >
             <div className="px-4 sm:px-6 py-4 space-y-4 text-sm">
-              <div className="space-y-1">
+              <div className="grid grid-cols-2 gap-2">
                 <Link
                   href="/"
                   onClick={() => setIsOpen(false)}
-                  className={`block py-2 px-3 rounded-lg transition-colors ${
+                  className={`py-2.5 px-3 rounded-xl border text-center transition-colors ${
                     pathname === '/'
-                      ? 'bg-[#0C2340]/8 text-[#0C2340] font-bold'
-                      : 'text-[#334155] hover:bg-[#0C2340]/5 hover:text-[#0C2340] font-medium'
+                      ? 'bg-[#0C2340] border-[#0C2340] text-white font-bold'
+                      : 'bg-[#F3F1EA]/70 border-[#0C2340]/10 text-[#0C2340] hover:bg-[#F3F1EA] font-semibold'
                   }`}
                 >
                   Beranda
@@ -348,60 +348,68 @@ export function Navbar() {
                 <Link
                   href="/kegiatan"
                   onClick={() => setIsOpen(false)}
-                  className={`block py-2 px-3 rounded-lg transition-colors ${
+                  className={`py-2.5 px-3 rounded-xl border text-center transition-colors ${
                     isRouteMatch('/kegiatan')
-                      ? 'bg-[#0C2340]/8 text-[#0C2340] font-bold'
-                      : 'text-[#334155] hover:bg-[#0C2340]/5 hover:text-[#0C2340] font-medium'
+                      ? 'bg-[#0C2340] border-[#0C2340] text-white font-bold'
+                      : 'bg-[#F3F1EA]/70 border-[#0C2340]/10 text-[#0C2340] hover:bg-[#F3F1EA] font-semibold'
                   }`}
                 >
                   Agenda
                 </Link>
               </div>
 
-              <div className="pt-2 border-t border-[#0C2340]/8 space-y-1">
-                <p className="px-3 pb-1 text-xs font-semibold text-[#64748B]">
+              <div className="pt-2 border-t border-[#0C2340]/8 space-y-2">
+                <p className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">
                   {JARINGAN_GROUP.label}
                 </p>
-                {JARINGAN_GROUP.items.map((item) => {
-                  const active = isRouteMatch(item.href);
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setIsOpen(false)}
-                      className={`block py-2 px-3 rounded-lg transition-colors ${
-                        active
-                          ? 'bg-[#0C2340]/8 text-[#0C2340] font-bold'
-                          : 'text-[#334155] hover:bg-[#0C2340]/5 hover:text-[#0C2340] font-medium'
-                      }`}
-                    >
-                      {item.label}
-                    </Link>
-                  );
-                })}
+                <div className="grid grid-cols-2 gap-2">
+                  {JARINGAN_GROUP.items.map((item, idx) => {
+                    const active = isRouteMatch(item.href);
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => setIsOpen(false)}
+                        className={`py-2.5 px-3 rounded-xl border transition-colors ${
+                          idx === 2 ? 'col-span-2' : ''
+                        } ${
+                          active
+                            ? 'bg-[#0C2340]/10 border-[#0C2340]/25 text-[#0C2340] font-bold'
+                            : 'bg-white border-[#0C2340]/10 text-[#334155] hover:border-[#0C2340]/30 hover:text-[#0C2340] font-medium'
+                        }`}
+                      >
+                        <span className="block text-[13px]">{item.label}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
               </div>
 
-              <div className="pt-2 border-t border-[#0C2340]/8 space-y-1">
-                <p className="px-3 pb-1 text-xs font-semibold text-[#64748B]">
+              <div className="pt-2 border-t border-[#0C2340]/8 space-y-2">
+                <p className="text-[11px] font-bold uppercase tracking-wider text-[#64748B]">
                   {TENTANG_GROUP.label}
                 </p>
-                {TENTANG_GROUP.items.map((item) => {
-                  const active = isRouteMatch(item.href);
-                  return (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setIsOpen(false)}
-                      className={`block py-2 px-3 rounded-lg transition-colors ${
-                        active
-                          ? 'bg-[#0C2340]/8 text-[#0C2340] font-bold'
-                          : 'text-[#334155] hover:bg-[#0C2340]/5 hover:text-[#0C2340] font-medium'
-                      }`}
-                    >
-                      {item.label}
-                    </Link>
-                  );
-                })}
+                <div className="grid grid-cols-2 gap-2">
+                  {TENTANG_GROUP.items.map((item, idx) => {
+                    const active = isRouteMatch(item.href);
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        onClick={() => setIsOpen(false)}
+                        className={`py-2.5 px-3 rounded-xl border transition-colors ${
+                          idx === 2 ? 'col-span-2' : ''
+                        } ${
+                          active
+                            ? 'bg-[#0C2340]/10 border-[#0C2340]/25 text-[#0C2340] font-bold'
+                            : 'bg-white border-[#0C2340]/10 text-[#334155] hover:border-[#0C2340]/30 hover:text-[#0C2340] font-medium'
+                        }`}
+                      >
+                        <span className="block text-[13px]">{item.label}</span>
+                      </Link>
+                    );
+                  })}
+                </div>
               </div>
               <div className="pt-3 mt-2 border-t border-[#0C2340]/10 flex gap-2.5">
                 <Link
@@ -430,10 +438,10 @@ export function Navbar() {
 export function Footer() {
   return (
     <footer className="bg-[#0C2340] text-[#FDFCF7] border-t border-white/10 font-sans">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10">
           
-          <div className="md:col-span-6 space-y-4">
+          <div className="md:col-span-6 space-y-3 sm:space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center p-1.5 border border-white/15">
                 <img
@@ -459,37 +467,39 @@ export function Footer() {
             </p>
           </div>
 
-          <div className="md:col-span-3">
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4 border-b border-white/10 pb-2">
-              Jelajahi Komunitas
-            </h4>
-            <ul className="space-y-2.5 text-sm text-white/75">
-              <li><Link href="/" className="hover:text-[#F59E0B] transition-colors">Beranda</Link></li>
-              <li><Link href="/direktori" className="hover:text-[#F59E0B] transition-colors">Direktori Alumni</Link></li>
-              <li><Link href="/peta" className="hover:text-[#F59E0B] transition-colors">Peta Sebaran Wilayah</Link></li>
-              <li><Link href="/kegiatan" className="hover:text-[#F59E0B] transition-colors">Agenda Kumpul</Link></li>
-              <li><Link href="/peluang" className="hover:text-[#F59E0B] transition-colors">Mentoring &amp; Peluang</Link></li>
-              <li><Link href="/cerita" className="hover:text-[#F59E0B] transition-colors">Cerita Alumni</Link></li>
-            </ul>
-          </div>
+          <div className="md:col-span-6 grid grid-cols-2 gap-6 sm:gap-8">
+            <div className="min-w-0">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-3.5 sm:mb-4 border-b border-white/10 pb-2">
+                Jelajahi Komunitas
+              </h4>
+              <ul className="space-y-2 sm:space-y-2.5 text-xs sm:text-sm text-white/75">
+                <li><Link href="/" className="hover:text-[#F59E0B] transition-colors">Beranda</Link></li>
+                <li><Link href="/direktori" className="hover:text-[#F59E0B] transition-colors">Direktori Alumni</Link></li>
+                <li><Link href="/peta" className="hover:text-[#F59E0B] transition-colors">Peta Sebaran Wilayah</Link></li>
+                <li><Link href="/kegiatan" className="hover:text-[#F59E0B] transition-colors">Agenda Kumpul</Link></li>
+                <li><Link href="/peluang" className="hover:text-[#F59E0B] transition-colors">Mentoring &amp; Peluang</Link></li>
+                <li><Link href="/cerita" className="hover:text-[#F59E0B] transition-colors">Cerita Alumni</Link></li>
+              </ul>
+            </div>
 
-          <div className="md:col-span-3">
-            <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-4 border-b border-white/10 pb-2">
-              Tata Kelola &amp; Anggota
-            </h4>
-            <ul className="space-y-2.5 text-sm text-white/75">
-              <li><Link href="/tentang" className="hover:text-[#F59E0B] transition-colors">Tentang Inisiatif</Link></li>
-              <li><Link href="/kepengurusan" className="hover:text-[#F59E0B] transition-colors">Struktur Kepengurusan</Link></li>
-              <li><Link href="/privasi" className="hover:text-[#F59E0B] transition-colors">Kebijakan Privasi</Link></li>
-              <li><Link href="/syarat" className="hover:text-[#F59E0B] transition-colors">Ketentuan Komunitas</Link></li>
-              <li><Link href="/app" className="hover:text-[#F59E0B] transition-colors">Area Anggota</Link></li>
-              <li><Link href="/admin" className="hover:text-[#F59E0B] transition-colors">Panel Pengurus</Link></li>
-            </ul>
+            <div className="min-w-0">
+              <h4 className="text-xs font-bold text-white uppercase tracking-wider mb-3.5 sm:mb-4 border-b border-white/10 pb-2">
+                Tata Kelola &amp; Anggota
+              </h4>
+              <ul className="space-y-2 sm:space-y-2.5 text-xs sm:text-sm text-white/75">
+                <li><Link href="/tentang" className="hover:text-[#F59E0B] transition-colors">Tentang Inisiatif</Link></li>
+                <li><Link href="/kepengurusan" className="hover:text-[#F59E0B] transition-colors">Struktur Kepengurusan</Link></li>
+                <li><Link href="/privasi" className="hover:text-[#F59E0B] transition-colors">Kebijakan Privasi</Link></li>
+                <li><Link href="/syarat" className="hover:text-[#F59E0B] transition-colors">Ketentuan Komunitas</Link></li>
+                <li><Link href="/app" className="hover:text-[#F59E0B] transition-colors">Area Anggota</Link></li>
+                <li><Link href="/admin" className="hover:text-[#F59E0B] transition-colors">Panel Pengurus</Link></li>
+              </ul>
+            </div>
           </div>
 
         </div>
 
-        <div className="border-t border-white/10 mt-12 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-white/60 gap-4">
+        <div className="border-t border-white/10 mt-8 sm:mt-12 pt-5 sm:pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-white/60 gap-2 sm:gap-4 text-center sm:text-left">
           <p>© 2026 IKA UMS Wilayah Jabodetabek · Jaringan Alumni Universitas Muhammadiyah Surakarta.</p>
           <p>Universitas Muhammadiyah Surakarta · DKI Jakarta, Banten &amp; Jawa Barat</p>
         </div>
