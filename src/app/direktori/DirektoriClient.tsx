@@ -38,6 +38,7 @@ export default function DirektoriPage() {
   const [connectionRequested, setConnectionRequested] = useState<Record<string, boolean>>({});
   const [messagesSent, setMessagesSent] = useState<Record<string, boolean>>({});
   const [activeProfileTab, setActiveProfileTab] = useState('tentang');
+  const [visibleCount, setVisibleCount] = useState(4);
   const shouldReduceMotion = useReducedMotion();
 
   const alumniList = useMemo(() => getAlumniList(), []);
@@ -156,21 +157,21 @@ export default function DirektoriPage() {
             </div>
 
             <div className="space-y-2.5">
-              <p className="text-xs font-bold uppercase tracking-wider text-[#92400E]">
+              <span className="inline-block text-sm font-bold uppercase tracking-wider text-[#92400E]">
                 Khusus Anggota Terdaftar
-              </p>
-              <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#0C2340]">
+              </span>
+              <h1 className="text-[clamp(1.625rem,1.25rem+1.5vw,2.25rem)] font-extrabold tracking-[-0.02em] text-[#0C2340]">
                 Daftar Anggota Tidak Ditampilkan untuk Umum
               </h1>
-              <p className="text-sm sm:text-base text-[#475569] leading-relaxed">
+              <p className="text-base text-[#475569] leading-[1.6] max-w-[48ch]">
                 Untuk menjaga privasi alumni, nama, pekerjaan, dan domisili hanya dapat dilihat oleh
                 anggota terverifikasi yang sudah masuk, dan hanya menampilkan rekan yang memberi izin
                 secara eksplisit saat mendaftar.
               </p>
             </div>
 
-            <div className="bg-[#F3F1EA] border border-[#0C2340]/10 rounded-xl p-4 sm:p-5 text-sm text-[#475569] space-y-2">
-              <p className="font-semibold text-[#0C2340]">Status Tahap Pra-Launch</p>
+            <div className="bg-[#F3F1EA] border border-[#0C2340]/10 rounded-xl p-4 sm:p-5 text-base text-[#475569] space-y-2 leading-[1.6]">
+              <p className="font-semibold text-[#0C2340]">Status Tahap Prapeluncuran</p>
               <p>
                 Saat ini kami sedang mengumpulkan pendaftaran awal anggota lintas wilayah Jabodetabek.
                 Daftar sekarang agar kamu mendapat kabar ketika Daftar Anggota dan jadwal kopdar pertama dibuka.
@@ -180,14 +181,14 @@ export default function DirektoriPage() {
             <div className="flex flex-wrap items-center gap-3 pt-1">
               <Link
                 href="/gabung"
-                className="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 py-2.5 rounded-lg bg-[#0C2340] hover:bg-[#16325C] text-white text-sm font-semibold transition-colors"
+                className="inline-flex items-center justify-center gap-2 min-h-[48px] px-5 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] active:scale-[0.99] text-white text-base font-semibold transition-all duration-150"
               >
                 Daftar jadi anggota
                 <ArrowRight className="w-4 h-4 text-[#F59E0B]" />
               </Link>
               <Link
                 href="/masuk"
-                className="inline-flex items-center justify-center min-h-[44px] px-5 py-2.5 rounded-lg bg-white border border-[#0C2340]/15 hover:border-[#0C2340]/35 text-[#0C2340] text-sm font-semibold transition-colors"
+                className="inline-flex items-center justify-center min-h-[48px] px-5 py-3 rounded-lg bg-white border border-[#0C2340]/15 hover:border-[#0C2340]/35 active:scale-[0.99] text-[#0C2340] text-base font-semibold transition-all duration-150"
               >
                 Masuk ke akun
               </Link>
@@ -230,20 +231,20 @@ export default function DirektoriPage() {
 
           <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
             <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-[#92400E] mb-1.5">
+              <span className="inline-block text-sm font-bold uppercase tracking-wider text-[#92400E] mb-1.5">
                 Jaringan Alumni Jabodetabek ({DEMO_BADGE_LABEL})
-              </p>
-              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0C2340]">
+              </span>
+              <h1 className="text-[clamp(1.75rem,1.3rem+1.8vw,2.5rem)] font-extrabold tracking-[-0.02em] text-[#0C2340]">
                 Daftar Anggota IKA UMS
               </h1>
-              <p className="text-sm sm:text-base text-[#475569] mt-2 max-w-2xl leading-relaxed">
+              <p className="text-base text-[#475569] mt-2 max-w-[48ch] sm:max-w-2xl leading-[1.6]">
                 Cari teman satu jurusan, rekan sewilayah domisili, atau senior yang bersedia berbagi pengalaman kerja.
               </p>
             </div>
 
             <Link
               href="/peta"
-              className="inline-flex items-center justify-center min-h-[44px] text-xs sm:text-sm font-semibold text-[#0C2340] hover:text-[#92400E] border border-[#0C2340]/20 bg-white px-4 py-2.5 rounded-lg self-start lg:self-auto transition-colors shrink-0"
+              className="inline-flex items-center justify-center min-h-[44px] text-sm sm:text-base font-semibold text-[#0C2340] hover:text-[#92400E] border border-[#0C2340]/20 bg-white px-4 py-2.5 rounded-lg self-start lg:self-auto transition-colors shrink-0"
             >
               Lihat Sebaran Wilayah
             </Link>
@@ -263,28 +264,37 @@ export default function DirektoriPage() {
                 aria-label="Cari nama, program studi, profesi, atau bidang industri"
                 placeholder="Cari nama, program studi, profesi, atau bidang industri..."
                 value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full min-h-[44px] pl-10 pr-4 py-2.5 bg-[#FDFCF7] border border-[#0C2340]/15 rounded-lg text-sm text-[#0C2340] placeholder:text-[#64748B] focus:outline-none focus:border-[#0C2340]"
+                onChange={(e) => {
+                  setSearchTerm(e.target.value);
+                  setVisibleCount(4);
+                }}
+                className="w-full min-h-[44px] pl-10 pr-4 py-2.5 bg-[#FDFCF7] border border-[#0C2340]/15 rounded-lg text-base text-[#0C2340] placeholder:text-[#64748B] focus:outline-none focus:border-[#0C2340]"
               />
             </div>
 
-            <div className="grid grid-cols-2 md:flex md:flex-wrap items-center gap-2.5 sm:gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:flex md:flex-wrap items-center gap-2.5 sm:gap-3">
               <select
                 value={selectedRegion}
-                onChange={(e) => setSelectedRegion(e.target.value)}
+                onChange={(e) => {
+                  setSelectedRegion(e.target.value);
+                  setVisibleCount(4);
+                }}
                 aria-label="Filter wilayah Jabodetabek"
-                className="w-full md:w-auto min-h-[44px] bg-[#FDFCF7] border border-[#0C2340]/15 text-xs sm:text-sm text-[#0C2340] font-medium px-3 sm:px-3.5 py-2.5 rounded-lg focus:outline-none focus:border-[#0C2340]"
+                className="w-full md:w-auto min-h-[44px] bg-[#FDFCF7] border border-[#0C2340]/15 text-base text-[#0C2340] font-medium px-3.5 py-2.5 rounded-lg focus:outline-none focus:border-[#0C2340]"
               >
                 {regions.map((reg) => (
                   <option key={reg} value={reg}>{reg}</option>
                 ))}
               </select>
 
-              <label className="w-full md:w-auto min-h-[44px] inline-flex items-center justify-center md:justify-start gap-2 px-3 sm:px-3.5 py-2.5 rounded-lg border border-[#0C2340]/15 bg-[#FDFCF7] text-xs sm:text-sm font-medium text-[#0C2340] cursor-pointer select-none">
+              <label className="w-full md:w-auto min-h-[44px] inline-flex items-center justify-center md:justify-start gap-2 px-3.5 py-2.5 rounded-lg border border-[#0C2340]/15 bg-[#FDFCF7] text-base font-medium text-[#0C2340] cursor-pointer select-none">
                 <input
                   type="checkbox"
                   checked={mentorOnly}
-                  onChange={(e) => setMentorOnly(e.target.checked)}
+                  onChange={(e) => {
+                    setMentorOnly(e.target.checked);
+                    setVisibleCount(4);
+                  }}
                   className="rounded text-[#0C2340] focus:ring-[#0C2340]"
                 />
                 <span>Siap mentoring</span>
@@ -292,9 +302,10 @@ export default function DirektoriPage() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between text-xs text-[#475569] pt-1 border-t border-[#0C2340]/8">
+          <div className="flex items-center justify-between text-sm text-[#475569] pt-2 border-t border-[#0C2340]/8">
             <span>
-              Menampilkan <strong className="text-[#0C2340]">{filteredAlumni.length}</strong> profil ({DEMO_BADGE_LABEL})
+              Menampilkan <strong className="text-[#0C2340]">{Math.min(visibleCount, filteredAlumni.length)}</strong> dari{' '}
+              <strong className="text-[#0C2340]">{filteredAlumni.length}</strong> profil ({DEMO_BADGE_LABEL})
               {selectedRegion !== 'Semua Wilayah' ? ` di ${selectedRegion}` : ''}
             </span>
             {(searchTerm || selectedRegion !== 'Semua Wilayah' || mentorOnly) && (
@@ -304,6 +315,7 @@ export default function DirektoriPage() {
                   setSearchTerm('');
                   setSelectedRegion('Semua Wilayah');
                   setMentorOnly(false);
+                  setVisibleCount(4);
                 }}
                 className="min-h-[44px] px-2 text-[#0C2340] font-semibold hover:underline cursor-pointer"
               >
@@ -313,13 +325,13 @@ export default function DirektoriPage() {
           </div>
         </div>
 
-        {/* Alumni Grid */}
+        {/* Alumni Single-Column List (Progressive Reveal) */}
         {filteredAlumni.length === 0 ? (
-          <div className="bg-white border border-dashed border-[#0C2340]/20 rounded-xl p-12 text-center space-y-3">
+          <div className="bg-white border border-dashed border-[#0C2340]/20 rounded-xl p-10 text-center space-y-3 max-w-3xl">
             <p className="text-base font-semibold text-[#0C2340]">
               Belum ada profil yang cocok dengan filter saat ini.
             </p>
-            <p className="text-sm text-[#475569]">
+            <p className="text-base text-[#475569]">
               Coba pilih wilayah lain atau hapus kata kunci pencarian.
             </p>
             <button
@@ -328,16 +340,17 @@ export default function DirektoriPage() {
                 setSearchTerm('');
                 setSelectedRegion('Semua Wilayah');
                 setMentorOnly(false);
+                setVisibleCount(4);
               }}
-              className="mt-2 inline-flex items-center min-h-[44px] px-4 py-2 rounded-lg bg-[#0C2340] text-white text-xs font-semibold cursor-pointer"
+              className="mt-2 inline-flex items-center min-h-[44px] px-5 py-2.5 rounded-lg bg-[#0C2340] text-white text-base font-semibold cursor-pointer"
             >
               Tampilkan Semua Alumni
             </button>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5">
+          <div className="max-w-3xl space-y-3">
             <AnimatePresence mode="popLayout">
-              {filteredAlumni.map((alumni) => (
+              {filteredAlumni.slice(0, visibleCount).map((alumni) => (
                 <motion.article
                   key={alumni.id}
                   layout={!shouldReduceMotion}
@@ -345,15 +358,16 @@ export default function DirektoriPage() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.98 }}
                   transition={{ duration: 0.2 }}
-                  className="bg-white border border-[#0C2340]/12 hover:border-[#0C2340]/40 rounded-2xl p-4 sm:p-5 flex flex-col justify-between gap-4 shadow-2xs transition-all"
+                  className="bg-white border border-[#0C2340]/12 hover:border-[#0C2340]/40 rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs transition-colors"
                 >
-                  <div className="flex items-start gap-3.5">
+                  <div className="flex items-start gap-3.5 min-w-0">
                     <div className="w-12 h-12 rounded-full overflow-hidden border border-[#0C2340]/10 bg-[#F3F1EA] shrink-0 relative">
                       {alumni.avatarUrl ? (
                         <Image
                           src={alumni.avatarUrl}
                           alt={`Foto profil ${alumni.nama}`}
                           fill
+                          loading="lazy"
                           sizes="48px"
                           className="object-cover"
                         />
@@ -364,14 +378,14 @@ export default function DirektoriPage() {
                       )}
                     </div>
 
-                    <div className="space-y-1 min-w-0 flex-1">
-                      <h2 className="text-base font-bold text-[#0C2340] truncate">
+                    <div className="space-y-0.5 min-w-0 flex-1">
+                      <h2 className="text-lg font-bold text-[#0C2340] truncate">
                         {alumni.nama}
                       </h2>
-                      <p className="text-xs text-[#475569] truncate">
-                        {alumni.prodi} · &apos;{String(alumni.angkatan).slice(-2)}
+                      <p className="text-base text-[#475569] truncate">
+                        {alumni.prodi} · &apos;{String(alumni.angkatan).slice(-2)} · {alumni.wilayah}
                       </p>
-                      <p className="text-xs text-[#0C2340] font-medium truncate">
+                      <p className="text-sm text-[#0C2340] font-medium truncate">
                         {alumni.industri}
                       </p>
                     </div>
@@ -383,7 +397,7 @@ export default function DirektoriPage() {
                       setActiveProfileTab('tentang');
                       setSelectedAlumni(alumni);
                     }}
-                    className="w-full inline-flex items-center justify-center gap-1.5 min-h-[44px] px-4 py-2 rounded-lg bg-[#F3F1EA] hover:bg-[#0C2340] text-[#0C2340] hover:text-white text-xs font-semibold transition-colors cursor-pointer"
+                    className="w-full sm:w-auto shrink-0 inline-flex items-center justify-center gap-1.5 min-h-[44px] px-4 py-2.5 rounded-lg bg-[#F3F1EA] hover:bg-[#0C2340] text-[#0C2340] hover:text-white text-sm font-semibold transition-colors cursor-pointer"
                   >
                     <span>Lihat profil</span>
                     <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
@@ -391,6 +405,18 @@ export default function DirektoriPage() {
                 </motion.article>
               ))}
             </AnimatePresence>
+
+            {filteredAlumni.length > visibleCount && (
+              <div className="pt-2">
+                <button
+                  type="button"
+                  onClick={() => setVisibleCount((prev) => prev + 4)}
+                  className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-lg border border-[#0C2340]/20 bg-white hover:bg-[#F3F1EA] text-[#0C2340] text-base font-semibold transition-colors cursor-pointer"
+                >
+                  Tampilkan profil lainnya ({filteredAlumni.length - visibleCount} lagi)
+                </button>
+              </div>
+            )}
           </div>
         )}
 

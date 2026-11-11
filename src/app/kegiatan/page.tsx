@@ -15,6 +15,7 @@ const STORAGE_KEY_RSVP = 'ikaums_persisted_rsvp';
 
 export default function KegiatanPage() {
   const [activeCategory, setActiveCategory] = useState('Semua');
+  const [visibleCount, setVisibleCount] = useState(2);
   const [rsvpDone, setRsvpDone] = useState<Record<string, boolean>>({});
   const shouldReduceMotion = useReducedMotion();
 
@@ -76,14 +77,14 @@ export default function KegiatanPage() {
               <span className="text-[#0C2340] font-semibold">Jadwal Kopdar</span>
             </nav>
 
-            <header className="space-y-2.5">
-              <p className="text-xs font-bold uppercase tracking-wider text-[#92400E]">
-                Tahap Pra-Launch
-              </p>
-              <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0C2340]">
+            <header className="space-y-3">
+              <span className="inline-block text-sm font-bold uppercase tracking-wider text-[#92400E]">
+                Tahap Prapeluncuran
+              </span>
+              <h1 className="text-[clamp(1.75rem,1.3rem+1.8vw,2.5rem)] font-extrabold tracking-[-0.02em] text-[#0C2340] leading-[1.15]">
                 Jadwal Kopdar IKA UMS Jabodetabek
               </h1>
-              <p className="text-sm sm:text-base text-[#475569] leading-relaxed">
+              <p className="text-base text-[#475569] leading-[1.6] max-w-[44ch] sm:max-w-2xl">
                 Belum ada jadwal kopdar terbuka yang ditetapkan karena kami sedang menghimpun minat hari dan domisili dari pendaftar awal.
               </p>
             </header>
@@ -97,21 +98,21 @@ export default function KegiatanPage() {
               <h2 className="text-xl font-bold text-[#0C2340]">
                 Rencana Kopdar Pertama Wilayah Jabodetabek
               </h2>
-              <p className="text-sm text-[#475569] leading-relaxed">
+              <p className="text-base text-[#475569] leading-[1.6] max-w-[48ch]">
                 Lokasi dan tanggal pasti akan diumumkan lewat WhatsApp kepada anggota yang sudah terdaftar.
               </p>
             </div>
 
-            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
+            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-base">
               <div className="bg-[#F3F1EA] rounded-xl p-4 space-y-1">
-                <dt className="text-xs font-semibold text-[#475569] flex items-center gap-1.5">
+                <dt className="text-sm font-semibold text-[#475569] flex items-center gap-1.5">
                   <Calendar className="w-4 h-4 text-[#92400E]" />
                   <span>Tanggal &amp; Jam</span>
                 </dt>
                 <dd className="font-semibold text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.firstKopdarDate}</dd>
               </div>
               <div className="bg-[#F3F1EA] rounded-xl p-4 space-y-1">
-                <dt className="text-xs font-semibold text-[#475569] flex items-center gap-1.5">
+                <dt className="text-sm font-semibold text-[#475569] flex items-center gap-1.5">
                   <MapPin className="w-4 h-4 text-[#92400E]" />
                   <span>Lokasi Pertemuan</span>
                 </dt>
@@ -122,14 +123,14 @@ export default function KegiatanPage() {
             <div className="flex flex-wrap items-center gap-3 pt-2">
               <Link
                 href="/#kopdar"
-                className="inline-flex items-center gap-2 min-h-[44px] px-5 py-2.5 rounded-lg bg-[#0C2340] hover:bg-[#16325C] text-white text-sm font-semibold transition-colors"
+                className="inline-flex items-center gap-2 min-h-[48px] px-5 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] active:scale-[0.99] text-white text-base font-semibold transition-all duration-150"
               >
                 Usulkan hari &amp; wilayah kopdar
                 <ArrowRight className="w-4 h-4 text-[#F59E0B]" />
               </Link>
               <Link
                 href="/gabung"
-                className="inline-flex items-center min-h-[44px] px-5 py-2.5 rounded-lg bg-white border border-[#0C2340]/20 hover:border-[#0C2340]/45 text-[#0C2340] text-sm font-semibold transition-colors"
+                className="inline-flex items-center min-h-[48px] px-5 py-3 rounded-lg bg-white border border-[#0C2340]/20 hover:border-[#0C2340]/45 active:scale-[0.99] text-[#0C2340] text-base font-semibold transition-all duration-150"
               >
                 Daftar jadi anggota
               </Link>
@@ -179,13 +180,13 @@ export default function KegiatanPage() {
           </nav>
 
           <div>
-            <p className="text-xs font-bold uppercase tracking-wider text-[#92400E] mb-1.5">
+            <span className="inline-block text-sm font-bold uppercase tracking-wider text-[#92400E] mb-1.5">
               Jadwal Pertemuan ({DEMO_BADGE_LABEL})
-            </p>
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0C2340]">
+            </span>
+            <h1 className="text-[clamp(1.75rem,1.3rem+1.8vw,2.5rem)] font-extrabold tracking-[-0.02em] text-[#0C2340]">
               Jadwal Kopdar Alumni Jabodetabek
             </h1>
-            <p className="text-sm sm:text-base text-[#475569] mt-2 max-w-2xl leading-relaxed">
+            <p className="text-base text-[#475569] mt-2 max-w-[44ch] sm:max-w-2xl leading-[1.6]">
               Dari kopdar per wilayah hingga sesi berbagi pengalaman kerja. Tandai kehadiranmu agar koordinator mudah memperkirakan tempat.
             </p>
           </div>
@@ -238,16 +239,16 @@ export default function KegiatanPage() {
                   </div>
                 </div>
 
-                <p className="text-sm text-[#475569] leading-relaxed">{featuredEvent.deskripsi}</p>
+                <p className="text-base text-[#475569] leading-[1.6]">{featuredEvent.deskripsi}</p>
               </div>
 
               <button
                 type="button"
                 onClick={(e) => toggleRsvp(featuredEvent.id, e)}
-                className={`w-full min-h-[44px] py-3 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer ${
+                className={`w-full min-h-[48px] py-3 rounded-lg text-base font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer ${
                   isFeaturedRsvp
                     ? 'bg-emerald-700 text-white hover:bg-emerald-800'
-                    : 'bg-[#0C2340] text-white hover:bg-[#16325C]'
+                    : 'bg-[#0C2340] text-white hover:bg-[#08182E]'
                 }`}
               >
                 {isFeaturedRsvp ? (
@@ -263,21 +264,25 @@ export default function KegiatanPage() {
           </div>
         </section>
 
-        <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <AnimatedTabs
             tabs={categories}
             activeTab={activeCategory}
-            onChange={setActiveCategory}
+            onChange={(tab) => {
+              setActiveCategory(tab);
+              setVisibleCount(2);
+            }}
             layoutId="kegiatanCategoryTabs"
           />
-          <span className="text-xs text-[#475569]">
-            Menampilkan <strong>{filteredKegiatan.length}</strong> contoh jadwal
+          <span className="text-sm text-[#475569]">
+            Menampilkan <strong>{Math.min(visibleCount, filteredKegiatan.length)}</strong> dari{' '}
+            <strong>{filteredKegiatan.length}</strong> contoh jadwal
           </span>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="max-w-3xl space-y-4">
           <AnimatePresence mode="popLayout">
-            {filteredKegiatan.map((item) => {
+            {filteredKegiatan.slice(0, visibleCount).map((item) => {
               const isRsvped = rsvpDone[item.id];
               return (
                 <motion.article
@@ -286,45 +291,60 @@ export default function KegiatanPage() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="bg-white border border-[#0C2340]/12 rounded-2xl overflow-hidden flex flex-col justify-between shadow-2xs"
+                  className="bg-white border border-[#0C2340]/12 rounded-xl overflow-hidden flex flex-col sm:flex-row shadow-2xs"
                 >
-                  <div>
-                    <div className="aspect-[16/10] bg-[#F3F1EA] relative overflow-hidden">
-                      <Image
-                        src={item.gambar || '/images/alumni-gathering-4.jpg'}
-                        alt={item.judul}
-                        fill
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                        className="object-cover"
-                      />
-                    </div>
-                    <div className="p-5 space-y-2">
-                      <span className="inline-block bg-[#F3F1EA] text-[#0C2340] text-[11px] font-semibold px-2.5 py-0.5 rounded">
-                        {item.jenis}
-                      </span>
-                      <h3 className="text-base font-bold text-[#0C2340] leading-snug">{item.judul}</h3>
-                      <p className="text-xs text-[#475569]">{item.tanggalWIB} · {item.wilayah}</p>
-                      <p className="text-xs text-[#475569]">{item.deskripsi}</p>
-                    </div>
+                  <div className="aspect-[16/10] sm:aspect-auto sm:w-52 shrink-0 bg-[#F3F1EA] relative overflow-hidden">
+                    <Image
+                      src={item.gambar || '/images/alumni-gathering-4.jpg'}
+                      alt={item.judul}
+                      fill
+                      loading="lazy"
+                      sizes="(max-width: 640px) 100vw, 208px"
+                      className="object-cover"
+                    />
                   </div>
-                  <div className="px-5 pb-5">
-                    <button
-                      type="button"
-                      onClick={(e) => toggleRsvp(item.id, e)}
-                      className={`w-full min-h-[44px] rounded-lg text-xs font-semibold cursor-pointer ${
-                        isRsvped
-                          ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                          : 'bg-[#F3F1EA] text-[#0C2340] hover:bg-[#0C2340] hover:text-white'
-                      }`}
-                    >
-                      {isRsvped ? 'Tercatat ikut' : 'Daftar ikut'}
-                    </button>
+                  <div className="p-5 flex-1 flex flex-col justify-between gap-4">
+                    <div className="space-y-1.5">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="inline-block bg-[#F3F1EA] text-[#0C2340] text-xs font-semibold px-2.5 py-0.5 rounded">
+                          {item.jenis}
+                        </span>
+                        <span className="text-sm text-[#475569]">{item.tanggalWIB} · {item.wilayah}</span>
+                      </div>
+                      <h3 className="text-lg font-bold text-[#0C2340] leading-snug">{item.judul}</h3>
+                      <p className="text-base text-[#475569] leading-[1.55]">{item.deskripsi}</p>
+                    </div>
+                    <div>
+                      <button
+                        type="button"
+                        onClick={(e) => toggleRsvp(item.id, e)}
+                        className={`w-full sm:w-auto min-h-[44px] px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors cursor-pointer ${
+                          isRsvped
+                            ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
+                            : 'bg-[#F3F1EA] text-[#0C2340] hover:bg-[#0C2340] hover:text-white'
+                        }`}
+                      >
+                        {isRsvped ? 'Tercatat ikut' : 'Daftar ikut'}
+                      </button>
+                    </div>
                   </div>
                 </motion.article>
               );
             })}
           </AnimatePresence>
-          </div>
+
+          {filteredKegiatan.length > visibleCount && (
+            <div className="pt-2">
+              <button
+                type="button"
+                onClick={() => setVisibleCount((prev) => prev + 3)}
+                className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-lg border border-[#0C2340]/20 bg-white hover:bg-[#F3F1EA] text-[#0C2340] text-base font-semibold transition-colors cursor-pointer"
+              >
+                Tampilkan jadwal lainnya ({filteredKegiatan.length - visibleCount} lagi)
+              </button>
+            </div>
+          )}
+        </div>
         </div>
       </main>
 

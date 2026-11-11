@@ -57,10 +57,10 @@ export default function MasukPage() {
                 {DEMO_BADGE_LABEL}
               </span>
             )}
-            <h1 className="text-2xl font-bold text-[#0C2340]">
+            <h1 className="text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold text-[#0C2340]">
               Masuk Anggota
             </h1>
-            <p className="text-sm text-[#475569] leading-relaxed">
+            <p className="text-base text-[#475569] leading-[1.6]">
               Masuk dengan kode WhatsApp atau tautan email tanpa perlu menghafal kata sandi.
             </p>
           </div>
@@ -76,7 +76,7 @@ export default function MasukPage() {
                     setIdentifier('');
                     setError('');
                   }}
-                  className={`min-h-[44px] rounded-lg text-xs sm:text-sm font-semibold transition-colors cursor-pointer ${
+                  className={`min-h-[44px] rounded-lg text-sm sm:text-base font-semibold transition-colors cursor-pointer ${
                     method === 'whatsapp'
                       ? 'bg-[#0C2340] text-white'
                       : 'text-[#0C2340] hover:bg-white/70'
@@ -91,7 +91,7 @@ export default function MasukPage() {
                     setIdentifier('');
                     setError('');
                   }}
-                  className={`min-h-[44px] rounded-lg text-xs sm:text-sm font-semibold transition-colors cursor-pointer ${
+                  className={`min-h-[44px] rounded-lg text-sm sm:text-base font-semibold transition-colors cursor-pointer ${
                     method === 'email'
                       ? 'bg-[#0C2340] text-white'
                       : 'text-[#0C2340] hover:bg-white/70'
@@ -104,7 +104,7 @@ export default function MasukPage() {
               {error && (
                 <div
                   role="alert"
-                  className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-800 text-xs flex items-center gap-2"
+                  className="p-3.5 rounded-lg bg-red-50 border border-red-200 text-red-800 text-sm flex items-center gap-2"
                 >
                   <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
                   <span>{error}</span>
@@ -128,7 +128,7 @@ export default function MasukPage() {
                     setIdentifier(e.target.value);
                     if (error) setError('');
                   }}
-                  className={`w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-[#FDFCF7] border text-sm text-[#0C2340] focus:outline-hidden focus:ring-2 ${
+                  className={`w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-[#FDFCF7] border text-base text-[#0C2340] focus:outline-hidden focus:ring-2 ${
                     error
                       ? 'border-red-500 focus:ring-red-200'
                       : 'border-[#0C2340]/20 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
@@ -138,7 +138,7 @@ export default function MasukPage() {
 
               <button
                 type="submit"
-                className="w-full min-h-[44px] inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg bg-[#0C2340] hover:bg-[#16325C] text-white text-sm font-semibold transition-colors cursor-pointer"
+                className="w-full min-h-[48px] inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] active:scale-[0.99] text-white text-base font-semibold transition-all duration-150 cursor-pointer"
               >
                 {method === 'whatsapp' ? 'Minta kode masuk WhatsApp' : 'Kirim tautan masuk email'}
                 <ArrowRight className="w-4 h-4" />
@@ -147,10 +147,10 @@ export default function MasukPage() {
           ) : (
             <div className="bg-[#FDFCF7] border border-emerald-200 rounded-xl p-5 text-center space-y-3">
               <CheckCircle2 className="w-8 h-8 text-emerald-700 mx-auto" />
-              <h2 className="text-base font-bold text-[#0C2340]">
+              <h2 className="text-lg font-bold text-[#0C2340]">
                 {IS_DEMO_MODE ? `Masuk (${DEMO_BADGE_LABEL})` : 'Login Otomatis Segera Aktif'}
               </h2>
-              <p className="text-xs text-[#475569] leading-relaxed">
+              <p className="text-base text-[#475569] leading-[1.6]">
                 {IS_DEMO_MODE ? (
                   <>
                     Pratinjau akun siap dibuka untuk <strong>{identifier}</strong>.
@@ -168,7 +168,7 @@ export default function MasukPage() {
               {IS_DEMO_MODE ? (
                 <Link
                   href="/app"
-                  className="inline-flex items-center justify-center gap-2 w-full min-h-[44px] px-4 py-2 rounded-lg bg-[#0C2340] text-white text-sm font-semibold hover:bg-[#16325C] transition-colors"
+                  className="inline-flex items-center justify-center gap-2 w-full min-h-[48px] px-4 py-2.5 rounded-lg bg-[#0C2340] text-white text-base font-semibold hover:bg-[#08182E] transition-colors"
                 >
                   Buka Profil Saya ({DEMO_BADGE_LABEL})
                   <ArrowRight className="w-4 h-4" />
@@ -177,7 +177,7 @@ export default function MasukPage() {
                 <button
                   type="button"
                   onClick={() => setSent(false)}
-                  className="inline-flex items-center justify-center w-full min-h-[44px] px-4 py-2 rounded-lg bg-[#F3F1EA] hover:bg-[#E7E3D7] text-[#0C2340] text-sm font-semibold transition-colors cursor-pointer"
+                  className="inline-flex items-center justify-center w-full min-h-[48px] px-4 py-2.5 rounded-lg bg-[#F3F1EA] hover:bg-[#E7E3D7] text-[#0C2340] text-base font-semibold transition-colors cursor-pointer"
                 >
                   Kembali ke halaman masuk
                 </button>
@@ -186,14 +186,14 @@ export default function MasukPage() {
           )}
 
           {/* Bantuan Lupa Akses */}
-          <details className="pt-4 border-t border-[#0C2340]/10 text-xs text-[#475569] group">
-            <summary className="list-none flex items-center justify-between gap-2 min-h-[44px] font-semibold text-[#0C2340] cursor-pointer">
+          <details className="pt-4 border-t border-[#0C2340]/10 text-base text-[#475569] group">
+            <summary className="list-none flex items-center justify-between gap-2 min-h-[44px] font-semibold text-base text-[#0C2340] cursor-pointer">
               <span className="inline-flex items-center gap-1.5">
                 <HelpCircle className="w-4 h-4 text-[#92400E]" />
                 Lupa akses atau nomor WhatsApp berubah?
               </span>
             </summary>
-            <p className="pt-2 pb-1 leading-relaxed text-[#475569]">
+            <p className="pt-2 pb-1 leading-[1.6] text-base text-[#475569]">
               Hubungi sekretariat pengurus melalui{' '}
               <span className="font-medium text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.contactEmail}</span>{' '}
               atau WhatsApp{' '}
@@ -202,11 +202,11 @@ export default function MasukPage() {
             </p>
           </details>
 
-          <p className="text-xs text-center text-[#475569] pt-1">
+          <p className="text-base text-center text-[#475569] pt-1">
             Belum terdaftar sebagai anggota?{' '}
             <Link
               href="/gabung"
-              className="inline-flex items-center min-h-[44px] text-[#0C2340] font-semibold hover:text-[#92400E] underline underline-offset-4"
+              className="inline-flex items-center min-h-[44px] px-1 text-[#0C2340] font-semibold hover:text-[#92400E] underline underline-offset-4"
             >
               Daftar jadi anggota
             </Link>

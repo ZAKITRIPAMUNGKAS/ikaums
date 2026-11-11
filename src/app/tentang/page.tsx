@@ -8,7 +8,7 @@ import { COMMUNITY_PLACEHOLDERS } from '@/lib/config';
 import { ShieldCheck, Users, Compass, ArrowRight, ExternalLink, Landmark } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Tentang Komunitas — IKA UMS Wilayah Jabodetabek',
+  title: 'Tentang Komunitas | IKA UMS Wilayah Jabodetabek',
   description:
     'Tujuan pembentukan jaringan alumni Universitas Muhammadiyah Surakarta di Jabodetabek, cara pengelolaannya, serta koordinasi dengan IKA UMS pusat.',
 };
@@ -96,39 +96,45 @@ export default function TentangPage() {
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-[1]">
         {/* Tiga Prinsip Komunitas */}
-        <section className="py-12 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-          <article className="space-y-3">
-            <div className="w-10 h-10 rounded-lg bg-[#F3F1EA] border border-[#0C2340]/10 flex items-center justify-center text-[#0C2340]">
-              <Compass className="w-5 h-5" />
+        <section className="py-12 max-w-4xl divide-y divide-[#0C2340]/12 border-y border-[#0C2340]/12">
+          <article className="py-6 first:pt-2 last:pb-2 grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            <div className="md:col-span-5 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-[#F3F1EA] border border-[#0C2340]/10 flex items-center justify-center text-[#0C2340] shrink-0">
+                <Compass className="w-5 h-5" />
+              </div>
+              <h2 className="text-xl font-bold text-[#0C2340]">
+                Fokus pada Kebutuhan Sehari-hari
+              </h2>
             </div>
-            <h2 className="text-xl font-bold text-[#0C2340]">
-              Fokus pada Kebutuhan Sehari-hari
-            </h2>
-            <p className="text-[15px] text-[#475569] leading-relaxed">
+            <p className="md:col-span-7 text-base text-[#475569] leading-[1.6]">
               Kegiatan difokuskan pada hal praktis: saling kenal sesama alumni yang tinggal atau berkantor di wilayah yang sama, mentoring karier untuk lulusan baru, serta berbagi info kerja dan usaha.
             </p>
           </article>
 
-          <article className="space-y-3">
-            <div className="w-10 h-10 rounded-lg bg-[#F3F1EA] border border-[#0C2340]/10 flex items-center justify-center text-[#0C2340]">
-              <Users className="w-5 h-5" />
+          <article className="py-6 grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            <div className="md:col-span-5 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-[#F3F1EA] border border-[#0C2340]/10 flex items-center justify-center text-[#0C2340] shrink-0">
+                <Users className="w-5 h-5" />
+              </div>
+              <h2 className="text-xl font-bold text-[#0C2340]">
+                Verifikasi Manual Pengurus
+              </h2>
             </div>
-            <h2 className="text-xl font-bold text-[#0C2340]">
-              Verifikasi Manual Pengurus
-            </h2>
-            <p className="text-[15px] text-[#475569] leading-relaxed">
-              Setiap pendaftaran ditinjau pengurus dengan mencocokkan nama, program studi, dan tahun masuk UMS agar ruang diskusi tetap nyaman dan bebas dari akun promosi komersial.
+            <p className="md:col-span-7 text-base text-[#475569] leading-[1.6]">
+              Setiap pendaftaran ditinjau pengurus dengan mencocokkan nama, program studi, dan tahun masuk UMS agar ruang diskusi tetap tertib dan bebas dari akun promosi komersial.
             </p>
           </article>
 
-          <article className="space-y-3">
-            <div className="w-10 h-10 rounded-lg bg-[#F3F1EA] border border-[#0C2340]/10 flex items-center justify-center text-[#0C2340]">
-              <ShieldCheck className="w-5 h-5" />
+          <article className="py-6 grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
+            <div className="md:col-span-5 flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-[#F3F1EA] border border-[#0C2340]/10 flex items-center justify-center text-[#0C2340] shrink-0">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+              <h2 className="text-xl font-bold text-[#0C2340]">
+                Privasi dengan Persetujuan Eksplisit
+              </h2>
             </div>
-            <h2 className="text-xl font-bold text-[#0C2340]">
-              Privasi dengan Persetujuan Eksplisit
-            </h2>
-            <p className="text-[15px] text-[#475569] leading-relaxed">
+            <p className="md:col-span-7 text-base text-[#475569] leading-[1.6]">
               Nomor WhatsApp dan email hanya untuk verifikasi dan informasi dari pengurus. Profil hanya muncul di Daftar Anggota bagi anggota yang sudah masuk jika kamu memilih setuju tampil.
             </p>
           </article>
@@ -146,7 +152,7 @@ export default function TentangPage() {
               <h2 className="text-xl font-bold text-[#0C2340]">
                 Hubungan dengan PP IKA UMS &amp; Kampus
               </h2>
-              <p className="text-sm sm:text-[15px] text-[#475569] leading-relaxed">
+              <p className="text-base text-[#475569] leading-[1.6]">
                 Status koordinasi resmi: <span className="font-semibold text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.ppIkaUmsStatus}</span>.
                 Penggunaan nama dan logo IKA UMS ditujukan untuk menghimpun alumni Universitas Muhammadiyah Surakarta wilayah Jabodetabek dalam koridor kepengurusan resmi.
               </p>

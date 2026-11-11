@@ -150,13 +150,13 @@ export default function PeluangPage() {
           </nav>
 
           <header className="space-y-2.5">
-            <p className="text-xs font-bold uppercase tracking-wider text-[#92400E]">
+            <span className="inline-block text-sm font-bold uppercase tracking-wider text-[#92400E]">
               Pengembangan Karier Alumni
-            </p>
-            <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-[#0C2340]">
+            </span>
+            <h1 className="text-[clamp(1.75rem,1.3rem+1.8vw,2.5rem)] font-extrabold tracking-[-0.02em] text-[#0C2340]">
               Mentoring Alumni serta Info Kerja &amp; Usaha
             </h1>
-            <p className="text-sm sm:text-base text-[#475569] max-w-2xl leading-relaxed">
+            <p className="text-base text-[#475569] max-w-[48ch] sm:max-w-2xl leading-[1.6]">
               Ruang untuk mencocokkan kebutuhan mentoring karier lulusan baru dengan praktisi
               alumni serta membagikan info lowongan atau kerja sama usaha yang terverifikasi.
             </p>
@@ -173,7 +173,7 @@ export default function PeluangPage() {
               <h2 id="heading-mentoring" className="text-2xl font-bold text-[#0C2340]">
                 Mentoring Alumni
               </h2>
-              <p className="text-sm sm:text-base text-[#475569] leading-relaxed">
+              <p className="text-base text-[#475569] leading-[1.6]">
                 Sesi mentoring singkat untuk ulas CV, persiapan wawancara, atau bertukar pikiran soal
                 jalur industri di Jabodetabek.
               </p>
@@ -183,14 +183,14 @@ export default function PeluangPage() {
               <button
                 type="button"
                 onClick={() => handleOpenBooking(null)}
-                className="inline-flex items-center gap-2 min-h-[44px] px-5 py-2.5 rounded-lg bg-[#0C2340] hover:bg-[#16325C] text-white text-sm font-semibold transition-colors cursor-pointer"
+                className="inline-flex items-center gap-2 min-h-[48px] px-5 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] active:scale-[0.99] text-white text-base font-semibold transition-all duration-150 cursor-pointer"
               >
                 Cari Mentor
                 <ArrowRight className="w-4 h-4 text-[#F59E0B]" />
               </button>
               <Link
                 href="/gabung?mentor=ya"
-                className="inline-flex items-center min-h-[44px] px-5 py-2.5 rounded-lg bg-white border border-[#0C2340]/20 hover:border-[#0C2340]/45 text-[#0C2340] text-sm font-semibold transition-colors"
+                className="inline-flex items-center min-h-[48px] px-5 py-3 rounded-lg bg-white border border-[#0C2340]/20 hover:border-[#0C2340]/45 text-[#0C2340] text-base font-semibold transition-colors"
               >
                 Daftar Jadi Mentor
               </Link>
@@ -200,14 +200,14 @@ export default function PeluangPage() {
           {!IS_DEMO_MODE ? (
             <div className="bg-white border border-[#0C2340]/12 rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6">
               <div className="space-y-2 max-w-xl">
-                <div className="inline-flex items-center gap-2 text-xs font-bold text-[#92400E]">
+                <div className="inline-flex items-center gap-2 text-sm font-bold text-[#92400E]">
                   <HeartHandshake className="w-4 h-4" />
-                  <span>Pencocokan Mentor Pra-Launch</span>
+                  <span>Pencocokan Mentor Prapeluncuran</span>
                 </div>
-                <h3 className="text-lg font-bold text-[#0C2340]">
+                <h3 className="text-xl font-bold text-[#0C2340]">
                   Daftar Mentor Sedang Dihimpun dari Pendaftar Awal
                 </h3>
-                <p className="text-sm text-[#475569] leading-relaxed">
+                <p className="text-base text-[#475569] leading-[1.6]">
                   Untuk menjaga privasi nama dan tempat kerja alumni, profil mentor baru ditampilkan
                   setelah pendaftar memverifikasi data dan menyetujui pencantuman dirinya. Sementara
                   itu, kamu tetap bisa mengirim permintaan butuh mentor melalui tombol Cari Mentor di
@@ -217,7 +217,7 @@ export default function PeluangPage() {
               <button
                 type="button"
                 onClick={() => handleOpenBooking(null)}
-                className="inline-flex items-center justify-center min-h-[44px] px-5 py-2.5 rounded-lg bg-[#F3F1EA] hover:bg-[#E7E3D7] text-[#0C2340] text-sm font-semibold transition-colors shrink-0 cursor-pointer"
+                className="inline-flex items-center justify-center min-h-[48px] px-5 py-3 rounded-lg bg-[#F3F1EA] hover:bg-[#E7E3D7] text-[#0C2340] text-base font-semibold transition-colors shrink-0 cursor-pointer"
               >
                 Ajukan Topik Mentoring
               </button>
@@ -281,19 +281,19 @@ export default function PeluangPage() {
             <h2 id="heading-info-kerja" className="text-2xl font-bold text-[#0C2340]">
               Info Kerja &amp; Usaha
             </h2>
-            <p className="text-sm sm:text-base text-[#475569] leading-relaxed">
+            <p className="text-base text-[#475569] leading-[1.6]">
               Papan berbagi lowongan dari tim internal alumni serta informasi peluang kemitraan usaha di wilayah Jabodetabek.
             </p>
           </div>
 
           <div className="bg-[#F3F1EA] border border-[#0C2340]/10 rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-5">
             <div className="space-y-2 max-w-xl">
-              <div className="inline-flex items-center gap-2 text-xs font-bold text-[#0C2340]">
+              <div className="inline-flex items-center gap-2 text-sm font-bold text-[#0C2340]">
                 <Briefcase className="w-4 h-4 text-[#92400E]" />
                 <span>Belum Ada Kiriman Aktif</span>
               </div>
-              <p className="text-sm text-[#475569] leading-relaxed">
-                Pada tahap pra-launch ini, daftar lowongan maupun penawaran usaha anggota belum
+              <p className="text-base text-[#475569] leading-[1.6]">
+                Pada tahap prapeluncuran ini, daftar lowongan maupun penawaran usaha anggota belum
                 dipublikasikan agar hanya informasi nyata dari anggota terverifikasi yang tampil.
                 Jika kamu memiliki info lowongan untuk dibagikan ke sesama alumni, kirimkan melalui
                 kontak pengurus ({COMMUNITY_PLACEHOLDERS.contactWhatsapp}).
@@ -301,7 +301,7 @@ export default function PeluangPage() {
             </div>
             <Link
               href="/gabung"
-              className="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 py-2.5 rounded-lg bg-[#0C2340] hover:bg-[#16325C] text-white text-sm font-semibold transition-colors shrink-0"
+              className="inline-flex items-center justify-center gap-2 min-h-[48px] px-5 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] active:scale-[0.99] text-white text-base font-semibold transition-all duration-150 shrink-0"
             >
               Daftar jadi anggota
               <ArrowRight className="w-4 h-4 text-[#F59E0B]" />
@@ -368,14 +368,14 @@ export default function PeluangPage() {
                     setRequestForm({ ...requestForm, nama: e.target.value });
                     clearMentorError('nama');
                   }}
-                  className={`w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border text-sm text-[#0C2340] focus:outline-hidden focus:ring-2 ${
+                  className={`w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border text-base text-[#0C2340] focus:outline-hidden focus:ring-2 ${
                     fieldErrors.nama
                       ? 'border-red-500 focus:ring-red-200'
                       : 'border-[#0C2340]/20 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
                   }`}
                 />
                 {fieldErrors.nama && (
-                  <p id="err-mentor-nama" className="mt-1 text-xs text-red-700 font-medium">
+                  <p id="err-mentor-nama" className="mt-1 text-sm text-red-700 font-medium">
                     {fieldErrors.nama}
                   </p>
                 )}
@@ -390,7 +390,7 @@ export default function PeluangPage() {
                     id="mentor-req-prodi"
                     value={requestForm.prodi}
                     onChange={(e) => setRequestForm({ ...requestForm, prodi: e.target.value })}
-                    className="w-full min-h-[44px] px-3 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-sm text-[#0C2340]"
+                    className="w-full min-h-[44px] px-3 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-base text-[#0C2340]"
                   >
                     <option value="">Pilih Prodi (Opsional)</option>
                     {FAKULTAS_PRODI_UMS.map((group) => (
@@ -412,7 +412,7 @@ export default function PeluangPage() {
                     id="mentor-req-angkatan"
                     value={requestForm.angkatan}
                     onChange={(e) => setRequestForm({ ...requestForm, angkatan: e.target.value })}
-                    className="w-full min-h-[44px] px-3 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-sm text-[#0C2340]"
+                    className="w-full min-h-[44px] px-3 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-base text-[#0C2340]"
                   >
                     <option value="">Pilih Angkatan (Opsional)</option>
                     {ANGKATAN_OPTIONS.map((tahun) => (
@@ -442,17 +442,17 @@ export default function PeluangPage() {
                     setRequestForm({ ...requestForm, whatsapp: e.target.value });
                     clearMentorError('whatsapp');
                   }}
-                  className={`w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border text-sm text-[#0C2340] focus:outline-hidden focus:ring-2 ${
+                  className={`w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border text-base text-[#0C2340] focus:outline-hidden focus:ring-2 ${
                     fieldErrors.whatsapp
                       ? 'border-red-500 focus:ring-red-200'
                       : 'border-[#0C2340]/20 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
                   }`}
                 />
-                <p id="hint-mentor-wa" className="mt-1 text-xs text-[#475569]">
+                <p id="hint-mentor-wa" className="mt-1 text-sm text-[#475569]">
                   Tidak ditampilkan publik; hanya diteruskan jika kamu menyetujui izin di bawah.
                 </p>
                 {fieldErrors.whatsapp && (
-                  <p id="err-mentor-wa" className="mt-1 text-xs text-red-700 font-medium">
+                  <p id="err-mentor-wa" className="mt-1 text-sm text-red-700 font-medium">
                     {fieldErrors.whatsapp}
                   </p>
                 )}
@@ -466,7 +466,7 @@ export default function PeluangPage() {
                   id="mentor-req-topik"
                   value={requestForm.topik}
                   onChange={(e) => setRequestForm({ ...requestForm, topik: e.target.value })}
-                  className="w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-sm text-[#0C2340]"
+                  className="w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-base text-[#0C2340]"
                 >
                   <option value="Ulas CV & Portofolio">Ulas CV &amp; Portofolio</option>
                   <option value="Persiapan Wawancara Kerja">Persiapan Wawancara Kerja</option>
@@ -485,14 +485,14 @@ export default function PeluangPage() {
                   placeholder="Ceritakan singkat bidang yang sedang kamu tuju..."
                   value={requestForm.catatan}
                   onChange={(e) => setRequestForm({ ...requestForm, catatan: e.target.value })}
-                  className="w-full px-3.5 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-sm text-[#0C2340]"
+                  className="w-full px-3.5 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-base text-[#0C2340]"
                 />
               </div>
 
               <div className="bg-[#F3F1EA]/75 border border-[#0C2340]/12 rounded-xl p-3.5">
                 <label
                   htmlFor="mentor-req-consent"
-                  className="flex items-start gap-2.5 min-h-[44px] cursor-pointer text-xs sm:text-sm text-[#0C2340]"
+                  className="flex items-start gap-2.5 min-h-[44px] cursor-pointer text-base text-[#0C2340] leading-[1.5]"
                 >
                   <input
                     id="mentor-req-consent"
@@ -504,7 +504,7 @@ export default function PeluangPage() {
                       setRequestForm({ ...requestForm, mentorContactConsent: e.target.checked });
                       clearMentorError('mentorContactConsent');
                     }}
-                    className="mt-1 w-4 h-4 rounded border-[#0C2340]/30 accent-[#0C2340] shrink-0"
+                    className="mt-1.5 w-4 h-4 rounded border-[#0C2340]/30 accent-[#0C2340] shrink-0"
                   />
                   <span>
                     Saya mengizinkan pengurus meneruskan nomor WhatsApp ini kepada mentor yang cocok agar dapat menghubungi saya.{' '}
@@ -512,7 +512,7 @@ export default function PeluangPage() {
                   </span>
                 </label>
                 {fieldErrors.mentorContactConsent && (
-                  <p id="err-mentor-consent" className="mt-1 pl-6 text-xs text-red-700 font-medium">
+                  <p id="err-mentor-consent" className="mt-1 pl-6 text-sm text-red-700 font-medium">
                     {fieldErrors.mentorContactConsent}
                   </p>
                 )}
@@ -522,14 +522,14 @@ export default function PeluangPage() {
                 <button
                   type="button"
                   onClick={() => setMentorModalOpen(false)}
-                  className="min-h-[44px] px-4 py-2 rounded-lg bg-[#F3F1EA] text-[#0C2340] text-sm font-semibold cursor-pointer"
+                  className="min-h-[44px] px-4 py-2 rounded-lg bg-[#F3F1EA] text-[#0C2340] text-base font-semibold cursor-pointer"
                 >
                   Batal
                 </button>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="min-h-[44px] px-5 py-2 rounded-lg bg-[#0C2340] text-white text-sm font-semibold hover:bg-[#16325C] disabled:opacity-60 cursor-pointer"
+                  className="min-h-[44px] px-5 py-2 rounded-lg bg-[#0C2340] text-white text-base font-semibold hover:bg-[#08182E] disabled:opacity-60 cursor-pointer"
                 >
                   {isSubmitting ? 'Mengirim...' : 'Kirim permintaan mentoring'}
                 </button>
@@ -539,10 +539,10 @@ export default function PeluangPage() {
             <div className="py-4 text-center space-y-4">
               <CheckCircle2 className="w-10 h-10 text-emerald-700 mx-auto" />
               <div className="space-y-1.5">
-                <h3 className="text-base font-bold text-[#0C2340]">
+                <h3 className="text-lg font-bold text-[#0C2340]">
                   Permintaan Mentoring Dicatat
                 </h3>
-                <p className="text-sm text-[#475569] leading-relaxed">
+                <p className="text-base text-[#475569] leading-[1.6]">
                   Terima kasih, {requestForm.nama}. Permintaan topik <strong>{requestForm.topik}</strong> akan
                   ditindaklanjuti pengurus bidang karier ke WhatsApp <strong>{requestForm.whatsapp}</strong> dalam{' '}
                   {COMMUNITY_PLACEHOLDERS.verificationSla}.
@@ -551,7 +551,7 @@ export default function PeluangPage() {
               <button
                 type="button"
                 onClick={() => setMentorModalOpen(false)}
-                className="min-h-[44px] px-5 py-2 rounded-lg bg-[#0C2340] text-white text-sm font-semibold cursor-pointer"
+                className="min-h-[44px] px-5 py-2 rounded-lg bg-[#0C2340] text-white text-base font-semibold cursor-pointer"
               >
                 Tutup
               </button>
