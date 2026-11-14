@@ -150,7 +150,13 @@ export function Navbar() {
           aria-expanded={isDropdownOpen}
           aria-haspopup="menu"
           onClick={() => setOpenDropdown(isDropdownOpen ? null : group.id)}
-          className={`relative inline-flex items-center gap-1 min-h-[44px] text-[13px] transition-colors pb-1 pt-1 whitespace-nowrap shrink-0 cursor-pointer ${
+          onKeyDown={(e) => {
+            if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              setOpenDropdown(true as unknown as 'jaringan' ? group.id : null);
+            }
+          }}
+          className={`relative inline-flex items-center gap-1 min-h-[44px] text-[13px] transition-colors pb-1 pt-1 whitespace-nowrap shrink-0 cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-[#0C2340] rounded-md ${
             isGroupActive || isDropdownOpen
               ? 'text-[#0C2340] font-bold'
               : 'text-[#475569] hover:text-[#0C2340] font-medium'
@@ -334,41 +340,89 @@ export function Navbar() {
             initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, height: 0 }}
             animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, height: 'auto' }}
             exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, height: 0 }}
-            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:hidden border-b border-[#0C2340]/12 bg-[#FDFCF7] overflow-hidden shadow-lg"
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            className="lg:hidden border-b border-[#0C2340]/12 bg-[#FDFCF7] overflow-hidden shadow-xl"
           >
-            <nav aria-label="Menu seluler" className="px-4 sm:px-6 py-5 space-y-2">
-              {[
-                { href: '/', label: 'Beranda', active: pathname === '/' },
-                { href: '/kegiatan', label: 'Jadwal Kopdar', active: isRouteMatch('/kegiatan') },
-                { href: '/peluang', label: 'Mentoring & Kerja', active: isRouteMatch('/peluang') },
-                { href: '/tentang', label: 'Tentang Komunitas', active: isRouteMatch('/tentang') },
-                { href: '/masuk', label: 'Masuk Anggota', active: isRouteMatch('/masuk') },
-              ].map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={() => setIsOpen(false)}
-                  className={`min-h-[44px] flex items-center justify-between px-4 py-2.5 rounded-lg border text-base transition-colors ${
-                    item.active
-                      ? 'bg-[#0C2340]/8 border-[#0C2340]/30 text-[#0C2340] font-bold'
-                      : 'bg-white border-[#0C2340]/12 text-[#0C2340] hover:bg-[#F3F1EA]/70 font-medium'
-                  }`}
-                >
-                  <span>{item.label}</span>
-                  {item.active && (
-                    <span className="text-xs font-semibold text-[#92400E]">Aktif</span>
-                  )}
-                </Link>
-              ))}
+            <nav aria-label="Menu navigasi seluler" className="px-4 sm:px-6 py-5 space-y-4 max-h-[calc(100vh-80px)] overflow-y-auto">
+              {/* Grup Jaringan & Kegiatan */}
+              <div className="space-y-1.5">
+                <span className="block text-xs font-bold uppercase tracking-wider text-[#92400E] px-1">
+                  Jaringan &amp; Kegiatan
+                </span>
+                <div className="space-y-1">
+                  {[
+                    { href: '/', label: 'Beranda', active: pathname === '/' },
+                    { href: '/kegiatan', label: 'Jadwal Kopdar', active: isRouteMatch('/kegiatan') },
+                    { href: '/peta', label: 'Sebaran Wilayah (Peta)', active: isRouteMatch('/peta') },
+                    { href: '/direktori', label: 'Daftar Anggota', active: isRouteMatch('/direktori') },
+                    { href: '/peluang', label: 'Mentoring & Kerja', active: isRouteMatch('/peluang') },
+                  ].map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setIsOpen(false)}
+                      className={`min-h-[44px] flex items-center justify-between px-3.5 py-2.5 rounded-lg border text-sm transition-colors ${
+                        item.active
+                          ? 'bg-[#0C2340]/8 border-[#0C2340]/30 text-[#0C2340] font-bold'
+                          : 'bg-white border-[#0C2340]/12 text-[#0C2340] hover:bg-[#F3F1EA]/70 font-medium'
+                      }`}
+                    >
+                      <span>{item.label}</span>
+                      {item.active && (
+                        <span className="text-xs font-semibold text-[#92400E]">Aktif</span>
+                      )}
+                    </Link>
+                  ))}
+                </div>
+              </div>
 
-              <div className="pt-3 mt-2 border-t border-[#0C2340]/10">
+              {/* Grup Tentang & Kontak */}
+              <div className="space-y-1.5 pt-2 border-t border-[#0C2340]/10">
+                <span className="block text-xs font-bold uppercase tracking-wider text-[#92400E] px-1">
+                  Tentang Komunitas
+                </span>
+                <div className="space-y-1">
+                  {[
+                    { href: '/tentang', label: 'Tentang Komunitas', active: isRouteMatch('/tentang') },
+                    { href: '/kepengurusan', label: 'Pengurus & Kontak', active: isRouteMatch('/kepengurusan') },
+                    ...(IS_DEMO_MODE
+                      ? [{ href: '/cerita', label: 'Cerita Alumni', active: isRouteMatch('/cerita') }]
+                      : []),
+                  ].map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setIsOpen(false)}
+                      className={`min-h-[44px] flex items-center justify-between px-3.5 py-2.5 rounded-lg border text-sm transition-colors ${
+                        item.active
+                          ? 'bg-[#0C2340]/8 border-[#0C2340]/30 text-[#0C2340] font-bold'
+                          : 'bg-white border-[#0C2340]/12 text-[#0C2340] hover:bg-[#F3F1EA]/70 font-medium'
+                      }`}
+                    >
+                      <span>{item.label}</span>
+                      {item.active && (
+                        <span className="text-xs font-semibold text-[#92400E]">Aktif</span>
+                      )}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* Tombol Aksi Bawah */}
+              <div className="pt-3 border-t border-[#0C2340]/10 grid grid-cols-2 gap-2.5">
+                <Link
+                  href="/masuk"
+                  onClick={() => setIsOpen(false)}
+                  className="min-h-[44px] flex items-center justify-center text-center py-2.5 px-3 bg-white hover:bg-[#F3F1EA] border border-[#0C2340]/20 text-[#0C2340] text-sm font-semibold rounded-lg transition-colors"
+                >
+                  Masuk Akun
+                </Link>
                 <Link
                   href="/gabung"
                   onClick={() => setIsOpen(false)}
-                  className="w-full min-h-[48px] flex items-center justify-center text-center py-3 px-4 bg-[#0C2340] hover:bg-[#08182E] text-white text-base font-semibold rounded-lg shadow-xs transition-colors"
+                  className="min-h-[44px] flex items-center justify-center text-center py-2.5 px-3 bg-[#0C2340] hover:bg-[#08182E] text-white text-sm font-semibold rounded-lg shadow-xs transition-colors"
                 >
-                  Daftar jadi anggota
+                  Daftar Anggota
                 </Link>
               </div>
             </nav>

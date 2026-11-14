@@ -16,6 +16,7 @@ import {
   LogOut,
   Sparkles,
   KeyRound,
+  Loader2,
 } from 'lucide-react';
 
 interface ActiveSession {
@@ -370,19 +371,40 @@ export default function MasukPage() {
                 className="w-full min-h-[48px] inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] active:scale-[0.99] text-white text-base font-semibold transition-all duration-150 cursor-pointer disabled:opacity-60"
               >
                 {isLoading ? (
-                  'Memverifikasi...'
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin text-[#F59E0B]" />
+                    <span>Memverifikasi...</span>
+                  </>
                 ) : method === 'admin' ? (
                   <>
                     <ShieldCheck className="w-4 h-4" />
-                    Masuk sebagai Pengurus
+                    <span>Masuk sebagai Pengurus</span>
+                    <ArrowRight className="w-4 h-4 text-[#F59E0B]" />
                   </>
                 ) : method === 'whatsapp' ? (
-                  'Minta kode masuk WhatsApp'
+                  <>
+                    <span>Minta kode masuk WhatsApp</span>
+                    <ArrowRight className="w-4 h-4 text-[#F59E0B]" />
+                  </>
                 ) : (
-                  'Kirim tautan masuk email'
+                  <>
+                    <span>Kirim tautan masuk email</span>
+                    <ArrowRight className="w-4 h-4 text-[#F59E0B]" />
+                  </>
                 )}
-                <ArrowRight className="w-4 h-4" />
               </button>
+
+              <div className="pt-3 border-t border-[#0C2340]/10 text-center">
+                <p className="text-sm text-[#475569]">
+                  Belum pernah mengisi pendataan?{' '}
+                  <Link
+                    href="/gabung"
+                    className="font-bold text-[#0C2340] hover:text-[#92400E] underline underline-offset-4"
+                  >
+                    Daftar jadi anggota
+                  </Link>
+                </p>
+              </div>
 
               {IS_DEMO_MODE && (
                 <div className="pt-4 border-t border-[#0C2340]/10 space-y-2">

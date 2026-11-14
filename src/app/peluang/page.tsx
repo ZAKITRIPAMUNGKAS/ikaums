@@ -27,6 +27,7 @@ import {
   AlertCircle,
   HeartHandshake,
   Briefcase,
+  Loader2,
 } from 'lucide-react';
 
 interface MentorFieldErrors {
@@ -529,9 +530,16 @@ export default function PeluangPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="min-h-[44px] px-5 py-2 rounded-lg bg-[#0C2340] text-white text-base font-semibold hover:bg-[#08182E] disabled:opacity-60 cursor-pointer"
+                  className="min-h-[44px] inline-flex items-center justify-center gap-2 px-5 py-2 rounded-lg bg-[#0C2340] text-white text-base font-semibold hover:bg-[#08182E] disabled:opacity-60 cursor-pointer"
                 >
-                  {isSubmitting ? 'Mengirim...' : 'Kirim permintaan mentoring'}
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin text-[#F59E0B]" />
+                      <span>Mengirim...</span>
+                    </>
+                  ) : (
+                    <span>Kirim permintaan mentoring</span>
+                  )}
                 </button>
               </div>
             </form>

@@ -92,47 +92,86 @@ export default function KegiatanPage() {
             </header>
           </PatternSection>
 
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 w-full relative z-[1]">
-            <section className="surface-card rounded-xl p-6 sm:p-8 space-y-5">
-            <div className="space-y-2">
-              <h2 className="text-xl font-bold text-[#0C2340]">
-                Penyusunan Kopdar Pertama
-              </h2>
-              <p className="text-base text-[#475569] leading-[1.6] max-w-[52ch]">
-                Begitu data domisili dan pilihan waktu luang per kota cukup, pengurus wilayah akan menetapkan
-                tempat bertemu yang dekat stasiun atau area kerja terbanyak lalu mengabari lewat WhatsApp.
-              </p>
-            </div>
-
-            <dl className="divide-y divide-[#0C2340]/10 border-y border-[#0C2340]/10 text-base">
-              <div className="py-3.5 flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4">
-                <dt className="sm:w-44 text-sm font-semibold text-[#475569] shrink-0">
-                  Waktu Pertemuan
-                </dt>
-                <dd className="font-medium text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.firstKopdarDate}</dd>
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 w-full relative z-[1] space-y-8">
+            {/* Kartu Status Utama */}
+            <section className="surface-card rounded-2xl p-6 sm:p-8 space-y-6">
+              <div className="space-y-2">
+                <span className="inline-block text-xs font-bold uppercase tracking-wider text-[#92400E]">
+                  Tahap Prapeluncuran
+                </span>
+                <h2 className="text-xl sm:text-2xl font-bold text-[#0C2340]">
+                  Alur Penyusunan Kopdar Perdana Jabodetabek
+                </h2>
+                <p className="text-base text-[#475569] leading-[1.6]">
+                  Pertemuan wilayah disusun berdasarkan sebaran domisili nyata agar titik kumpul mudah dijangkau dari stasiun KRL, MRT, atau tol utama. Berikut alur penetapan yang sedang berjalan:
+                </p>
               </div>
-              <div className="py-3.5 flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4">
-                <dt className="sm:w-44 text-sm font-semibold text-[#475569] shrink-0">
-                  Titik Lokasi
-                </dt>
-                <dd className="font-medium text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.firstKopdarLocation}</dd>
-              </div>
-            </dl>
 
-            <div className="flex flex-wrap items-center gap-3 pt-1">
-              <Link
-                href="/#kopdar"
-                className="inline-flex items-center justify-center min-h-[48px] px-5 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] active:scale-[0.99] text-white text-base font-semibold transition-all duration-150"
-              >
-                Usulkan hari &amp; wilayah kopdar
-              </Link>
-              <Link
-                href="/gabung"
-                className="inline-flex items-center justify-center min-h-[48px] px-5 py-3 rounded-lg bg-white border border-[#0C2340]/20 hover:border-[#0C2340]/45 active:scale-[0.99] text-[#0C2340] text-base font-semibold transition-all duration-150"
-              >
-                Daftar jadi anggota
-              </Link>
-            </div>
+              {/* 4 Langkah Alur */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                <div className="p-4 rounded-xl bg-[#FDFCF7] border border-[#0C2340]/10 space-y-1.5">
+                  <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#0C2340] text-white text-xs font-bold">1</span>
+                  <h3 className="font-bold text-base text-[#0C2340]">Pendataan Domisili</h3>
+                  <p className="text-sm text-[#475569] leading-relaxed">
+                    Alumni mengisi nama, prodi, nomor WhatsApp, dan domisili kota/kabupaten.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-[#FDFCF7] border border-[#0C2340]/10 space-y-1.5">
+                  <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#92400E] text-white text-xs font-bold">2</span>
+                  <h3 className="font-bold text-base text-[#0C2340]">Musyawarah Titik Kumpul</h3>
+                  <p className="text-sm text-[#475569] leading-relaxed">
+                    Koordinator 9 wilayah memilih lokasi temu yang nyaman dan dekat transportasi publik.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-[#FDFCF7] border border-[#0C2340]/10 space-y-1.5">
+                  <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#0C2340]/70 text-white text-xs font-bold">3</span>
+                  <h3 className="font-bold text-base text-[#0C2340]">Kabar via WhatsApp</h3>
+                  <p className="text-sm text-[#475569] leading-relaxed">
+                    Undangan resmi dan detail jam pertemuan dikirimkan langsung ke WhatsApp pendaftar.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-[#FDFCF7] border border-[#0C2340]/10 space-y-1.5">
+                  <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-emerald-700 text-white text-xs font-bold">4</span>
+                  <h3 className="font-bold text-base text-[#0C2340]">Kopdar Pertama</h3>
+                  <p className="text-sm text-[#475569] leading-relaxed">
+                    Silaturahmi santai, perkenalan lintas jurusan, dan pembentukan koordinator wilayah.
+                  </p>
+                </div>
+              </div>
+
+              {/* Status Tempat & Waktu */}
+              <dl className="divide-y divide-[#0C2340]/10 border-y border-[#0C2340]/10 text-base">
+                <div className="py-3.5 flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4">
+                  <dt className="sm:w-44 text-sm font-semibold text-[#475569] shrink-0">
+                    Waktu Pertemuan
+                  </dt>
+                  <dd className="font-medium text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.firstKopdarDate}</dd>
+                </div>
+                <div className="py-3.5 flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4">
+                  <dt className="sm:w-44 text-sm font-semibold text-[#475569] shrink-0">
+                    Titik Lokasi
+                  </dt>
+                  <dd className="font-medium text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.firstKopdarLocation}</dd>
+                </div>
+              </dl>
+
+              <div className="flex flex-wrap items-center gap-3 pt-1">
+                <Link
+                  href="/#kopdar"
+                  className="inline-flex items-center justify-center min-h-[48px] px-5 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] active:scale-[0.99] text-white text-base font-semibold transition-all duration-150"
+                >
+                  Usulkan hari &amp; wilayah kopdar
+                </Link>
+                <Link
+                  href="/gabung"
+                  className="inline-flex items-center justify-center min-h-[48px] px-5 py-3 rounded-lg bg-white border border-[#0C2340]/20 hover:border-[#0C2340]/45 active:scale-[0.99] text-[#0C2340] text-base font-semibold transition-all duration-150"
+                >
+                  Daftar jadi anggota
+                </Link>
+              </div>
             </section>
           </div>
         </main>

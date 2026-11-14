@@ -143,7 +143,7 @@ export default function DirektoriPage() {
 
         <main className="flex-grow page-grain-base pattern-surface pattern-dots pattern-tone-light pattern-fade-soft-edges w-full py-10 sm:py-16">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 space-y-6 relative z-[1]">
-            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-[#475569]">
+            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-[#475569]">
               <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
                 Beranda
               </Link>
@@ -152,47 +152,77 @@ export default function DirektoriPage() {
             </nav>
 
             <section className="surface-card rounded-2xl p-6 sm:p-10 space-y-6">
-            <div className="w-12 h-12 rounded-xl bg-[#F3F1EA] border border-[#0C2340]/12 flex items-center justify-center text-[#0C2340]">
-              <Lock className="w-5 h-5" />
-            </div>
+              <div className="w-12 h-12 rounded-xl bg-[#F3F1EA] border border-[#0C2340]/12 flex items-center justify-center text-[#0C2340]">
+                <Lock className="w-5 h-5 text-[#92400E]" />
+              </div>
 
-            <div className="space-y-2.5">
-              <span className="inline-block text-sm font-semibold text-[#92400E]">
-                Khusus Anggota Terdaftar
-              </span>
-              <h1 className="text-[clamp(1.625rem,1.25rem+1.5vw,2.25rem)] font-extrabold tracking-[-0.02em] text-[#0C2340]">
-                Daftar Anggota Tidak Ditampilkan untuk Umum
-              </h1>
-              <p className="text-base text-[#475569] leading-[1.6] max-w-[48ch]">
-                Untuk menjaga privasi alumni, nama, pekerjaan, dan domisili hanya dapat dilihat oleh
-                anggota terverifikasi yang sudah masuk, dan hanya menampilkan rekan yang memberi izin
-                secara eksplisit saat mendaftar.
-              </p>
-            </div>
+              <div className="space-y-2.5">
+                <span className="inline-block text-xs font-bold uppercase tracking-wider text-[#92400E]">
+                  Privasi &amp; Akses Terbatas
+                </span>
+                <h1 className="text-[clamp(1.625rem,1.25rem+1.5vw,2.25rem)] font-extrabold tracking-[-0.02em] text-[#0C2340]">
+                  Daftar Anggota Khusus Alumni Terdaftar
+                </h1>
+                <p className="text-base text-[#475569] leading-[1.6] max-w-xl">
+                  Untuk menjaga kenyamanan dan keamanan seluruh rekan, data nama, program studi, dan domisili kota hanya dapat diakses oleh sesama alumni yang telah diverifikasi dan masuk ke akun masing-masing.
+                </p>
+              </div>
 
-            <div className="bg-[#F3F1EA] border border-[#0C2340]/10 rounded-xl p-4 sm:p-5 text-base text-[#475569] space-y-2 leading-[1.6]">
-              <p className="font-semibold text-[#0C2340]">Status Tahap Prapeluncuran</p>
-              <p>
-                Saat ini kami sedang mengumpulkan pendaftaran awal anggota lintas wilayah Jabodetabek.
-                Daftar sekarang agar kamu mendapat kabar ketika Daftar Anggota dan jadwal kopdar pertama dibuka.
-              </p>
-            </div>
+              {/* 3 Jaminan Privasi */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-2">
+                <div className="p-4 rounded-xl bg-[#FDFCF7] border border-[#0C2340]/10 space-y-1">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-[#0C2340]">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0" />
+                    <span>Kontak Rahasia</span>
+                  </div>
+                  <p className="text-xs text-[#475569] leading-relaxed">
+                    Nomor WhatsApp dan email tidak pernah diumbar ke halaman publik.
+                  </p>
+                </div>
 
-            <div className="flex flex-wrap items-center gap-3 pt-1">
-              <Link
-                href="/gabung"
-                className="inline-flex items-center justify-center gap-2 min-h-[48px] px-5 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] active:scale-[0.99] text-white text-base font-semibold transition-all duration-150"
-              >
-                Daftar jadi anggota
-                <ArrowRight className="w-4 h-4 text-[#F59E0B]" />
-              </Link>
-              <Link
-                href="/masuk"
-                className="inline-flex items-center justify-center min-h-[48px] px-5 py-3 rounded-lg bg-white border border-[#0C2340]/15 hover:border-[#0C2340]/35 active:scale-[0.99] text-[#0C2340] text-base font-semibold transition-all duration-150"
-              >
-                Masuk ke akun
-              </Link>
-            </div>
+                <div className="p-4 rounded-xl bg-[#FDFCF7] border border-[#0C2340]/10 space-y-1">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-[#0C2340]">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0" />
+                    <span>Verifikasi Manual</span>
+                  </div>
+                  <p className="text-xs text-[#475569] leading-relaxed">
+                    Setiap akun dicocokkan nama dan prodi oleh koordinator wilayah.
+                  </p>
+                </div>
+
+                <div className="p-4 rounded-xl bg-[#FDFCF7] border border-[#0C2340]/10 space-y-1">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-[#0C2340]">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0" />
+                    <span>Kendali Penuh</span>
+                  </div>
+                  <p className="text-xs text-[#475569] leading-relaxed">
+                    Izin tampil di direktori bersifat opsional dan bisa diubah kapan saja.
+                  </p>
+                </div>
+              </div>
+
+              <div className="bg-[#F3F1EA] border border-[#0C2340]/10 rounded-xl p-4 sm:p-5 text-sm sm:text-base text-[#475569] space-y-1.5 leading-[1.6]">
+                <p className="font-bold text-[#0C2340]">Bagaimana cara melihat direktori?</p>
+                <p>
+                  Jika sudah pernah mendaftar, silakan masuk ke akun menggunakan nomor WhatsApp yang terdaftar. Jika belum, daftar terlebih dahulu untuk verifikasi gratis.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-3 pt-1">
+                <Link
+                  href="/masuk"
+                  className="inline-flex items-center justify-center gap-2 min-h-[48px] px-6 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] active:scale-[0.99] text-white text-base font-semibold transition-all duration-150"
+                >
+                  Masuk ke akun alumni
+                  <ArrowRight className="w-4 h-4 text-[#F59E0B]" />
+                </Link>
+                <Link
+                  href="/gabung"
+                  className="inline-flex items-center justify-center min-h-[48px] px-5 py-3 rounded-lg bg-white border border-[#0C2340]/20 hover:border-[#0C2340]/45 active:scale-[0.99] text-[#0C2340] text-base font-semibold transition-all duration-150"
+                >
+                  Belum mendaftar? Daftar sekarang
+                </Link>
+              </div>
             </section>
           </div>
         </main>

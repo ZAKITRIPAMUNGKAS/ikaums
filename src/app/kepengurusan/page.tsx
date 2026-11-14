@@ -452,12 +452,15 @@ export default function KepengurusanPage() {
               pendaftar atau menjadi koordinator kopdar pertama di wilayahnya.
             </p>
           </div>
-          <Link
-            href="/gabung"
-            className="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] text-white font-semibold text-base transition-colors shrink-0"
-          >
-            Daftar jadi anggota
-          </Link>
+          <div className="flex flex-wrap items-center gap-3 shrink-0">
+            <Link
+              href="/gabung"
+              className="inline-flex items-center justify-center gap-2 min-h-[48px] px-6 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] text-white font-semibold text-base transition-colors shrink-0 shadow-xs"
+            >
+              <span>Daftar &amp; Usulkan Wilayahmu</span>
+              <ArrowRight className="w-4 h-4 text-[#F59E0B]" />
+            </Link>
+          </div>
         </section>
         </div>
       </main>

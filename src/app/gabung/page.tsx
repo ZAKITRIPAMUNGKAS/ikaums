@@ -11,7 +11,7 @@ import {
   isValidEmail,
 } from '@/data/ums-prodi';
 import { COMMUNITY_PLACEHOLDERS, IS_DEMO_MODE, DEMO_BADGE_LABEL } from '@/lib/config';
-import { CheckCircle2, AlertCircle, ArrowRight, Share2, ChevronDown } from 'lucide-react';
+import { CheckCircle2, AlertCircle, ArrowRight, Share2, ChevronDown, Loader2, ExternalLink } from 'lucide-react';
 
 const SUBMISSIONS_KEY = 'ikaums_prelaunch_submissions';
 
@@ -663,15 +663,21 @@ export default function GabungPage() {
                 <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pl-7">
                   <Link
                     href="/privasi"
-                    className="inline-flex items-center min-h-[44px] px-1 text-base font-semibold text-[#0C2340] underline decoration-[#92400E] underline-offset-4 hover:text-[#92400E]"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 min-h-[44px] px-1 text-sm sm:text-base font-semibold text-[#0C2340] underline decoration-[#92400E] underline-offset-4 hover:text-[#92400E]"
                   >
-                    Kebijakan Privasi
+                    <span>Kebijakan Privasi</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
                   </Link>
                   <Link
                     href="/syarat"
-                    className="inline-flex items-center min-h-[44px] px-1 text-base font-semibold text-[#0C2340] underline decoration-[#92400E] underline-offset-4 hover:text-[#92400E]"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 min-h-[44px] px-1 text-sm sm:text-base font-semibold text-[#0C2340] underline decoration-[#92400E] underline-offset-4 hover:text-[#92400E]"
                   >
-                    Ketentuan Komunitas
+                    <span>Ketentuan Komunitas</span>
+                    <ExternalLink className="w-3.5 h-3.5" />
                   </Link>
                 </div>
 
@@ -707,8 +713,17 @@ export default function GabungPage() {
                   disabled={isSubmitting}
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 min-h-[48px] px-6 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] active:scale-[0.99] disabled:opacity-60 text-white text-base font-semibold transition-all duration-150 cursor-pointer shrink-0"
                 >
-                  <span>{isSubmitting ? 'Mengirim pendaftaran...' : 'Daftar jadi anggota'}</span>
-                  <ArrowRight className="w-4 h-4" />
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin text-[#F59E0B]" />
+                      <span>Mengirim pendaftaran...</span>
+                    </>
+                  ) : (
+                    <>
+                      <span>Daftar jadi anggota</span>
+                      <ArrowRight className="w-4 h-4 text-[#F59E0B]" />
+                    </>
+                  )}
                 </button>
               </div>
             </form>
