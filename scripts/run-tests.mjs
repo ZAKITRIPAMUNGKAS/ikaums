@@ -209,7 +209,54 @@ test('Dashboard admin memuat tab kelola pendaftar, kopdar, dan pengurus', async 
     'Kontak &amp; Komunitas',
     '+ Tambah Alumni',
     '+ Jadwal Kopdar',
+    'Info Lowongan Kerja',
+    '+ Tambah Info Loker',
   ]) {
     assert.ok(source.includes(expectedContent), `Konten dashboard admin hilang: ${expectedContent}`);
+  }
+});
+
+// 6. Kontrak fitur Info Lowongan Kerja & Peluang Karier (/peluang & cms-store)
+test('Portal Peluang memuat papan info loker, filter, dan modal publikasi loker', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const source = await readFile(
+    new URL('../src/app/peluang/page.tsx', import.meta.url),
+    'utf8'
+  );
+
+  for (const expectedContent of [
+    'Mentoring Alumni serta Info Kerja &amp; Usaha',
+    'Info Lowongan Kerja &amp; Peluang Bisnis',
+    'Bagikan Info Loker',
+    'Semua Wilayah Jabodetabek',
+    'Semua Bidang Industri',
+    'Lihat Detail',
+  ]) {
+    assert.ok(source.includes(expectedContent), `Konten halaman peluang hilang: ${expectedContent}`);
+  }
+});
+
+test('CMS Store menyediakan struktur LokerItem dan 6 loker alumni awal', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const [sourceCms, sourceLoker] = await Promise.all([
+    readFile(new URL('../src/lib/cms-store.ts', import.meta.url), 'utf8'),
+    readFile(new URL('../src/data/loker.ts', import.meta.url), 'utf8'),
+  ]);
+
+  for (const expectedCms of ['saveLokerItem', 'deleteLokerItem', 'DEFAULT_LOKERS']) {
+    assert.ok(sourceCms.includes(expectedCms), `Konten CMS store loker hilang: ${expectedCms}`);
+  }
+
+  for (const expectedLoker of [
+    'export interface LokerItem',
+    'export const DEFAULT_LOKERS: LokerItem[]',
+    'Frontend Developer (React / Next.js)',
+    'Site Engineer & Estimator Biaya Proyek',
+    'Apoteker Penanggung Jawab (APJ)',
+    'Staff Akuntansi & Tax Compliance',
+    'People & Talent Acquisition Specialist',
+    'Corporate Legal & Perizinan Officer',
+  ]) {
+    assert.ok(sourceLoker.includes(expectedLoker), `Konten data loker hilang: ${expectedLoker}`);
   }
 });

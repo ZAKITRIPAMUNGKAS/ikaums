@@ -5,6 +5,8 @@ import {
   deleteAgendaItem,
   savePengurusData,
   saveKomunitasSettings,
+  saveLokerItem,
+  deleteLokerItem,
 } from '@/lib/cms-store';
 import { getServerSession } from '@/lib/server-auth';
 import { IS_DEMO_MODE } from '@/lib/config';
@@ -35,6 +37,17 @@ export async function POST(request: NextRequest) {
       if (!id) return NextResponse.json({ error: 'ID agenda diperlukan' }, { status: 400 });
       await deleteAgendaItem(id);
       return NextResponse.json({ success: true, message: 'Jadwal kopdar berhasil dihapus.' });
+    }
+
+    if (type === 'loker') {
+      const saved = await saveLokerItem(data);
+      return NextResponse.json({ success: true, message: 'Info lowongan kerja berhasil disimpan.', item: saved });
+    }
+
+    if (type === 'loker-delete') {
+      if (!id) return NextResponse.json({ error: 'ID lowongan kerja diperlukan' }, { status: 400 });
+      await deleteLokerItem(id);
+      return NextResponse.json({ success: true, message: 'Info lowongan kerja berhasil dihapus.' });
     }
 
     if (type === 'pengurus') {

@@ -32,6 +32,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import type { AgendaItem, PengurusData, KomunitasSettings } from '@/lib/cms-store';
+import { type LokerItem, DEFAULT_LOKERS } from '@/data/loker';
 
 interface PendaftarItem {
   id: string;
@@ -51,7 +52,7 @@ interface PendaftarItem {
 
 export default function AdminDashboardClient() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<'pendaftar' | 'agenda' | 'pengurus' | 'settings'>('pendaftar');
+  const [activeTab, setActiveTab] = useState<'pendaftar' | 'agenda' | 'loker' | 'pengurus' | 'settings'>('pendaftar');
   const [toastMsg, setToastMsg] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -64,15 +65,52 @@ export default function AdminDashboardClient() {
   // 2. Data Agenda / Kopdar
   const [agendaList, setAgendaList] = useState<AgendaItem[]>([]);
 
-  // 3. Data Pengurus & Korwil
+  // 3. Data Loker / Peluang Karier
+  const [lokerList, setLokerList] = useState<LokerItem[]>(DEFAULT_LOKERS);
+  const [lokerSearch, setLokerSearch] = useState<string>('');
+  const [lokerWilayahFilter, setLokerWilayahFilter] = useState<string>('semua');
+
+  // 4. Data Pengurus & Korwil
   const [pengurusData, setPengurusData] = useState<PengurusData | null>(null);
 
-  // 4. Data Settings Komunitas
+  // 5. Data Settings Komunitas
   const [settingsData, setSettingsData] = useState<KomunitasSettings | null>(null);
 
   // Modals
   const [manualAlumniOpen, setManualAlumniOpen] = useState(false);
   const [agendaModalOpen, setAgendaModalOpen] = useState(false);
+  const [lokerModalOpen, setLokerModalOpen] = useState(false);
+
+  // Form State: Tambah Loker Baru
+  const [newLoker, setNewLoker] = useState<{
+    posisi: string;
+    perusahaan: string;
+    industri: string;
+    wilayah: string;
+    tipeKerja: LokerItem['tipeKerja'];
+    sistemKerja: LokerItem['sistemKerja'];
+    gajiPerkiraan: string;
+    alumniRujukan: string;
+    kualifikasi: string;
+    deskripsi: string;
+    kontakLamar: string;
+    linkLamar: string;
+    status: LokerItem['status'];
+  }>({
+    posisi: '',
+    perusahaan: '',
+    industri: 'Teknologi Informasi & Software',
+    wilayah: 'Jakarta Selatan',
+    tipeKerja: 'Penuh Waktu',
+    sistemKerja: 'Hybrid',
+    gajiPerkiraan: '',
+    alumniRujukan: '',
+    kualifikasi: '',
+    deskripsi: '',
+    kontakLamar: '',
+    linkLamar: '',
+    status: 'Aktif',
+  });
 
   // Form State: Tambah Alumni Manual
   const [newAlumni, setNewAlumni] = useState({
@@ -120,12 +158,15 @@ export default function AdminDashboardClient() {
         setPendaftarList(dataPendaftar.items);
       }
 
-      // Fetch CMS Content (Agenda, Pengurus, Settings)
+      // Fetch CMS Content (Agenda, Pengurus, Settings, Lokers)
       const resContent = await fetch('/api/admin/content');
       const dataContent = await resContent.json();
       if (dataContent) {
         if (Array.isArray(dataContent.agendas)) {
           setAgendaList(dataContent.agendas);
+        }
+        if (Array.isArray(dataContent.lokers) && dataContent.lokers.length > 0) {
+          setLokerList(dataContent.lokers);
         }
         if (dataContent.pengurus) {
           setPengurusData(dataContent.pengurus);
@@ -160,6 +201,9 @@ export default function AdminDashboardClient() {
         if (dataContent) {
           if (Array.isArray(dataContent.agendas)) {
             setAgendaList(dataContent.agendas);
+          }
+          if (Array.isArray(dataContent.lokers) && dataContent.lokers.length > 0) {
+            setLokerList(dataContent.lokers);
           }
           if (dataContent.pengurus) {
             setPengurusData(dataContent.pengurus);
@@ -309,6 +353,87 @@ export default function AdminDashboardClient() {
     }
   };
 
+  // Handler: Simpan Loker Baru
+  const handleSaveLoker = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const kualifikasiArray = newLoker.kualifikasi
+        .split('\n')
+        .map((k) => k.replace(/^[•\-\s]+/, '').trim())
+        .filter(Boolean);
+
+      const dataToSend = {
+        ...newLoker,
+        kualifikasi: kualifikasiArray.length > 0 ? kualifikasiArray : ['Kualifikasi relevan bagi alumni'],
+        gajiPerkiraan: newLoker.gajiPerkiraan.trim() || undefined,
+        alumniRujukan: newLoker.alumniRujukan.trim() || undefined,
+        linkLamar: newLoker.linkLamar.trim() || undefined,
+      };
+
+      const res = await fetch('/api/admin/content', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'loker',
+          data: dataToSend,
+        }),
+      });
+
+      if (res.ok) {
+        const json = await res.json();
+        if (json.item) {
+          setLokerList((prev) => [json.item, ...prev]);
+        } else {
+          await loadData();
+        }
+        setLokerModalOpen(false);
+        setNewLoker({
+          posisi: '',
+          perusahaan: '',
+          industri: 'Teknologi Informasi & Software',
+          wilayah: 'Jakarta Selatan',
+          tipeKerja: 'Penuh Waktu',
+          sistemKerja: 'Hybrid',
+          gajiPerkiraan: '',
+          alumniRujukan: '',
+          kualifikasi: '',
+          deskripsi: '',
+          kontakLamar: '',
+          linkLamar: '',
+          status: 'Aktif',
+        });
+        showToast('Info lowongan kerja berhasil disimpan dan diterbitkan.');
+      } else {
+        showToast('Gagal menerbitkan lowongan kerja.');
+      }
+    } catch {
+      showToast('Terjadi kesalahan jaringan.');
+    }
+  };
+
+  // Handler: Hapus Loker
+  const handleDeleteLoker = async (id: string) => {
+    if (!confirm('Yakin ingin menghapus info lowongan kerja ini?')) return;
+    try {
+      const res = await fetch('/api/admin/content', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'loker-delete',
+          id,
+        }),
+      });
+      if (res.ok) {
+        setLokerList((prev) => prev.filter((item) => item.id !== id));
+        showToast('Info lowongan kerja berhasil dihapus.');
+      } else {
+        showToast('Gagal menghapus lowongan kerja.');
+      }
+    } catch {
+      showToast('Terjadi kesalahan jaringan.');
+    }
+  };
+
   // Handler: Simpan Data Pengurus
   const handleSavePengurus = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -386,6 +511,21 @@ export default function AdminDashboardClient() {
   const countMenunggu = pendaftarList.filter((p) => p.status === 'menunggu').length;
   const countDisetujui = pendaftarList.filter((p) => p.status === 'disetujui').length;
 
+  // Filter loker
+  const filteredLokers = lokerList.filter((item) => {
+    if (lokerWilayahFilter !== 'semua' && item.wilayah !== lokerWilayahFilter) return false;
+    if (lokerSearch.trim()) {
+      const q = lokerSearch.toLowerCase();
+      const matchPosisi = item.posisi.toLowerCase().includes(q);
+      const matchPerusahaan = item.perusahaan.toLowerCase().includes(q);
+      const matchIndustri = item.industri.toLowerCase().includes(q);
+      const matchWilayah = item.wilayah.toLowerCase().includes(q);
+      const matchAlumni = item.alumniRujukan?.toLowerCase().includes(q);
+      return matchPosisi || matchPerusahaan || matchIndustri || matchWilayah || matchAlumni;
+    }
+    return true;
+  });
+
   return (
     <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
       <Navbar />
@@ -438,7 +578,7 @@ export default function AdminDashboardClient() {
               Pusat Data IKA UMS Jabodetabek
             </h1>
             <p className="text-sm sm:text-base text-[#475569] max-w-2xl leading-[1.6]">
-              Kelola verifikasi pendaftaran alumni, kepengurusan 9 wilayah, jadwal kopdar, dan informasi resmi organisasi.
+              Kelola verifikasi alumni baru, jadwal kopdar, info lowongan kerja, struktur 9 korwil, serta pengaturan kontak resmi organisasi.
             </p>
           </div>
 
@@ -459,33 +599,48 @@ export default function AdminDashboardClient() {
               <Calendar className="w-4 h-4" />
               + Jadwal Kopdar
             </button>
+            <button
+              type="button"
+              onClick={() => setLokerModalOpen(true)}
+              className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 rounded-lg bg-[#047857] hover:bg-[#065F46] text-white text-sm font-semibold transition-colors cursor-pointer shadow-xs"
+            >
+              <Briefcase className="w-4 h-4" />
+              + Info Loker
+            </button>
           </div>
         </header>
 
         {/* Kartu Statistik Cepat */}
-        <section className="grid grid-cols-2 lg:grid-cols-4 gap-4" aria-label="Ringkasan data">
-          <div className="bg-white border border-[#0C2340]/12 rounded-xl p-5 shadow-xs">
+        <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4" aria-label="Ringkasan data">
+          <div className="bg-white border border-[#0C2340]/12 rounded-xl p-4 sm:p-5 shadow-xs">
             <span className="block text-xs font-semibold text-[#475569] uppercase tracking-wider">Menunggu Verifikasi</span>
             <div className="flex items-baseline gap-2 mt-1">
               <span className="text-2xl sm:text-3xl font-extrabold text-[#0C2340]">{countMenunggu}</span>
               <span className="text-xs text-[#92400E] font-medium">alumni baru</span>
             </div>
           </div>
-          <div className="bg-white border border-[#0C2340]/12 rounded-xl p-5 shadow-xs">
+          <div className="bg-white border border-[#0C2340]/12 rounded-xl p-4 sm:p-5 shadow-xs">
             <span className="block text-xs font-semibold text-[#475569] uppercase tracking-wider">Total Anggota Masuk</span>
             <div className="flex items-baseline gap-2 mt-1">
               <span className="text-2xl sm:text-3xl font-extrabold text-[#0C2340]">{pendaftarList.length}</span>
               <span className="text-xs text-emerald-700 font-medium">({countDisetujui} terverifikasi)</span>
             </div>
           </div>
-          <div className="bg-white border border-[#0C2340]/12 rounded-xl p-5 shadow-xs">
+          <div className="bg-white border border-[#0C2340]/12 rounded-xl p-4 sm:p-5 shadow-xs">
             <span className="block text-xs font-semibold text-[#475569] uppercase tracking-wider">Jadwal Kopdar Aktif</span>
             <div className="flex items-baseline gap-2 mt-1">
               <span className="text-2xl sm:text-3xl font-extrabold text-[#0C2340]">{agendaList.length}</span>
               <span className="text-xs text-[#475569]">agenda wilayah</span>
             </div>
           </div>
-          <div className="bg-white border border-[#0C2340]/12 rounded-xl p-5 shadow-xs">
+          <div className="bg-white border border-[#0C2340]/12 rounded-xl p-4 sm:p-5 shadow-xs">
+            <span className="block text-xs font-semibold text-[#475569] uppercase tracking-wider">Info Loker Aktif</span>
+            <div className="flex items-baseline gap-2 mt-1">
+              <span className="text-2xl sm:text-3xl font-extrabold text-[#047857]">{lokerList.length}</span>
+              <span className="text-xs text-[#475569]">lowongan terbuka</span>
+            </div>
+          </div>
+          <div className="bg-white border border-[#0C2340]/12 rounded-xl p-4 sm:p-5 shadow-xs col-span-2 md:col-span-1">
             <span className="block text-xs font-semibold text-[#475569] uppercase tracking-wider">Cakupan Wilayah</span>
             <div className="flex items-baseline gap-2 mt-1">
               <span className="text-2xl sm:text-3xl font-extrabold text-[#0C2340]">{WILAYAH_JABODETABEK.length}</span>
@@ -545,6 +700,22 @@ export default function AdminDashboardClient() {
             <span>Jadwal Kopdar &amp; Agenda</span>
             <span className="px-2 py-0.5 rounded-full text-xs bg-[#F3F1EA] text-[#0C2340]">
               {agendaList.length}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('loker')}
+            className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+              activeTab === 'loker'
+                ? 'border-[#0C2340] text-[#0C2340]'
+                : 'border-transparent text-[#475569] hover:text-[#0C2340]'
+            }`}
+          >
+            <Briefcase className="w-4 h-4" />
+            <span>Info Lowongan Kerja</span>
+            <span className="px-2 py-0.5 rounded-full text-xs bg-emerald-100 text-emerald-800 font-bold">
+              {lokerList.length}
             </span>
           </button>
 
@@ -824,7 +995,147 @@ export default function AdminDashboardClient() {
         )}
 
         {/* ========================================================================= */}
-        {/* TAB 3: PENGURUS & 9 KORWIL                                                */}
+        {/* TAB 3: INFO LOWONGAN KERJA & PELUANG ALUMNI                               */}
+        {/* ========================================================================= */}
+        {activeTab === 'loker' && (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h2 className="text-xl font-bold text-[#0C2340]">Daftar Lowongan Kerja &amp; Peluang Bisnis</h2>
+                <p className="text-sm text-[#475569]">
+                  Kelola informasi karier alumni. Lowongan aktif langsung tampil di halaman publik (/peluang#loker).
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setLokerModalOpen(true)}
+                className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 rounded-lg bg-[#0C2340] hover:bg-[#08182E] text-white text-sm font-semibold transition-colors cursor-pointer shadow-xs self-start sm:self-auto"
+              >
+                <Plus className="w-4 h-4 text-[#F59E0B]" />
+                + Tambah Info Loker
+              </button>
+            </div>
+
+            {/* Filter Bar Loker */}
+            <div className="bg-white border border-[#0C2340]/12 rounded-xl p-4 sm:p-5 flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center shadow-xs">
+              <div className="relative flex-1">
+                <Search className="w-4 h-4 text-[#475569] absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  placeholder="Cari lowongan berdasarkan posisi, perusahaan, atau rujukan..."
+                  value={lokerSearch}
+                  onChange={(e) => setLokerSearch(e.target.value)}
+                  className="w-full min-h-[42px] pl-10 pr-4 py-2 text-sm rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-[#0C2340] focus:outline-hidden focus:ring-2 focus:ring-[#0C2340]/15"
+                />
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2.5">
+                <select
+                  value={lokerWilayahFilter}
+                  onChange={(e) => setLokerWilayahFilter(e.target.value)}
+                  className="min-h-[42px] px-3 py-2 text-sm rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/15 cursor-pointer font-medium"
+                >
+                  <option value="semua">Semua Wilayah</option>
+                  {WILAYAH_JABODETABEK.map((w) => (
+                    <option key={w.id} value={w.nama}>
+                      {w.nama}
+                    </option>
+                  ))}
+                  <option value="Jabodetabek / Remote">Jabodetabek / Remote</option>
+                </select>
+              </div>
+            </div>
+
+            {/* List Lowongan */}
+            {filteredLokers.length === 0 ? (
+              <div className="bg-white border border-[#0C2340]/12 rounded-2xl p-10 text-center space-y-3">
+                <Briefcase className="w-10 h-10 text-[#475569]/60 mx-auto" />
+                <h3 className="text-lg font-bold text-[#0C2340]">Belum Ada Lowongan yang Cocok</h3>
+                <p className="text-sm text-[#475569] max-w-md mx-auto">
+                  Belum ada lowongan yang sesuai kriteria pencarian. Kamu dapat menambah info loker baru untuk alumni UMS.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setLokerModalOpen(true)}
+                  className="inline-flex items-center gap-2 min-h-[44px] px-5 py-2.5 rounded-lg bg-[#0C2340] text-white text-sm font-semibold hover:bg-[#08182E] transition-colors cursor-pointer"
+                >
+                  <Plus className="w-4 h-4 text-[#F59E0B]" />
+                  <span>Terbitkan Loker Sekarang</span>
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {filteredLokers.map((loker) => (
+                  <div
+                    key={loker.id}
+                    className="bg-white border border-[#0C2340]/12 rounded-xl p-5 shadow-xs hover:border-[#0C2340]/30 transition-all flex flex-col justify-between gap-4"
+                  >
+                    <div className="space-y-3">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200">
+                          {loker.tipeKerja} • {loker.sistemKerja}
+                        </span>
+                        <span className="text-xs text-[#475569]">
+                          {loker.wilayah}
+                        </span>
+                      </div>
+
+                      <div>
+                        <h3 className="text-base sm:text-lg font-bold text-[#0C2340]">
+                          {loker.posisi}
+                        </h3>
+                        <p className="text-sm font-semibold text-[#92400E]">
+                          {loker.perusahaan}
+                        </p>
+                        <p className="text-xs text-[#475569] mt-0.5">
+                          Bidang: {loker.industri}
+                        </p>
+                      </div>
+
+                      {loker.alumniRujukan && (
+                        <div className="text-xs bg-[#F3F1EA] p-2.5 rounded-lg text-[#0C2340]">
+                          <span className="font-semibold">Rujukan Alumni:</span> {loker.alumniRujukan}
+                        </div>
+                      )}
+
+                      <div className="text-xs text-[#475569] space-y-1">
+                        <div>
+                          <strong>Kontak Lamar:</strong> {loker.kontakLamar}
+                        </div>
+                        {loker.gajiPerkiraan && (
+                          <div>
+                            <strong>Kompensasi:</strong> {loker.gajiPerkiraan}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-3 border-t border-[#0C2340]/10">
+                      <Link
+                        href="/peluang#loker"
+                        target="_blank"
+                        className="text-xs text-[#0C2340] hover:underline font-semibold"
+                      >
+                        Lihat di Halaman Publik →
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteLoker(loker.id)}
+                        className="inline-flex items-center gap-1 min-h-[36px] px-3 py-1 rounded-lg text-red-700 hover:bg-red-50 text-xs font-semibold transition-colors cursor-pointer"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                        Hapus Loker
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* ========================================================================= */}
+        {/* TAB 4: PENGURUS & 9 KORWIL                                                */}
         {/* ========================================================================= */}
         {activeTab === 'pengurus' && pengurusData && (
           <form onSubmit={handleSavePengurus} className="space-y-8">
@@ -1480,6 +1791,239 @@ export default function AdminDashboardClient() {
                 className="min-h-[44px] px-5 py-2 rounded-lg bg-[#0C2340] hover:bg-[#08182E] text-white text-xs sm:text-sm font-semibold"
               >
                 Simpan &amp; Terbitkan
+              </button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* ========================================================================= */}
+      {/* MODAL 3: TAMBAH INFO LOKER BARU                                           */}
+      {/* ========================================================================= */}
+      <Dialog open={lokerModalOpen} onOpenChange={setLokerModalOpen}>
+        <DialogContent className="max-w-xl bg-[#FDFCF7] border border-[#0C2340]/20 p-6 sm:p-8 rounded-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader className="space-y-1.5 border-b border-[#0C2340]/10 pb-3">
+            <DialogTitle className="text-xl font-bold text-[#0C2340]">
+              Terbitkan Info Lowongan Kerja Baru
+            </DialogTitle>
+            <DialogDescription className="text-xs text-[#475569]">
+              Lowongan yang disimpan langsung tampil di halaman publik Mentoring &amp; Kerja (/peluang#loker).
+            </DialogDescription>
+          </DialogHeader>
+
+          <form onSubmit={handleSaveLoker} className="space-y-4 pt-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div>
+                <label className="block text-xs font-bold text-[#0C2340] mb-1 uppercase">
+                  Posisi Pekerjaan *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Contoh: Frontend Developer"
+                  value={newLoker.posisi}
+                  onChange={(e) => setNewLoker({ ...newLoker, posisi: e.target.value })}
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#0C2340] mb-1 uppercase">
+                  Nama Perusahaan / Usaha *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Contoh: PT Teknologi Bangsa"
+                  value={newLoker.perusahaan}
+                  onChange={(e) => setNewLoker({ ...newLoker, perusahaan: e.target.value })}
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div>
+                <label className="block text-xs font-bold text-[#0C2340] mb-1 uppercase">
+                  Bidang Industri *
+                </label>
+                <select
+                  value={newLoker.industri}
+                  onChange={(e) => setNewLoker({ ...newLoker, industri: e.target.value })}
+                  className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                >
+                  <option value="Teknologi Informasi & Software">Teknologi Informasi &amp; Software</option>
+                  <option value="Konstruksi & Rekayasa Bangunan">Konstruksi &amp; Rekayasa</option>
+                  <option value="Kesehatan, Farmasi & Klinik">Kesehatan &amp; Farmasi</option>
+                  <option value="Keuangan, Pajak & Perbankan">Keuangan, Pajak &amp; Perbankan</option>
+                  <option value="Sumber Daya Manusia & Rekrutmen">SDM &amp; Manajemen</option>
+                  <option value="Hukum, Regulasi & Notaris">Hukum &amp; Legal</option>
+                  <option value="Pendidikan, Riset & Bimbel">Pendidikan &amp; Bimbel</option>
+                  <option value="Kreatif, Media & Komunikasi">Media &amp; Desain Kreatif</option>
+                  <option value="Logistik, Ekspor & Perdagangan">Logistik &amp; Perdagangan</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#0C2340] mb-1 uppercase">
+                  Wilayah Penempatan *
+                </label>
+                <select
+                  value={newLoker.wilayah}
+                  onChange={(e) => setNewLoker({ ...newLoker, wilayah: e.target.value })}
+                  className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                >
+                  {WILAYAH_JABODETABEK.map((w) => (
+                    <option key={w.id} value={w.nama}>
+                      {w.nama}
+                    </option>
+                  ))}
+                  <option value="Jabodetabek / Remote">Jabodetabek / Remote</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div>
+                <label className="block text-xs font-bold text-[#0C2340] mb-1 uppercase">
+                  Tipe Pekerjaan *
+                </label>
+                <select
+                  value={newLoker.tipeKerja}
+                  onChange={(e) =>
+                    setNewLoker({
+                      ...newLoker,
+                      tipeKerja: e.target.value as 'Penuh Waktu' | 'Paruh Waktu' | 'Magang' | 'Kontrak',
+                    })
+                  }
+                  className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                >
+                  <option value="Penuh Waktu">Penuh Waktu (Full-time)</option>
+                  <option value="Paruh Waktu">Paruh Waktu (Part-time)</option>
+                  <option value="Magang">Magang (Internship)</option>
+                  <option value="Kontrak">Kontrak Proyek (Contract)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#0C2340] mb-1 uppercase">
+                  Sistem Kerja *
+                </label>
+                <select
+                  value={newLoker.sistemKerja}
+                  onChange={(e) =>
+                    setNewLoker({
+                      ...newLoker,
+                      sistemKerja: e.target.value as 'On-site' | 'Hybrid' | 'Remote',
+                    })
+                  }
+                  className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                >
+                  <option value="Hybrid">Hybrid (Sebagian Kantor / Rumah)</option>
+                  <option value="On-site">On-site (Wajib di Kantor/Lokasi)</option>
+                  <option value="Remote">Remote (Dari Mana Saja)</option>
+                </select>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div>
+                <label className="block text-xs font-bold text-[#0C2340] mb-1 uppercase">
+                  Perkiraan Gaji (Opsional)
+                </label>
+                <input
+                  type="text"
+                  placeholder="Contoh: Rp 7.000.000 - Rp 10.000.000"
+                  value={newLoker.gajiPerkiraan}
+                  onChange={(e) => setNewLoker({ ...newLoker, gajiPerkiraan: e.target.value })}
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#0C2340] mb-1 uppercase">
+                  Alumni UMS Rujukan (Opsional)
+                </label>
+                <input
+                  type="text"
+                  placeholder="Contoh: Budi Santoso (Informatika '18)"
+                  value={newLoker.alumniRujukan}
+                  onChange={(e) => setNewLoker({ ...newLoker, alumniRujukan: e.target.value })}
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-[#0C2340] mb-1 uppercase">
+                Kualifikasi &amp; Persyaratan (Pisahkan per baris) *
+              </label>
+              <textarea
+                rows={3}
+                required
+                placeholder={"Contoh:\n- Minimal S1 Informatika / Sistem Informasi\n- Pengalaman React & Next.js minimal 1 tahun\n- Disiplin & terbiasa kerja tim"}
+                value={newLoker.kualifikasi}
+                onChange={(e) => setNewLoker({ ...newLoker, kualifikasi: e.target.value })}
+                className="w-full px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-[#0C2340] mb-1 uppercase">
+                Deskripsi Tanggung Jawab *
+              </label>
+              <textarea
+                rows={3}
+                required
+                placeholder="Tuliskan tugas harian, tantangan pekerjaan, serta fasilitas kerja..."
+                value={newLoker.deskripsi}
+                onChange={(e) => setNewLoker({ ...newLoker, deskripsi: e.target.value })}
+                className="w-full px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div>
+                <label className="block text-xs font-bold text-[#0C2340] mb-1 uppercase">
+                  Email / Kontak Lamaran *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="hrd@kantor.com atau WA 0812..."
+                  value={newLoker.kontakLamar}
+                  onChange={(e) => setNewLoker({ ...newLoker, kontakLamar: e.target.value })}
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#0C2340] mb-1 uppercase">
+                  Tautan Karir Eksternal (Opsional)
+                </label>
+                <input
+                  type="url"
+                  placeholder="https://perusahaan.com/karir"
+                  value={newLoker.linkLamar}
+                  onChange={(e) => setNewLoker({ ...newLoker, linkLamar: e.target.value })}
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-2.5 pt-4 border-t border-[#0C2340]/10">
+              <button
+                type="button"
+                onClick={() => setLokerModalOpen(false)}
+                className="min-h-[44px] px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-[#0C2340]/20 hover:bg-[#F3F1EA] text-[#0C2340]"
+              >
+                Batal
+              </button>
+              <button
+                type="submit"
+                className="min-h-[44px] px-5 py-2 rounded-lg bg-[#0C2340] hover:bg-[#08182E] text-white text-xs sm:text-sm font-semibold"
+              >
+                Simpan &amp; Terbitkan Loker
               </button>
             </div>
           </form>

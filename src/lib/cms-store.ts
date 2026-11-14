@@ -2,6 +2,9 @@ import fs from 'fs/promises';
 import path from 'path';
 import { getSupabaseServerClient } from './supabase';
 import { COMMUNITY_PLACEHOLDERS } from './config';
+import { type LokerItem, DEFAULT_LOKERS } from '@/data/loker';
+
+export { type LokerItem, DEFAULT_LOKERS };
 
 export interface AgendaItem {
   id: string;
@@ -48,6 +51,7 @@ export interface CmsStoreData {
   agendas: AgendaItem[];
   pengurus: PengurusData;
   settings: KomunitasSettings;
+  lokers: LokerItem[];
 }
 
 const DEFAULT_PENGURUS: PengurusData = {
@@ -145,12 +149,14 @@ async function ensureCmsFile(): Promise<CmsStoreData> {
       agendas: Array.isArray(parsed.agendas) ? parsed.agendas : DEFAULT_AGENDAS,
       pengurus: { ...DEFAULT_PENGURUS, ...(parsed.pengurus || {}) },
       settings: { ...DEFAULT_SETTINGS, ...(parsed.settings || {}) },
+      lokers: Array.isArray(parsed.lokers) ? parsed.lokers : DEFAULT_LOKERS,
     };
   } catch {
     const initial: CmsStoreData = {
       agendas: DEFAULT_AGENDAS,
       pengurus: DEFAULT_PENGURUS,
       settings: DEFAULT_SETTINGS,
+      lokers: DEFAULT_LOKERS,
     };
     try {
       await fs.writeFile(CMS_FILE, JSON.stringify(initial, null, 2), 'utf-8');
@@ -274,4 +280,37 @@ export async function saveKomunitasSettings(settings: KomunitasSettings): Promis
   data.settings = settings;
   await writeCmsFile(data);
   return data.settings;
+}
+
+export async function saveLokerItem(loker: Omit<LokerItem, 'id' | 'createdAt'> & { id?: string }): Promise<LokerItem> {
+  const data = await getCmsData();
+  const id = loker.id || `loker-${Date.now()}-${Math.random().toString(36).slice(2, 5)}`;
+  const newLoker: LokerItem = {
+    ...loker,
+    id,
+    createdAt: new Date().toISOString(),
+  };
+
+  if (!Array.isArray(data.lokers)) {
+    data.lokers = [];
+  }
+
+  const existingIdx = data.lokers.findIndex((l) => l.id === id);
+  if (existingIdx !== -1) {
+    data.lokers[existingIdx] = newLoker;
+  } else {
+    data.lokers.unshift(newLoker);
+  }
+
+  await writeCmsFile(data);
+  return newLoker;
+}
+
+export async function deleteLokerItem(id: string): Promise<boolean> {
+  const data = await getCmsData();
+  if (Array.isArray(data.lokers)) {
+    data.lokers = data.lokers.filter((l) => l.id !== id);
+    await writeCmsFile(data);
+  }
+  return true;
 }
