@@ -1,20 +1,100 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { Navbar, Footer } from '@/components/Navigation';
 import { normalizeIndonesianWhatsApp, isValidEmail } from '@/data/ums-prodi';
 import { IS_DEMO_MODE, DEMO_BADGE_LABEL } from '@/lib/config';
-import { CheckCircle2, ArrowRight, AlertCircle, HelpCircle } from 'lucide-react';
+import {
+  CheckCircle2,
+  ArrowRight,
+  AlertCircle,
+  ShieldCheck,
+  User,
+  LogOut,
+  Sparkles,
+} from 'lucide-react';
+
+interface ActiveSession {
+  sub: string;
+  role: 'member' | 'admin';
+  exp: number;
+}
 
 export default function MasukPage() {
+  const router = useRouter();
   const [method, setMethod] = useState<'whatsapp' | 'email'>('whatsapp');
   const [identifier, setIdentifier] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [activeSession, setActiveSession] = useState<ActiveSession | null>(null);
   const [sent, setSent] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    fetch('/api/auth')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.authenticated && data.session) {
+          setActiveSession(data.session);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const handleLoginRole = async (role: 'member' | 'admin', customId?: string) => {
+    setIsLoading(true);
+    setError('');
+    try {
+      const res = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'login',
+          role,
+          identifier: customId || (role === 'admin' ? 'admin-wilayah' : 'alumni-aditya'),
+        }),
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setActiveSession({
+          sub: data.sub,
+          role: data.role,
+          exp: Math.floor(Date.now() / 1000) + 7 * 24 * 3600,
+        });
+        setSent(true);
+        router.refresh();
+      } else {
+        setError(data.error || 'Gagal masuk.');
+      }
+    } catch {
+      setError('Terjadi kendala jaringan saat menghubungi server.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleLogout = async () => {
+    setIsLoading(true);
+    try {
+      await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'logout' }),
+      });
+      setActiveSession(null);
+      setSent(false);
+      setIdentifier('');
+      router.refresh();
+    } catch {
+      setError('Gagal keluar.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const raw = identifier.trim();
 
@@ -35,7 +115,13 @@ export default function MasukPage() {
     }
 
     setError('');
-    setSent(true);
+
+    if (IS_DEMO_MODE) {
+      // Di mode demo, langsung terbitkan sesi simulasi anggota untuk nomor/email yang diinput
+      await handleLoginRole('member', raw);
+    } else {
+      setSent(true);
+    }
   };
 
   return (
@@ -61,14 +147,67 @@ export default function MasukPage() {
               Masuk Anggota
             </h1>
             <p className="text-base text-[#475569] leading-[1.6]">
-              Masuk dengan kode WhatsApp atau tautan email tanpa perlu menghafal kata sandi.
+              Akses portal Profil Saya, Daftar Anggota, dan verifikasi kepengurusan wilayah.
             </p>
           </div>
 
-          {!sent ? (
+          {activeSession ? (
+            <div className="bg-[#FAF9F5] border border-emerald-300 rounded-xl p-5 space-y-4">
+              <div className="flex items-center gap-3 text-emerald-800">
+                <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-600" />
+                <div>
+                  <p className="font-semibold text-sm">Sesi Aktif Terverifikasi</p>
+                  <p className="text-xs text-[#475569]">
+                    Masuk sebagai <strong>{activeSession.sub}</strong> ({activeSession.role === 'admin' ? 'Pengurus Wilayah' : 'Anggota Alumni'})
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-2 pt-2">
+                {activeSession.role === 'admin' ? (
+                  <Link
+                    href="/admin"
+                    className="flex items-center justify-center gap-2 w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-[#0C2340] text-white text-sm font-semibold hover:bg-[#08182E] transition-colors"
+                  >
+                    Buka Panel Pengurus (/admin)
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                ) : (
+                  <Link
+                    href="/app"
+                    className="flex items-center justify-center gap-2 w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-[#0C2340] text-white text-sm font-semibold hover:bg-[#08182E] transition-colors"
+                  >
+                    Buka Profil Saya (/app)
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                )}
+
+                <Link
+                  href="/direktori"
+                  className="flex items-center justify-center gap-2 w-full min-h-[44px] px-4 py-2 rounded-lg border border-[#0C2340]/20 bg-white text-[#0C2340] text-sm font-semibold hover:bg-[#F3F1EA] transition-colors"
+                >
+                  Buka Daftar Anggota (/direktori)
+                </Link>
+
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  disabled={isLoading}
+                  className="flex items-center justify-center gap-2 w-full min-h-[44px] px-4 py-2 rounded-lg text-red-700 hover:bg-red-50 text-sm font-semibold transition-colors cursor-pointer"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Keluar dari Sesi
+                </button>
+              </div>
+            </div>
+          ) : !sent ? (
             <form onSubmit={handleSubmit} className="space-y-4" noValidate>
               {/* Pilihan Kanal Masuk */}
-              <div className="grid grid-cols-2 gap-2 p-1 bg-[#F3F1EA] rounded-xl" role="group" aria-label="Pilih metode masuk">
+              <div
+                className="grid grid-cols-2 gap-2 p-1 bg-[#F3F1EA] rounded-xl"
+                role="group"
+                aria-label="Pilih metode masuk"
+              >
                 <button
                   type="button"
                   onClick={() => {
@@ -112,7 +251,10 @@ export default function MasukPage() {
               )}
 
               <div>
-                <label htmlFor="loginIdentifier" className="block text-sm font-semibold text-[#0C2340] mb-1.5">
+                <label
+                  htmlFor="loginIdentifier"
+                  className="block text-sm font-semibold text-[#0C2340] mb-1.5"
+                >
                   {method === 'whatsapp' ? 'Nomor WhatsApp Terdaftar' : 'Alamat Email Terdaftar'}
                 </label>
                 <input
@@ -138,89 +280,89 @@ export default function MasukPage() {
 
               <button
                 type="submit"
-                className="w-full min-h-[48px] inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] active:scale-[0.99] text-white text-base font-semibold transition-all duration-150 cursor-pointer"
+                disabled={isLoading}
+                className="w-full min-h-[48px] inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] active:scale-[0.99] text-white text-base font-semibold transition-all duration-150 cursor-pointer disabled:opacity-60"
               >
-                {method === 'whatsapp' ? 'Minta kode masuk WhatsApp' : 'Kirim tautan masuk email'}
+                {isLoading
+                  ? 'Memproses...'
+                  : method === 'whatsapp'
+                  ? 'Minta kode masuk WhatsApp'
+                  : 'Kirim tautan masuk email'}
                 <ArrowRight className="w-4 h-4" />
               </button>
+
+              {IS_DEMO_MODE && (
+                <div className="pt-4 border-t border-[#0C2340]/10 space-y-2">
+                  <p className="text-xs font-semibold text-[#92400E] flex items-center gap-1.5 uppercase tracking-wider">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    Uji Akses Cepat ({DEMO_BADGE_LABEL}):
+                  </p>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      onClick={() => handleLoginRole('member', 'demo-alumni')}
+                      disabled={isLoading}
+                      className="min-h-[44px] px-3 py-2 text-xs font-semibold rounded-lg border border-[#0C2340]/20 bg-white hover:bg-[#F3F1EA] text-[#0C2340] transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+                    >
+                      <User className="w-3.5 h-3.5 text-[#92400E]" />
+                      Simulasi Anggota
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleLoginRole('admin', 'demo-pengurus')}
+                      disabled={isLoading}
+                      className="min-h-[44px] px-3 py-2 text-xs font-semibold rounded-lg border border-[#0C2340]/20 bg-white hover:bg-[#F3F1EA] text-[#0C2340] transition-colors cursor-pointer flex items-center justify-center gap-1.5"
+                    >
+                      <ShieldCheck className="w-3.5 h-3.5 text-[#0C2340]" />
+                      Simulasi Pengurus
+                    </button>
+                  </div>
+                </div>
+              )}
             </form>
           ) : (
             <div className="bg-[#FDFCF7] border border-emerald-200 rounded-xl p-5 text-center space-y-3">
               <CheckCircle2 className="w-8 h-8 text-emerald-700 mx-auto" />
               <h2 className="text-lg font-bold text-[#0C2340]">
-                {IS_DEMO_MODE ? `Masuk (${DEMO_BADGE_LABEL})` : 'Login Otomatis Segera Aktif'}
+                {IS_DEMO_MODE ? `Masuk Berhasil (${DEMO_BADGE_LABEL})` : 'Login Otomatis Segera Aktif'}
               </h2>
               <p className="text-base text-[#475569] leading-[1.6]">
                 {IS_DEMO_MODE ? (
-                  <>
-                    Pratinjau akun siap dibuka untuk <strong>{identifier}</strong>.
-                  </>
+                  <>Sesi akun berhasil diaktifkan untuk <strong>{identifier || 'Alumni UMS'}</strong>.</>
                 ) : (
                   <>
                     Fitur masuk anggota via OTP WhatsApp dan tautan email untuk{' '}
                     <strong>{identifier}</strong> sedang disiapkan menjelang peluncuran penuh.
-                    Jika kamu sudah mendaftar dan ingin memeriksa status, lihat saluran resmi pengurus
-                    di halaman{' '}
-                    <Link
-                      href="/kepengurusan"
-                      className="font-semibold text-[#0C2340] underline decoration-[#92400E] underline-offset-4"
-                    >
-                      Pengurus &amp; Kontak
-                    </Link>
-                    .
                   </>
                 )}
               </p>
 
               {IS_DEMO_MODE ? (
-                <Link
-                  href="/app"
-                  className="inline-flex items-center justify-center gap-2 w-full min-h-[48px] px-4 py-2.5 rounded-lg bg-[#0C2340] text-white text-base font-semibold hover:bg-[#08182E] transition-colors"
-                >
-                  Buka Profil Saya ({DEMO_BADGE_LABEL})
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
+                <div className="space-y-2 pt-2">
+                  <Link
+                    href="/app"
+                    className="inline-flex items-center justify-center gap-2 w-full min-h-[48px] px-4 py-2.5 rounded-lg bg-[#0C2340] text-white text-base font-semibold hover:bg-[#08182E] transition-colors"
+                  >
+                    Buka Profil Saya ({DEMO_BADGE_LABEL})
+                    <ArrowRight className="w-4 h-4" />
+                  </Link>
+                  <Link
+                    href="/admin"
+                    className="inline-flex items-center justify-center gap-2 w-full min-h-[44px] px-4 py-2 rounded-lg border border-[#0C2340]/20 bg-white text-[#0C2340] text-sm font-semibold hover:bg-[#F3F1EA] transition-colors"
+                  >
+                    Buka Panel Pengurus (/admin)
+                  </Link>
+                </div>
               ) : (
-                <button
-                  type="button"
-                  onClick={() => setSent(false)}
-                  className="inline-flex items-center justify-center w-full min-h-[48px] px-4 py-2.5 rounded-lg bg-[#F3F1EA] hover:bg-[#E7E3D7] text-[#0C2340] text-base font-semibold transition-colors cursor-pointer"
+                <Link
+                  href="/"
+                  className="inline-flex items-center justify-center w-full min-h-[48px] px-4 py-2.5 rounded-lg border border-[#0C2340]/20 text-[#0C2340] text-base font-semibold hover:bg-[#F3F1EA] transition-colors"
                 >
-                  Kembali ke halaman masuk
-                </button>
+                  Kembali ke Beranda
+                </Link>
               )}
             </div>
           )}
-
-          {/* Bantuan Lupa Akses */}
-          <details className="pt-4 border-t border-[#0C2340]/10 text-base text-[#475569] group">
-            <summary className="list-none flex items-center justify-between gap-2 min-h-[44px] font-semibold text-base text-[#0C2340] cursor-pointer">
-              <span className="inline-flex items-center gap-1.5">
-                <HelpCircle className="w-4 h-4 text-[#92400E]" />
-                Lupa akses atau nomor WhatsApp berubah?
-              </span>
-            </summary>
-            <p className="pt-2 pb-1 leading-[1.6] text-base text-[#475569]">
-              Sampaikan lewat saluran resmi pengurus di halaman{' '}
-              <Link
-                href="/kepengurusan"
-                className="font-semibold text-[#0C2340] underline decoration-[#92400E] underline-offset-4"
-              >
-                Pengurus &amp; Kontak
-              </Link>{' '}
-              dengan menyertakan nama lengkap, program studi, dan tahun angkatan UMS untuk pembaruan data.
-            </p>
-          </details>
-
-          <p className="text-base text-center text-[#475569] pt-1">
-            Belum terdaftar sebagai anggota?{' '}
-            <Link
-              href="/gabung"
-              className="inline-flex items-center min-h-[44px] px-1 text-[#0C2340] font-semibold hover:text-[#92400E] underline underline-offset-4"
-            >
-              Daftar jadi anggota
-            </Link>
-          </p>
         </div>
       </main>
 

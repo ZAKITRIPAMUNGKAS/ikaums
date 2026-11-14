@@ -12,6 +12,18 @@ export interface ServerSession {
 
 const textEncoder = new TextEncoder();
 
+export function getSessionSecret(): string | undefined {
+  const secret = process.env.AUTH_SESSION_SECRET;
+  if (secret && secret.length >= 16) {
+    return secret;
+  }
+  // Fallback aman hanya bila di mode pengembangan / demo
+  if (process.env.NODE_ENV !== 'production' || process.env.NEXT_PUBLIC_DEMO_MODE === 'true') {
+    return 'ikaums_dev_auth_session_secret_32chars_min';
+  }
+  return undefined;
+}
+
 function base64UrlToBytes(input: string): Uint8Array<ArrayBuffer> {
   const normalized = input.replace(/-/g, '+').replace(/_/g, '/');
   const padded = normalized.padEnd(Math.ceil(normalized.length / 4) * 4, '=');
@@ -24,14 +36,62 @@ function base64UrlToBytes(input: string): Uint8Array<ArrayBuffer> {
   return bytes;
 }
 
-async function importHmacKey(secret: string): Promise<CryptoKey> {
+function bytesToBase64Url(bytes: Uint8Array): string {
+  let binary = '';
+  for (let i = 0; i < bytes.byteLength; i += 1) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary)
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=+$/, '');
+}
+
+async function importHmacKey(secret: string, usages: KeyUsage[]): Promise<CryptoKey> {
   return globalThis.crypto.subtle.importKey(
     'raw',
     textEncoder.encode(secret),
     { name: 'HMAC', hash: 'SHA-256' },
     false,
-    ['verify']
+    usages
   );
+}
+
+/**
+ * Membuat token sesi cookie bertanda tangan HMAC-SHA256.
+ */
+export async function signSessionToken(payload: {
+  sub: string;
+  role: SessionRole;
+  exp?: number;
+}): Promise<string | null> {
+  const secret = getSessionSecret();
+  if (!secret) return null;
+
+  const exp = payload.exp ?? Math.floor(Date.now() / 1000) + 7 * 24 * 3600; // 7 hari
+  const sessionData: ServerSession = {
+    sub: payload.sub,
+    role: payload.role,
+    exp,
+  };
+
+  try {
+    const payloadJson = JSON.stringify(sessionData);
+    const payloadBytes = textEncoder.encode(payloadJson);
+    const encodedPayload = bytesToBase64Url(payloadBytes);
+
+    const key = await importHmacKey(secret, ['sign']);
+    const sigBuffer = await globalThis.crypto.subtle.sign(
+      'HMAC',
+      key,
+      textEncoder.encode(encodedPayload)
+    );
+    const encodedSig = bytesToBase64Url(new Uint8Array(sigBuffer));
+
+    return `${encodedPayload}.${encodedSig}`;
+  } catch {
+    return null;
+  }
 }
 
 /**
@@ -41,8 +101,8 @@ async function importHmacKey(secret: string): Promise<CryptoKey> {
 export async function verifySessionToken(
   token: string | undefined
 ): Promise<ServerSession | null> {
-  const secret = process.env.AUTH_SESSION_SECRET;
-  if (!token || !secret || secret.length < 16) {
+  const secret = getSessionSecret();
+  if (!token || !secret) {
     return null;
   }
 
@@ -52,7 +112,7 @@ export async function verifySessionToken(
     const [encodedPayload, encodedSig] = parts;
     if (!encodedPayload || !encodedSig) return null;
 
-    const key = await importHmacKey(secret);
+    const key = await importHmacKey(secret, ['verify']);
     const sigBytes = base64UrlToBytes(encodedSig);
     const payloadBytes = textEncoder.encode(encodedPayload);
 

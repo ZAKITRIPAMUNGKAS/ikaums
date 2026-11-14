@@ -100,7 +100,7 @@ export default function GabungPage() {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (submittingRef.current) return;
 
@@ -203,7 +203,30 @@ export default function GabungPage() {
     setIsSubmitting(true);
     setFieldErrors({});
 
-    setTimeout(() => {
+    try {
+      const response = await fetch('/api/pendaftaran', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          namaLengkap: cleanName,
+          whatsapp: validWa,
+          email: cleanEmail || undefined,
+        }),
+      });
+
+      const data = await response.json().catch(() => ({}));
+
+      if (!response.ok) {
+        setFieldErrors({
+          form: data.error || 'Terjadi kendala saat menyimpan pendaftaran. Silakan coba lagi.',
+        });
+        setIsSubmitting(false);
+        submittingRef.current = false;
+        return;
+      }
+
+      // Simpan juga ke localStorage sebagai bukti/riwayat lokal di peramban
       try {
         const existingRaw = localStorage.getItem(SUBMISSIONS_KEY);
         const existing: StoredSubmission[] = existingRaw ? JSON.parse(existingRaw) : [];
@@ -222,7 +245,13 @@ export default function GabungPage() {
       setIsSubmitting(false);
       submittingRef.current = false;
       setSubmitted(true);
-    }, 250);
+    } catch {
+      setFieldErrors({
+        form: 'Gagal terhubung ke server pendaftaran. Pastikan jaringan internet aktif lalu coba lagi.',
+      });
+      setIsSubmitting(false);
+      submittingRef.current = false;
+    }
   };
 
   const shareText = encodeURIComponent(

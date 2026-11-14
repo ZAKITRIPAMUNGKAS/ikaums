@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Navbar, Footer } from '@/components/Navigation';
 import { AnimatedTabs } from '@/components/ui/animated-tabs';
@@ -14,7 +14,7 @@ import {
 import { getKegiatanList, STATS_JABODETABEK } from '@/data/simulasi';
 import { WILAYAH_JABODETABEK } from '@/data/ums-prodi';
 import { IS_DEMO_MODE, DEMO_BADGE_LABEL } from '@/lib/config';
-import { CheckCircle2, Plus, QrCode, Lock, ArrowRight } from 'lucide-react';
+import { CheckCircle2, Plus, QrCode, Download } from 'lucide-react';
 
 interface PendaftarMenunggu {
   id: string;
@@ -93,6 +93,40 @@ export default function KelolaPendaftaranPage() {
   );
   const [toastMsg, setToastMsg] = useState<string | null>(null);
 
+  useEffect(() => {
+    fetch('/api/pendaftaran')
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && Array.isArray(data.items)) {
+          const pending = data.items
+            .filter((item: { status: string }) => item.status === 'menunggu')
+            .map((item: { id: string; namaLengkap: string; prodi: string; angkatan: number; wilayah: string; pekerjaan?: string; perusahaan?: string; createdAt: string }) => ({
+              id: item.id,
+              nama: item.namaLengkap,
+              prodi: item.prodi,
+              angkatan: item.angkatan,
+              wilayah: item.wilayah,
+              pekerjaan: item.pekerjaan || item.perusahaan || 'Alumni UMS',
+              tanggalDaftar: new Date(item.createdAt).toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+              }) + ' WIB',
+            }));
+          const approvedCount = data.items.filter((item: { status: string }) => item.status === 'disetujui').length;
+          if (pending.length > 0 || approvedCount > 0) {
+            setAntrean(pending);
+            if (approvedCount > 0) {
+              setTotalDisetujui(approvedCount);
+            }
+          }
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   const [agendaOpen, setAgendaOpen] = useState(false);
   const [judulAgenda, setJudulAgenda] = useState('');
   const [tanggalAgenda, setTanggalAgenda] = useState('');
@@ -104,11 +138,20 @@ export default function KelolaPendaftaranPage() {
     if (setuju) {
       setTotalDisetujui((n) => n + 1);
       setToastMsg(
-        `Profil ${item.nama} (${item.prodi} '${String(item.angkatan).slice(2)}) ditandai disetujui (${DEMO_BADGE_LABEL}).`
+        `Profil ${item.nama} (${item.prodi} '${String(item.angkatan).slice(2)}) ditandai disetujui.`
       );
     } else {
       setToastMsg(`Permintaan ${item.nama} ditandai untuk pemeriksaan ulang oleh korwil.`);
     }
+
+    fetch('/api/pendaftaran', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: item.id,
+        status: setuju ? 'disetujui' : 'ditolak',
+      }),
+    }).catch(() => {});
   };
 
   const togglePresensi = (id: string) => {
@@ -141,67 +184,6 @@ export default function KelolaPendaftaranPage() {
     setAgendaOpen(false);
   };
 
-  if (!IS_DEMO_MODE) {
-    return (
-      <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
-        <Navbar />
-        <main className="flex-grow pattern-surface pattern-dots pattern-tone-light pattern-fade-soft-edges py-12 sm:py-16 w-full">
-          <div className="max-w-2xl mx-auto px-4 sm:px-6 relative z-[1]">
-            <div className="surface-card rounded-2xl p-6 sm:p-8 space-y-5">
-            <div className="w-11 h-11 rounded-xl bg-[#F3F1EA] border border-[#0C2340]/12 flex items-center justify-center text-[#0C2340]">
-              <Lock className="w-5 h-5" />
-            </div>
-            <div className="space-y-2">
-              <span className="inline-block text-sm font-semibold text-[#92400E]">
-                Halaman Internal Pengurus
-              </span>
-              <h1 className="text-2xl sm:text-3xl font-bold text-[#0C2340]">
-                Kelola Pendaftaran Belum Dibuka di Publik
-              </h1>
-              <p className="text-base text-[#475569] leading-[1.6]">
-                Untuk menjaga data pribadi pendaftar, halaman verifikasi anggota hanya akan
-                diaktifkan setelah autentikasi pengurus di sisi server terpasang.
-              </p>
-            </div>
-
-            <div className="bg-[#F3F1EA] border border-[#0C2340]/10 rounded-xl p-4 text-base text-[#475569] space-y-1.5 leading-[1.6]">
-              <p className="font-semibold text-[#0C2340]">Koordinasi Pengurus Saat Pra-Launch</p>
-              <p>
-                Pengajuan verifikasi atau pembaruan data anggota sementara ditangani melalui saluran
-                resmi di halaman{' '}
-                <Link
-                  href="/kepengurusan"
-                  className="font-semibold text-[#0C2340] underline decoration-[#92400E] underline-offset-4"
-                >
-                  Pengurus &amp; Kontak
-                </Link>
-                .
-              </p>
-            </div>
-
-            <div className="flex flex-wrap gap-3 pt-2">
-              <Link
-                href="/"
-                className="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 py-2.5 rounded-lg bg-[#0C2340] hover:bg-[#16325C] text-white text-sm font-semibold transition-colors"
-              >
-                Kembali ke Beranda
-              </Link>
-              <Link
-                href="/kepengurusan"
-                className="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 py-2.5 rounded-lg bg-white border border-[#0C2340]/15 hover:border-[#0C2340]/35 text-[#0C2340] text-sm font-semibold transition-colors"
-              >
-                Lihat Pengurus &amp; Kontak
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
       <Navbar />
@@ -215,9 +197,21 @@ export default function KelolaPendaftaranPage() {
             <span aria-hidden="true">/</span>
             <span className="text-[#0C2340] font-medium">Kelola Pendaftaran</span>
           </div>
-          <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-[#92400E] text-xs font-semibold">
-            {DEMO_BADGE_LABEL} | Simulasi Lokal
-          </span>
+          <div className="flex items-center gap-3">
+            <a
+              href="/api/pendaftaran?format=csv"
+              download
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0C2340] hover:bg-[#08182E] text-white text-xs font-semibold transition-colors"
+            >
+              <Download className="w-3.5 h-3.5" />
+              Unduh Rekap CSV
+            </a>
+            {IS_DEMO_MODE && (
+              <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-[#92400E] text-xs font-semibold">
+                {DEMO_BADGE_LABEL}
+              </span>
+            )}
+          </div>
         </nav>
 
         <header className="space-y-2">

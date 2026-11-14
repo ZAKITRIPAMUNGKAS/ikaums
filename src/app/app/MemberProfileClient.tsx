@@ -4,13 +4,11 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Navbar, Footer } from '@/components/Navigation';
-import { IS_DEMO_MODE, DEMO_BADGE_LABEL } from '@/lib/config';
+import { DEMO_BADGE_LABEL } from '@/lib/config';
 import {
   CheckCircle2,
   MapPin,
   Briefcase,
-  Lock,
-  ArrowRight,
   ShieldCheck,
 } from 'lucide-react';
 
@@ -18,67 +16,6 @@ export default function ProfilSayaPage() {
   const [tampilDiDirektori, setTampilDiDirektori] = useState(false);
   const [terbukaMentoring, setTerbukaMentoring] = useState(false);
   const [savedNotice, setSavedNotice] = useState<string | null>(null);
-
-  if (!IS_DEMO_MODE) {
-    return (
-      <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
-        <Navbar />
-        <main className="flex-grow pattern-surface pattern-dots pattern-tone-light pattern-fade-soft-edges py-12 sm:py-16 w-full">
-          <div className="max-w-2xl mx-auto px-4 sm:px-6 relative z-[1]">
-            <div className="surface-card rounded-2xl p-6 sm:p-8 space-y-5">
-            <div className="w-11 h-11 rounded-xl bg-[#F3F1EA] border border-[#0C2340]/12 flex items-center justify-center text-[#0C2340]">
-              <Lock className="w-5 h-5" />
-            </div>
-
-            <div className="space-y-2">
-              <span className="inline-block text-sm font-semibold text-[#92400E]">
-                Profil Saya
-              </span>
-              <h1 className="text-2xl sm:text-3xl font-bold text-[#0C2340]">
-                Masuk Diperlukan untuk Mengakses Profil Saya
-              </h1>
-              <p className="text-base text-[#475569] leading-[1.6]">
-                Halaman pengaturan profil, perubahan domisili, dan kontrol persetujuan tampil di
-                Daftar Anggota akan aktif setelah fitur masuk anggota dibuka di peluncuran penuh.
-              </p>
-            </div>
-
-            <div className="bg-[#F3F1EA] border border-[#0C2340]/10 rounded-xl p-4 text-base text-[#475569] space-y-1.5 leading-[1.6]">
-              <p className="font-semibold text-[#0C2340]">Ingin memperbarui atau menghapus data pra-launch?</p>
-              <p>
-                Hubungi sekretariat pengurus melalui saluran resmi di halaman{' '}
-                <Link
-                  href="/kepengurusan"
-                  className="font-semibold text-[#0C2340] underline decoration-[#92400E] underline-offset-4"
-                >
-                  Pengurus &amp; Kontak
-                </Link>
-                .
-              </p>
-            </div>
-
-            <div className="flex flex-wrap gap-3 pt-2">
-              <Link
-                href="/masuk"
-                className="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 py-2.5 rounded-lg bg-[#0C2340] hover:bg-[#16325C] text-white text-sm font-semibold transition-colors"
-              >
-                Masuk ke akun
-              </Link>
-              <Link
-                href="/gabung"
-                className="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 py-2.5 rounded-lg bg-white border border-[#0C2340]/15 hover:border-[#0C2340]/35 text-[#0C2340] text-sm font-semibold transition-colors"
-              >
-                Daftar jadi anggota
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            </div>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">

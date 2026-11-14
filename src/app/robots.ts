@@ -6,8 +6,9 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/admin", "/app"],
+        disallow: ["/admin", "/app", "/direktori"],
       },
     ],
+    sitemap: "https://ikaums.vercel.app/sitemap.xml",
   };
 }

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { ArrowRight, Lock, ShieldAlert, Users } from 'lucide-react';
 import { Footer, Navbar } from '@/components/Navigation';
 import { getServerSession, type SessionRole } from '@/lib/server-auth';
+import { IS_DEMO_MODE } from '@/lib/config';
 
 export type ProtectedRouteVariant = 'admin' | 'member' | 'direktori';
 
@@ -126,8 +127,9 @@ async function SessionGate({
 }: ServerProtectedRouteProps) {
   const session = await getServerSession();
   const isAuthorized =
-    session !== null &&
-    (!requiredRole || session.role === requiredRole || session.role === 'admin');
+    (IS_DEMO_MODE && (variant === 'member' || variant === 'direktori')) ||
+    (session !== null &&
+      (!requiredRole || session.role === requiredRole || session.role === 'admin'));
 
   if (!isAuthorized) {
     return <ProtectedRouteGate variant={variant} />;
