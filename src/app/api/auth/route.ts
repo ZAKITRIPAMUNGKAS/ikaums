@@ -28,9 +28,26 @@ export async function POST(request: NextRequest) {
 
     if (action === 'login') {
       const role: SessionRole = body.role === 'admin' ? 'admin' : 'member';
-      const identifier = String(body.identifier || (role === 'admin' ? 'admin-wilayah' : 'alumni-ums')).trim();
+      const identifier = String(
+        body.identifier || (role === 'admin' ? 'Pengurus Wilayah' : 'Alumni UMS')
+      ).trim();
 
-      // Di mode demo atau development, izinkan pembuatan sesi login simulasi
+      // Verifikasi Kode Akses / PIN Pengurus untuk peran Admin
+      if (role === 'admin') {
+        const expectedPasskey = process.env.ADMIN_PASSKEY || 'ikaums2026';
+        const providedPasskey = String(body.passkey || '').trim();
+
+        // Boleh bypass tanpa passkey hanya jika tombol demo cepat diklik pada mode demo aktif
+        const isDemoBypass = IS_DEMO_MODE && body.isDemoClick === true;
+
+        if (!isDemoBypass && providedPasskey !== expectedPasskey) {
+          return NextResponse.json(
+            { error: 'Kode akses pengurus salah. Silakan periksa kembali kata sandi/PIN pengurus.' },
+            { status: 401 }
+          );
+        }
+      }
+
       const token = await signSessionToken({
         sub: identifier,
         role,
