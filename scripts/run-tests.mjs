@@ -174,3 +174,42 @@ test('CSV Export Escaping', () => {
   assert.equal(escapeCsv('Hendra "The Coder"'), '"Hendra ""The Coder"""');
   assert.equal(escapeCsv('Simple Text'), '"Simple Text"');
 });
+
+// 4. Kontrak konten dashboard anggota
+test('Dashboard anggota memuat ringkasan profil dan pengaturan privasi', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const source = await readFile(
+    new URL('../src/app/app/MemberProfileClient.tsx', import.meta.url),
+    'utf8'
+  );
+
+  for (const expectedContent of [
+    'Profil Saya',
+    'Pengaturan Privasi Tampilan',
+    'Tampilkan di Daftar Anggota',
+    'Bersedia Jadi Mentor Alumni',
+  ]) {
+    assert.ok(source.includes(expectedContent), `Konten dashboard anggota hilang: ${expectedContent}`);
+  }
+});
+
+// 5. Kontrak fitur dashboard admin (Back Office CMS)
+test('Dashboard admin memuat tab kelola pendaftar, kopdar, dan pengurus', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const source = await readFile(
+    new URL('../src/app/admin/AdminDashboardClient.tsx', import.meta.url),
+    'utf8'
+  );
+
+  for (const expectedContent of [
+    'Pusat Data IKA UMS Jabodetabek',
+    'Pendaftaran &amp; Anggota',
+    'Jadwal Kopdar &amp; Agenda',
+    'Pengurus &amp; 9 Korwil',
+    'Kontak &amp; Komunitas',
+    '+ Tambah Alumni',
+    '+ Jadwal Kopdar',
+  ]) {
+    assert.ok(source.includes(expectedContent), `Konten dashboard admin hilang: ${expectedContent}`);
+  }
+});
