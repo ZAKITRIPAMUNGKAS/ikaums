@@ -41,6 +41,7 @@ const ALASAN = [
 
 export default function HomePage() {
   const [selectedWilayah, setSelectedWilayah] = useState('');
+  const [heroPhoto, setHeroPhoto] = useState<'gathering' | 'kumpul'>('gathering');
   const counts = useKopdarInterestCounts();
 
   const handleSelectRegion = (wilayah: string) => {
@@ -117,19 +118,79 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* Kolom Kanan: Visual Showcase Sesuai Desain Referensi */}
-              <div className="lg:col-span-6 flex items-center justify-center lg:justify-end">
-                <div className="relative w-full max-w-[580px] lg:max-w-none">
-                  <Image
-                    src="/images/hero-illustration-banner.png"
-                    alt="Alumni Universitas Muhammadiyah Surakarta berkumpul dan berdiskusi di Jabodetabek"
-                    width={980}
-                    height={660}
-                    priority
-                    fetchPriority="high"
-                    sizes="(max-width: 1024px) 100vw, 50vw"
-                    className="w-full h-auto object-contain drop-shadow-sm select-none"
+              {/* Kolom Kanan: Visual Showcase dengan FOTO REAL Dokumentasi Alumni UMS */}
+              <div className="lg:col-span-6 relative flex items-center justify-center lg:justify-end pt-2 pb-6 lg:py-0">
+                <div className="relative w-full max-w-[560px] lg:max-w-none">
+                  {/* Aksen Shape Background Krem Hangat Melengkung (sesuai referensi) */}
+                  <div
+                    aria-hidden="true"
+                    className="absolute -top-3 -right-3 sm:-top-5 sm:-right-5 bottom-3 left-4 sm:left-8 bg-[#F6EFE4] rounded-tr-[52px] rounded-bl-[36px] rounded-tl-[20px] rounded-br-[60px] pointer-events-none"
                   />
+
+                  {/* Frame Foto Real Dokumentasi Alumni UMS */}
+                  <div className="relative z-10 w-full overflow-hidden rounded-[24px] sm:rounded-[34px] border border-white/80 bg-slate-100 shadow-lg aspect-[16/11]">
+                    <Image
+                      src={
+                        heroPhoto === 'gathering'
+                          ? '/images/alumni-gathering-4.jpg'
+                          : '/images/hero-kumpul-bolo-pisah.jpg'
+                      }
+                      alt={
+                        heroPhoto === 'gathering'
+                          ? 'Dokumentasi silaturahmi alumni Universitas Muhammadiyah Surakarta saat registrasi pertemuan di De Terras'
+                          : 'Dokumentasi foto bersama alumni Universitas Muhammadiyah Surakarta di aula pertemuan Kumpul Bolo Pisah'
+                      }
+                      width={1200}
+                      height={825}
+                      priority
+                      fetchPriority="high"
+                      sizes="(max-width: 1024px) 100vw, 48vw"
+                      className="h-full w-full object-cover transition-all duration-300"
+                    />
+
+                    {/* Gradient halus di bawah agar foto menyatu dengan floating card */}
+                    <div
+                      aria-hidden="true"
+                      className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent pointer-events-none"
+                    />
+
+                    {/* Badge Pill Pemilih Foto Nyata di Pojok Atas */}
+                    <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 rounded-full bg-black/50 backdrop-blur-md px-3 py-1 text-[11px] font-semibold text-white border border-white/20">
+                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
+                      <span>Dokumentasi Nyata IKA UMS</span>
+                      <span className="text-white/40">·</span>
+                      <button
+                        type="button"
+                        onClick={() => setHeroPhoto(heroPhoto === 'gathering' ? 'kumpul' : 'gathering')}
+                        className="text-[#F59E0B] hover:text-white transition-colors cursor-pointer underline underline-offset-2"
+                      >
+                        {heroPhoto === 'gathering' ? 'Ganti Foto 2 →' : 'Ganti Foto 1 →'}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Floating Badge Navy Institusional di Pojok Bawah (persis seperti referensi) */}
+                  <div className="relative sm:absolute sm:-bottom-5 sm:right-4 lg:-bottom-6 lg:-right-4 z-20 mt-3 sm:mt-0 max-w-full sm:max-w-md rounded-2xl bg-[#0C2340] p-4 sm:p-5 text-white shadow-xl border border-white/10 flex items-center justify-between gap-4">
+                    <div className="border-l-2 border-[#D97706] pl-3.5 space-y-0.5">
+                      <p className="text-sm sm:text-base font-bold text-white tracking-tight">
+                        Satu almamater. Banyak cerita.
+                      </p>
+                      <p className="text-xs sm:text-sm text-slate-300">
+                        Keluarga besar UMS di perantauan.
+                      </p>
+                    </div>
+
+                    {/* Line-Art Arsitektur Kampus UMS Transparan */}
+                    <div className="relative h-11 w-24 sm:w-28 shrink-0 overflow-hidden opacity-90">
+                      <Image
+                        src="/images/campus-blueprint-transparent.png"
+                        alt="Siluet Arsitektur Kampus UMS"
+                        fill
+                        sizes="112px"
+                        className="object-contain object-right"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
