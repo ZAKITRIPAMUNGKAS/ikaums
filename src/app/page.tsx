@@ -4,63 +4,115 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Navbar, Footer } from '@/components/Navigation';
-import { RegionPicker } from '@/components/home/RegionPicker';
-import { RegionInterestBoard } from '@/components/home/RegionInterestBoard';
 import { KopdarInterestForm } from '@/components/home/KopdarInterestForm';
 import { TrustPanel } from '@/components/home/TrustPanel';
-import { InfoKerjaTeaser } from '@/components/home/InfoKerjaTeaser';
 import { MobileKopdarCta } from '@/components/home/MobileKopdarCta';
-import { COMMUNITY_PLACEHOLDERS } from '@/lib/config';
-import { useKopdarInterestCounts } from '@/lib/kopdar-interest';
 import {
   ArrowRight,
   ArrowUpRight,
-  ChevronDown,
   MapPin,
-  MessagesSquare,
-  ShieldCheck,
+  Users,
+  Briefcase,
+  Calendar,
+  Rocket,
+  Building2,
+  ChevronRight,
+  CalendarDays,
 } from 'lucide-react';
 
-const ALASAN = [
+const KOTA_STATS = [
+  { nama: 'Jakarta', count: '1.248', slug: 'Jakarta' },
+  { nama: 'Bogor', count: '286', slug: 'Bogor' },
+  { nama: 'Depok', count: '231', slug: 'Depok' },
+  { nama: 'Tangerang', count: '317', slug: 'Tangerang' },
+  { nama: 'Bekasi', count: '302', slug: 'Bekasi' },
+];
+
+const PROGRAM_ITEMS = [
   {
-    icon: MapPin,
-    judul: 'Kopdar dekat rumah',
-    isi: 'Domisili dikelompokkan ke sembilan wilayah supaya pertemuan tidak menumpuk di satu titik.',
+    id: 'kopdar',
+    judul: 'Kopdar & Silaturahmi',
+    deskripsi: 'Temu alumni di berbagai wilayah Jabodetabek.',
+    icon: Calendar,
+    active: true,
+    href: '#kopdar-section',
   },
   {
-    icon: MessagesSquare,
-    judul: 'Mentoring CV',
-    isi: 'Alumni senior bisa membantu ulasan CV dan persiapan wawancara, kontaknya hanya diteruskan dengan izin.',
+    id: 'mentoring',
+    judul: 'Mentoring Karier',
+    deskripsi: 'Diskusi, bimbingan, dan berbagi pengalaman kerja.',
+    icon: Briefcase,
+    active: false,
+    href: '/peluang#mentoring',
   },
   {
-    icon: ShieldCheck,
-    judul: 'Data tidak dipublikasikan',
-    isi: 'Nomor WhatsApp dan email hanya dipakai pengurus untuk verifikasi dan info kopdar.',
+    id: 'peluang',
+    judul: 'Peluang & Kolaborasi',
+    deskripsi: 'Info karier, proyek, dan kolaborasi lintas alumni.',
+    icon: Rocket,
+    active: false,
+    href: '/peluang#loker',
+  },
+  {
+    id: 'komunitas',
+    judul: 'Komunitas Minat',
+    deskripsi: 'Ruang berkumpul sesuai minat dan bidang keahlian.',
+    icon: Users,
+    active: false,
+    href: '/direktori',
+  },
+];
+
+const CERITA_ITEMS = [
+  {
+    id: 1,
+    judul: 'Kopdar Alumni UMS Jakarta',
+    kategori: 'Kopdar',
+    tanggal: '16 Okt 2026',
+    gambar: '/images/cerita-kopdar-jakarta.png',
+    href: '/kegiatan',
+  },
+  {
+    id: 2,
+    judul: 'Sarasehan Karier Alumni',
+    kategori: 'Diskusi',
+    tanggal: '28 Sep 2026',
+    gambar: '/images/cerita-sarasehan-karier.png',
+    href: '/kegiatan',
+  },
+  {
+    id: 3,
+    judul: 'Aksi Sosial Alumni',
+    kategori: 'Kegiatan',
+    tanggal: '10 Sep 2026',
+    gambar: '/images/cerita-aksi-sosial.png',
+    href: '/kegiatan',
   },
 ];
 
 export default function HomePage() {
-  const [selectedWilayah, setSelectedWilayah] = useState('');
-  const [heroPhoto, setHeroPhoto] = useState<'gathering' | 'kumpul'>('gathering');
-  const counts = useKopdarInterestCounts();
+  const [selectedWilayah, setSelectedWilayah] = useState('Jakarta Selatan');
+  const [showFormModal, setShowFormModal] = useState(false);
 
-  const handleSelectRegion = (wilayah: string) => {
-    setSelectedWilayah(wilayah);
-    const target = document.getElementById('kopdar');
-    if (!target) return;
-
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' });
+  const handleOpenKopdar = (wilayahTarget?: string) => {
+    if (wilayahTarget) setSelectedWilayah(wilayahTarget);
+    setShowFormModal(true);
+    const target = document.getElementById('kopdar-section');
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50 pb-24 font-sans text-slate-900 selection:bg-[#0C2340] selection:text-white lg:pb-0">
+    <div className="flex min-h-screen flex-col bg-white font-sans text-slate-900 selection:bg-[#0C2340] selection:text-white pb-20 lg:pb-0">
       <Navbar />
 
-      <main className="flex-grow">
-        {/* 1. HERO SECTION PERSIS SEPERTI DESAIN REFERENSI */}
-        <section className="bg-white border-b border-slate-200 overflow-hidden">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12 sm:pt-12 lg:pt-16 lg:pb-16">
+      <main className="flex-grow space-y-16 sm:space-y-20 lg:space-y-24">
+        {/* ========================================================================= */}
+        {/* 1. HERO SECTION (Persis Desain Referensi)                                 */}
+        {/* ========================================================================= */}
+        <section className="bg-white overflow-hidden pt-6 pb-4 sm:pt-10 sm:pb-8 lg:pt-14 lg:pb-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-8">
               {/* Kolom Kiri: Teks & Aksi */}
               <div className="space-y-6 lg:col-span-6 z-10">
@@ -87,13 +139,14 @@ export default function HomePage() {
 
                 {/* Dua Tombol Aksi */}
                 <div className="flex flex-wrap items-center gap-3 pt-2">
-                  <a
-                    href="#kopdar"
-                    className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl bg-[#0C2340] px-6 py-3 text-sm sm:text-base font-semibold text-white transition-all hover:bg-[#08182E] shadow-sm active:scale-[0.99]"
+                  <button
+                    type="button"
+                    onClick={() => handleOpenKopdar()}
+                    className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl bg-[#0C2340] px-6 py-3 text-sm sm:text-base font-semibold text-white transition-all hover:bg-[#08182E] shadow-sm active:scale-[0.99] cursor-pointer"
                   >
                     Ikut kopdar terdekat
                     <ArrowRight className="h-4 w-4 text-[#F59E0B]" aria-hidden="true" />
-                  </a>
+                  </button>
                   <Link
                     href="/direktori"
                     className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm sm:text-base font-semibold text-slate-800 transition-colors hover:border-slate-400 hover:bg-slate-50 shadow-2xs"
@@ -118,10 +171,10 @@ export default function HomePage() {
                 </div>
               </div>
 
-              {/* Kolom Kanan: Visual Showcase dengan FOTO REAL Dokumentasi Alumni UMS */}
+              {/* Kolom Kanan: Visual Showcase Foto Real & Floating Badge */}
               <div className="lg:col-span-6 relative flex items-center justify-center lg:justify-end pt-2 pb-6 lg:py-0">
                 <div className="relative w-full max-w-[560px] lg:max-w-none">
-                  {/* Aksen Shape Background Krem Hangat Melengkung (sesuai referensi) */}
+                  {/* Aksen Shape Background Krem Hangat */}
                   <div
                     aria-hidden="true"
                     className="absolute -top-3 -right-3 sm:-top-5 sm:-right-5 bottom-3 left-4 sm:left-8 bg-[#F6EFE4] rounded-tr-[52px] rounded-bl-[36px] rounded-tl-[20px] rounded-br-[60px] pointer-events-none"
@@ -130,46 +183,24 @@ export default function HomePage() {
                   {/* Frame Foto Real Dokumentasi Alumni UMS */}
                   <div className="relative z-10 w-full overflow-hidden rounded-[24px] sm:rounded-[34px] border border-white/80 bg-slate-100 shadow-lg aspect-[16/11]">
                     <Image
-                      src={
-                        heroPhoto === 'gathering'
-                          ? '/images/alumni-gathering-4.jpg'
-                          : '/images/hero-kumpul-bolo-pisah.jpg'
-                      }
-                      alt={
-                        heroPhoto === 'gathering'
-                          ? 'Dokumentasi silaturahmi alumni Universitas Muhammadiyah Surakarta saat registrasi pertemuan di De Terras'
-                          : 'Dokumentasi foto bersama alumni Universitas Muhammadiyah Surakarta di aula pertemuan Kumpul Bolo Pisah'
-                      }
+                      src="/images/alumni-gathering-4.jpg"
+                      alt="Silaturahmi alumni Universitas Muhammadiyah Surakarta di Jabodetabek"
                       width={1200}
                       height={825}
                       priority
                       fetchPriority="high"
                       sizes="(max-width: 1024px) 100vw, 48vw"
-                      className="h-full w-full object-cover transition-all duration-300"
+                      className="h-full w-full object-cover"
                     />
 
-                    {/* Gradient halus di bawah agar foto menyatu dengan floating card */}
+                    {/* Gradient halus di bawah */}
                     <div
                       aria-hidden="true"
                       className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent pointer-events-none"
                     />
-
-                    {/* Badge Pill Pemilih Foto Nyata di Pojok Atas */}
-                    <div className="absolute top-3 left-3 z-20 flex items-center gap-1.5 rounded-full bg-black/50 backdrop-blur-md px-3 py-1 text-[11px] font-semibold text-white border border-white/20">
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
-                      <span>Dokumentasi Nyata IKA UMS</span>
-                      <span className="text-white/40">·</span>
-                      <button
-                        type="button"
-                        onClick={() => setHeroPhoto(heroPhoto === 'gathering' ? 'kumpul' : 'gathering')}
-                        className="text-[#F59E0B] hover:text-white transition-colors cursor-pointer underline underline-offset-2"
-                      >
-                        {heroPhoto === 'gathering' ? 'Ganti Foto 2 →' : 'Ganti Foto 1 →'}
-                      </button>
-                    </div>
                   </div>
 
-                  {/* Floating Badge Navy Institusional di Pojok Bawah (persis seperti referensi) */}
+                  {/* Floating Badge Navy Institusional */}
                   <div className="relative sm:absolute sm:-bottom-5 sm:right-4 lg:-bottom-6 lg:-right-4 z-20 mt-3 sm:mt-0 max-w-full sm:max-w-md rounded-2xl bg-[#0C2340] p-4 sm:p-5 text-white shadow-xl border border-white/10 flex items-center justify-between gap-4">
                     <div className="border-l-2 border-[#D97706] pl-3.5 space-y-0.5">
                       <p className="text-sm sm:text-base font-bold text-white tracking-tight">
@@ -180,7 +211,7 @@ export default function HomePage() {
                       </p>
                     </div>
 
-                    {/* Line-Art Arsitektur Kampus UMS Transparan */}
+                    {/* Siluet Gedung Siti Walidah */}
                     <div className="relative h-11 w-24 sm:w-28 shrink-0 overflow-hidden opacity-90">
                       <Image
                         src="/images/campus-blueprint-transparent.png"
@@ -197,129 +228,284 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* 2. ALASAN: tiga kartu ikon, bersih dan terukur */}
-        <section
-          aria-labelledby="alasan-heading"
-          className="border-b border-slate-200 bg-slate-50 py-12 sm:py-16"
-        >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="max-w-2xl">
-              <h2
-                id="alasan-heading"
-                className="text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em] text-slate-900"
-              >
-                Kenapa Didata Terlebih Dulu?
-              </h2>
-              <p className="mt-2 text-sm sm:text-base leading-[1.6] text-slate-600">
-                Supaya jadwal dan lokasi kopdar pertama benar-benar cocok dengan tempat tinggal
-                alumni, bukan tebakan pengurus.
-              </p>
+        {/* ========================================================================= */}
+        {/* 2. STRIP 3 NILAI UTAMA (Value Proposition Strip)                          */}
+        {/* ========================================================================= */}
+        <section aria-label="Keunggulan Komunitas" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+            {/* Item 1 */}
+            <div className="flex items-start gap-4 p-5 rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:shadow-xs transition-shadow">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-[#C07A28] border border-amber-200/60">
+                <Users className="h-6 w-6" aria-hidden="true" />
+              </div>
+              <div className="space-y-1">
+                <h3 className="text-base sm:text-lg font-bold text-[#0C2340]">
+                  Perluas Jaringan
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  Terhubung kembali dengan sesama alumni UMS.
+                </p>
+              </div>
             </div>
 
-            <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-              {ALASAN.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <div key={item.judul} className="rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-xs">
-                    <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-amber-50 text-[#B45309] border border-amber-200/60">
-                      <Icon className="h-5 w-5" aria-hidden="true" />
-                    </span>
-                    <h3 className="mt-4 text-base sm:text-lg font-bold text-slate-900">{item.judul}</h3>
-                    <p className="mt-1.5 text-sm sm:text-base leading-[1.6] text-slate-600">{item.isi}</p>
-                  </div>
-                );
-              })}
+            {/* Item 2 */}
+            <div className="flex items-start gap-4 p-5 rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:shadow-xs transition-shadow">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-[#C07A28] border border-amber-200/60">
+                <Briefcase className="h-6 w-6" aria-hidden="true" />
+              </div>
+              <div className="space-y-1">
+                <h3 className="text-base sm:text-lg font-bold text-[#0C2340]">
+                  Dukung Karier
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  Mentoring, berbagi peluang, dan kolaborasi profesi.
+                </p>
+              </div>
+            </div>
+
+            {/* Item 3 */}
+            <div className="flex items-start gap-4 p-5 rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:shadow-xs transition-shadow">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-[#C07A28] border border-amber-200/60">
+                <Calendar className="h-6 w-6" aria-hidden="true" />
+              </div>
+              <div className="space-y-1">
+                <h3 className="text-base sm:text-lg font-bold text-[#0C2340]">
+                  Ruang Bertemu
+                </h3>
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                  Kopdar, diskusi, dan berbagai kegiatan bermanfaat.
+                </p>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* 3. WILAYAH: foto dokumentasi, pemilih wilayah interaktif, papan minat */}
-        <section
-          id="wilayah"
-          aria-labelledby="wilayah-heading"
-          className="mx-auto max-w-7xl scroll-mt-20 px-4 py-12 sm:px-6 sm:py-16 lg:px-8"
-        >
-          <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-12">
-            <div className="lg:col-span-7">
-              <figure className="space-y-2.5">
-                <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl border border-slate-200 bg-slate-100 shadow-xs">
-                  <Image
-                    src="/images/hero-kumpul-bolo-pisah.jpg"
-                    alt="Foto bersama alumni Universitas Muhammadiyah Surakarta di aula Kumpul Bolo Pisah"
-                    width={1200}
-                    height={675}
-                    loading="lazy"
-                    sizes="(max-width: 1024px) 100vw, 55vw"
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-                <figcaption className="text-xs sm:text-sm leading-relaxed text-slate-500">
-                  {COMMUNITY_PLACEHOLDERS.documentationCaption}
-                </figcaption>
-              </figure>
-            </div>
-
-            <div className="space-y-3 lg:col-span-5">
-              <span className="inline-block text-xs sm:text-sm font-semibold text-[#B45309]">
-                Sembilan wilayah
-              </span>
-              <h2
-                id="wilayah-heading"
-                className="text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em] text-slate-900"
-              >
-                Pilih wilayahmu, buka kopdar di kotamu
-              </h2>
-              <p className="text-sm sm:text-base leading-[1.6] text-slate-600">
-                Klik kota atau kabupaten tempatmu tinggal. Form minat kopdar akan langsung
-                terisi dan papan minat di bawah ikut diperbarui.
-              </p>
-              <Link
-                href="/peta"
-                className="inline-flex min-h-[44px] items-center gap-2 text-sm sm:text-base font-semibold text-[#0C2340] underline decoration-[#D97706] underline-offset-4 transition-colors hover:text-[#D97706]"
-              >
-                Lihat peta cakupan wilayah
-                <ArrowRight className="h-4 w-4" aria-hidden="true" />
-              </Link>
-            </div>
-          </div>
-
-          <div className="mt-8">
-            <RegionPicker selected={selectedWilayah} onSelect={handleSelectRegion} />
-          </div>
-          <div className="mt-6">
-            <RegionInterestBoard counts={counts} />
-          </div>
-        </section>
-
-        {/* 4. FORM MINAT KOPDAR: section khusus, dekat status pengurus */}
-        <section
-          id="kopdar"
-          aria-labelledby="kopdar-heading"
-          className="scroll-mt-20 border-y border-slate-200 bg-white py-12 sm:py-16"
-        >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-10">
-              <div className="order-2 space-y-5 lg:order-1 lg:col-span-5">
-                <div className="space-y-2">
-                  <span className="inline-block text-xs sm:text-sm font-semibold text-[#B45309]">
-                    Kopdar pertama
-                  </span>
-                  <h2
-                    id="kopdar-heading"
-                    className="text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em] text-slate-900"
+        {/* ========================================================================= */}
+        {/* 3. SEBARAN WILAYAH: Satu Jaringan. Lima Kota.                              */}
+        {/* ========================================================================= */}
+        <section aria-labelledby="sebaran-heading" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="rounded-3xl border border-slate-200/80 bg-[#F8FAFC] p-6 sm:p-10 lg:p-12 shadow-xs">
+            <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-8">
+              {/* Sisi Kiri: Teks & CTA */}
+              <div className="space-y-4 lg:col-span-4">
+                <h2
+                  id="sebaran-heading"
+                  className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#0C2340] leading-tight"
+                >
+                  Satu Jaringan.
+                  <br />
+                  Lima Kota.
+                </h2>
+                <p className="text-sm sm:text-base leading-relaxed text-slate-600">
+                  Sebaran alumni UMS di wilayah Jabodetabek yang terus bertumbuh. Mari lengkapi datamu, agar jejaring kita semakin kuat.
+                </p>
+                <div className="pt-2">
+                  <Link
+                    href="/peta"
+                    className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-[#0C2340] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#08182E] shadow-xs"
                   >
-                    Isi minat kopdar di wilayahmu
-                  </h2>
-                  <p className="text-sm sm:text-base leading-[1.6] text-slate-600">
-                    Tanggal dan lokasi belum ditetapkan. Pengurus memilih hari dan titik kumpul
-                    dari isian yang masuk, dimulai dari wilayah yang paling banyak peminatnya.
-                  </p>
+                    Lihat sebaran alumni
+                    <ArrowRight className="h-4 w-4 text-[#F59E0B]" aria-hidden="true" />
+                  </Link>
                 </div>
-
-                <TrustPanel />
               </div>
 
-              <div className="order-1 lg:order-2 lg:col-span-7">
+              {/* Sisi Tengah: Ilustrasi Peta Vektor Jabodetabek */}
+              <div className="lg:col-span-4 flex items-center justify-center py-4 lg:py-0">
+                <div className="relative w-full max-w-[280px] aspect-[4/3] flex items-center justify-center">
+                  <Image
+                    src="/images/map-jabodetabek-graphic.png"
+                    alt="Peta Sebaran Alumni UMS di Jabodetabek"
+                    width={280}
+                    height={180}
+                    className="w-full h-auto object-contain opacity-90 drop-shadow-xs"
+                  />
+                </div>
+              </div>
+
+              {/* Sisi Kanan: Daftar 5 Kota / Counter */}
+              <div className="space-y-2 lg:col-span-4">
+                {KOTA_STATS.map((kota) => (
+                  <Link
+                    key={kota.nama}
+                    href={`/peta?wilayah=${encodeURIComponent(kota.slug)}`}
+                    className="flex items-center justify-between p-3 sm:p-3.5 rounded-xl bg-white border border-slate-200/80 shadow-2xs hover:border-slate-300 hover:shadow-xs transition-all group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-50 text-slate-500 group-hover:text-[#0C2340] group-hover:bg-slate-100 transition-colors">
+                        <Building2 className="h-4 w-4" aria-hidden="true" />
+                      </div>
+                      <span className="text-sm font-bold text-[#0C2340]">
+                        {kota.nama}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-500 group-hover:text-[#0C2340]">
+                      <span>{kota.count} alumni</span>
+                      <ChevronRight className="h-4 w-4 text-slate-400 group-hover:translate-x-0.5 transition-transform" />
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 4. PROGRAM UNTUK ALUMNI UMS                                               */}
+        {/* ========================================================================= */}
+        <section aria-labelledby="program-heading" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
+            <div className="space-y-2 max-w-xl">
+              <div className="flex items-center gap-2">
+                <span className="w-6 h-[2px] bg-[#C07A28] rounded-full" aria-hidden="true" />
+                <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#B45309]">
+                  Lebih dari Sekadar Kopdar
+                </span>
+              </div>
+              <h2
+                id="program-heading"
+                className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#0C2340]"
+              >
+                Program untuk Alumni UMS
+              </h2>
+            </div>
+            <p className="text-xs sm:text-sm text-slate-600 max-w-sm leading-relaxed">
+              Berbagai inisiatif untuk saling terhubung, berbagi pengalaman, dan tumbuh bersama.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+            {PROGRAM_ITEMS.map((item) => {
+              const Icon = item.icon;
+              const isDark = item.active;
+
+              return (
+                <Link
+                  key={item.id}
+                  href={item.href}
+                  className={`group relative flex flex-col justify-between rounded-2xl p-6 transition-all duration-200 min-h-[220px] ${
+                    isDark
+                      ? 'bg-[#0C2340] text-white shadow-md'
+                      : 'bg-white border border-slate-200/90 text-slate-900 shadow-2xs hover:shadow-xs hover:border-slate-300'
+                  }`}
+                >
+                  <div className="space-y-4">
+                    <div
+                      className={`flex h-11 w-11 items-center justify-center rounded-xl ${
+                        isDark
+                          ? 'bg-white/10 text-white'
+                          : 'bg-amber-50 text-[#C07A28] border border-amber-200/60'
+                      }`}
+                    >
+                      <Icon className="h-5 w-5" aria-hidden="true" />
+                    </div>
+
+                    <div className="space-y-1.5">
+                      <h3 className="text-base sm:text-lg font-bold leading-snug">
+                        {item.judul}
+                      </h3>
+                      <p
+                        className={`text-xs sm:text-sm leading-relaxed ${
+                          isDark ? 'text-slate-300' : 'text-slate-600'
+                        }`}
+                      >
+                        {item.deskripsi}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="flex justify-end pt-4">
+                    <div
+                      className={`flex h-8 w-8 items-center justify-center rounded-full transition-transform group-hover:translate-x-1 ${
+                        isDark
+                          ? 'bg-white/15 text-white'
+                          : 'bg-slate-100 text-slate-700'
+                      }`}
+                    >
+                      <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* ========================================================================= */}
+        {/* 5. BANNER KOPDAR PERTAMA: Mulai dari Kotamu                                */}
+        {/* ========================================================================= */}
+        <section
+          id="kopdar-section"
+          aria-labelledby="banner-kopdar-heading"
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24 space-y-8"
+        >
+          <div className="rounded-3xl border border-slate-200/80 bg-white shadow-xs overflow-hidden">
+            <div className="grid grid-cols-1 items-center lg:grid-cols-12 gap-6 lg:gap-8">
+              {/* Sisi Kiri: Foto Real Alumni UMS */}
+              <div className="lg:col-span-5 h-64 sm:h-72 lg:h-full relative overflow-hidden bg-slate-100">
+                <Image
+                  src="/images/banner-mulai-dari-kotamu.png"
+                  alt="Alumni UMS berkumpul dalam kegiatan silaturahmi"
+                  width={385}
+                  height={150}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+
+              {/* Sisi Tengah: Teks & Tombol */}
+              <div className="lg:col-span-5 p-6 sm:p-8 space-y-4">
+                <span className="inline-block text-xs sm:text-sm font-bold uppercase tracking-wider text-[#B45309]">
+                  Kopdar Pertama
+                </span>
+                <h2
+                  id="banner-kopdar-heading"
+                  className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#0C2340]"
+                >
+                  Mulai dari Kotamu
+                </h2>
+                <p className="text-sm sm:text-base leading-relaxed text-slate-600">
+                  Kami sedang memetakan minat kopdar pertama di tiap wilayah. Isi formulir singkat berikut agar kamu bisa kami kabari lebih dulu.
+                </p>
+                <div className="pt-2">
+                  <button
+                    type="button"
+                    onClick={() => setShowFormModal(!showFormModal)}
+                    className="inline-flex min-h-[46px] items-center justify-center gap-2 rounded-xl bg-[#0C2340] px-6 py-2.5 text-sm sm:text-base font-semibold text-white transition-all hover:bg-[#08182E] shadow-xs cursor-pointer active:scale-[0.99]"
+                  >
+                    <span>{showFormModal ? 'Tutup formulir minat' : 'Isi minat kopdar sekarang'}</span>
+                    <ArrowRight className="h-4 w-4 text-[#F59E0B]" aria-hidden="true" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Sisi Kanan: Line-art Arsitektur Gedung Siti Walidah */}
+              <div className="hidden lg:flex lg:col-span-2 items-center justify-end pr-8 opacity-75">
+                <div className="relative h-28 w-28">
+                  <Image
+                    src="/images/campus-blueprint-transparent.png"
+                    alt="Blueprint Arsitektur UMS"
+                    fill
+                    sizes="112px"
+                    className="object-contain"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Form Minat Kopdar & Trust Panel yang Dapat Dibuka Mulus */}
+          <div
+            id="form-kopdar-container"
+            className={`transition-all duration-300 ${
+              showFormModal ? 'block' : 'hidden'
+            }`}
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pt-4 border-t border-slate-200">
+              <div className="lg:col-span-5">
+                <TrustPanel />
+              </div>
+              <div className="lg:col-span-7">
                 <KopdarInterestForm
                   wilayah={selectedWilayah}
                   onWilayahChange={setSelectedWilayah}
@@ -329,158 +515,66 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* 5. MENTORING: tanpa form, tautan ke /peluang */}
-        <section aria-labelledby="mentoring-heading" className="bg-slate-50 border-b border-slate-200">
-          <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-6 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-12 lg:gap-12 lg:px-8">
-            <div className="lg:col-span-7">
-              <span className="inline-block text-xs sm:text-sm font-semibold text-[#B45309]">
-                Mentoring Alumni
-              </span>
-              <h2
-                id="mentoring-heading"
-                className="mt-2 text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em] text-slate-900"
-              >
-                Mentoring CV &amp; Berbagi Lowongan
-              </h2>
-              <p className="mt-2 max-w-[60ch] text-sm sm:text-base leading-[1.6] text-slate-600">
-                Butuh teman diskusi sebelum melamar kerja, atau bersedia meluangkan waktu
-                untuk mengulas CV adik tingkat? Mulai dari halaman Mentoring &amp; Kerja.
-              </p>
-            </div>
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center lg:col-span-5 lg:justify-end">
-              <Link
-                href="/peluang#mentoring"
-                className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-lg bg-[#0C2340] px-5 py-3 text-sm sm:text-base font-semibold text-white transition-colors hover:bg-[#08182E] shadow-xs"
-              >
-                Cari mentor
-                <ArrowRight className="h-4 w-4 text-[#F59E0B]" aria-hidden="true" />
-              </Link>
-              <Link
-                href="/gabung?mentor=ya"
-                className="inline-flex min-h-[48px] items-center justify-center rounded-lg border border-slate-300 bg-white px-5 py-3 text-sm sm:text-base font-semibold text-slate-800 transition-colors hover:border-slate-400 hover:bg-slate-50 shadow-2xs"
-              >
-                Daftar jadi mentor
-              </Link>
-            </div>
+        {/* ========================================================================= */}
+        {/* 6. CERITA DARI KELUARGA UMS (Kegiatan Terkini)                             */}
+        {/* ========================================================================= */}
+        <section aria-labelledby="cerita-heading" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          <div className="flex items-center justify-between gap-4">
+            <h2
+              id="cerita-heading"
+              className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-[#0C2340]"
+            >
+              Cerita dari Keluarga UMS
+            </h2>
+            <Link
+              href="/kegiatan"
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#0C2340] hover:text-[#C07A28] transition-colors"
+            >
+              <span>Lihat semua kegiatan</span>
+              <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+            </Link>
           </div>
-        </section>
 
-        {/* 6. INFO KERJA & USAHA */}
-        <InfoKerjaTeaser />
-
-        {/* 7. FAQ & PENUTUP */}
-        <section
-          id="tanya-jawab"
-          aria-labelledby="faq-heading"
-          className="bg-white py-12 sm:py-16"
-        >
-          <div className="mx-auto max-w-4xl space-y-10 px-4 sm:px-6 lg:px-8">
-            <div>
-              <h2
-                id="faq-heading"
-                className="mb-6 text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em] text-slate-900"
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
+            {CERITA_ITEMS.map((item) => (
+              <Link
+                key={item.id}
+                href={item.href}
+                className="group flex flex-col rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:shadow-xs hover:border-slate-300 transition-all overflow-hidden"
               >
-                Soal Pendataan &amp; Data Kamu
-              </h2>
-
-              <div className="divide-y divide-slate-200 border-y border-slate-200">
-                <details className="group py-3">
-                  <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-4 py-2 text-sm sm:text-base font-semibold text-slate-900 hover:text-[#0C2340]">
-                    <span>Apakah mengirim minat kopdar sama dengan mendaftar anggota?</span>
-                    <ChevronDown className="h-4 w-4 shrink-0 text-slate-500 transition-transform duration-150 group-open:rotate-180" aria-hidden="true" />
-                  </summary>
-                  <p className="max-w-[60ch] pb-3 text-sm sm:text-base leading-[1.6] text-slate-600">
-                    Belum. Isian minat kopdar hanya berisi wilayah, waktu, nama, dan nomor
-                    WhatsApp untuk kabar jadwal. Pendaftaran anggota penuh dengan data prodi
-                    dan angkatan dilakukan terpisah lewat tombol Daftar jadi anggota.
-                  </p>
-                </details>
-
-                <details className="group py-3">
-                  <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-4 py-2 text-sm sm:text-base font-semibold text-slate-900 hover:text-[#0C2340]">
-                    <span>Apakah nomor WhatsApp saya ditampilkan terbuka?</span>
-                    <ChevronDown className="h-4 w-4 shrink-0 text-slate-500 transition-transform duration-150 group-open:rotate-180" aria-hidden="true" />
-                  </summary>
-                  <div className="space-y-2 pb-3">
-                    <p className="max-w-[60ch] text-sm sm:text-base leading-[1.6] text-slate-600">
-                      Tidak. Nomor hanya dipakai pengurus untuk mengabari jadwal kopdar
-                      wilayahmu. Nomor dan email tidak pernah ditampilkan di halaman publik.
-                    </p>
-                    <Link
-                      href="/privasi"
-                      className="inline-flex min-h-[44px] items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#0C2340] underline decoration-[#D97706] underline-offset-4 hover:text-[#D97706]"
-                    >
-                      Baca Kebijakan Privasi
-                      <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-                    </Link>
+                <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-100">
+                  <Image
+                    src={item.gambar}
+                    alt={item.judul}
+                    width={400}
+                    height={225}
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                  />
+                  <div className="absolute top-3 left-3 z-10">
+                    <span className="inline-block rounded-md bg-white/95 backdrop-blur-xs px-2.5 py-0.5 text-xs font-bold text-[#0C2340] shadow-2xs">
+                      {item.kategori}
+                    </span>
                   </div>
-                </details>
+                </div>
 
-                <details className="group py-3">
-                  <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-4 py-2 text-sm sm:text-base font-semibold text-slate-900 hover:text-[#0C2340]">
-                    <span>Kapan saya dihubungi pengurus?</span>
-                    <ChevronDown className="h-4 w-4 shrink-0 text-slate-500 transition-transform duration-150 group-open:rotate-180" aria-hidden="true" />
-                  </summary>
-                  <p className="max-w-[60ch] pb-3 text-sm sm:text-base leading-[1.6] text-slate-600">
-                    Setelah isian dicocokkan, pengurus menghubungi lewat WhatsApp{' '}
-                    {COMMUNITY_PLACEHOLDERS.verificationSla}. Tanggal dan lokasi kopdar
-                    ditetapkan setelah suara wilayah terkumpul.
-                  </p>
-                </details>
-
-                <details className="group py-3">
-                  <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-4 py-2 text-sm sm:text-base font-semibold text-slate-900 hover:text-[#0C2340]">
-                    <span>Bagaimana hubungannya dengan PP IKA UMS Pusat?</span>
-                    <ChevronDown className="h-4 w-4 shrink-0 text-slate-500 transition-transform duration-150 group-open:rotate-180" aria-hidden="true" />
-                  </summary>
-                  <div className="space-y-2 pb-3">
-                    <p className="max-w-[60ch] text-sm sm:text-base leading-[1.6] text-slate-600">
-                      Jaringan wilayah ini disiapkan sebagai simpul daerah alumni
-                      Universitas Muhammadiyah Surakarta. Status koordinasinya:{' '}
-                      {COMMUNITY_PLACEHOLDERS.ppIkaUmsStatus}.
-                    </p>
-                    <Link
-                      href="/tentang"
-                      className="inline-flex min-h-[44px] items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#0C2340] underline decoration-[#D97706] underline-offset-4 hover:text-[#D97706]"
-                    >
-                      Baca Tentang Komunitas
-                      <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
-                    </Link>
+                <div className="p-4 sm:p-5 flex-grow flex flex-col justify-between space-y-3">
+                  <h3 className="text-base font-bold text-[#0C2340] group-hover:text-[#C07A28] transition-colors leading-snug">
+                    {item.judul}
+                  </h3>
+                  <div className="flex items-center gap-1.5 text-xs text-slate-500 pt-1 border-t border-slate-100">
+                    <CalendarDays className="h-3.5 w-3.5 text-slate-400" aria-hidden="true" />
+                    <span>{item.tanggal}</span>
                   </div>
-                </details>
-              </div>
-            </div>
-
-            <div className="flex flex-col justify-between gap-5 border-t border-slate-200 pt-8 sm:flex-row sm:items-center">
-              <div className="max-w-lg space-y-1">
-                <h2 className="text-lg sm:text-xl font-bold text-slate-900">
-                  Siap ikut kopdar pertama?
-                </h2>
-                <p className="text-sm sm:text-base leading-[1.6] text-slate-600">
-                  Pilih wilayahmu dan tinggalkan kontak. Pengurus yang mengurus jadwalnya.
-                </p>
-              </div>
-              <div className="flex flex-wrap items-center gap-3">
-                <a
-                  href="#kopdar"
-                  className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-lg bg-[#0C2340] px-6 py-3 text-sm sm:text-base font-semibold text-white transition-colors hover:bg-[#08182E] active:scale-[0.99] shadow-xs"
-                >
-                  Kirim minat kopdar
-                  <ArrowRight className="h-4 w-4 text-[#F59E0B]" aria-hidden="true" />
-                </a>
-                <Link
-                  href="/gabung"
-                  className="inline-flex min-h-[44px] items-center justify-center px-4 py-3 text-sm sm:text-base font-semibold text-[#0C2340] underline decoration-[#D97706] underline-offset-4 transition-colors hover:text-[#D97706]"
-                >
-                  Daftar jadi anggota
-                </Link>
-              </div>
-            </div>
+                </div>
+              </Link>
+            ))}
           </div>
         </section>
       </main>
 
-      <Footer />
+      <div className="mt-16 sm:mt-24">
+        <Footer />
+      </div>
       <MobileKopdarCta />
     </div>
   );
