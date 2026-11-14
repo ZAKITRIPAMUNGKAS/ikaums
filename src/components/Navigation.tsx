@@ -134,6 +134,8 @@ export function Navbar() {
   const isRouteMatch = (href: string) =>
     href === '/' ? pathname === '/' : pathname === href || pathname.startsWith(`${href}/`);
 
+  const isHome = pathname === '/';
+
   const renderDropdownGroup = (group: NavGroup) => {
     const isGroupActive = group.items.some((item) => isRouteMatch(item.href));
     const isDropdownOpen = openDropdown === group.id;
@@ -304,10 +306,10 @@ export function Navbar() {
               Masuk
             </Link>
             <Link
-              href="/gabung"
+              href={isHome ? '#kopdar' : '/gabung'}
               className="inline-flex items-center gap-1.5 min-h-[44px] text-[13px] font-semibold text-white bg-[#0C2340] hover:bg-[#16325C] px-4 py-2 transition-all shadow-xs rounded-lg group whitespace-nowrap"
             >
-              <span>Daftar jadi anggota</span>
+              <span>{isHome ? 'Kirim minat kopdar' : 'Daftar jadi anggota'}</span>
               <ArrowRight className="w-3.5 h-3.5 text-[#F59E0B] group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </div>
@@ -315,10 +317,10 @@ export function Navbar() {
           {/* Mobile & Tablet Actions */}
           <div className="flex lg:hidden items-center gap-2">
             <Link
-              href="/gabung"
+              href={isHome ? '#kopdar' : '/gabung'}
               className="inline-flex items-center justify-center min-h-[44px] text-xs font-semibold text-white bg-[#0C2340] hover:bg-[#16325C] px-3.5 py-2 rounded-lg whitespace-nowrap"
             >
-              Daftar
+              {isHome ? 'Minat kopdar' : 'Daftar'}
             </Link>
             <button
               onClick={() => setIsOpen(!isOpen)}
