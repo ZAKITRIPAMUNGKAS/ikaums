@@ -61,6 +61,7 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
   const [errors, setErrors] = useState<FormErrors>({});
   const [submitted, setSubmitted] = useState(false);
   const [successWa, setSuccessWa] = useState('');
+  const [shareUrl, setShareUrl] = useState('');
   const submittingRef = useRef(false);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const mountedRef = useRef(false);
@@ -180,13 +181,14 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
     });
 
     setSuccessWa(validWa!);
+    setShareUrl(
+      `https://wa.me/?text=${encodeURIComponent(
+        `Aku sudah kirim minat kopdar IKA UMS Jabodetabek wilayah ${wilayah}. Yuk isi juga di ${window.location.origin}/#kopdar`
+      )}`
+    );
     submittingRef.current = false;
     setSubmitted(true);
   };
-
-  const shareUrl = `https://wa.me/?text=${encodeURIComponent(
-    `Aku sudah kirim minat kopdar IKA UMS Jabodetabek wilayah ${wilayah}. Yuk isi juga di https://ikaums.vercel.app/#kopdar`
-  )}`;
 
   if (submitted) {
     return (
@@ -207,7 +209,7 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
           kopdar {wilayah} sudah ditetapkan.
         </p>
         <p className="mx-auto mt-2 max-w-md text-base leading-[1.6] text-[#475569]">
-          Waktu verifikasi: {COMMUNITY_PLACEHOLDERS.verificationSla}. Nomor WhatsApp tidak
+          Kamu akan dihubungi {COMMUNITY_PLACEHOLDERS.verificationSla}. Nomor WhatsApp tidak
           ditampilkan di halaman publik.
         </p>
         <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
@@ -239,10 +241,7 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
       className="relative rounded-xl border border-[#0C2340]/12 bg-white p-5 shadow-2xs sm:p-7"
     >
       {/* Honeypot: tidak terlihat, tidak terbaca screen reader, tidak bisa di-tab */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute left-[-9999px] top-auto h-px w-px overflow-hidden"
-      >
+      <div aria-hidden="true" className="sr-only">
         <label htmlFor="kopdar-website">Website</label>
         <input
           id="kopdar-website"
@@ -252,6 +251,7 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
           autoComplete="off"
           value={website}
           onChange={(event) => setWebsite(event.target.value)}
+          className="sr-only"
         />
       </div>
 

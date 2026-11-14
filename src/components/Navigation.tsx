@@ -244,8 +244,11 @@ export function Navbar() {
               <span className="text-base sm:text-[17px] font-extrabold tracking-[-0.03em] text-[#0C2340] leading-none">
                 IKA UMS
               </span>
-              <span className="text-xs font-semibold tracking-[0.06em] text-[#92400E] uppercase leading-none mt-1">
+              <span className="mt-1 hidden text-xs font-semibold tracking-[0.06em] text-[#92400E] uppercase leading-none min-[420px]:block">
                 Wilayah Jabodetabek
+              </span>
+              <span className="mt-1 text-xs font-semibold tracking-[0.06em] text-[#92400E] uppercase leading-none min-[420px]:hidden">
+                Jabodetabek
               </span>
             </div>
           </Link>
