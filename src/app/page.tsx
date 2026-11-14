@@ -10,10 +10,11 @@ import { KopdarInterestForm } from '@/components/home/KopdarInterestForm';
 import { TrustPanel } from '@/components/home/TrustPanel';
 import { InfoKerjaTeaser } from '@/components/home/InfoKerjaTeaser';
 import { MobileKopdarCta } from '@/components/home/MobileKopdarCta';
-import { COMMUNITY_PLACEHOLDERS, DEMO_BADGE_LABEL, IS_DEMO_MODE } from '@/lib/config';
+import { COMMUNITY_PLACEHOLDERS } from '@/lib/config';
 import { useKopdarInterestCounts } from '@/lib/kopdar-interest';
 import {
   ArrowRight,
+  ArrowUpRight,
   ChevronDown,
   MapPin,
   MessagesSquare,
@@ -56,81 +57,80 @@ export default function HomePage() {
       <Navbar />
 
       <main className="flex-grow">
-        {/* 1. HERO: badge status, satu aksi utama, foto dokumentasi */}
-        <section className="bg-white border-b border-slate-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12 sm:pt-12 lg:pt-16 lg:pb-20">
-            <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:items-center lg:gap-12">
-              <div className="space-y-5 lg:col-span-6">
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs sm:text-sm font-semibold text-[#B45309]">
-                    <span className="h-2 w-2 rounded-full bg-[#D97706]" aria-hidden="true" />
-                    Tahap pendataan awal
+        {/* 1. HERO SECTION PERSIS SEPERTI DESAIN REFERENSI */}
+        <section className="bg-white border-b border-slate-200 overflow-hidden">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12 sm:pt-12 lg:pt-16 lg:pb-16">
+            <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-8">
+              {/* Kolom Kiri: Teks & Aksi */}
+              <div className="space-y-6 lg:col-span-6 z-10">
+                {/* Eyebrow / Kicker */}
+                <div className="flex items-center gap-2.5">
+                  <span className="w-8 h-[2.5px] bg-[#C07A28] rounded-full" aria-hidden="true" />
+                  <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#B45309]">
+                    Ikatan Keluarga Alumni UMS
                   </span>
-                  {IS_DEMO_MODE && (
-                    <span className="inline-flex items-center rounded-full bg-slate-100 border border-slate-200 px-2.5 py-0.5 text-xs sm:text-sm font-semibold text-slate-700">
-                      {DEMO_BADGE_LABEL}
-                    </span>
-                  )}
                 </div>
 
-                <h1 className="text-[clamp(1.875rem,1.35rem+2.2vw,2.75rem)] font-extrabold leading-[1.12] tracking-[-0.025em] text-slate-900">
-                  Jaringan Alumni UMS di Jabodetabek
+                {/* Headline Utama */}
+                <h1 className="text-[clamp(2.25rem,1.75rem+2.6vw,3.75rem)] font-extrabold leading-[1.12] tracking-[-0.03em] text-[#0C2340]">
+                  Jauh dari kampus,
+                  <br />
+                  dekat sebagai{' '}
+                  <span className="text-[#C07A28]">keluarga.</span>
                 </h1>
 
-                <p className="max-w-[46ch] text-base sm:text-lg leading-[1.6] text-slate-600 sm:max-w-xl">
-                  Tempat alumni Universitas Muhammadiyah Surakarta di Jakarta, Bogor, Depok,
-                  Tangerang, dan Bekasi saling kenal lagi.
-                </p>
-                <p className="max-w-[46ch] text-sm sm:text-base leading-[1.65] text-slate-600 sm:max-w-xl">
-                  Kami sedang mendata domisili untuk menentukan kopdar pertama per wilayah.
-                  Isi minatmu dulu, tanpa perlu membuat akun.
+                {/* Subtitle / Deskripsi */}
+                <p className="max-w-[46ch] text-base sm:text-lg leading-[1.65] text-slate-600 sm:max-w-xl">
+                  Temukan kembali teman, bangun koneksi, dan bertumbuh bersama alumni Universitas Muhammadiyah Surakarta di Jabodetabek.
                 </p>
 
-                <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:flex-wrap sm:items-center">
+                {/* Dua Tombol Aksi */}
+                <div className="flex flex-wrap items-center gap-3 pt-2">
                   <a
                     href="#kopdar"
-                    className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-lg bg-[#0C2340] px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-[#08182E] shadow-xs active:scale-[0.99]"
+                    className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl bg-[#0C2340] px-6 py-3 text-sm sm:text-base font-semibold text-white transition-all hover:bg-[#08182E] shadow-sm active:scale-[0.99]"
                   >
-                    Kirim minat kopdar
+                    Ikut kopdar terdekat
                     <ArrowRight className="h-4 w-4 text-[#F59E0B]" aria-hidden="true" />
                   </a>
                   <Link
-                    href="/gabung"
-                    className="inline-flex min-h-[48px] items-center justify-center rounded-lg border border-slate-300 bg-white px-5 py-3 text-base font-semibold text-slate-800 transition-colors hover:border-slate-400 hover:bg-slate-50 shadow-2xs"
+                    href="/direktori"
+                    className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm sm:text-base font-semibold text-slate-800 transition-colors hover:border-slate-400 hover:bg-slate-50 shadow-2xs"
                   >
-                    Daftar jadi anggota
+                    Jelajahi jaringan
+                    <ArrowUpRight className="h-4 w-4 text-slate-500" aria-hidden="true" />
                   </Link>
                 </div>
-                <p className="text-xs sm:text-sm text-slate-500">
-                  Form minat ± 1 menit. Sudah mendaftar?{' '}
-                  <Link
-                    href="/masuk"
-                    className="inline-flex min-h-[44px] items-center font-semibold text-[#0C2340] underline decoration-[#D97706] underline-offset-4 hover:text-[#D97706]"
-                  >
-                    Masuk di sini
-                  </Link>
-                  .
-                </p>
+
+                {/* Footer Wilayah */}
+                <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 text-xs sm:text-sm text-slate-500 pt-3">
+                  <MapPin className="h-4 w-4 text-slate-400 shrink-0" aria-hidden="true" />
+                  <span className="hover:text-slate-700 transition-colors">Jakarta</span>
+                  <span className="text-slate-300">·</span>
+                  <span className="hover:text-slate-700 transition-colors">Bogor</span>
+                  <span className="text-slate-300">·</span>
+                  <span className="hover:text-slate-700 transition-colors">Depok</span>
+                  <span className="text-slate-300">·</span>
+                  <span className="hover:text-slate-700 transition-colors">Tangerang</span>
+                  <span className="text-slate-300">·</span>
+                  <span className="hover:text-slate-700 transition-colors">Bekasi</span>
+                </div>
               </div>
 
-              <div className="lg:col-span-6">
-                <figure className="space-y-2.5">
-                  <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-slate-200 bg-slate-100 shadow-xs">
-                    <Image
-                      src="/images/alumni-gathering-4.jpg"
-                      alt="Alumni Universitas Muhammadiyah Surakarta berjabat tangan di meja registrasi De Terras"
-                      width={1200}
-                      height={750}
-                      priority
-                      fetchPriority="high"
-                      sizes="(max-width: 1024px) 100vw, 46vw"
-                      className="h-full w-full object-cover"
-                    />
-                  </div>
-                  <figcaption className="text-xs sm:text-sm leading-relaxed text-slate-500">
-                    {COMMUNITY_PLACEHOLDERS.heroPhotoCaption}
-                  </figcaption>
-                </figure>
+              {/* Kolom Kanan: Visual Showcase Sesuai Desain Referensi */}
+              <div className="lg:col-span-6 flex items-center justify-center lg:justify-end">
+                <div className="relative w-full max-w-[580px] lg:max-w-none">
+                  <Image
+                    src="/images/hero-illustration-banner.png"
+                    alt="Alumni Universitas Muhammadiyah Surakarta berkumpul dan berdiskusi di Jabodetabek"
+                    width={980}
+                    height={660}
+                    priority
+                    fetchPriority="high"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="w-full h-auto object-contain drop-shadow-sm select-none"
+                  />
+                </div>
               </div>
             </div>
           </div>

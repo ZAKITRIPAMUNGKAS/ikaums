@@ -286,7 +286,7 @@ export function Navbar() {
                   : 'text-[#475569] hover:text-[#0C2340] font-medium'
               }`}
             >
-              <span>Jadwal Kopdar</span>
+              <span>Kegiatan</span>
               {isRouteMatch('/kegiatan') && (
                 <motion.div
                   layoutId={shouldReduceMotion ? undefined : 'navbarActiveIndicator'}
@@ -308,10 +308,10 @@ export function Navbar() {
               Masuk
             </Link>
             <Link
-              href={isHome ? '#kopdar' : '/gabung'}
+              href="/gabung"
               className="inline-flex items-center gap-1.5 min-h-[44px] text-[13px] font-semibold text-white bg-[#0C2340] hover:bg-[#16325C] px-4 py-2 transition-all shadow-xs rounded-lg group whitespace-nowrap"
             >
-              <span>{isHome ? 'Kirim minat kopdar' : 'Daftar jadi anggota'}</span>
+              <span>Bergabung di IKA UMS</span>
               <ArrowRight className="w-3.5 h-3.5 text-[#F59E0B] group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </div>
