@@ -255,16 +255,6 @@ export default function HomePage() {
                   </p>
                 </div>
 
-                <div className="rounded-xl border border-amber-200 bg-amber-50/70 p-4 sm:p-5">
-                  <p className="text-sm sm:text-base font-bold text-slate-900">
-                    Dalam koordinasi dengan PP IKA UMS Pusat
-                  </p>
-                  <p className="mt-1 text-xs sm:text-sm leading-[1.6] text-slate-700">
-                    Status resmi pengurus wilayah masih dalam penetapan. Nomor WhatsApp hanya
-                    dipakai pengurus untuk verifikasi dan info kopdar.
-                  </p>
-                </div>
-
                 <TrustPanel />
               </div>
 
