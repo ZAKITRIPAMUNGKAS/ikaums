@@ -23,7 +23,7 @@ export default function CeritaPage() {
 
   if (!IS_DEMO_MODE || stories.length === 0) {
     return (
-      <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans">
+      <div className="min-h-screen bg-slate-50 text-[#0C2340] flex flex-col font-sans">
         <Navbar />
 
         <main className="flex-grow pattern-surface pattern-dots pattern-tone-light pattern-fade-soft-edges py-12 sm:py-16 w-full">
@@ -37,7 +37,7 @@ export default function CeritaPage() {
           </nav>
 
           <section className="surface-card rounded-2xl p-6 sm:p-10 space-y-5">
-            <div className="w-11 h-11 rounded-xl bg-[#F3F1EA] border border-[#0C2340]/10 flex items-center justify-center text-[#0C2340]">
+            <div className="w-11 h-11 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-[#0C2340]">
               <BookOpen className="w-5 h-5" />
             </div>
             <div className="space-y-2">
@@ -70,7 +70,7 @@ export default function CeritaPage() {
               </Link>
               <Link
                 href="/"
-                className="inline-flex items-center min-h-[44px] px-5 py-2.5 rounded-lg bg-white border border-[#0C2340]/20 hover:border-[#0C2340]/40 text-[#0C2340] text-sm font-semibold transition-colors"
+                className="inline-flex items-center min-h-[44px] px-5 py-2.5 rounded-lg bg-white border border-slate-300 hover:border-slate-400 text-[#0C2340] text-sm font-semibold transition-colors"
               >
                 Kembali ke Beranda
               </Link>
@@ -88,10 +88,10 @@ export default function CeritaPage() {
   const secondaryStories = stories.slice(1);
 
   return (
-    <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-50 text-[#0C2340] flex flex-col font-sans">
       <Navbar />
 
-      <main className="flex-grow page-grain-base w-full">
+      <main className="flex-grow  w-full">
         <PatternSection
           as="section"
           variant="dots"
@@ -99,7 +99,7 @@ export default function CeritaPage() {
           fade="right-focus"
           patternOpacity={0.05}
           patternSize="24px"
-          className="border-b border-[#0C2340]/10"
+          className="border-b border-slate-200"
           contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 md:pt-8 md:pb-10"
         >
           <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-2 text-xs text-[#475569] mb-4">
@@ -160,7 +160,7 @@ export default function CeritaPage() {
               <p className="text-base text-[#334155] leading-[1.6]">{featured.ringkasan}</p>
             </div>
 
-            <div className="pt-4 border-t border-[#0C2340]/10 flex items-center justify-between gap-4 text-sm">
+            <div className="pt-4 border-t border-slate-200 flex items-center justify-between gap-4 text-sm">
               <div>
                 <span className="block font-bold text-[#0C2340]">{featured.tokoh}</span>
                 <span className="block text-xs text-[#475569]">{featured.prodiAngkatan}</span>
@@ -181,10 +181,10 @@ export default function CeritaPage() {
           {secondaryStories.map((cerita) => (
             <article
               key={cerita.id}
-              className="bg-white border border-[#0C2340]/12 rounded-2xl overflow-hidden flex flex-col justify-between shadow-2xs"
+              className="bg-white border border-slate-200 rounded-2xl overflow-hidden flex flex-col justify-between shadow-2xs"
             >
               <div>
-                <div className="aspect-[16/10] relative bg-[#F3F1EA] overflow-hidden">
+                <div className="aspect-[16/10] relative bg-slate-100 overflow-hidden">
                   <Image
                     src={cerita.gambar || '/images/alumni-gathering-4.jpg'}
                     alt={cerita.judul}
@@ -194,7 +194,7 @@ export default function CeritaPage() {
                   />
                 </div>
                 <div className="p-6 space-y-2.5">
-                  <span className="inline-block bg-[#F3F1EA] text-[#0C2340] text-xs font-semibold px-2.5 py-0.5 rounded">
+                  <span className="inline-block bg-slate-100 text-[#0C2340] text-xs font-semibold px-2.5 py-0.5 rounded">
                     {cerita.kategori}
                   </span>
                   <h3 className="text-xl font-bold text-[#0C2340]">{cerita.judul}</h3>
@@ -221,7 +221,7 @@ export default function CeritaPage() {
 
         <Dialog open={!!selectedStory} onOpenChange={(open) => !open && setSelectedStory(null)}>
           {selectedStory && (
-            <DialogContent className="bg-white border border-[#0C2340]/15 rounded-2xl max-w-2xl">
+            <DialogContent className="bg-white border border-slate-200 rounded-2xl max-w-2xl">
               <DialogHeader>
                 <DialogTitle className="text-xl font-bold text-[#0C2340]">
                   {selectedStory.judul}

@@ -363,10 +363,10 @@ export default function PeluangPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-50 text-[#0C2340] flex flex-col font-sans">
       <Navbar />
 
-      <main className="flex-grow page-grain-base w-full">
+      <main className="flex-grow w-full">
         <PatternSection
           as="section"
           variant="dots"
@@ -374,7 +374,7 @@ export default function PeluangPage() {
           fade="right-focus"
           patternOpacity={0.055}
           patternSize="24px"
-          className="border-b border-[#0C2340]/10"
+          className="border-b border-slate-200"
           contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 md:pt-8 md:pb-10"
         >
           <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-2 text-xs text-[#475569] mb-4">
@@ -437,7 +437,7 @@ export default function PeluangPage() {
                 </button>
                 <Link
                   href="/gabung?mentor=ya"
-                  className="inline-flex items-center min-h-[48px] px-5 py-3 rounded-lg bg-white border border-[#0C2340]/20 hover:border-[#0C2340]/45 text-[#0C2340] text-base font-semibold transition-colors"
+                  className="inline-flex items-center min-h-[48px] px-5 py-3 rounded-lg bg-white border border-slate-300 hover:border-slate-400 text-[#0C2340] text-base font-semibold transition-colors"
                 >
                   Daftar Jadi Mentor
                 </Link>
@@ -445,7 +445,7 @@ export default function PeluangPage() {
             </div>
 
             {!IS_DEMO_MODE ? (
-              <div className="bg-white border border-[#0C2340]/12 rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xs">
+              <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xs">
                 <div className="space-y-2 max-w-xl">
                   <div className="inline-flex items-center gap-2 text-sm font-bold text-[#92400E]">
                     <HeartHandshake className="w-4 h-4" />
@@ -464,7 +464,7 @@ export default function PeluangPage() {
                 <button
                   type="button"
                   onClick={() => handleOpenBooking(null)}
-                  className="inline-flex items-center justify-center min-h-[48px] px-5 py-3 rounded-lg bg-[#F3F1EA] hover:bg-[#E7E3D7] text-[#0C2340] text-base font-semibold transition-colors shrink-0 cursor-pointer"
+                  className="inline-flex items-center justify-center min-h-[48px] px-5 py-3 rounded-lg bg-slate-100 hover:bg-[#E7E3D7] text-[#0C2340] text-base font-semibold transition-colors shrink-0 cursor-pointer"
                 >
                   Ajukan Topik Mentoring
                 </button>
@@ -474,11 +474,11 @@ export default function PeluangPage() {
                 {mentors.map((m) => (
                   <article
                     key={m.id}
-                    className="bg-white border border-[#0C2340]/12 rounded-2xl p-5 flex flex-col justify-between gap-4 shadow-xs hover:border-[#0C2340]/30 transition-all"
+                    className="bg-white border border-slate-200 rounded-2xl p-5 flex flex-col justify-between gap-4 shadow-xs hover:border-slate-300 transition-all"
                   >
                     <div className="space-y-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-full overflow-hidden bg-[#F3F1EA] relative shrink-0">
+                        <div className="w-12 h-12 rounded-full overflow-hidden bg-slate-100 relative shrink-0">
                           {m.avatarUrl ? (
                             <Image
                               src={m.avatarUrl}
@@ -512,7 +512,7 @@ export default function PeluangPage() {
                     <button
                       type="button"
                       onClick={() => handleOpenBooking(m)}
-                      className="w-full min-h-[44px] rounded-lg bg-[#F3F1EA] hover:bg-[#0C2340] text-[#0C2340] hover:text-white text-xs font-semibold transition-colors cursor-pointer"
+                      className="w-full min-h-[44px] rounded-lg bg-slate-100 hover:bg-[#0C2340] text-[#0C2340] hover:text-white text-xs font-semibold transition-colors cursor-pointer"
                     >
                       Ajukan Sesi ({DEMO_BADGE_LABEL})
                     </button>
@@ -525,7 +525,7 @@ export default function PeluangPage() {
           {/* ========================================================================= */}
           {/* Bagian 2: Info Kerja & Peluang Karier Alumni                              */}
           {/* ========================================================================= */}
-          <section id="loker" aria-labelledby="heading-info-kerja" className="pt-10 border-t border-[#0C2340]/10 space-y-8">
+          <section id="loker" aria-labelledby="heading-info-kerja" className="pt-10 border-t border-slate-200 space-y-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
               <div className="space-y-2 max-w-2xl">
                 <div className="inline-flex items-center gap-2 text-xs font-bold text-[#92400E] uppercase tracking-wider">
@@ -555,7 +555,7 @@ export default function PeluangPage() {
                 </button>
                 <Link
                   href="/kepengurusan"
-                  className="inline-flex items-center min-h-[48px] px-5 py-3 rounded-lg bg-white border border-[#0C2340]/20 hover:border-[#0C2340]/45 text-[#0C2340] text-base font-semibold transition-colors"
+                  className="inline-flex items-center min-h-[48px] px-5 py-3 rounded-lg bg-white border border-slate-300 hover:border-slate-400 text-[#0C2340] text-base font-semibold transition-colors"
                 >
                   Kontak Pengurus
                 </Link>
@@ -563,7 +563,7 @@ export default function PeluangPage() {
             </div>
 
             {/* Filter Bar & Pencarian Lowongan */}
-            <div className="bg-white border border-[#0C2340]/12 rounded-2xl p-4 sm:p-6 shadow-xs space-y-4">
+            <div className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-xs space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-4 items-center">
                 {/* Kolom Pencarian */}
                 <div className="md:col-span-5 relative">
@@ -573,7 +573,7 @@ export default function PeluangPage() {
                     value={lokerSearch}
                     onChange={(e) => setLokerSearch(e.target.value)}
                     placeholder="Cari posisi, perusahaan, atau keahlian..."
-                    className="w-full min-h-[44px] pl-10 pr-4 py-2.5 text-sm rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-[#0C2340] placeholder:text-[#475569]/70 focus:outline-hidden focus:ring-2 focus:ring-[#0C2340]/15"
+                    className="w-full min-h-[44px] pl-10 pr-4 py-2.5 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340] placeholder:text-[#475569]/70 focus:outline-hidden focus:ring-2 focus:ring-[#0C2340]/15"
                   />
                 </div>
 
@@ -582,7 +582,7 @@ export default function PeluangPage() {
                   <select
                     value={filterWilayah}
                     onChange={(e) => setFilterWilayah(e.target.value)}
-                    className="w-full min-h-[44px] px-3.5 py-2.5 text-sm rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/15 cursor-pointer font-medium"
+                    className="w-full min-h-[44px] px-3.5 py-2.5 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/15 cursor-pointer font-medium"
                   >
                     <option value="semua">Semua Wilayah Jabodetabek</option>
                     {WILAYAH_JABODETABEK.map((w) => (
@@ -599,7 +599,7 @@ export default function PeluangPage() {
                   <select
                     value={filterIndustri}
                     onChange={(e) => setFilterIndustri(e.target.value)}
-                    className="w-full min-h-[44px] px-3.5 py-2.5 text-sm rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/15 cursor-pointer font-medium"
+                    className="w-full min-h-[44px] px-3.5 py-2.5 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/15 cursor-pointer font-medium"
                   >
                     <option value="semua">Semua Bidang Industri</option>
                     {industryOptions.map((ind) => (
@@ -612,7 +612,7 @@ export default function PeluangPage() {
               </div>
 
               {/* Pill Filter Sistem Kerja */}
-              <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#0C2340]/10">
+              <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-slate-200">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="text-xs font-semibold text-[#475569] mr-1 flex items-center gap-1">
                     <Filter className="w-3.5 h-3.5" />
@@ -626,7 +626,7 @@ export default function PeluangPage() {
                       className={`min-h-[34px] px-3 py-1 rounded-full text-xs font-semibold transition-colors cursor-pointer ${
                         filterSistem === mode
                           ? 'bg-[#0C2340] text-white shadow-xs'
-                          : 'bg-[#F3F1EA] text-[#475569] hover:bg-[#E7E3D7] hover:text-[#0C2340]'
+                          : 'bg-slate-100 text-[#475569] hover:bg-[#E7E3D7] hover:text-[#0C2340]'
                       }`}
                     >
                       {mode === 'semua' ? 'Semua Sistem' : mode}
@@ -642,7 +642,7 @@ export default function PeluangPage() {
 
             {/* Grid Kartu Lowongan Kerja */}
             {filteredLokers.length === 0 ? (
-              <div className="bg-white border border-[#0C2340]/12 rounded-2xl p-10 sm:p-12 text-center space-y-4">
+              <div className="bg-white border border-slate-200 rounded-2xl p-10 sm:p-12 text-center space-y-4">
                 <Briefcase className="w-12 h-12 text-[#475569]/50 mx-auto" />
                 <div className="space-y-1.5 max-w-md mx-auto">
                   <h3 className="text-lg font-bold text-[#0C2340]">Tidak Ada Lowongan yang Cocok</h3>
@@ -659,7 +659,7 @@ export default function PeluangPage() {
                       setFilterIndustri('semua');
                       setFilterSistem('semua');
                     }}
-                    className="min-h-[42px] px-4 py-2 rounded-lg bg-[#F3F1EA] hover:bg-[#E7E3D7] text-[#0C2340] text-sm font-semibold transition-colors cursor-pointer"
+                    className="min-h-[42px] px-4 py-2 rounded-lg bg-slate-100 hover:bg-[#E7E3D7] text-[#0C2340] text-sm font-semibold transition-colors cursor-pointer"
                   >
                     Reset Filter
                   </button>
@@ -681,7 +681,7 @@ export default function PeluangPage() {
                 {filteredLokers.map((item) => (
                   <article
                     key={item.id}
-                    className="bg-white border border-[#0C2340]/12 rounded-2xl p-5 sm:p-6 flex flex-col justify-between gap-5 shadow-xs hover:border-[#0C2340]/30 hover:shadow-md transition-all group"
+                    className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 flex flex-col justify-between gap-5 shadow-xs hover:border-slate-300 hover:shadow-md transition-all group"
                   >
                     <div className="space-y-3.5">
                       {/* Badge Atas */}
@@ -727,7 +727,7 @@ export default function PeluangPage() {
 
                       {/* Rujukan Alumni UMS */}
                       {item.alumniRujukan && (
-                        <div className="bg-[#F3F1EA]/80 rounded-lg p-2.5 flex items-start gap-2 border border-[#0C2340]/8">
+                        <div className="bg-slate-100/80 rounded-lg p-2.5 flex items-start gap-2 border border-[#0C2340]/8">
                           <UserCheck className="w-4 h-4 text-[#0C2340] shrink-0 mt-0.5" />
                           <div className="min-w-0 text-xs">
                             <span className="font-semibold text-[#0C2340] block">Rujukan Alumni UMS:</span>
@@ -750,7 +750,7 @@ export default function PeluangPage() {
                     </div>
 
                     {/* Tombol Aksi Bawah */}
-                    <div className="pt-3 border-t border-[#0C2340]/10 flex items-center justify-between gap-3">
+                    <div className="pt-3 border-t border-slate-200 flex items-center justify-between gap-3">
                       {item.gajiPerkiraan ? (
                         <div className="text-xs text-[#0C2340] font-bold">
                           {item.gajiPerkiraan}
@@ -780,7 +780,7 @@ export default function PeluangPage() {
       {/* DIALOG 1: AJUKAN MENTORING                                                */}
       {/* ========================================================================= */}
       <Dialog open={mentorModalOpen} onOpenChange={setMentorModalOpen}>
-        <DialogContent className="bg-white border border-[#0C2340]/15 rounded-2xl max-w-lg">
+        <DialogContent className="bg-white border border-slate-200 rounded-2xl max-w-lg">
           <DialogHeader>
             <DialogTitle className="text-lg font-bold text-[#0C2340]">
               {selectedMentor ? `Ajukan Mentoring ke ${selectedMentor.nama}` : 'Cari Mentor Alumni UMS'}
@@ -835,10 +835,10 @@ export default function PeluangPage() {
                     setRequestForm({ ...requestForm, nama: e.target.value });
                     clearMentorError('nama');
                   }}
-                  className={`w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border text-base text-[#0C2340] focus:outline-hidden focus:ring-2 ${
+                  className={`w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-white border text-base text-[#0C2340] focus:outline-hidden focus:ring-2 ${
                     fieldErrors.nama
                       ? 'border-red-500 focus:ring-red-200'
-                      : 'border-[#0C2340]/20 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
+                      : 'border-slate-300 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
                   }`}
                 />
                 {fieldErrors.nama && (
@@ -857,7 +857,7 @@ export default function PeluangPage() {
                     id="mentor-req-prodi"
                     value={requestForm.prodi}
                     onChange={(e) => setRequestForm({ ...requestForm, prodi: e.target.value })}
-                    className="w-full min-h-[44px] px-3 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-base text-[#0C2340]"
+                    className="w-full min-h-[44px] px-3 py-2 rounded-lg bg-white border border-slate-300 text-base text-[#0C2340]"
                   >
                     <option value="">Pilih Prodi (Opsional)</option>
                     {FAKULTAS_PRODI_UMS.map((group) => (
@@ -879,7 +879,7 @@ export default function PeluangPage() {
                     id="mentor-req-angkatan"
                     value={requestForm.angkatan}
                     onChange={(e) => setRequestForm({ ...requestForm, angkatan: e.target.value })}
-                    className="w-full min-h-[44px] px-3 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-base text-[#0C2340]"
+                    className="w-full min-h-[44px] px-3 py-2 rounded-lg bg-white border border-slate-300 text-base text-[#0C2340]"
                   >
                     <option value="">Pilih Angkatan (Opsional)</option>
                     {ANGKATAN_OPTIONS.map((tahun) => (
@@ -909,10 +909,10 @@ export default function PeluangPage() {
                     setRequestForm({ ...requestForm, whatsapp: e.target.value });
                     clearMentorError('whatsapp');
                   }}
-                  className={`w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border text-base text-[#0C2340] focus:outline-hidden focus:ring-2 ${
+                  className={`w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-white border text-base text-[#0C2340] focus:outline-hidden focus:ring-2 ${
                     fieldErrors.whatsapp
                       ? 'border-red-500 focus:ring-red-200'
-                      : 'border-[#0C2340]/20 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
+                      : 'border-slate-300 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
                   }`}
                 />
                 <p id="hint-mentor-wa" className="mt-1 text-sm text-[#475569]">
@@ -933,7 +933,7 @@ export default function PeluangPage() {
                   id="mentor-req-topik"
                   value={requestForm.topik}
                   onChange={(e) => setRequestForm({ ...requestForm, topik: e.target.value })}
-                  className="w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-base text-[#0C2340]"
+                  className="w-full min-h-[44px] px-3.5 py-2 rounded-lg bg-white border border-slate-300 text-base text-[#0C2340]"
                 >
                   <option value="Ulas CV & Portofolio">Ulas CV &amp; Portofolio</option>
                   <option value="Persiapan Wawancara Kerja">Persiapan Wawancara Kerja</option>
@@ -952,11 +952,11 @@ export default function PeluangPage() {
                   placeholder="Ceritakan singkat bidang yang sedang kamu tuju..."
                   value={requestForm.catatan}
                   onChange={(e) => setRequestForm({ ...requestForm, catatan: e.target.value })}
-                  className="w-full px-3.5 py-2 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-base text-[#0C2340]"
+                  className="w-full px-3.5 py-2 rounded-lg bg-white border border-slate-300 text-base text-[#0C2340]"
                 />
               </div>
 
-              <div className="bg-[#F3F1EA]/75 border border-[#0C2340]/12 rounded-xl p-3.5">
+              <div className="bg-slate-100/75 border border-slate-200 rounded-xl p-3.5">
                 <label
                   htmlFor="mentor-req-consent"
                   className="flex items-start gap-2.5 min-h-[44px] cursor-pointer text-base text-[#0C2340] leading-[1.5]"
@@ -989,7 +989,7 @@ export default function PeluangPage() {
                 <button
                   type="button"
                   onClick={() => setMentorModalOpen(false)}
-                  className="min-h-[44px] px-4 py-2 rounded-lg bg-[#F3F1EA] text-[#0C2340] text-base font-semibold cursor-pointer"
+                  className="min-h-[44px] px-4 py-2 rounded-lg bg-slate-100 text-[#0C2340] text-base font-semibold cursor-pointer"
                 >
                   Batal
                 </button>
@@ -1038,10 +1038,10 @@ export default function PeluangPage() {
       {/* DIALOG 2: DETAIL LOWONGAN KERJA & CARA MELAMAR                           */}
       {/* ========================================================================= */}
       <Dialog open={detailLokerOpen} onOpenChange={setDetailLokerOpen}>
-        <DialogContent className="max-w-2xl bg-[#FDFCF7] border border-[#0C2340]/20 p-6 sm:p-8 rounded-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl bg-white border border-slate-200 shadow-xl p-6 sm:p-8 rounded-2xl max-h-[90vh] overflow-y-auto">
           {selectedLoker && (
             <div className="space-y-6">
-              <DialogHeader className="space-y-2 border-b border-[#0C2340]/10 pb-4">
+              <DialogHeader className="space-y-2 border-b border-slate-200 pb-4">
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800">
                     {selectedLoker.tipeKerja}
@@ -1049,7 +1049,7 @@ export default function PeluangPage() {
                   <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800">
                     {selectedLoker.sistemKerja}
                   </span>
-                  <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-[#F3F1EA] text-[#475569]">
+                  <span className="px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-[#475569]">
                     {selectedLoker.industri}
                   </span>
                 </div>
@@ -1072,14 +1072,14 @@ export default function PeluangPage() {
               {/* Rujukan & Gaji */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 {selectedLoker.alumniRujukan && (
-                  <div className="bg-white border border-[#0C2340]/12 rounded-xl p-3.5">
+                  <div className="bg-white border border-slate-200 rounded-xl p-3.5">
                     <span className="text-xs font-semibold text-[#475569] block">Rujukan Alumni UMS:</span>
                     <span className="text-sm font-bold text-[#0C2340] mt-0.5 block">
                       {selectedLoker.alumniRujukan}
                     </span>
                   </div>
                 )}
-                <div className="bg-white border border-[#0C2340]/12 rounded-xl p-3.5">
+                <div className="bg-white border border-slate-200 rounded-xl p-3.5">
                   <span className="text-xs font-semibold text-[#475569] block">Estimasi Gaji / Kompensasi:</span>
                   <span className="text-sm font-bold text-emerald-800 mt-0.5 block">
                     {selectedLoker.gajiPerkiraan || 'Sesuai Pengalaman (Diskusikan saat Wawancara)'}
@@ -1092,7 +1092,7 @@ export default function PeluangPage() {
                 <h4 className="text-sm font-bold uppercase tracking-wider text-[#0C2340]">
                   Deskripsi Pekerjaan
                 </h4>
-                <p className="text-sm text-[#475569] leading-relaxed whitespace-pre-line bg-white border border-[#0C2340]/10 rounded-xl p-4">
+                <p className="text-sm text-[#475569] leading-relaxed whitespace-pre-line bg-white border border-slate-200 rounded-xl p-4">
                   {selectedLoker.deskripsi}
                 </p>
               </div>
@@ -1102,7 +1102,7 @@ export default function PeluangPage() {
                 <h4 className="text-sm font-bold uppercase tracking-wider text-[#0C2340]">
                   Kualifikasi &amp; Persyaratan
                 </h4>
-                <ul className="text-sm text-[#475569] space-y-2 bg-white border border-[#0C2340]/10 rounded-xl p-4 list-disc list-inside">
+                <ul className="text-sm text-[#475569] space-y-2 bg-white border border-slate-200 rounded-xl p-4 list-disc list-inside">
                   {selectedLoker.kualifikasi.map((kual, idx) => (
                     <li key={idx} className="leading-relaxed">
                       {kual}
@@ -1129,7 +1129,7 @@ export default function PeluangPage() {
                   <button
                     type="button"
                     onClick={() => handleCopyContact(selectedLoker.kontakLamar)}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white text-[#0C2340] hover:bg-[#F3F1EA] text-xs font-semibold transition-colors cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white text-[#0C2340] hover:bg-slate-100 text-xs font-semibold transition-colors cursor-pointer"
                   >
                     {isCopied ? (
                       <>
@@ -1164,7 +1164,7 @@ export default function PeluangPage() {
                 <button
                   type="button"
                   onClick={() => setDetailLokerOpen(false)}
-                  className="min-h-[44px] px-5 py-2 rounded-lg bg-[#F3F1EA] hover:bg-[#E7E3D7] text-[#0C2340] text-sm font-semibold transition-colors cursor-pointer"
+                  className="min-h-[44px] px-5 py-2 rounded-lg bg-slate-100 hover:bg-[#E7E3D7] text-[#0C2340] text-sm font-semibold transition-colors cursor-pointer"
                 >
                   Tutup Rincian
                 </button>
@@ -1178,8 +1178,8 @@ export default function PeluangPage() {
       {/* DIALOG 3: BAGIKAN INFO LOWONGAN KERJA BARU                                */}
       {/* ========================================================================= */}
       <Dialog open={shareLokerOpen} onOpenChange={setShareLokerOpen}>
-        <DialogContent className="max-w-xl bg-[#FDFCF7] border border-[#0C2340]/20 p-6 sm:p-8 rounded-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader className="space-y-1.5 border-b border-[#0C2340]/10 pb-4">
+        <DialogContent className="max-w-xl bg-white border border-slate-200 shadow-xl p-6 sm:p-8 rounded-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader className="space-y-1.5 border-b border-slate-200 pb-4">
             <DialogTitle className="text-xl font-bold text-[#0C2340]">
               Bagikan Info Lowongan Kerja
             </DialogTitle>
@@ -1216,7 +1216,7 @@ export default function PeluangPage() {
                     placeholder="Contoh: Digital Marketing Specialist"
                     value={lokerForm.posisi}
                     onChange={(e) => setLokerForm({ ...lokerForm, posisi: e.target.value })}
-                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                   />
                   {lokerFormErrors.posisi && (
                     <p className="mt-1 text-xs text-red-600 font-medium">{lokerFormErrors.posisi}</p>
@@ -1233,7 +1233,7 @@ export default function PeluangPage() {
                     placeholder="Contoh: PT Kreasi Digital Nusantara"
                     value={lokerForm.perusahaan}
                     onChange={(e) => setLokerForm({ ...lokerForm, perusahaan: e.target.value })}
-                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                   />
                   {lokerFormErrors.perusahaan && (
                     <p className="mt-1 text-xs text-red-600 font-medium">{lokerFormErrors.perusahaan}</p>
@@ -1250,7 +1250,7 @@ export default function PeluangPage() {
                   <select
                     value={lokerForm.industri}
                     onChange={(e) => setLokerForm({ ...lokerForm, industri: e.target.value })}
-                    className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                    className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                   >
                     <option value="Teknologi Informasi & Software">Teknologi Informasi &amp; Software</option>
                     <option value="Konstruksi & Rekayasa Bangunan">Konstruksi &amp; Rekayasa</option>
@@ -1271,7 +1271,7 @@ export default function PeluangPage() {
                   <select
                     value={lokerForm.wilayah}
                     onChange={(e) => setLokerForm({ ...lokerForm, wilayah: e.target.value })}
-                    className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                    className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                   >
                     {WILAYAH_JABODETABEK.map((w) => (
                       <option key={w.id} value={w.nama}>
@@ -1297,7 +1297,7 @@ export default function PeluangPage() {
                         tipeKerja: e.target.value as 'Penuh Waktu' | 'Paruh Waktu' | 'Magang' | 'Kontrak',
                       })
                     }
-                    className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                    className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                   >
                     <option value="Penuh Waktu">Penuh Waktu (Full-time)</option>
                     <option value="Paruh Waktu">Paruh Waktu (Part-time)</option>
@@ -1318,7 +1318,7 @@ export default function PeluangPage() {
                         sistemKerja: e.target.value as 'On-site' | 'Hybrid' | 'Remote',
                       })
                     }
-                    className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                    className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                   >
                     <option value="Hybrid">Hybrid (Sebagian Kantor / Rumah)</option>
                     <option value="On-site">On-site (Wajib di Kantor/Lokasi)</option>
@@ -1338,7 +1338,7 @@ export default function PeluangPage() {
                     placeholder="Contoh: Rp 6.000.000 - Rp 9.000.000"
                     value={lokerForm.gajiPerkiraan}
                     onChange={(e) => setLokerForm({ ...lokerForm, gajiPerkiraan: e.target.value })}
-                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                   />
                 </div>
 
@@ -1352,7 +1352,7 @@ export default function PeluangPage() {
                     placeholder="Contoh: Andi Wijaya (Informatika '18)"
                     value={lokerForm.alumniRujukan}
                     onChange={(e) => setLokerForm({ ...lokerForm, alumniRujukan: e.target.value })}
-                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                   />
                   {lokerFormErrors.alumniRujukan && (
                     <p className="mt-1 text-xs text-red-600 font-medium">{lokerFormErrors.alumniRujukan}</p>
@@ -1371,7 +1371,7 @@ export default function PeluangPage() {
                   placeholder={"Contoh:\n- Pendidikan minimal D3/S1\n- Menguasai tools relevan\n- Komunikatif & teliti"}
                   value={lokerForm.kualifikasi}
                   onChange={(e) => setLokerForm({ ...lokerForm, kualifikasi: e.target.value })}
-                  className="w-full px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                  className="w-full px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                 />
                 {lokerFormErrors.kualifikasi && (
                   <p className="mt-1 text-xs text-red-600 font-medium">{lokerFormErrors.kualifikasi}</p>
@@ -1389,7 +1389,7 @@ export default function PeluangPage() {
                   placeholder="Jelaskan peran harian, ruang lingkup proyek, atau benefit yang didapatkan..."
                   value={lokerForm.deskripsi}
                   onChange={(e) => setLokerForm({ ...lokerForm, deskripsi: e.target.value })}
-                  className="w-full px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                  className="w-full px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                 />
                 {lokerFormErrors.deskripsi && (
                   <p className="mt-1 text-xs text-red-600 font-medium">{lokerFormErrors.deskripsi}</p>
@@ -1408,7 +1408,7 @@ export default function PeluangPage() {
                     placeholder="recruitment@kantor.com atau WA 0812..."
                     value={lokerForm.kontakLamar}
                     onChange={(e) => setLokerForm({ ...lokerForm, kontakLamar: e.target.value })}
-                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                   />
                   {lokerFormErrors.kontakLamar && (
                     <p className="mt-1 text-xs text-red-600 font-medium">{lokerFormErrors.kontakLamar}</p>
@@ -1424,16 +1424,16 @@ export default function PeluangPage() {
                     placeholder="https://perusahaan.com/karir"
                     value={lokerForm.linkLamar}
                     onChange={(e) => setLokerForm({ ...lokerForm, linkLamar: e.target.value })}
-                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                   />
                 </div>
               </div>
 
-              <div className="flex justify-end gap-2.5 pt-4 border-t border-[#0C2340]/10">
+              <div className="flex justify-end gap-2.5 pt-4 border-t border-slate-200">
                 <button
                   type="button"
                   onClick={() => setShareLokerOpen(false)}
-                  className="min-h-[44px] px-4 py-2 rounded-lg bg-[#F3F1EA] text-[#0C2340] text-sm font-semibold cursor-pointer"
+                  className="min-h-[44px] px-4 py-2 rounded-lg bg-slate-100 text-[#0C2340] text-sm font-semibold cursor-pointer"
                 >
                   Batal
                 </button>

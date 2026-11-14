@@ -7,33 +7,29 @@
 }
 
 :root {
-  /* Token warna dasar & brand eksisting (tanpa palet baru) */
-  --background: #FAF9F5;
-  --surface-base: #FDFCF7;
-  --surface-tint: #F3F1EA;
-  --surface-brand: #0C2340;
+  /* Design Tokens Bersih & Elegan - Identitas Resmi IKA UMS */
+  --background: #F8FAFC;       /* Slate-50: bersih, tenang, jernih */
+  --surface-base: #FFFFFF;     /* Pure White untuk kartu & kontainer */
+  --surface-tint: #F1F5F9;     /* Slate-100 untuk aksen latar sekunder */
+  --surface-brand: #0C2340;    /* Navy Resmi IKA UMS */
   --surface-brand-deep: #08182E;
-  --foreground: #0C1222;
+  --foreground: #0F172A;       /* Slate-900: kontras tinggi & nyaman dibaca */
+  --foreground-muted: #475569; /* Slate-600: teks sekunder terukur */
+  
   --brand-navy: #0C2340;
-  --brand-gold-text: #92400E;
-  --brand-gold-accent: #F59E0B;
+  --brand-navy-light: #1E3A8A;
+  --brand-gold-text: #B45309;  /* Amber-700: kontras tinggi WCAG AAA */
+  --brand-gold-accent: #D97706;/* Amber-600: aksen hangat Muhammadiyah */
 
-  /* Token elevasi kartu halus */
-  --card-border: rgba(12, 35, 64, 0.12);
-  --card-border-strong: rgba(12, 35, 64, 0.2);
-  --card-shadow:
-    0 1px 2px rgba(12, 35, 64, 0.04),
-    0 6px 18px -6px rgba(12, 35, 64, 0.06);
-  --card-shadow-hover:
-    0 2px 6px rgba(12, 35, 64, 0.05),
-    0 12px 28px -8px rgba(12, 35, 64, 0.1);
+  /* Token Elevasi & Border Bersih (Crisp, Tanpa AI Gradients Bertumpuk) */
+  --card-border: #E2E8F0;      /* Slate-200 tegas 1px */
+  --card-border-hover: #CBD5E1;/* Slate-300 saat hover */
+  --card-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.05), 0 1px 2px -1px rgba(15, 23, 42, 0.03);
+  --card-shadow-hover: 0 4px 6px -1px rgba(15, 23, 42, 0.07), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
 
-  /* Variabel kontrol sistem pola latar (ubah di sini untuk menyesuaikan global) */
-  --pattern-color: #0C2340;
-  --pattern-opacity: 0.055;
-  --pattern-size: 64px;
-  --pattern-tile: url("/patterns/pattern-dots.svg");
-  --pattern-fade: linear-gradient(to bottom, #000 0%, #000 100%);
+  /* Variabel sistem layout */
+  --pattern-color: transparent;
+  --pattern-opacity: 0;
 }
 
 body {
@@ -51,159 +47,62 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #FAF9F5;
+  background: #F1F5F9;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #D8D5CC;
+  background: #CBD5E1;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #B0ABA0;
+  background: #94A3B8;
 }
 
 /* ============================================================================
-   Sistem Pola Latar Halus (IKA UMS Wilayah Jabodetabek)
-   Semua pola diletakkan pada pseudo-element ::before (non-interaktif / aria-hidden)
+   Sistem Latar Bersih & Modern (Bebas AI Slop & Bebas Noise Debu)
    ============================================================================ */
 
+/* Menghilangkan lapisan noise berpasir yang membuat layar kotor */
 .page-grain-base {
   position: relative;
-  isolation: isolate;
+  background-color: transparent;
 }
 
 .page-grain-base::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-color: var(--brand-navy);
-  opacity: 0.028;
-  -webkit-mask-image: url("/patterns/pattern-grain.svg");
-  -webkit-mask-repeat: repeat;
-  -webkit-mask-size: 80px 80px;
-  mask-image: url("/patterns/pattern-grain.svg");
-  mask-repeat: repeat;
-  mask-size: 80px 80px;
+  display: none !important;
 }
 
+/* Pattern surface dibuat tenang dan minimalis sebagai pemisah arsitektural */
 .pattern-surface {
   position: relative;
-  isolation: isolate;
-  overflow-x: clip;
+  background-color: transparent;
 }
 
 .pattern-surface::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background-color: var(--pattern-color, #0C2340);
-  opacity: var(--pattern-opacity, 0.055);
-  -webkit-mask-image: var(--pattern-tile), var(--pattern-fade);
-  -webkit-mask-size: var(--pattern-size, 64px) var(--pattern-size, 64px), 100% 100%;
-  -webkit-mask-repeat: repeat, no-repeat;
-  -webkit-mask-position: top center, center;
-  -webkit-mask-composite: source-in;
-  mask-image: var(--pattern-tile), var(--pattern-fade);
-  mask-size: var(--pattern-size, 64px) var(--pattern-size, 64px), 100% 100%;
-  mask-repeat: repeat, no-repeat;
-  mask-position: top center, center;
-  mask-composite: intersect;
+  display: none !important;
 }
 
-/* Fallback bagi browser sangat lama tanpa mask-composite */
-@supports not (mask-composite: intersect) {
-  .pattern-surface::before {
-    background-color: transparent;
-    background-image: var(--pattern-tile);
-    background-repeat: repeat;
-    background-size: var(--pattern-size, 64px) var(--pattern-size, 64px);
-    -webkit-mask-image: var(--pattern-fade);
-    -webkit-mask-repeat: no-repeat;
-    -webkit-mask-size: 100% 100%;
-    mask-image: var(--pattern-fade);
-    mask-repeat: no-repeat;
-    mask-size: 100% 100%;
-  }
-}
-
-/* 4 Varian Pola */
-.pattern-dots {
-  --pattern-tile: url("/patterns/pattern-dots.svg");
-  --pattern-size: 24px;
-  --pattern-opacity: 0.055;
-}
-
-.pattern-batik {
-  --pattern-tile: url("/patterns/pattern-batik.svg");
-  --pattern-size: 64px;
-  --pattern-opacity: 0.065;
-}
-
-.pattern-contour {
-  --pattern-tile: url("/patterns/pattern-contour.svg");
-  --pattern-size: 180px;
-  --pattern-opacity: 0.075;
-}
-
-.pattern-grain {
-  --pattern-tile: url("/patterns/pattern-grain.svg");
-  --pattern-size: 80px;
-  --pattern-opacity: 0.032;
-}
-
-/* Tone Permukaan Brand */
+/* Tone Permukaan */
 .pattern-tone-light {
-  --pattern-color: #0C2340;
+  background-color: #FFFFFF;
 }
 
 .pattern-tone-tint {
-  background-color: var(--surface-tint);
-  --pattern-color: #0C2340;
+  background-color: #F8FAFC;
 }
 
 .pattern-tone-brand {
   background-color: var(--surface-brand);
   color: #FFFFFF;
-  --pattern-color: #FDFCF7;
 }
 
 .pattern-tone-brand-deep {
   background-color: var(--surface-brand-deep);
-  color: #FDFCF7;
-  --pattern-color: #FDFCF7;
+  color: #FFFFFF;
 }
 
-/* Preset Masking Tepi Agar Pola Memudar Halus */
-.pattern-fade-none {
-  --pattern-fade: linear-gradient(to bottom, #000 0%, #000 100%);
-}
-
-.pattern-fade-soft-edges {
-  --pattern-fade: radial-gradient(ellipse 92% 86% at 50% 50%, #000 42%, rgba(0, 0, 0, 0.45) 75%, transparent 100%);
-}
-
-.pattern-fade-right-focus {
-  --pattern-fade: radial-gradient(ellipse 74% 88% at 86% 42%, #000 18%, rgba(0, 0, 0, 0.45) 54%, transparent 90%);
-}
-
-.pattern-fade-top-right {
-  --pattern-fade: radial-gradient(ellipse 68% 82% at 92% 14%, #000 20%, rgba(0, 0, 0, 0.42) 52%, transparent 86%);
-}
-
-.pattern-fade-bottom-soft {
-  --pattern-fade: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.75) 22%, #000 65%, transparent 100%);
-}
-
-.pattern-fade-radial-soft {
-  --pattern-fade: radial-gradient(ellipse 84% 92% at 88% 50%, #000 22%, rgba(0, 0, 0, 0.48) 58%, transparent 95%);
-}
-
-/* Kartu dengan elevasi & border halus brand */
+/* Kartu Bersih & Proporsional */
 .surface-card {
   background-color: #FFFFFF;
   border: 1px solid var(--card-border);
@@ -211,41 +110,28 @@ body {
 }
 
 .surface-card-soft {
-  background-color: #FDFCF7;
+  background-color: #F8FAFC;
   border: 1px solid var(--card-border);
-  box-shadow: 0 1px 2px rgba(12, 35, 64, 0.03);
 }
 
 .surface-card-interactive {
-  transition: box-shadow 180ms ease, border-color 180ms ease;
+  transition: border-color 150ms ease, box-shadow 150ms ease, transform 150ms ease;
 }
 
 .surface-card-interactive:hover {
-  border-color: var(--card-border-strong);
+  border-color: var(--card-border-hover);
   box-shadow: var(--card-shadow-hover);
 }
 
-/* Pembatas gradient tipis pengganti border lurus keras */
+/* Pembatas garis minimalis */
 .section-gradient-line {
   height: 1px;
   width: 100%;
-  background: linear-gradient(
-    to right,
-    transparent 0%,
-    rgba(12, 35, 64, 0.14) 20%,
-    rgba(146, 64, 14, 0.22) 50%,
-    rgba(12, 35, 64, 0.14) 80%,
-    transparent 100%
-  );
+  background: #E2E8F0;
 }
 
-/* Matikan animasi atau pergeseran visual ketika user memilih reduced motion */
+/* Accessibility: Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
-  .pattern-surface::before {
-    animation: none !important;
-    transition: none !important;
-  }
-
   .surface-card-interactive {
     transition: none;
   }

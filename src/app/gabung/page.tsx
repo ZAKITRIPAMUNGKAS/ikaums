@@ -260,13 +260,13 @@ export default function GabungPage() {
   const whatsappShareUrl = `https://wa.me/?text=${shareText}`;
 
   return (
-    <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
+    <div className="min-h-screen bg-slate-50 text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
       <Navbar />
 
-      <main className="flex-grow page-grain-base w-full">
+      <main className="flex-grow  w-full">
         {!submitted ? (
           <>
-            <section className="bg-[#FAF9F5] border-b border-[#0C2340]/10">
+            <section className="bg-slate-50 border-b border-slate-200">
               <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-7 sm:pt-8 sm:pb-8">
                 <nav aria-label="Breadcrumb" className="text-sm text-[#475569] mb-3 flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2">
@@ -327,7 +327,7 @@ export default function GabungPage() {
 
               {/* Langkah 1: Data Inti */}
               <fieldset className="space-y-5">
-                <legend className="text-base font-bold text-[#0C2340] pb-2 border-b border-[#0C2340]/10 w-full">
+                <legend className="text-base font-bold text-[#0C2340] pb-2 border-b border-slate-200 w-full">
                   Data Dasar Alumni (Wajib)
                 </legend>
 
@@ -349,10 +349,10 @@ export default function GabungPage() {
                         setFormData({ ...formData, namaLengkap: e.target.value });
                         clearError('namaLengkap');
                       }}
-                      className={`w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-[#FDFCF7] border text-base text-[#0C2340] focus:outline-hidden focus:ring-2 ${
+                      className={`w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-white border text-base text-[#0C2340] focus:outline-hidden focus:ring-2 ${
                         fieldErrors.namaLengkap
                           ? 'border-red-500 focus:ring-red-200'
-                          : 'border-[#0C2340]/20 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
+                          : 'border-slate-300 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
                       }`}
                     />
                     <p id="hint-nama" className="mt-1.5 text-base text-[#475569] leading-[1.5]">
@@ -379,10 +379,10 @@ export default function GabungPage() {
                         setFormData({ ...formData, angkatan: e.target.value });
                         clearError('angkatan');
                       }}
-                      className={`w-full min-h-[44px] px-3.5 py-2.5 rounded-lg bg-[#FDFCF7] border text-base text-[#0C2340] focus:outline-hidden focus:ring-2 ${
+                      className={`w-full min-h-[44px] px-3.5 py-2.5 rounded-lg bg-white border text-base text-[#0C2340] focus:outline-hidden focus:ring-2 ${
                         fieldErrors.angkatan
                           ? 'border-red-500 focus:ring-red-200'
-                          : 'border-[#0C2340]/20 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
+                          : 'border-slate-300 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
                       }`}
                     >
                       <option value="">Pilih Tahun Angkatan</option>
@@ -413,10 +413,10 @@ export default function GabungPage() {
                         setFormData({ ...formData, prodi: e.target.value });
                         clearError('prodi');
                       }}
-                      className={`w-full min-h-[44px] px-3.5 py-2.5 rounded-lg bg-[#FDFCF7] border text-base text-[#0C2340] focus:outline-hidden focus:ring-2 ${
+                      className={`w-full min-h-[44px] px-3.5 py-2.5 rounded-lg bg-white border text-base text-[#0C2340] focus:outline-hidden focus:ring-2 ${
                         fieldErrors.prodi
                           ? 'border-red-500 focus:ring-red-200'
-                          : 'border-[#0C2340]/20 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
+                          : 'border-slate-300 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
                       }`}
                     >
                       <option value="">Pilih Program Studi</option>
@@ -450,7 +450,7 @@ export default function GabungPage() {
                         setFormData({ ...formData, wilayah: e.target.value });
                         clearError('wilayah');
                       }}
-                      className="w-full min-h-[44px] px-3.5 py-2.5 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 focus:border-[#0C2340] focus:outline-hidden focus:ring-2 focus:ring-[#0C2340]/10 text-base text-[#0C2340]"
+                      className="w-full min-h-[44px] px-3.5 py-2.5 rounded-lg bg-white border border-slate-300 focus:border-[#0C2340] focus:outline-hidden focus:ring-2 focus:ring-[#0C2340]/10 text-base text-[#0C2340]"
                     >
                       {WILAYAH_JABODETABEK.map((reg) => (
                         <option key={reg.id} value={reg.nama}>
@@ -478,10 +478,10 @@ export default function GabungPage() {
                         setFormData({ ...formData, whatsapp: e.target.value });
                         clearError('whatsapp');
                       }}
-                      className={`w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-[#FDFCF7] border text-base text-[#0C2340] focus:outline-hidden focus:ring-2 ${
+                      className={`w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-white border text-base text-[#0C2340] focus:outline-hidden focus:ring-2 ${
                         fieldErrors.whatsapp
                           ? 'border-red-500 focus:ring-red-200'
-                          : 'border-[#0C2340]/20 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
+                          : 'border-slate-300 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
                       }`}
                     />
                     <p id="hint-wa" className="mt-1.5 text-base text-[#475569] leading-[1.5]">
@@ -511,10 +511,10 @@ export default function GabungPage() {
                         setFormData({ ...formData, email: e.target.value });
                         clearError('email');
                       }}
-                      className={`w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-[#FDFCF7] border text-base text-[#0C2340] focus:outline-hidden focus:ring-2 ${
+                      className={`w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-white border text-base text-[#0C2340] focus:outline-hidden focus:ring-2 ${
                         fieldErrors.email
                           ? 'border-red-500 focus:ring-red-200'
-                          : 'border-[#0C2340]/20 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
+                          : 'border-slate-300 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
                       }`}
                     />
                     <p id="hint-email" className="mt-1.5 text-base text-[#475569] leading-[1.5]">
@@ -530,7 +530,7 @@ export default function GabungPage() {
               </fieldset>
 
               {/* Langkah 2 (Opsional & Dapat Dilewati) */}
-              <div className="border-t border-[#0C2340]/10 pt-5">
+              <div className="border-t border-slate-200 pt-5">
                 <button
                   type="button"
                   onClick={() => setShowOptional((v) => !v)}
@@ -556,7 +556,7 @@ export default function GabungPage() {
                         placeholder="Misalnya: Analis Keuangan, Wirausaha, Guru"
                         value={formData.pekerjaan}
                         onChange={(e) => setFormData({ ...formData, pekerjaan: e.target.value })}
-                        className="w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 focus:border-[#0C2340] focus:outline-hidden text-base text-[#0C2340]"
+                        className="w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-white border border-slate-300 focus:border-[#0C2340] focus:outline-hidden text-base text-[#0C2340]"
                       />
                     </div>
                     <div>
@@ -570,7 +570,7 @@ export default function GabungPage() {
                         placeholder="Nama perusahaan atau usaha sendiri"
                         value={formData.perusahaan}
                         onChange={(e) => setFormData({ ...formData, perusahaan: e.target.value })}
-                        className="w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 focus:border-[#0C2340] focus:outline-hidden text-base text-[#0C2340]"
+                        className="w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-white border border-slate-300 focus:border-[#0C2340] focus:outline-hidden text-base text-[#0C2340]"
                       />
                     </div>
                     <div className="sm:col-span-2 space-y-2">
@@ -588,7 +588,7 @@ export default function GabungPage() {
                             });
                             if (!checked) clearError('mentorContactConsent');
                           }}
-                          className="mt-1.5 w-4 h-4 rounded border-[#0C2340]/30 accent-[#0C2340]"
+                          className="mt-1.5 w-4 h-4 rounded border-slate-300 accent-[#0C2340]"
                         />
                         <span>
                           Saya bersedia menjadi mentor sukarela (ulas CV, persiapan wawancara, atau diskusi bidang kerja) untuk sesama alumni UMS.
@@ -596,7 +596,7 @@ export default function GabungPage() {
                       </label>
 
                       {formData.siapMentoring && (
-                        <div className="ml-0 sm:ml-7 bg-[#F3F1EA]/80 border border-[#0C2340]/12 rounded-xl p-3.5">
+                        <div className="ml-0 sm:ml-7 bg-slate-100 border border-slate-200 rounded-xl p-3.5">
                           <label
                             htmlFor="mentorContactConsent"
                             className="flex items-start gap-3 min-h-[44px] py-1 cursor-pointer text-base text-[#0C2340] leading-[1.5]"
@@ -616,7 +616,7 @@ export default function GabungPage() {
                                 });
                                 clearError('mentorContactConsent');
                               }}
-                              className="mt-1.5 w-4 h-4 rounded border-[#0C2340]/30 accent-[#0C2340]"
+                              className="mt-1.5 w-4 h-4 rounded border-slate-300 accent-[#0C2340]"
                             />
                             <span>
                               Saya mengizinkan pengurus meneruskan nomor WhatsApp atau email saya kepada pemohon mentoring terverifikasi saat dijadwalkan.{' '}
@@ -636,7 +636,7 @@ export default function GabungPage() {
               </div>
 
               {/* Persetujuan Terpisah */}
-              <div className="bg-[#F3F1EA]/70 border border-[#0C2340]/10 rounded-xl p-4 sm:p-5 space-y-3">
+              <div className="bg-slate-100 border border-slate-200 rounded-xl p-4 sm:p-5 space-y-3">
                 <span className="block text-sm font-bold uppercase tracking-wider text-[#0C2340]">
                   Izin Penggunaan Data
                 </span>
@@ -652,7 +652,7 @@ export default function GabungPage() {
                       setFormData({ ...formData, agreeConsent: e.target.checked });
                       clearError('agreeConsent');
                     }}
-                    className="mt-1.5 w-4 h-4 rounded border-[#0C2340]/30 accent-[#0C2340] shrink-0"
+                    className="mt-1.5 w-4 h-4 rounded border-slate-300 accent-[#0C2340] shrink-0"
                   />
                   <span>
                     Saya menyetujui Kebijakan Privasi dan Ketentuan Komunitas agar data ini dicatat pengurus untuk verifikasi alumni dan kabar kopdar.{' '}
@@ -687,14 +687,14 @@ export default function GabungPage() {
                   </p>
                 )}
 
-                <div className="pt-2 border-t border-[#0C2340]/10">
+                <div className="pt-2 border-t border-slate-200">
                   <label htmlFor="tampilDiDirektori" className="flex items-start gap-3 min-h-[44px] py-1.5 cursor-pointer text-base text-[#475569] leading-[1.5]">
                     <input
                       id="tampilDiDirektori"
                       type="checkbox"
                       checked={formData.tampilDiDirektori}
                       onChange={(e) => setFormData({ ...formData, tampilDiDirektori: e.target.checked })}
-                      className="mt-1.5 w-4 h-4 rounded border-[#0C2340]/30 accent-[#0C2340] shrink-0"
+                      className="mt-1.5 w-4 h-4 rounded border-slate-300 accent-[#0C2340] shrink-0"
                     />
                     <span>
                       Saya mengizinkan nama, prodi, angkatan, dan wilayah domisili saya tampil di Daftar Anggota khusus anggota terdaftar.{' '}
@@ -704,7 +704,7 @@ export default function GabungPage() {
                 </div>
               </div>
 
-              <div className="pt-2 border-t border-[#0C2340]/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="pt-2 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <span className="text-sm sm:text-base text-[#475569] leading-[1.5]">
                   Pemeriksaan data dilakukan {COMMUNITY_PLACEHOLDERS.verificationSla}.
                 </span>
@@ -751,7 +751,7 @@ export default function GabungPage() {
               </p>
             </div>
 
-            <div className="bg-[#F3F1EA] border border-[#0C2340]/10 rounded-xl p-4 sm:p-5 text-left text-base text-[#334155] space-y-2 leading-[1.6]">
+            <div className="bg-slate-100 border border-slate-200 rounded-xl p-4 sm:p-5 text-left text-base text-[#334155] space-y-2 leading-[1.6]">
               <p className="font-bold text-[#0C2340]">Apa langkah selanjutnya?</p>
               <ul className="list-disc pl-5 space-y-1.5 text-[#475569]">
                 <li>
@@ -787,13 +787,13 @@ export default function GabungPage() {
               <button
                 type="button"
                 onClick={() => setSubmitted(false)}
-                className="inline-flex items-center justify-center min-h-[44px] px-5 py-2.5 rounded-lg bg-[#F3F1EA] hover:bg-[#E7E3D7] text-[#0C2340] text-sm font-semibold transition-colors cursor-pointer"
+                className="inline-flex items-center justify-center min-h-[44px] px-5 py-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-[#0C2340] text-sm font-semibold transition-colors cursor-pointer"
               >
                 Ubah data formulir
               </button>
               <Link
                 href="/"
-                className="inline-flex items-center justify-center min-h-[44px] px-5 py-2.5 rounded-lg border border-[#0C2340]/15 hover:border-[#0C2340]/35 text-[#0C2340] text-sm font-semibold transition-colors"
+                className="inline-flex items-center justify-center min-h-[44px] px-5 py-2.5 rounded-lg border border-slate-200 hover:border-slate-300 text-[#0C2340] text-sm font-semibold transition-colors"
               >
                 Kembali ke Beranda
               </Link>

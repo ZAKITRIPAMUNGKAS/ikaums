@@ -24,7 +24,7 @@ export function MobileKopdarCta() {
     <div
       aria-hidden={formVisible}
       className={cn(
-        'fixed inset-x-0 bottom-0 z-40 border-t border-[#0C2340]/15 bg-[#FDFCF7]/95 backdrop-blur-md transition-transform duration-200 lg:hidden',
+        'fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 backdrop-blur-md shadow-lg transition-transform duration-200 lg:hidden',
         formVisible && 'pointer-events-none translate-y-full'
       )}
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}

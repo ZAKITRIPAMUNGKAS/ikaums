@@ -21,21 +21,21 @@ export function RegionInterestBoard({
   ).length;
 
   return (
-    <div className="surface-card rounded-xl p-5 sm:p-6">
+    <div className="rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-xs">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex items-start gap-3">
           <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#0C2340] text-white">
             <Users className="h-4 w-4" aria-hidden="true" />
           </span>
           <div>
-            <h3 className="text-lg font-bold text-[#0C2340]">Papan Minat per Wilayah</h3>
-            <p className="mt-1 max-w-[58ch] text-base leading-[1.6] text-[#475569]">
+            <h3 className="text-lg font-bold text-slate-900">Papan Minat per Wilayah</h3>
+            <p className="mt-1 max-w-[58ch] text-sm sm:text-base leading-[1.6] text-slate-600">
               Target awal {target} peminat per wilayah. Angka baru ditampilkan setelah minimal{' '}
               {minVisible} isian terkumpul supaya tidak menyesatkan.
             </p>
           </div>
         </div>
-        <span className="rounded-md bg-[#F3F1EA] px-2.5 py-1 text-sm font-semibold text-[#92400E]">
+        <span className="rounded-md bg-amber-50 border border-amber-200 px-2.5 py-1 text-xs sm:text-sm font-semibold text-[#B45309]">
           {reachedRegions} dari {WILAYAH_JABODETABEK.length} wilayah tercapai
         </span>
       </div>
@@ -55,21 +55,21 @@ export function RegionInterestBoard({
             <li
               key={region.id}
               aria-label={`${region.nama}: ${status}`}
-              className="min-h-[68px] rounded-lg border border-[#0C2340]/12 bg-[#FDFCF7] px-3.5 py-3"
+              className="min-h-[68px] rounded-lg border border-slate-200 bg-slate-50/70 px-3.5 py-3 transition-colors hover:bg-slate-50"
             >
               <div className="flex items-baseline justify-between gap-2">
-                <span className="text-base font-bold text-[#0C2340]">{region.nama}</span>
+                <span className="text-sm sm:text-base font-bold text-slate-900">{region.nama}</span>
                 <span
-                  className={`text-sm font-semibold whitespace-nowrap ${
-                    reached ? 'text-[#92400E]' : 'text-[#475569]'
+                  className={`text-xs sm:text-sm font-semibold whitespace-nowrap ${
+                    reached ? 'text-[#B45309]' : 'text-slate-500'
                   }`}
                 >
                   {status}
                 </span>
               </div>
-              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#0C2340]/10" aria-hidden="true">
+              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-200" aria-hidden="true">
                 <div
-                  className="h-full rounded-full bg-[#92400E] transition-[width] duration-300"
+                  className="h-full rounded-full bg-[#D97706] transition-[width] duration-300"
                   style={{ width: `${percentage}%` }}
                 />
               </div>
@@ -78,7 +78,7 @@ export function RegionInterestBoard({
         })}
       </ul>
 
-      <p className="mt-4 text-sm leading-[1.6] text-[#475569]">
+      <p className="mt-4 text-xs sm:text-sm leading-[1.6] text-slate-500">
         Papan ini menghitung isian yang tersimpan di peramban ini. Rekap gabungan baru
         tersedia setelah pendataan tersambung ke pengurus.
       </p>

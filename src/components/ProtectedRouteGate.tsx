@@ -58,12 +58,12 @@ export function ProtectedRouteGate({ variant }: ProtectedRouteGateProps) {
   const copy = VARIANT_CONTENT[variant];
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F3F1EA] text-[#111827] font-sans">
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 font-sans">
       <Navbar />
       <main className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-16">
         <section
           aria-labelledby="protected-route-title"
-          className="w-full max-w-xl bg-[#FDFCF7] border border-[#CBD5E1] rounded-2xl p-6 sm:p-8 shadow-sm"
+          className="w-full max-w-xl bg-white border border-[#CBD5E1] rounded-2xl p-6 sm:p-8 shadow-sm"
         >
           <div className="inline-flex items-center gap-2 text-sm font-semibold text-[#92400E] mb-3">
             {variant === 'admin' ? (
@@ -87,14 +87,14 @@ export function ProtectedRouteGate({ variant }: ProtectedRouteGateProps) {
             {copy.description}
           </p>
 
-          <p className="mt-3 text-base text-[#475569] bg-[#F3F1EA] border border-[#E2E8F0] rounded-xl p-4 leading-[1.6]">
+          <p className="mt-3 text-base text-[#475569] bg-slate-100 border border-[#E2E8F0] rounded-xl p-4 leading-[1.6]">
             {copy.detail}
           </p>
 
           <div className="mt-6 flex flex-col sm:flex-row gap-3">
             <Link
               href={copy.loginHref}
-              className="inline-flex items-center justify-center gap-2 min-h-[48px] px-5 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] active:scale-[0.99] text-[#FDFCF7] text-base font-semibold transition-all duration-150"
+              className="inline-flex items-center justify-center gap-2 min-h-[48px] px-5 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] active:scale-[0.99] text-white text-base font-semibold transition-all duration-150"
             >
               <span>{copy.loginLabel}</span>
               <ArrowRight className="w-4 h-4" aria-hidden="true" />

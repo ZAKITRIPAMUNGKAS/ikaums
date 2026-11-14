@@ -285,16 +285,16 @@ export default function MapLibreExplorer({
   };
 
   return (
-    <div className="relative w-full h-full bg-[#F6F5F0] overflow-hidden rounded-xl border border-[#0C2340]/15 shadow-xs">
+    <div className="relative w-full h-full bg-[#F6F5F0] overflow-hidden rounded-xl border border-slate-200 shadow-xs">
       <div ref={mapContainerRef} className="w-full h-full absolute inset-0" />
 
-      <div className="absolute top-3.5 right-3.5 z-10 flex flex-col gap-1 bg-white/95 backdrop-blur-xs border border-[#0C2340]/15 rounded-lg p-1 shadow-sm">
+      <div className="absolute top-3.5 right-3.5 z-10 flex flex-col gap-1 bg-white/95 backdrop-blur-xs border border-slate-200 rounded-lg p-1 shadow-sm">
         <button
           type="button"
           onClick={handleZoomIn}
           title="Perbesar Peta"
           aria-label="Perbesar Peta"
-          className="w-11 h-11 flex items-center justify-center rounded text-[#0C2340] hover:bg-[#F3F1EA] transition-colors cursor-pointer"
+          className="w-11 h-11 flex items-center justify-center rounded text-[#0C2340] hover:bg-slate-100 transition-colors cursor-pointer"
         >
           <Plus className="w-4 h-4" />
         </button>
@@ -303,7 +303,7 @@ export default function MapLibreExplorer({
           onClick={handleZoomOut}
           title="Perkecil Peta"
           aria-label="Perkecil Peta"
-          className="w-11 h-11 flex items-center justify-center rounded text-[#0C2340] hover:bg-[#F3F1EA] transition-colors cursor-pointer"
+          className="w-11 h-11 flex items-center justify-center rounded text-[#0C2340] hover:bg-slate-100 transition-colors cursor-pointer"
         >
           <Minus className="w-4 h-4" />
         </button>
@@ -313,13 +313,13 @@ export default function MapLibreExplorer({
           onClick={handleResetView}
           title="Tampilkan Seluruh Jabodetabek"
           aria-label="Tampilkan Seluruh Jabodetabek"
-          className="w-11 h-11 flex items-center justify-center rounded text-[#0C2340] hover:bg-[#F3F1EA] transition-colors cursor-pointer"
+          className="w-11 h-11 flex items-center justify-center rounded text-[#0C2340] hover:bg-slate-100 transition-colors cursor-pointer"
         >
           <RotateCcw className="w-4 h-4" />
         </button>
       </div>
 
-      <div className="absolute bottom-3 left-3 sm:bottom-3.5 sm:left-3.5 z-10 bg-white/95 backdrop-blur-xs border border-[#0C2340]/15 rounded-lg p-2.5 sm:p-3 shadow-sm max-w-[250px]">
+      <div className="absolute bottom-3 left-3 sm:bottom-3.5 sm:left-3.5 z-10 bg-white/95 backdrop-blur-xs border border-slate-200 rounded-lg p-2.5 sm:p-3 shadow-sm max-w-[250px]">
         {IS_DEMO_MODE ? (
           <>
             <div className="flex items-center justify-between gap-3 mb-1.5">
@@ -346,7 +346,7 @@ export default function MapLibreExplorer({
           </span>
         )}
 
-        <span className="block text-xs text-[#475569] mt-2 leading-snug border-t border-[#0C2340]/10 pt-1.5">
+        <span className="block text-xs text-[#475569] mt-2 leading-snug border-t border-slate-200 pt-1.5">
           Batas wilayah resmi BPS · geoBoundaries (CC BY 3.0 IGO).
         </span>
       </div>

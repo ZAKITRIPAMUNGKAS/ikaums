@@ -101,10 +101,10 @@ export default function KepengurusanPage() {
   const demoWilayah = getWilayahDemoList();
 
   return (
-    <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
+    <div className="min-h-screen bg-slate-50 text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
       <Navbar />
 
-      <main className="flex-grow page-grain-base w-full">
+      <main className="flex-grow  w-full">
         <PatternSection
           as="section"
           variant="dots"
@@ -112,7 +112,7 @@ export default function KepengurusanPage() {
           fade="right-focus"
           patternOpacity={0.055}
           patternSize="24px"
-          className="border-b border-[#0C2340]/10"
+          className="border-b border-slate-200"
           contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 md:pt-8 md:pb-10"
         >
           {/* Breadcrumb */}
@@ -146,7 +146,7 @@ export default function KepengurusanPage() {
             <div className="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-2.5 sm:gap-3 shrink-0 w-full sm:w-auto">
               <Link
                 href="/tentang"
-                className="inline-flex items-center justify-center min-h-[44px] px-4 py-2.5 rounded-lg bg-white border border-[#0C2340]/15 hover:border-[#0C2340]/35 text-[#0C2340] text-sm sm:text-base font-semibold text-center transition-colors"
+                className="inline-flex items-center justify-center min-h-[44px] px-4 py-2.5 rounded-lg bg-white border border-slate-200 hover:border-slate-300 text-[#0C2340] text-sm sm:text-base font-semibold text-center transition-colors"
               >
                 Tentang Komunitas
               </Link>
@@ -164,7 +164,7 @@ export default function KepengurusanPage() {
         {/* Kontak Sekretariat & Hubungan PP IKA UMS */}
         <section
           aria-labelledby="heading-kontak-resmi"
-          className="mb-12 bg-[#F3F1EA] border border-[#0C2340]/12 rounded-2xl p-5 sm:p-7 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
+          className="mb-12 bg-slate-100 border border-slate-200 rounded-2xl p-5 sm:p-7 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start"
         >
           <div className="lg:col-span-5 space-y-2">
             <span className="inline-block text-sm font-semibold text-[#92400E]">
@@ -180,19 +180,19 @@ export default function KepengurusanPage() {
           </div>
 
           <dl className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm sm:text-base">
-            <div className="bg-white rounded-xl p-4 border border-[#0C2340]/10 space-y-1">
+            <div className="bg-white rounded-xl p-4 border border-slate-200 space-y-1">
               <dt className="text-xs font-semibold text-[#475569]">Email Sekretariat</dt>
               <dd className="font-semibold text-[#0C2340] break-words">
                 {COMMUNITY_PLACEHOLDERS.contactEmail}
               </dd>
             </div>
-            <div className="bg-white rounded-xl p-4 border border-[#0C2340]/10 space-y-1">
+            <div className="bg-white rounded-xl p-4 border border-slate-200 space-y-1">
               <dt className="text-xs font-semibold text-[#475569]">WhatsApp Pengurus</dt>
               <dd className="font-semibold text-[#0C2340] break-words">
                 {COMMUNITY_PLACEHOLDERS.contactWhatsapp}
               </dd>
             </div>
-            <div className="bg-white rounded-xl p-4 border border-[#0C2340]/10 sm:col-span-2 space-y-1.5">
+            <div className="bg-white rounded-xl p-4 border border-slate-200 sm:col-span-2 space-y-1.5">
               <dt className="text-xs font-semibold text-[#475569]">Koordinasi dengan PP IKA UMS Pusat</dt>
               <dd className="font-medium text-[#0C2340] leading-relaxed">
                 {COMMUNITY_PLACEHOLDERS.ppIkaUmsStatus}
@@ -215,7 +215,7 @@ export default function KepengurusanPage() {
 
         {/* Section 1: Pengurus Harian */}
         <section
-          className="pb-14 border-b border-[#0C2340]/10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start"
+          className="pb-14 border-b border-slate-200 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start"
           aria-labelledby="heading-inti"
         >
           <div className="lg:col-span-4 space-y-4">
@@ -228,7 +228,7 @@ export default function KepengurusanPage() {
               </p>
             </div>
 
-            <div className="bg-[#F3F1EA] border border-[#0C2340]/10 rounded-xl p-4 space-y-1.5">
+            <div className="bg-slate-100 border border-slate-200 rounded-xl p-4 space-y-1.5">
               <div className="flex items-center gap-2 text-sm font-bold text-[#0C2340]">
                 <Info className="w-4 h-4 text-[#92400E] shrink-0" />
                 <span>Status Susunan Prapeluncuran</span>
@@ -239,14 +239,14 @@ export default function KepengurusanPage() {
             </div>
           </div>
 
-          <div className="lg:col-span-8 bg-white border border-[#0C2340]/12 rounded-2xl divide-y divide-[#0C2340]/10 overflow-hidden shadow-xs">
+          <div className="lg:col-span-8 bg-white border border-slate-200 rounded-2xl divide-y divide-[#0C2340]/10 overflow-hidden shadow-xs">
             {PENGURUS_INTI.map((item) => (
               <div
                 key={item.jabatan}
-                className="p-5 sm:px-7 sm:py-6 flex items-start gap-4 sm:gap-5 hover:bg-[#FDFCF7]/80 transition-colors"
+                className="p-5 sm:px-7 sm:py-6 flex items-start gap-4 sm:gap-5 hover:bg-white/80 transition-colors"
               >
                 <div
-                  className="w-10 h-10 rounded-xl bg-[#F3F1EA] border border-[#0C2340]/10 flex items-center justify-center text-xs font-extrabold text-[#0C2340] shrink-0 mt-0.5"
+                  className="w-10 h-10 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-xs font-extrabold text-[#0C2340] shrink-0 mt-0.5"
                   aria-hidden="true"
                 >
                   {item.kode}
@@ -271,7 +271,7 @@ export default function KepengurusanPage() {
         </section>
 
         {/* Section 2: Bidang Program Kerja */}
-        <section className="py-14 border-b border-[#0C2340]/10" aria-labelledby="heading-bidang">
+        <section className="py-14 border-b border-slate-200" aria-labelledby="heading-bidang">
           <div className="max-w-2xl mb-8 space-y-2">
             <h2 id="heading-bidang" className="text-2xl font-bold tracking-tight text-[#0C2340]">
               Bidang Program Kerja
@@ -281,7 +281,7 @@ export default function KepengurusanPage() {
             </p>
           </div>
 
-          <div className="bg-white border border-[#0C2340]/12 rounded-2xl overflow-hidden shadow-xs grid grid-cols-1 md:grid-cols-2">
+          <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs grid grid-cols-1 md:grid-cols-2">
             {BIDANG_KERJA.map((bidang, idx) => {
               const isRightCol = idx % 2 === 1;
               const isTopRow = idx < 2;
@@ -289,12 +289,12 @@ export default function KepengurusanPage() {
                 <article
                   key={bidang.jabatan}
                   className={`p-6 sm:p-8 flex flex-col justify-between gap-5 ${
-                    !isRightCol ? 'md:border-r md:border-[#0C2340]/10' : ''
+                    !isRightCol ? 'md:border-r md:border-slate-200' : ''
                   } ${
                     isTopRow
-                      ? 'border-b border-[#0C2340]/10'
+                      ? 'border-b border-slate-200'
                       : idx === 2
-                        ? 'border-b md:border-b-0 border-[#0C2340]/10'
+                        ? 'border-b md:border-b-0 border-slate-200'
                         : ''
                   }`}
                 >
@@ -356,10 +356,10 @@ export default function KepengurusanPage() {
 
           {!IS_DEMO_MODE ? (
             <>
-              <div className="hidden md:block bg-white border border-[#0C2340]/12 rounded-2xl overflow-hidden shadow-xs">
+              <div className="hidden md:block bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="bg-[#F3F1EA] border-b border-[#0C2340]/12 text-xs font-bold text-[#0C2340]">
+                    <tr className="bg-slate-100 border-b border-slate-200 text-xs font-bold text-[#0C2340]">
                       <th className="py-3.5 px-6 whitespace-nowrap w-[22%]">Wilayah</th>
                       <th className="py-3.5 px-5 w-[28%]">Cakupan Area</th>
                       <th className="py-3.5 px-5 w-[28%]">Koordinator Wilayah</th>
@@ -368,7 +368,7 @@ export default function KepengurusanPage() {
                   </thead>
                   <tbody className="divide-y divide-[#0C2340]/10 text-base">
                     {WILAYAH_JABODETABEK.map((w) => (
-                      <tr key={w.id} className="hover:bg-[#FDFCF7] transition-colors">
+                      <tr key={w.id} className="hover:bg-white transition-colors">
                         <td className="py-4 px-6 align-top">
                           <span className="block font-bold text-[#0C2340] whitespace-nowrap">{w.nama}</span>
                           <span className="block text-sm text-[#475569] whitespace-nowrap mt-0.5">{w.provinsi}</span>
@@ -389,7 +389,7 @@ export default function KepengurusanPage() {
               </div>
 
               {/* Mobile Single-Column Clean List */}
-              <div className="md:hidden divide-y divide-[#0C2340]/12 border-y border-[#0C2340]/12 bg-white rounded-xl px-4">
+              <div className="md:hidden divide-y divide-[#0C2340]/12 border-y border-slate-200 bg-white rounded-xl px-4">
                 {WILAYAH_JABODETABEK.map((w) => (
                   <article key={w.id} className="py-4 space-y-1.5">
                     <div className="flex flex-wrap items-baseline justify-between gap-2">
@@ -405,10 +405,10 @@ export default function KepengurusanPage() {
               </div>
             </>
           ) : (
-            <div className="bg-white border border-[#0C2340]/12 rounded-2xl overflow-hidden shadow-xs">
+            <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="bg-[#F3F1EA] border-b border-[#0C2340]/12 text-xs font-bold text-[#0C2340]">
+                  <tr className="bg-slate-100 border-b border-slate-200 text-xs font-bold text-[#0C2340]">
                     <th className="py-3.5 px-6 whitespace-nowrap">Wilayah</th>
                     <th className="py-3.5 px-5">Titik Kumpul</th>
                     <th className="py-3.5 px-5">Koordinator ({DEMO_BADGE_LABEL})</th>
@@ -417,7 +417,7 @@ export default function KepengurusanPage() {
                 </thead>
                 <tbody className="divide-y divide-[#0C2340]/10 text-base">
                   {demoWilayah.map((w) => (
-                    <tr key={w.id} className="hover:bg-[#FDFCF7] transition-colors">
+                    <tr key={w.id} className="hover:bg-white transition-colors">
                       <td className="py-4 px-6 align-top">
                         <span className="block font-bold text-[#0C2340]">{w.nama}</span>
                         <span className="block text-sm text-[#475569]">{w.provinsi}</span>
@@ -442,7 +442,7 @@ export default function KepengurusanPage() {
         </section>
 
         {/* Penutup Bersih di Atas Kertas Krem (tanpa blok navy menumpuk di atas footer) */}
-        <section className="pt-8 border-t border-[#0C2340]/12 flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <section className="pt-8 border-t border-slate-200 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="space-y-1.5 max-w-xl">
             <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-[#0C2340]">
               Bersedia Jadi Penghubung Wilayahmu?

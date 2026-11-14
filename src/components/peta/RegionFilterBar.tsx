@@ -30,14 +30,14 @@ export default function RegionFilterBar({
               className={`min-h-[44px] px-3.5 py-2 rounded-lg text-xs transition-all duration-150 flex items-center gap-1.5 cursor-pointer border ${
                 isSelected
                   ? 'bg-[#0C2340] text-white border-[#0C2340] shadow-xs font-semibold'
-                  : 'bg-white text-[#334155] border-[#0C2340]/15 hover:bg-[#FDFCF7] hover:border-[#0C2340]/40 hover:text-[#0C2340] font-medium'
+                  : 'bg-white text-[#334155] border-slate-200 hover:bg-slate-50 hover:border-slate-400 hover:text-[#0C2340] font-medium'
               }`}
             >
               <span>{r.regionName}</span>
               {IS_DEMO_MODE && (
                 <span
                   className={`text-[11px] px-1.5 py-0.5 rounded font-semibold leading-none ${
-                    isSelected ? 'bg-white/15 text-[#F59E0B]' : 'bg-[#F3F1EA] text-[#475569]'
+                    isSelected ? 'bg-white/15 text-[#F59E0B]' : 'bg-slate-100 text-[#475569]'
                   }`}
                 >
                   {r.count}

@@ -138,10 +138,10 @@ export default function DirektoriPage() {
 
   if (!IS_DEMO_MODE) {
     return (
-      <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans">
+      <div className="min-h-screen bg-slate-50 text-[#0C2340] flex flex-col font-sans">
         <Navbar />
 
-        <main className="flex-grow page-grain-base pattern-surface pattern-dots pattern-tone-light pattern-fade-soft-edges w-full py-10 sm:py-16">
+        <main className="flex-grow w-full py-10 sm:py-16">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 space-y-6 relative z-[1]">
             <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-[#475569]">
               <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
@@ -152,7 +152,7 @@ export default function DirektoriPage() {
             </nav>
 
             <section className="surface-card rounded-2xl p-6 sm:p-10 space-y-6">
-              <div className="w-12 h-12 rounded-xl bg-[#F3F1EA] border border-[#0C2340]/12 flex items-center justify-center text-[#0C2340]">
+              <div className="w-12 h-12 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-[#0C2340]">
                 <Lock className="w-5 h-5 text-[#92400E]" />
               </div>
 
@@ -170,7 +170,7 @@ export default function DirektoriPage() {
 
               {/* 3 Jaminan Privasi */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 pt-2">
-                <div className="p-4 rounded-xl bg-[#FDFCF7] border border-[#0C2340]/10 space-y-1">
+                <div className="p-4 rounded-xl bg-white border border-slate-200 space-y-1">
                   <div className="flex items-center gap-1.5 text-xs font-bold text-[#0C2340]">
                     <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0" />
                     <span>Kontak Rahasia</span>
@@ -180,7 +180,7 @@ export default function DirektoriPage() {
                   </p>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#FDFCF7] border border-[#0C2340]/10 space-y-1">
+                <div className="p-4 rounded-xl bg-white border border-slate-200 space-y-1">
                   <div className="flex items-center gap-1.5 text-xs font-bold text-[#0C2340]">
                     <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0" />
                     <span>Verifikasi Manual</span>
@@ -190,7 +190,7 @@ export default function DirektoriPage() {
                   </p>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#FDFCF7] border border-[#0C2340]/10 space-y-1">
+                <div className="p-4 rounded-xl bg-white border border-slate-200 space-y-1">
                   <div className="flex items-center gap-1.5 text-xs font-bold text-[#0C2340]">
                     <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0" />
                     <span>Kendali Penuh</span>
@@ -201,7 +201,7 @@ export default function DirektoriPage() {
                 </div>
               </div>
 
-              <div className="bg-[#F3F1EA] border border-[#0C2340]/10 rounded-xl p-4 sm:p-5 text-sm sm:text-base text-[#475569] space-y-1.5 leading-[1.6]">
+              <div className="bg-slate-100 border border-slate-200 rounded-xl p-4 sm:p-5 text-sm sm:text-base text-[#475569] space-y-1.5 leading-[1.6]">
                 <p className="font-bold text-[#0C2340]">Bagaimana cara melihat direktori?</p>
                 <p>
                   Jika sudah pernah mendaftar, silakan masuk ke akun menggunakan nomor WhatsApp yang terdaftar. Jika belum, daftar terlebih dahulu untuk verifikasi gratis.
@@ -218,7 +218,7 @@ export default function DirektoriPage() {
                 </Link>
                 <Link
                   href="/gabung"
-                  className="inline-flex items-center justify-center min-h-[48px] px-5 py-3 rounded-lg bg-white border border-[#0C2340]/20 hover:border-[#0C2340]/45 active:scale-[0.99] text-[#0C2340] text-base font-semibold transition-all duration-150"
+                  className="inline-flex items-center justify-center min-h-[48px] px-5 py-3 rounded-lg bg-white border border-slate-300 hover:border-[#0C2340]/45 active:scale-[0.99] text-[#0C2340] text-base font-semibold transition-all duration-150"
                 >
                   Belum mendaftar? Daftar sekarang
                 </Link>
@@ -233,10 +233,10 @@ export default function DirektoriPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-50 text-[#0C2340] flex flex-col font-sans">
       <Navbar />
 
-      <main className="flex-grow page-grain-base w-full">
+      <main className="flex-grow w-full">
         <PatternSection
           as="section"
           variant="dots"
@@ -244,7 +244,7 @@ export default function DirektoriPage() {
           fade="right-focus"
           patternOpacity={0.055}
           patternSize="24px"
-          className="border-b border-[#0C2340]/10"
+          className="border-b border-slate-200"
           contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 md:pt-8 md:pb-10"
         >
           <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-2 text-xs text-[#475569] mb-4">
@@ -275,7 +275,7 @@ export default function DirektoriPage() {
 
             <Link
               href="/peta"
-              className="inline-flex items-center justify-center min-h-[44px] text-sm sm:text-base font-semibold text-[#0C2340] hover:text-[#92400E] border border-[#0C2340]/20 bg-white px-4 py-2.5 rounded-lg self-start lg:self-auto transition-colors shrink-0"
+              className="inline-flex items-center justify-center min-h-[44px] text-sm sm:text-base font-semibold text-[#0C2340] hover:text-[#92400E] border border-slate-300 bg-white px-4 py-2.5 rounded-lg self-start lg:self-auto transition-colors shrink-0"
             >
               Lihat Sebaran Wilayah
             </Link>
@@ -297,7 +297,7 @@ export default function DirektoriPage() {
                   setSearchTerm(e.target.value);
                   setVisibleCount(4);
                 }}
-                className="w-full min-h-[44px] pl-10 pr-4 py-2.5 bg-[#FDFCF7] border border-[#0C2340]/15 rounded-lg text-base text-[#0C2340] placeholder:text-[#64748B] focus:outline-none focus:border-[#0C2340]"
+                className="w-full min-h-[44px] pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-lg text-base text-[#0C2340] placeholder:text-[#64748B] focus:outline-none focus:border-[#0C2340]"
               />
             </div>
 
@@ -309,14 +309,14 @@ export default function DirektoriPage() {
                   setVisibleCount(4);
                 }}
                 aria-label="Filter wilayah Jabodetabek"
-                className="w-full md:w-auto min-h-[44px] bg-[#FDFCF7] border border-[#0C2340]/15 text-base text-[#0C2340] font-medium px-3.5 py-2.5 rounded-lg focus:outline-none focus:border-[#0C2340]"
+                className="w-full md:w-auto min-h-[44px] bg-white border border-slate-200 text-base text-[#0C2340] font-medium px-3.5 py-2.5 rounded-lg focus:outline-none focus:border-[#0C2340]"
               >
                 {regions.map((reg) => (
                   <option key={reg} value={reg}>{reg}</option>
                 ))}
               </select>
 
-              <label className="w-full md:w-auto min-h-[44px] inline-flex items-center justify-center md:justify-start gap-2 px-3.5 py-2.5 rounded-lg border border-[#0C2340]/15 bg-[#FDFCF7] text-base font-medium text-[#0C2340] cursor-pointer select-none">
+              <label className="w-full md:w-auto min-h-[44px] inline-flex items-center justify-center md:justify-start gap-2 px-3.5 py-2.5 rounded-lg border border-slate-200 bg-white text-base font-medium text-[#0C2340] cursor-pointer select-none">
                 <input
                   type="checkbox"
                   checked={mentorOnly}
@@ -356,7 +356,7 @@ export default function DirektoriPage() {
 
         {/* Alumni Single-Column List (Progressive Reveal) */}
         {filteredAlumni.length === 0 ? (
-          <div className="bg-white border border-dashed border-[#0C2340]/20 rounded-xl p-10 text-center space-y-3 max-w-3xl">
+          <div className="bg-white border border-dashed border-slate-300 rounded-xl p-10 text-center space-y-3 max-w-3xl">
             <p className="text-base font-semibold text-[#0C2340]">
               Belum ada profil yang cocok dengan filter saat ini.
             </p>
@@ -387,10 +387,10 @@ export default function DirektoriPage() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.98 }}
                   transition={{ duration: 0.2 }}
-                  className="bg-white border border-[#0C2340]/12 hover:border-[#0C2340]/40 rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs transition-colors"
+                  className="bg-white border border-slate-200 hover:border-[#0C2340]/40 rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs transition-colors"
                 >
                   <div className="flex items-start gap-3.5 min-w-0">
-                    <div className="w-12 h-12 rounded-full overflow-hidden border border-[#0C2340]/10 bg-[#F3F1EA] shrink-0 relative">
+                    <div className="w-12 h-12 rounded-full overflow-hidden border border-slate-200 bg-slate-100 shrink-0 relative">
                       {alumni.avatarUrl ? (
                         <Image
                           src={alumni.avatarUrl}
@@ -426,7 +426,7 @@ export default function DirektoriPage() {
                       setActiveProfileTab('tentang');
                       setSelectedAlumni(alumni);
                     }}
-                    className="w-full sm:w-auto shrink-0 inline-flex items-center justify-center gap-1.5 min-h-[44px] px-4 py-2.5 rounded-lg bg-[#F3F1EA] hover:bg-[#0C2340] text-[#0C2340] hover:text-white text-sm font-semibold transition-colors cursor-pointer"
+                    className="w-full sm:w-auto shrink-0 inline-flex items-center justify-center gap-1.5 min-h-[44px] px-4 py-2.5 rounded-lg bg-slate-100 hover:bg-[#0C2340] text-[#0C2340] hover:text-white text-sm font-semibold transition-colors cursor-pointer"
                   >
                     <span>Lihat profil</span>
                     <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
@@ -440,7 +440,7 @@ export default function DirektoriPage() {
                 <button
                   type="button"
                   onClick={() => setVisibleCount((prev) => prev + 4)}
-                  className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-lg border border-[#0C2340]/20 bg-white hover:bg-[#F3F1EA] text-[#0C2340] text-base font-semibold transition-colors cursor-pointer"
+                  className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 text-[#0C2340] text-base font-semibold transition-colors cursor-pointer"
                 >
                   Tampilkan profil lainnya ({filteredAlumni.length - visibleCount} lagi)
                 </button>
@@ -452,12 +452,12 @@ export default function DirektoriPage() {
         {/* Profile Detail Modal */}
         <Dialog open={!!selectedAlumni} onOpenChange={(open) => !open && setSelectedAlumni(null)}>
           {selectedAlumni && (
-            <DialogContent className="max-w-xl bg-white border border-[#0C2340]/15 rounded-2xl p-0 overflow-hidden shadow-2xl">
+            <DialogContent className="max-w-xl bg-white border border-slate-200 rounded-2xl p-0 overflow-hidden shadow-2xl">
               <div className="bg-[#0C2340] h-20 relative" />
 
               <div className="px-6 sm:px-8 pb-8 -mt-10 relative">
                 <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-5">
-                  <div className="w-20 h-20 rounded-full border-4 border-white overflow-hidden bg-[#F3F1EA] shadow-sm relative shrink-0">
+                  <div className="w-20 h-20 rounded-full border-4 border-white overflow-hidden bg-slate-100 shadow-sm relative shrink-0">
                     {selectedAlumni.avatarUrl ? (
                       <Image
                         src={selectedAlumni.avatarUrl}
@@ -479,7 +479,7 @@ export default function DirektoriPage() {
                       onClick={() => toggleConnection(selectedAlumni.id)}
                       className={`min-h-[44px] px-4 py-2 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                         connectionRequested[selectedAlumni.id]
-                          ? 'bg-[#0C2340]/10 text-[#0C2340] border border-[#0C2340]/20'
+                          ? 'bg-[#0C2340]/10 text-[#0C2340] border border-slate-300'
                           : 'bg-[#0C2340] hover:bg-[#16325C] text-white shadow-xs'
                       }`}
                     >
@@ -488,7 +488,7 @@ export default function DirektoriPage() {
                     <button
                       type="button"
                       onClick={() => handleSendMessage(selectedAlumni.id)}
-                      className="min-h-[44px] text-xs font-semibold text-[#0C2340] border border-[#0C2340]/20 px-3.5 py-2 rounded-lg hover:bg-[#FDFCF7] transition-colors flex items-center gap-1.5 cursor-pointer"
+                      className="min-h-[44px] text-xs font-semibold text-[#0C2340] border border-slate-300 px-3.5 py-2 rounded-lg hover:bg-white transition-colors flex items-center gap-1.5 cursor-pointer"
                     >
                       <MessageSquare className="w-3.5 h-3.5" />
                       <span>{messagesSent[selectedAlumni.id] ? 'Sapaan Terkirim' : 'Kirim Pesan'}</span>
@@ -540,7 +540,7 @@ export default function DirektoriPage() {
                     </div>
                   )}
                   {activeProfileTab === 'pengalaman' && (
-                    <div className="bg-[#FDFCF7] p-4 rounded-lg border border-[#0C2340]/10 space-y-1">
+                    <div className="bg-white p-4 rounded-lg border border-slate-200 space-y-1">
                       <p className="font-bold text-[#0C2340]">{selectedAlumni.pekerjaan}</p>
                       <span className="block text-sm text-[#475569]">
                         {selectedAlumni.perusahaan || 'Praktisi Independen'} · Domisili {selectedAlumni.wilayah}
@@ -555,7 +555,7 @@ export default function DirektoriPage() {
                       {selectedAlumni.keahlian.map((skill, idx) => (
                         <span
                           key={idx}
-                          className="bg-[#F3F1EA] text-[#0C2340] px-3 py-1 rounded-md text-xs font-medium"
+                          className="bg-slate-100 text-[#0C2340] px-3 py-1 rounded-md text-xs font-medium"
                         >
                           {skill}
                         </span>

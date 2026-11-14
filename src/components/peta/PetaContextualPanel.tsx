@@ -48,7 +48,7 @@ export default function PetaContextualPanel({ region }: PetaContextualPanelProps
           </h2>
 
           <div className="space-y-3 mb-6">
-            <div className="bg-[#FDFCF7] border border-[#0C2340]/10 rounded-lg p-3.5">
+            <div className="bg-slate-50 border border-slate-200 rounded-lg p-3.5">
               <div className="text-sm font-bold text-[#0C2340] mb-1 flex items-center gap-1.5">
                 <MapPin className="w-4 h-4 text-[#92400E]" />
                 <span>Cakupan Area</span>
@@ -58,7 +58,7 @@ export default function PetaContextualPanel({ region }: PetaContextualPanelProps
               </p>
             </div>
 
-            <div className="bg-[#FDFCF7] border border-[#0C2340]/10 rounded-lg p-3.5">
+            <div className="bg-slate-50 border border-slate-200 rounded-lg p-3.5">
               <div className="text-sm font-bold text-[#0C2340] mb-1">
                 Jumlah Alumni Terdata
               </div>
@@ -67,7 +67,7 @@ export default function PetaContextualPanel({ region }: PetaContextualPanelProps
               </p>
             </div>
 
-            <div className="bg-[#FDFCF7] border border-[#0C2340]/10 rounded-lg p-3.5">
+            <div className="bg-slate-50 border border-slate-200 rounded-lg p-3.5">
               <div className="text-sm font-bold text-[#0C2340] mb-1 flex items-center gap-1.5">
                 <Calendar className="w-4 h-4 text-[#0C2340]" />
                 <span>Rencana Kopdar Pertama</span>
@@ -91,13 +91,13 @@ export default function PetaContextualPanel({ region }: PetaContextualPanelProps
 
             <Link
               href="/kepengurusan"
-              className="w-full min-h-[44px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-white hover:bg-[#FDFCF7] border border-[#0C2340]/20 text-sm font-semibold text-[#0C2340] transition-colors"
+              className="w-full min-h-[44px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-white hover:bg-slate-50 border border-slate-300 text-sm font-semibold text-[#0C2340] transition-colors"
             >
               <span>Lihat Pengurus &amp; Korwil</span>
             </Link>
           </div>
 
-          <div className="mt-4 pt-3 border-t border-[#0C2340]/10 flex items-start gap-2 text-xs text-[#475569] leading-snug">
+          <div className="mt-4 pt-3 border-t border-slate-200 flex items-start gap-2 text-xs text-[#475569] leading-snug">
             <ShieldCheck className="w-4 h-4 text-[#16A34A] shrink-0 mt-0.5" />
             <span>
               Situs tidak menyimpan atau memetakan alamat rumah maupun titik GPS anggota.
@@ -125,19 +125,19 @@ export default function PetaContextualPanel({ region }: PetaContextualPanelProps
         </h2>
 
         <div className="grid grid-cols-3 gap-2.5 mb-5">
-          <div className="bg-[#FDFCF7] border border-[#0C2340]/10 rounded-lg p-3">
+          <div className="bg-slate-50 border border-slate-200 rounded-lg p-3">
             <div className="text-xs font-medium text-[#475569] mb-1">Alumni</div>
             <div className="text-xl font-extrabold text-[#0C2340]">{region.count}</div>
             <div className="text-xs text-[#475569]">contoh</div>
           </div>
 
-          <div className="bg-[#FDFCF7] border border-[#0C2340]/10 rounded-lg p-3">
+          <div className="bg-slate-50 border border-slate-200 rounded-lg p-3">
             <div className="text-xs font-medium text-[#475569] mb-1">Mentor</div>
             <div className="text-xl font-extrabold text-[#0C2340]">{region.mentorCount}</div>
             <div className="text-xs text-[#475569]">contoh</div>
           </div>
 
-          <div className="bg-[#FDFCF7] border border-[#0C2340]/10 rounded-lg p-3">
+          <div className="bg-slate-50 border border-slate-200 rounded-lg p-3">
             <div className="text-xs font-medium text-[#475569] mb-1">Partisipasi</div>
             <div className="text-xl font-extrabold text-[#0C2340]">{region.activePercent}</div>
             <div className="text-xs text-[#475569]">contoh</div>
@@ -153,7 +153,7 @@ export default function PetaContextualPanel({ region }: PetaContextualPanelProps
             {region.industri.map((item, idx) => (
               <span
                 key={idx}
-                className="inline-block px-2.5 py-1 rounded-md bg-[#F3F1EA] text-xs font-medium text-[#0C2340]"
+                className="inline-block px-2.5 py-1 rounded-md bg-slate-100 text-xs font-medium text-[#0C2340]"
               >
                 {item}
               </span>
@@ -162,7 +162,7 @@ export default function PetaContextualPanel({ region }: PetaContextualPanelProps
         </div>
 
         <div className="space-y-3 mb-6">
-          <div className="bg-[#FDFCF7] border border-[#0C2340]/10 rounded-lg p-3.5">
+          <div className="bg-slate-50 border border-slate-200 rounded-lg p-3.5">
             <div className="text-sm font-bold text-[#0C2340] mb-1 flex items-center gap-1.5">
               <MapPin className="w-4 h-4 text-[#92400E]" />
               <span>Titik Kumpul</span>
@@ -170,7 +170,7 @@ export default function PetaContextualPanel({ region }: PetaContextualPanelProps
             <p className="text-base text-[#475569] leading-[1.6]">{region.titikKumpul}</p>
           </div>
 
-          <div className="bg-[#FDFCF7] border border-[#0C2340]/10 rounded-lg p-3.5">
+          <div className="bg-slate-50 border border-slate-200 rounded-lg p-3.5">
             <div className="text-sm font-bold text-[#0C2340] mb-1 flex items-center gap-1.5">
               <Calendar className="w-4 h-4 text-[#0C2340]" />
               <span>Contoh Jadwal Kopdar</span>
@@ -192,13 +192,13 @@ export default function PetaContextualPanel({ region }: PetaContextualPanelProps
 
           <Link
             href="/kegiatan"
-            className="w-full min-h-[44px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-white hover:bg-[#FDFCF7] border border-[#0C2340]/20 text-sm font-semibold text-[#0C2340] transition-colors"
+            className="w-full min-h-[44px] inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-white hover:bg-slate-50 border border-slate-300 text-sm font-semibold text-[#0C2340] transition-colors"
           >
             <span>Lihat Jadwal Kopdar</span>
           </Link>
         </div>
 
-        <div className="mt-4 pt-3 border-t border-[#0C2340]/10 flex items-start gap-2 text-[11px] text-[#475569] leading-snug">
+        <div className="mt-4 pt-3 border-t border-slate-200 flex items-start gap-2 text-[11px] text-[#475569] leading-snug">
           <ShieldCheck className="w-3.5 h-3.5 text-[#16A34A] shrink-0 mt-0.5" />
           <span>Data ditampilkan sebagai agregat tingkat kota untuk menjaga privasi.</span>
         </div>

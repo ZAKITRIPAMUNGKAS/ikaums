@@ -13,10 +13,10 @@ export const metadata: Metadata = {
 
 export default function PrivasiPage() {
   return (
-    <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
+    <div className="min-h-screen bg-slate-50 text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
       <Navbar />
 
-      <main className="flex-grow page-grain-base w-full">
+      <main className="flex-grow  w-full">
         <PatternSection
           as="section"
           variant="dots"
@@ -24,7 +24,7 @@ export default function PrivasiPage() {
           fade="right-focus"
           patternOpacity={0.05}
           patternSize="24px"
-          className="border-b border-[#0C2340]/10"
+          className="border-b border-slate-200"
           contentClassName="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 sm:pt-8 sm:pb-10"
         >
           <nav aria-label="Breadcrumb" className="text-sm text-[#475569] mb-4 flex items-center gap-2">
@@ -74,7 +74,7 @@ export default function PrivasiPage() {
             <h2 className="text-xl font-bold text-[#0C2340]">
               2. Pemisahan Profil Anggota dan Kontak Pribadi
             </h2>
-            <div className="bg-white border border-[#0C2340]/12 rounded-xl p-5 grid grid-cols-1 sm:grid-cols-2 gap-5 my-3">
+            <div className="bg-white border border-slate-200 rounded-xl p-5 grid grid-cols-1 sm:grid-cols-2 gap-5 my-3">
               <div>
                 <h3 className="font-bold text-[#0C2340] mb-2 text-base">
                   Boleh Tampil di Daftar Anggota (Hanya Jika Kamu Pilih)
@@ -157,7 +157,7 @@ export default function PrivasiPage() {
             </p>
           </section>
 
-          <section className="bg-[#F3F1EA] border border-[#0C2340]/12 rounded-xl p-5 text-base text-[#475569] leading-[1.6]">
+          <section className="bg-slate-100 border border-slate-200 rounded-xl p-5 text-base text-[#475569] leading-[1.6]">
             <h2 className="text-lg font-bold text-[#0C2340] mb-1.5">
               Keterbukaan Pengelolaan Situs
             </h2>
@@ -167,7 +167,7 @@ export default function PrivasiPage() {
           </section>
         </div>
 
-        <div className="pt-6 border-t border-[#0C2340]/10 flex flex-wrap items-center justify-between gap-4">
+        <div className="pt-6 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
           <Link
             href="/syarat"
             className="inline-flex items-center min-h-[44px] text-sm font-semibold text-[#0C2340] hover:text-[#92400E] transition-colors"

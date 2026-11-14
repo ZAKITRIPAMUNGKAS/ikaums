@@ -45,11 +45,11 @@ interface KopdarInterestFormProps {
 
 const inputClass = (invalid: boolean) =>
   cn(
-    'w-full min-h-[44px] rounded-lg border bg-[#FDFCF7] px-3.5 py-2.5 text-base text-[#0C2340]',
+    'w-full min-h-[44px] rounded-lg border bg-white px-3.5 py-2.5 text-base text-slate-900 shadow-2xs transition-colors',
     'focus:outline-hidden focus:ring-2',
     invalid
-      ? 'border-red-500 focus:border-red-600 focus:ring-red-200'
-      : 'border-[#0C2340]/20 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
+      ? 'border-red-400 focus:border-red-600 focus:ring-red-100'
+      : 'border-slate-300 focus:border-[#0C2340] focus:ring-[#0C2340]/10 hover:border-slate-400'
   );
 
 export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestFormProps) {
@@ -195,29 +195,29 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
       <div
         role="status"
         aria-live="polite"
-        className="rounded-xl border border-[#0C2340]/12 bg-white p-6 text-center shadow-2xs sm:p-8"
+        className="rounded-xl border border-slate-200 bg-white p-6 text-center shadow-xs sm:p-8"
       >
-        <div className="mx-auto flex h-11 w-11 items-center justify-center rounded-full border border-emerald-200 bg-emerald-50 text-emerald-700">
-          <CheckCircle2 className="h-5 w-5" aria-hidden="true" />
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-emerald-200 bg-emerald-50 text-emerald-700">
+          <CheckCircle2 className="h-6 w-6" aria-hidden="true" />
         </div>
-        <h3 className="mt-4 text-xl font-bold text-[#0C2340]">
+        <h3 className="mt-4 text-xl font-bold text-slate-900">
           Minat kopdar {wilayah} tercatat
         </h3>
-        <p className="mx-auto mt-2 max-w-md text-base leading-[1.6] text-[#475569]">
+        <p className="mx-auto mt-2 max-w-md text-sm sm:text-base leading-[1.6] text-slate-600">
           Terima kasih, {nama}. Pengurus akan menghubungi WhatsApp{' '}
-          <strong className="text-[#0C2340]">{successWa}</strong> saat jadwal dan lokasi
+          <strong className="text-slate-900 font-semibold">{successWa}</strong> saat jadwal dan lokasi
           kopdar {wilayah} sudah ditetapkan.
         </p>
-        <p className="mx-auto mt-2 max-w-md text-base leading-[1.6] text-[#475569]">
+        <p className="mx-auto mt-2 max-w-md text-xs sm:text-sm leading-[1.6] text-slate-500">
           Kamu akan dihubungi {COMMUNITY_PLACEHOLDERS.verificationSla}. Nomor WhatsApp tidak
           ditampilkan di halaman publik.
         </p>
-        <div className="mt-5 flex flex-col justify-center gap-3 sm:flex-row">
+        <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
           <a
             href={shareUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-lg bg-[#0C2340] px-5 py-3 text-base font-semibold text-white transition-colors hover:bg-[#08182E]"
+            className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-lg bg-[#0C2340] px-5 py-3 text-sm sm:text-base font-semibold text-white transition-colors hover:bg-[#08182E] shadow-xs"
           >
             <Share2 className="h-4 w-4 text-[#F59E0B]" aria-hidden="true" />
             Ajak alumni lewat WhatsApp
@@ -225,7 +225,7 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
           <button
             type="button"
             onClick={() => setSubmitted(false)}
-            className="inline-flex min-h-[48px] cursor-pointer items-center justify-center rounded-lg bg-[#F3F1EA] px-5 py-3 text-base font-semibold text-[#0C2340] transition-colors hover:bg-[#E7E3D7]"
+            className="inline-flex min-h-[48px] cursor-pointer items-center justify-center rounded-lg border border-slate-200 bg-slate-100 px-5 py-3 text-sm sm:text-base font-semibold text-slate-800 transition-colors hover:bg-slate-200"
           >
             Ubah pilihan
           </button>
@@ -238,7 +238,7 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
     <form
       onSubmit={handleSubmit}
       noValidate
-      className="relative rounded-xl border border-[#0C2340]/12 bg-white p-5 shadow-2xs sm:p-7"
+      className="relative rounded-xl border border-slate-200 bg-white p-5 shadow-xs sm:p-7"
     >
       {/* Honeypot: tidak terlihat, tidak terbaca screen reader, tidak bisa di-tab */}
       <div aria-hidden="true" className="sr-only">
@@ -256,8 +256,8 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
       </div>
 
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="text-sm font-semibold text-[#92400E]">Form minat kopdar</p>
-        <p className="text-sm text-[#475569]">Langkah {step} dari 3</p>
+        <p className="text-xs sm:text-sm font-semibold text-[#B45309]">Form minat kopdar</p>
+        <p className="text-xs sm:text-sm text-slate-500">Langkah {step} dari 3</p>
       </div>
 
       <ol className="mt-3 grid grid-cols-3 gap-2" aria-label="Langkah formulir minat kopdar">
@@ -269,13 +269,13 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
               <span
                 className={cn(
                   'block h-1 rounded-full transition-colors',
-                  current || done ? 'bg-[#0C2340]' : 'bg-[#0C2340]/15'
+                  current || done ? 'bg-[#0C2340]' : 'bg-slate-200'
                 )}
               />
               <span
                 className={cn(
-                  'block text-sm',
-                  current ? 'font-bold text-[#0C2340]' : 'font-medium text-[#475569]'
+                  'block text-xs sm:text-sm',
+                  current ? 'font-bold text-[#0C2340]' : 'font-medium text-slate-500'
                 )}
               >
                 {item.id}. {item.label}
@@ -288,7 +288,7 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
       <h3
         ref={headingRef}
         tabIndex={-1}
-        className="mt-5 text-lg font-bold text-[#0C2340] focus:outline-none"
+        className="mt-5 text-base sm:text-lg font-bold text-slate-900 focus:outline-none"
       >
         {step === 1 && 'Pilih wilayah domisilimu'}
         {step === 2 && 'Kapan biasanya kamu kosong?'}
@@ -298,7 +298,7 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
       {errors.form && (
         <div
           role="alert"
-          className="mt-3 flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-base text-red-800"
+          className="mt-3 flex items-center gap-2 rounded-lg border border-red-200 bg-red-50 p-3 text-sm sm:text-base text-red-800"
         >
           <AlertCircle className="h-4 w-4 shrink-0 text-red-600" aria-hidden="true" />
           <span>{errors.form}</span>
@@ -307,8 +307,8 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
 
       {step === 1 && (
         <div className="mt-4 space-y-2">
-          <label htmlFor="kopdar-wilayah" className="block text-base font-semibold text-[#0C2340]">
-            Wilayah domisili <span className="text-[#92400E]">*</span>
+          <label htmlFor="kopdar-wilayah" className="block text-sm sm:text-base font-semibold text-slate-900">
+            Wilayah domisili <span className="text-[#B45309]">*</span>
           </label>
           <select
             id="kopdar-wilayah"
@@ -329,12 +329,12 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
             ))}
           </select>
           {errors.wilayah ? (
-            <p id="err-kopdar-wilayah" className="text-sm font-medium text-red-700">
+            <p id="err-kopdar-wilayah" className="text-xs sm:text-sm font-medium text-red-600">
               {errors.wilayah}
             </p>
           ) : (
-            <p className="text-sm text-[#475569]">
-              Pilih yang paling dekat dengan rumah atau kantormu.
+            <p className="text-xs sm:text-sm text-slate-500">
+              Pilih yang paling dekat dengan tempat tinggal atau kantormu.
             </p>
           )}
         </div>
@@ -345,10 +345,10 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
           className="mt-4"
           aria-describedby={errors.waktu ? 'err-kopdar-waktu' : undefined}
         >
-          <legend className="text-base font-semibold text-[#0C2340]">
-            Hari &amp; waktu yang cocok <span className="text-[#92400E]">*</span>
+          <legend className="text-sm sm:text-base font-semibold text-slate-900">
+            Hari &amp; waktu yang cocok <span className="text-[#B45309]">*</span>
           </legend>
-          <p className="mt-1 text-sm text-[#475569]">Boleh pilih lebih dari satu.</p>
+          <p className="mt-1 text-xs sm:text-sm text-slate-500">Boleh pilih lebih dari satu.</p>
           <div className="mt-3 grid gap-2">
             {WAKTU_OPTIONS.map((option, index) => {
               const checked = waktu.includes(option);
@@ -356,16 +356,16 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
                 <label
                   key={option}
                   className={cn(
-                    'flex min-h-[48px] cursor-pointer items-center gap-3 rounded-lg border px-3.5 py-3 text-base transition-colors',
+                    'flex min-h-[48px] cursor-pointer items-center gap-3 rounded-lg border px-3.5 py-3 text-sm sm:text-base transition-colors',
                     checked
-                      ? 'border-[#0C2340] bg-[#F3F1EA] text-[#0C2340]'
-                      : 'border-[#0C2340]/15 bg-[#FDFCF7] text-[#0C2340] hover:border-[#0C2340]/35'
+                      ? 'border-[#0C2340] bg-slate-100 text-slate-900 font-medium'
+                      : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50'
                   )}
                 >
                   <input
                     id={`kopdar-waktu-${index}`}
                     type="checkbox"
-                    className="h-5 w-5 shrink-0 accent-[#0C2340]"
+                    className="h-4 w-4 shrink-0 rounded accent-[#0C2340]"
                     checked={checked}
                     onChange={() => toggleWaktu(option)}
                   />
@@ -375,7 +375,7 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
             })}
           </div>
           {errors.waktu && (
-            <p id="err-kopdar-waktu" className="mt-2 text-sm font-medium text-red-700">
+            <p id="err-kopdar-waktu" className="mt-2 text-xs sm:text-sm font-medium text-red-600">
               {errors.waktu}
             </p>
           )}
@@ -385,8 +385,8 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
       {step === 3 && (
         <div className="mt-4 space-y-4">
           <div className="space-y-1.5">
-            <label htmlFor="kopdar-nama" className="block text-base font-semibold text-[#0C2340]">
-              Nama lengkap <span className="text-[#92400E]">*</span>
+            <label htmlFor="kopdar-nama" className="block text-sm sm:text-base font-semibold text-slate-900">
+              Nama lengkap <span className="text-[#B45309]">*</span>
             </label>
             <input
               id="kopdar-nama"
@@ -404,15 +404,15 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
               className={inputClass(Boolean(errors.nama))}
             />
             {errors.nama && (
-              <p id="err-kopdar-nama" className="text-sm font-medium text-red-700">
+              <p id="err-kopdar-nama" className="text-xs sm:text-sm font-medium text-red-600">
                 {errors.nama}
               </p>
             )}
           </div>
 
           <div className="space-y-1.5">
-            <label htmlFor="kopdar-wa" className="block text-base font-semibold text-[#0C2340]">
-              Nomor WhatsApp <span className="text-[#92400E]">*</span>
+            <label htmlFor="kopdar-wa" className="block text-sm sm:text-base font-semibold text-slate-900">
+              Nomor WhatsApp <span className="text-[#B45309]">*</span>
             </label>
             <input
               id="kopdar-wa"
@@ -431,22 +431,22 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
               className={inputClass(Boolean(errors.whatsapp))}
             />
             {errors.whatsapp ? (
-              <p id="err-kopdar-wa" className="text-sm font-medium text-red-700">
+              <p id="err-kopdar-wa" className="text-xs sm:text-sm font-medium text-red-600">
                 {errors.whatsapp}
               </p>
             ) : (
-              <p id="hint-kopdar-wa" className="text-sm text-[#475569]">
-                Format 08xx atau +62. Hanya pengurus yang bisa melihat nomor ini.
+              <p id="hint-kopdar-wa" className="text-xs sm:text-sm text-slate-500">
+                Format 08xx atau +62. Hanya pengurus yang dapat melihat nomor ini.
               </p>
             )}
           </div>
 
-          <p className="text-base leading-[1.6] text-[#475569]">
-            Dengan mengirim, kamu setuju nomor WhatsApp dipakai pengurus IKA UMS Jabodetabek
-            untuk info kopdar wilayahmu. Baca{' '}
+          <p className="text-xs sm:text-sm leading-[1.6] text-slate-500">
+            Dengan mengirim formulir ini, kamu menyetujui nomor WhatsApp dipakai pengurus IKA UMS Jabodetabek
+            untuk konfirmasi jadwal kopdar wilayahmu. Baca{' '}
             <Link
               href="/privasi"
-              className="font-semibold text-[#0C2340] underline decoration-[#92400E] underline-offset-4 hover:text-[#92400E]"
+              className="font-semibold text-[#0C2340] underline decoration-[#D97706] underline-offset-4 hover:text-[#D97706]"
             >
               Kebijakan Privasi
             </Link>
@@ -460,7 +460,7 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
           <button
             type="button"
             onClick={goNext}
-            className="inline-flex min-h-[48px] cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#0C2340] px-5 py-3 text-base font-semibold text-white transition-colors hover:bg-[#08182E] active:scale-[0.99]"
+            className="inline-flex min-h-[48px] cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#0C2340] px-5 py-3 text-sm sm:text-base font-semibold text-white transition-colors hover:bg-[#08182E] active:scale-[0.99] shadow-xs"
           >
             {step === 1 ? 'Lanjut pilih waktu' : 'Lanjut isi kontak'}
             <ArrowRight className="h-4 w-4 text-[#F59E0B]" aria-hidden="true" />
@@ -468,7 +468,7 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
         ) : (
           <button
             type="submit"
-            className="inline-flex min-h-[48px] cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#0C2340] px-5 py-3 text-base font-semibold text-white transition-colors hover:bg-[#08182E] active:scale-[0.99]"
+            className="inline-flex min-h-[48px] cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#0C2340] px-5 py-3 text-sm sm:text-base font-semibold text-white transition-colors hover:bg-[#08182E] active:scale-[0.99] shadow-xs"
           >
             Kirim minat kopdar
             <ArrowRight className="h-4 w-4 text-[#F59E0B]" aria-hidden="true" />
@@ -479,7 +479,7 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
           <button
             type="button"
             onClick={goBack}
-            className="inline-flex min-h-[44px] cursor-pointer items-center justify-center gap-2 rounded-lg px-4 py-2 text-base font-semibold text-[#0C2340] transition-colors hover:bg-[#F3F1EA]"
+            className="inline-flex min-h-[44px] cursor-pointer items-center justify-center gap-2 rounded-lg border border-slate-200 bg-slate-100 px-4 py-2 text-sm sm:text-base font-semibold text-slate-700 transition-colors hover:bg-slate-200"
           >
             <ArrowLeft className="h-4 w-4" aria-hidden="true" />
             Kembali
@@ -487,9 +487,9 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
         )}
       </div>
 
-      <p className="mt-3 flex items-start gap-2 text-sm leading-[1.6] text-[#475569]">
-        <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-[#16A34A]" aria-hidden="true" />
-        Nomor WhatsApp dan email tidak pernah ditampilkan di halaman publik.
+      <p className="mt-4 flex items-start gap-2 text-xs sm:text-sm leading-[1.6] text-slate-500 pt-2 border-t border-slate-100">
+        <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" aria-hidden="true" />
+        Nomor WhatsApp dan email tidak pernah dipublikasikan di halaman publik.
       </p>
     </form>
   );

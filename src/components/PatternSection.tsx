@@ -23,67 +23,41 @@ export interface PatternSectionProps extends React.HTMLAttributes<HTMLElement> {
   children: React.ReactNode;
 }
 
-const VARIANT_CLASSES: Record<PatternVariant, string> = {
-  dots: 'pattern-surface pattern-dots',
-  batik: 'pattern-surface pattern-batik',
-  contour: 'pattern-surface pattern-contour',
-  grain: 'pattern-surface pattern-grain',
-  none: 'relative overflow-x-clip',
-};
-
 const TONE_CLASSES: Record<PatternTone, string> = {
-  light: 'pattern-tone-light',
-  tint: 'pattern-tone-tint',
-  brand: 'pattern-tone-brand',
-  'brand-deep': 'pattern-tone-brand-deep',
-};
-
-const FADE_CLASSES: Record<PatternFade, string> = {
-  none: 'pattern-fade-none',
-  'soft-edges': 'pattern-fade-soft-edges',
-  'right-focus': 'pattern-fade-right-focus',
-  'top-right': 'pattern-fade-top-right',
-  'bottom-soft': 'pattern-fade-bottom-soft',
-  'radial-soft': 'pattern-fade-radial-soft',
+  light: 'bg-white text-[#0F172A]',
+  tint: 'bg-[#F8FAFC] text-[#0F172A]',
+  brand: 'bg-[#0C2340] text-white',
+  'brand-deep': 'bg-[#08182E] text-white',
 };
 
 export function PatternSection({
   as = 'section',
-  variant = 'dots',
   tone = 'light',
-  fade = 'soft-edges',
-  patternColor,
-  patternOpacity,
-  patternSize,
   className,
   contentClassName,
   style,
   children,
+  variant: _v,
+  fade: _f,
+  patternColor: _pc,
+  patternOpacity: _po,
+  patternSize: _ps,
   ...rest
 }: PatternSectionProps) {
+  void _v;
+  void _f;
+  void _pc;
+  void _po;
+  void _ps;
   const Component = as;
-
-  const customVars: React.CSSProperties = {
-    ...(patternColor ? ({ '--pattern-color': patternColor } as React.CSSProperties) : {}),
-    ...(patternOpacity !== undefined
-      ? ({ '--pattern-opacity': String(patternOpacity) } as React.CSSProperties)
-      : {}),
-    ...(patternSize ? ({ '--pattern-size': patternSize } as React.CSSProperties) : {}),
-    ...style,
-  };
 
   return (
     <Component
-      className={cn(
-        VARIANT_CLASSES[variant],
-        TONE_CLASSES[tone],
-        variant !== 'none' && FADE_CLASSES[fade],
-        className
-      )}
-      style={customVars}
+      className={cn('relative w-full', TONE_CLASSES[tone], className)}
+      style={style}
       {...rest}
     >
-      <div className={cn('relative z-[1]', contentClassName)}>{children}</div>
+      <div className={cn('relative z-10 w-full', contentClassName)}>{children}</div>
     </Component>
   );
 }
@@ -95,26 +69,14 @@ export interface PatternDividerProps {
   className?: string;
 }
 
-/**
- * Garis pemisah struktural antar-bagian yang tenang tanpa gelombang dekoratif.
- */
 export function PatternDivider({
-  variant = 'rule',
   className,
 }: PatternDividerProps) {
-  if (variant === 'gradient') {
-    return (
-      <div
-        aria-hidden="true"
-        className={cn('section-gradient-line', className)}
-      />
-    );
-  }
-
   return (
     <div
+      role="separator"
       aria-hidden="true"
-      className={cn('w-full border-t border-[#0C2340]/10', className)}
+      className={cn('w-full h-px bg-slate-200', className)}
     />
   );
 }

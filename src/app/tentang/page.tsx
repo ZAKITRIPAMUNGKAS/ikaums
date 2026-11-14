@@ -15,10 +15,10 @@ export const metadata: Metadata = {
 
 export default function TentangPage() {
   return (
-    <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
+    <div className="min-h-screen bg-slate-50 text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
       <Navbar />
 
-      <main className="flex-grow page-grain-base w-full">
+      <main className="flex-grow  w-full">
         {/* Hero Editorial Asimetris — pattern-batik ringan memudar di kanan */}
         <PatternSection
           as="section"
@@ -27,7 +27,7 @@ export default function TentangPage() {
           fade="right-focus"
           patternOpacity={0.055}
           patternSize="64px"
-          className="border-b border-[#0C2340]/10"
+          className="border-b border-slate-200"
           contentClassName="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12 sm:pt-8"
         >
           {/* Breadcrumb */}
@@ -66,7 +66,7 @@ export default function TentangPage() {
                 </Link>
                 <Link
                   href="/kepengurusan"
-                  className="inline-flex items-center gap-2 min-h-[44px] px-5 py-2.5 rounded-lg bg-white border border-[#0C2340]/15 hover:border-[#0C2340]/35 text-[#0C2340] text-sm font-semibold transition-colors"
+                  className="inline-flex items-center gap-2 min-h-[44px] px-5 py-2.5 rounded-lg bg-white border border-slate-200 hover:border-slate-300 text-[#0C2340] text-sm font-semibold transition-colors"
                 >
                   Lihat Pengurus &amp; Kontak
                 </Link>
@@ -75,7 +75,7 @@ export default function TentangPage() {
 
             <div className="lg:col-span-5">
               <figure className="surface-card rounded-2xl overflow-hidden">
-                <div className="aspect-[4/3] w-full bg-[#F3F1EA] relative overflow-hidden">
+                <div className="aspect-[4/3] w-full bg-slate-100 relative overflow-hidden">
                   <Image
                     src="/images/hero-kumpul-bolo-pisah.jpg"
                     alt="Dokumentasi pertemuan alumni Universitas Muhammadiyah Surakarta"
@@ -84,7 +84,7 @@ export default function TentangPage() {
                     className="object-cover"
                   />
                 </div>
-                <figcaption className="p-4 text-sm text-[#475569] leading-relaxed border-t border-[#0C2340]/10 bg-white">
+                <figcaption className="p-4 text-sm text-[#475569] leading-relaxed border-t border-slate-200 bg-white">
                   <strong className="text-[#0C2340] font-semibold">Dokumentasi Pertemuan Alumni.</strong>{' '}
                   {COMMUNITY_PLACEHOLDERS.documentationCaption}
                 </figcaption>
@@ -95,10 +95,10 @@ export default function TentangPage() {
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-[1]">
         {/* Tiga Prinsip Komunitas */}
-        <section className="py-12 max-w-4xl divide-y divide-[#0C2340]/12 border-y border-[#0C2340]/12">
+        <section className="py-12 max-w-4xl divide-y divide-[#0C2340]/12 border-y border-slate-200">
           <article className="py-6 first:pt-2 last:pb-2 grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
             <div className="md:col-span-5 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-[#F3F1EA] border border-[#0C2340]/10 flex items-center justify-center text-[#0C2340] shrink-0">
+              <div className="w-10 h-10 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-[#0C2340] shrink-0">
                 <Compass className="w-5 h-5" />
               </div>
               <h2 className="text-xl font-bold text-[#0C2340]">
@@ -112,7 +112,7 @@ export default function TentangPage() {
 
           <article className="py-6 grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
             <div className="md:col-span-5 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-[#F3F1EA] border border-[#0C2340]/10 flex items-center justify-center text-[#0C2340] shrink-0">
+              <div className="w-10 h-10 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-[#0C2340] shrink-0">
                 <Users className="w-5 h-5" />
               </div>
               <h2 className="text-xl font-bold text-[#0C2340]">
@@ -126,7 +126,7 @@ export default function TentangPage() {
 
           <article className="py-6 grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
             <div className="md:col-span-5 flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-[#F3F1EA] border border-[#0C2340]/10 flex items-center justify-center text-[#0C2340] shrink-0">
+              <div className="w-10 h-10 rounded-lg bg-slate-100 border border-slate-200 flex items-center justify-center text-[#0C2340] shrink-0">
                 <ShieldCheck className="w-5 h-5" />
               </div>
               <h2 className="text-xl font-bold text-[#0C2340]">
@@ -173,13 +173,13 @@ export default function TentangPage() {
             <div className="flex flex-wrap gap-3 shrink-0">
               <Link
                 href="/privasi"
-                className="inline-flex items-center min-h-[44px] px-4 py-2.5 rounded-lg bg-white border border-[#0C2340]/15 hover:border-[#0C2340]/35 text-[#0C2340] text-sm font-semibold transition-colors"
+                className="inline-flex items-center min-h-[44px] px-4 py-2.5 rounded-lg bg-white border border-slate-200 hover:border-slate-300 text-[#0C2340] text-sm font-semibold transition-colors"
               >
                 Kebijakan Privasi
               </Link>
               <Link
                 href="/syarat"
-                className="inline-flex items-center min-h-[44px] px-4 py-2.5 rounded-lg bg-white border border-[#0C2340]/15 hover:border-[#0C2340]/35 text-[#0C2340] text-sm font-semibold transition-colors"
+                className="inline-flex items-center min-h-[44px] px-4 py-2.5 rounded-lg bg-white border border-slate-200 hover:border-slate-300 text-[#0C2340] text-sm font-semibold transition-colors"
               >
                 Ketentuan Komunitas
               </Link>

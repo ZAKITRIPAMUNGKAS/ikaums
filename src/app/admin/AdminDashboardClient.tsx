@@ -527,12 +527,12 @@ export default function AdminDashboardClient() {
   });
 
   return (
-    <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
+    <div className="min-h-screen bg-slate-50 text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
       <Navbar />
 
-      <main className="flex-grow page-grain-base max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 w-full space-y-8">
+      <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 w-full space-y-8">
         {/* Navigasi Breadcrumb & Status */}
-        <div className="flex flex-wrap items-center justify-between gap-4 pb-2 border-b border-[#0C2340]/10">
+        <div className="flex flex-wrap items-center justify-between gap-4 pb-2 border-b border-slate-200">
           <nav aria-label="Breadcrumb" className="text-sm text-[#475569] flex items-center gap-2">
             <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
               Beranda
@@ -545,7 +545,7 @@ export default function AdminDashboardClient() {
             <a
               href="/api/pendaftaran?format=csv"
               download
-              className="inline-flex items-center gap-1.5 min-h-[40px] px-3.5 py-1.5 rounded-lg border border-[#0C2340]/20 bg-white hover:bg-[#F3F1EA] text-[#0C2340] text-xs sm:text-sm font-semibold transition-colors"
+              className="inline-flex items-center gap-1.5 min-h-[40px] px-3.5 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 text-[#0C2340] text-xs sm:text-sm font-semibold transition-colors"
             >
               <Download className="w-3.5 h-3.5" />
               Unduh CSV
@@ -612,35 +612,35 @@ export default function AdminDashboardClient() {
 
         {/* Kartu Statistik Cepat */}
         <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4" aria-label="Ringkasan data">
-          <div className="bg-white border border-[#0C2340]/12 rounded-xl p-4 sm:p-5 shadow-xs">
+          <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs">
             <span className="block text-xs font-semibold text-[#475569] uppercase tracking-wider">Menunggu Verifikasi</span>
             <div className="flex items-baseline gap-2 mt-1">
               <span className="text-2xl sm:text-3xl font-extrabold text-[#0C2340]">{countMenunggu}</span>
               <span className="text-xs text-[#92400E] font-medium">alumni baru</span>
             </div>
           </div>
-          <div className="bg-white border border-[#0C2340]/12 rounded-xl p-4 sm:p-5 shadow-xs">
+          <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs">
             <span className="block text-xs font-semibold text-[#475569] uppercase tracking-wider">Total Anggota Masuk</span>
             <div className="flex items-baseline gap-2 mt-1">
               <span className="text-2xl sm:text-3xl font-extrabold text-[#0C2340]">{pendaftarList.length}</span>
               <span className="text-xs text-emerald-700 font-medium">({countDisetujui} terverifikasi)</span>
             </div>
           </div>
-          <div className="bg-white border border-[#0C2340]/12 rounded-xl p-4 sm:p-5 shadow-xs">
+          <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs">
             <span className="block text-xs font-semibold text-[#475569] uppercase tracking-wider">Jadwal Kopdar Aktif</span>
             <div className="flex items-baseline gap-2 mt-1">
               <span className="text-2xl sm:text-3xl font-extrabold text-[#0C2340]">{agendaList.length}</span>
               <span className="text-xs text-[#475569]">agenda wilayah</span>
             </div>
           </div>
-          <div className="bg-white border border-[#0C2340]/12 rounded-xl p-4 sm:p-5 shadow-xs">
+          <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs">
             <span className="block text-xs font-semibold text-[#475569] uppercase tracking-wider">Info Loker Aktif</span>
             <div className="flex items-baseline gap-2 mt-1">
               <span className="text-2xl sm:text-3xl font-extrabold text-[#047857]">{lokerList.length}</span>
               <span className="text-xs text-[#475569]">lowongan terbuka</span>
             </div>
           </div>
-          <div className="bg-white border border-[#0C2340]/12 rounded-xl p-4 sm:p-5 shadow-xs col-span-2 md:col-span-1">
+          <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs col-span-2 md:col-span-1">
             <span className="block text-xs font-semibold text-[#475569] uppercase tracking-wider">Cakupan Wilayah</span>
             <div className="flex items-baseline gap-2 mt-1">
               <span className="text-2xl sm:text-3xl font-extrabold text-[#0C2340]">{WILAYAH_JABODETABEK.length}</span>
@@ -670,7 +670,7 @@ export default function AdminDashboardClient() {
         )}
 
         {/* Tab Navigasi Pengelolaan */}
-        <div className="border-b border-[#0C2340]/15 flex overflow-x-auto gap-2 sm:gap-4 no-scrollbar">
+        <div className="border-b border-slate-200 flex overflow-x-auto gap-2 sm:gap-4 no-scrollbar">
           <button
             type="button"
             onClick={() => setActiveTab('pendaftar')}
@@ -682,7 +682,7 @@ export default function AdminDashboardClient() {
           >
             <Users className="w-4 h-4" />
             <span>Pendaftaran &amp; Anggota</span>
-            <span className="px-2 py-0.5 rounded-full text-xs bg-[#F3F1EA] text-[#0C2340]">
+            <span className="px-2 py-0.5 rounded-full text-xs bg-slate-100 text-[#0C2340]">
               {pendaftarList.length}
             </span>
           </button>
@@ -698,7 +698,7 @@ export default function AdminDashboardClient() {
           >
             <Calendar className="w-4 h-4" />
             <span>Jadwal Kopdar &amp; Agenda</span>
-            <span className="px-2 py-0.5 rounded-full text-xs bg-[#F3F1EA] text-[#0C2340]">
+            <span className="px-2 py-0.5 rounded-full text-xs bg-slate-100 text-[#0C2340]">
               {agendaList.length}
             </span>
           </button>
@@ -752,7 +752,7 @@ export default function AdminDashboardClient() {
         {activeTab === 'pendaftar' && (
           <div className="space-y-6">
             {/* Filter Bar & Search */}
-            <div className="bg-white border border-[#0C2340]/12 rounded-xl p-4 sm:p-5 flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center shadow-xs">
+            <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center shadow-xs">
               <div className="relative flex-1">
                 <Search className="w-4 h-4 text-[#475569] absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
@@ -760,7 +760,7 @@ export default function AdminDashboardClient() {
                   placeholder="Cari nama alumni, prodi, angkatan, atau pekerjaan..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full min-h-[42px] pl-10 pr-4 py-2 text-sm rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-[#0C2340] focus:outline-hidden focus:ring-2 focus:ring-[#0C2340]/15"
+                  className="w-full min-h-[42px] pl-10 pr-4 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:outline-hidden focus:ring-2 focus:ring-[#0C2340]/15"
                 />
               </div>
 
@@ -768,7 +768,7 @@ export default function AdminDashboardClient() {
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value as 'semua' | 'menunggu' | 'disetujui' | 'ditolak')}
-                  className="min-h-[42px] px-3 py-2 text-sm rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/15 cursor-pointer font-medium"
+                  className="min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:ring-2 focus:ring-[#0C2340]/15 cursor-pointer font-medium"
                 >
                   <option value="semua">Semua Status</option>
                   <option value="menunggu">Menunggu Verifikasi ({countMenunggu})</option>
@@ -779,7 +779,7 @@ export default function AdminDashboardClient() {
                 <select
                   value={wilayahFilter}
                   onChange={(e) => setWilayahFilter(e.target.value)}
-                  className="min-h-[42px] px-3 py-2 text-sm rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/15 cursor-pointer font-medium"
+                  className="min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:ring-2 focus:ring-[#0C2340]/15 cursor-pointer font-medium"
                 >
                   <option value="semua">Semua 9 Wilayah</option>
                   {WILAYAH_JABODETABEK.map((w) => (
@@ -793,7 +793,7 @@ export default function AdminDashboardClient() {
 
             {/* Daftar Pendaftar */}
             {filteredPendaftar.length === 0 ? (
-              <div className="bg-white border border-[#0C2340]/12 rounded-2xl p-10 text-center space-y-3">
+              <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center space-y-3">
                 <Users className="w-10 h-10 text-[#475569]/60 mx-auto" />
                 <h3 className="text-lg font-bold text-[#0C2340]">Tidak Ada Data Pendaftar</h3>
                 <p className="text-sm text-[#475569] max-w-md mx-auto">
@@ -813,14 +813,14 @@ export default function AdminDashboardClient() {
                 {filteredPendaftar.map((item) => (
                   <div
                     key={item.id}
-                    className="bg-white border border-[#0C2340]/12 rounded-xl p-4 sm:p-5 shadow-xs hover:border-[#0C2340]/30 transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-4"
+                    className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs hover:border-[#0C2340]/30 transition-all flex flex-col lg:flex-row lg:items-center justify-between gap-4"
                   >
                     <div className="space-y-2 min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
                         <span className="text-base sm:text-lg font-bold text-[#0C2340]">
                           {item.namaLengkap}
                         </span>
-                        <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-[#F3F1EA] text-[#0C2340]">
+                        <span className="px-2 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-[#0C2340]">
                           {item.prodi} &apos;{String(item.angkatan).slice(2)}
                         </span>
                         <span
@@ -875,7 +875,7 @@ export default function AdminDashboardClient() {
                     </div>
 
                     {/* Aksi Verifikasi */}
-                    <div className="flex items-center gap-2 shrink-0 pt-2 lg:pt-0 border-t lg:border-t-0 border-[#0C2340]/10">
+                    <div className="flex items-center gap-2 shrink-0 pt-2 lg:pt-0 border-t lg:border-t-0 border-slate-200">
                       {item.status !== 'disetujui' && (
                         <button
                           type="button"
@@ -890,7 +890,7 @@ export default function AdminDashboardClient() {
                         <button
                           type="button"
                           onClick={() => handleUpdateStatus(item.id, 'ditolak')}
-                          className="min-h-[40px] px-3.5 py-1.5 rounded-lg border border-[#0C2340]/20 bg-white hover:bg-[#F3F1EA] text-[#0C2340] text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
+                          className="min-h-[40px] px-3.5 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 text-[#0C2340] text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
                         >
                           Review Ulang
                         </button>
@@ -926,7 +926,7 @@ export default function AdminDashboardClient() {
             </div>
 
             {agendaList.length === 0 ? (
-              <div className="bg-white border border-[#0C2340]/12 rounded-2xl p-10 text-center space-y-3">
+              <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center space-y-3">
                 <Calendar className="w-10 h-10 text-[#475569]/60 mx-auto" />
                 <h3 className="text-lg font-bold text-[#0C2340]">Belum Ada Jadwal Kopdar</h3>
                 <p className="text-sm text-[#475569] max-w-md mx-auto">
@@ -946,11 +946,11 @@ export default function AdminDashboardClient() {
                 {agendaList.map((agenda) => (
                   <div
                     key={agenda.id}
-                    className="bg-white border border-[#0C2340]/12 rounded-xl p-5 shadow-xs flex flex-col justify-between space-y-4"
+                    className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs flex flex-col justify-between space-y-4"
                   >
                     <div className="space-y-2">
                       <div className="flex items-center justify-between gap-2">
-                        <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-[#F3F1EA] text-[#92400E]">
+                        <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-slate-100 text-[#92400E]">
                           {agenda.jenis}
                         </span>
                         <span className="text-xs text-[#475569] font-medium">
@@ -977,7 +977,7 @@ export default function AdminDashboardClient() {
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-end gap-2 pt-3 border-t border-[#0C2340]/10">
+                    <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-200">
                       <button
                         type="button"
                         onClick={() => handleDeleteAgenda(agenda.id)}
@@ -1017,7 +1017,7 @@ export default function AdminDashboardClient() {
             </div>
 
             {/* Filter Bar Loker */}
-            <div className="bg-white border border-[#0C2340]/12 rounded-xl p-4 sm:p-5 flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center shadow-xs">
+            <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center shadow-xs">
               <div className="relative flex-1">
                 <Search className="w-4 h-4 text-[#475569] absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
@@ -1025,7 +1025,7 @@ export default function AdminDashboardClient() {
                   placeholder="Cari lowongan berdasarkan posisi, perusahaan, atau rujukan..."
                   value={lokerSearch}
                   onChange={(e) => setLokerSearch(e.target.value)}
-                  className="w-full min-h-[42px] pl-10 pr-4 py-2 text-sm rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-[#0C2340] focus:outline-hidden focus:ring-2 focus:ring-[#0C2340]/15"
+                  className="w-full min-h-[42px] pl-10 pr-4 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:outline-hidden focus:ring-2 focus:ring-[#0C2340]/15"
                 />
               </div>
 
@@ -1033,7 +1033,7 @@ export default function AdminDashboardClient() {
                 <select
                   value={lokerWilayahFilter}
                   onChange={(e) => setLokerWilayahFilter(e.target.value)}
-                  className="min-h-[42px] px-3 py-2 text-sm rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/15 cursor-pointer font-medium"
+                  className="min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:ring-2 focus:ring-[#0C2340]/15 cursor-pointer font-medium"
                 >
                   <option value="semua">Semua Wilayah</option>
                   {WILAYAH_JABODETABEK.map((w) => (
@@ -1048,7 +1048,7 @@ export default function AdminDashboardClient() {
 
             {/* List Lowongan */}
             {filteredLokers.length === 0 ? (
-              <div className="bg-white border border-[#0C2340]/12 rounded-2xl p-10 text-center space-y-3">
+              <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center space-y-3">
                 <Briefcase className="w-10 h-10 text-[#475569]/60 mx-auto" />
                 <h3 className="text-lg font-bold text-[#0C2340]">Belum Ada Lowongan yang Cocok</h3>
                 <p className="text-sm text-[#475569] max-w-md mx-auto">
@@ -1068,7 +1068,7 @@ export default function AdminDashboardClient() {
                 {filteredLokers.map((loker) => (
                   <div
                     key={loker.id}
-                    className="bg-white border border-[#0C2340]/12 rounded-xl p-5 shadow-xs hover:border-[#0C2340]/30 transition-all flex flex-col justify-between gap-4"
+                    className="bg-white border border-slate-200 rounded-xl p-5 shadow-xs hover:border-[#0C2340]/30 transition-all flex flex-col justify-between gap-4"
                   >
                     <div className="space-y-3">
                       <div className="flex flex-wrap items-center justify-between gap-2">
@@ -1093,7 +1093,7 @@ export default function AdminDashboardClient() {
                       </div>
 
                       {loker.alumniRujukan && (
-                        <div className="text-xs bg-[#F3F1EA] p-2.5 rounded-lg text-[#0C2340]">
+                        <div className="text-xs bg-slate-100 p-2.5 rounded-lg text-[#0C2340]">
                           <span className="font-semibold">Rujukan Alumni:</span> {loker.alumniRujukan}
                         </div>
                       )}
@@ -1110,7 +1110,7 @@ export default function AdminDashboardClient() {
                       </div>
                     </div>
 
-                    <div className="flex items-center justify-between pt-3 border-t border-[#0C2340]/10">
+                    <div className="flex items-center justify-between pt-3 border-t border-slate-200">
                       <Link
                         href="/peluang#loker"
                         target="_blank"
@@ -1140,8 +1140,8 @@ export default function AdminDashboardClient() {
         {activeTab === 'pengurus' && pengurusData && (
           <form onSubmit={handleSavePengurus} className="space-y-8">
             {/* 1. Pengurus Harian */}
-            <div className="bg-white border border-[#0C2340]/12 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs">
-              <div className="space-y-1 border-b border-[#0C2340]/10 pb-4">
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs">
+              <div className="space-y-1 border-b border-slate-200 pb-4">
                 <h2 className="text-lg sm:text-xl font-bold text-[#0C2340]">1. Pengurus Harian Wilayah</h2>
                 <p className="text-xs sm:text-sm text-[#475569]">
                   Tampil pada halaman Pengurus &amp; Kontak (/kepengurusan).
@@ -1159,7 +1159,7 @@ export default function AdminDashboardClient() {
                     onChange={(e) =>
                       setPengurusData({ ...pengurusData, dewanPembina: e.target.value })
                     }
-                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-[#0C2340]"
+                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10"
                     placeholder="Contoh: Nama Tokoh Senior Alumni UMS"
                   />
                 </div>
@@ -1174,7 +1174,7 @@ export default function AdminDashboardClient() {
                     onChange={(e) =>
                       setPengurusData({ ...pengurusData, ketuaWilayah: e.target.value })
                     }
-                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-[#0C2340]"
+                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10"
                     placeholder="Contoh: Nama Ketua Pengurus & Angkatan"
                   />
                 </div>
@@ -1189,7 +1189,7 @@ export default function AdminDashboardClient() {
                     onChange={(e) =>
                       setPengurusData({ ...pengurusData, wakilKetua: e.target.value })
                     }
-                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-[#0C2340]"
+                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10"
                     placeholder="Contoh: Nama Wakil Ketua & Angkatan"
                   />
                 </div>
@@ -1204,7 +1204,7 @@ export default function AdminDashboardClient() {
                     onChange={(e) =>
                       setPengurusData({ ...pengurusData, sekretaris: e.target.value })
                     }
-                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-[#0C2340]"
+                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10"
                     placeholder="Contoh: Nama Sekretaris & Angkatan"
                   />
                 </div>
@@ -1219,7 +1219,7 @@ export default function AdminDashboardClient() {
                     onChange={(e) =>
                       setPengurusData({ ...pengurusData, bendahara: e.target.value })
                     }
-                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-[#0C2340]"
+                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10"
                     placeholder="Contoh: Nama Bendahara & Angkatan"
                   />
                 </div>
@@ -1227,8 +1227,8 @@ export default function AdminDashboardClient() {
             </div>
 
             {/* 2. Koordinator Bidang Kerja */}
-            <div className="bg-white border border-[#0C2340]/12 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs">
-              <div className="space-y-1 border-b border-[#0C2340]/10 pb-4">
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs">
+              <div className="space-y-1 border-b border-slate-200 pb-4">
                 <h2 className="text-lg sm:text-xl font-bold text-[#0C2340]">2. Koordinator 4 Bidang Kerja</h2>
                 <p className="text-xs sm:text-sm text-[#475569]">
                   Koordinator penggerak program karier, usaha, kopdar, dan humas.
@@ -1246,7 +1246,7 @@ export default function AdminDashboardClient() {
                     onChange={(e) =>
                       setPengurusData({ ...pengurusData, bidangKarier: e.target.value })
                     }
-                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-[#0C2340]"
+                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10"
                   />
                 </div>
 
@@ -1260,7 +1260,7 @@ export default function AdminDashboardClient() {
                     onChange={(e) =>
                       setPengurusData({ ...pengurusData, bidangUsaha: e.target.value })
                     }
-                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-[#0C2340]"
+                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10"
                   />
                 </div>
 
@@ -1274,7 +1274,7 @@ export default function AdminDashboardClient() {
                     onChange={(e) =>
                       setPengurusData({ ...pengurusData, bidangKopdar: e.target.value })
                     }
-                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-[#0C2340]"
+                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10"
                   />
                 </div>
 
@@ -1288,15 +1288,15 @@ export default function AdminDashboardClient() {
                     onChange={(e) =>
                       setPengurusData({ ...pengurusData, bidangHumas: e.target.value })
                     }
-                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-[#0C2340]"
+                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10"
                   />
                 </div>
               </div>
             </div>
 
             {/* 3. Koordinator 9 Wilayah Jabodetabek */}
-            <div className="bg-white border border-[#0C2340]/12 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs">
-              <div className="space-y-1 border-b border-[#0C2340]/10 pb-4">
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs">
+              <div className="space-y-1 border-b border-slate-200 pb-4">
                 <h2 className="text-lg sm:text-xl font-bold text-[#0C2340]">3. Koordinator 9 Wilayah (Korwil)</h2>
                 <p className="text-xs sm:text-sm text-[#475569]">
                   Lengkapi nama koordinator, kontak WhatsApp, dan titik kumpul per kota/kabupaten.
@@ -1313,9 +1313,9 @@ export default function AdminDashboardClient() {
                   return (
                     <div
                       key={wil.id}
-                      className="p-4 rounded-xl border border-[#0C2340]/15 bg-[#FAF9F5] space-y-3"
+                      className="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-3"
                     >
-                      <span className="text-sm font-bold text-[#0C2340] block border-b border-[#0C2340]/10 pb-1.5">
+                      <span className="text-sm font-bold text-[#0C2340] block border-b border-slate-200 pb-1.5">
                         {wil.nama}
                       </span>
                       <div>
@@ -1331,7 +1331,7 @@ export default function AdminDashboardClient() {
                             setPengurusData({ ...pengurusData, korwil: updated });
                           }}
                           placeholder="Nama & Angkatan"
-                          className="w-full min-h-[38px] px-3 py-1.5 text-xs rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                          className="w-full min-h-[38px] px-3 py-1.5 text-xs rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                         />
                       </div>
                       <div>
@@ -1347,7 +1347,7 @@ export default function AdminDashboardClient() {
                             setPengurusData({ ...pengurusData, korwil: updated });
                           }}
                           placeholder="081234567890"
-                          className="w-full min-h-[38px] px-3 py-1.5 text-xs rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                          className="w-full min-h-[38px] px-3 py-1.5 text-xs rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                         />
                       </div>
                       <div>
@@ -1363,7 +1363,7 @@ export default function AdminDashboardClient() {
                             setPengurusData({ ...pengurusData, korwil: updated });
                           }}
                           placeholder="Contoh: Tebet / BSD"
-                          className="w-full min-h-[38px] px-3 py-1.5 text-xs rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                          className="w-full min-h-[38px] px-3 py-1.5 text-xs rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                         />
                       </div>
                     </div>
@@ -1389,8 +1389,8 @@ export default function AdminDashboardClient() {
         {/* ========================================================================= */}
         {activeTab === 'settings' && settingsData && (
           <form onSubmit={handleSaveSettings} className="space-y-6">
-            <div className="bg-white border border-[#0C2340]/12 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs">
-              <div className="space-y-1 border-b border-[#0C2340]/10 pb-4">
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs">
+              <div className="space-y-1 border-b border-slate-200 pb-4">
                 <h2 className="text-lg sm:text-xl font-bold text-[#0C2340]">
                   Informasi Resmi &amp; Kontak Sekretariat
                 </h2>
@@ -1410,7 +1410,7 @@ export default function AdminDashboardClient() {
                     onChange={(e) =>
                       setSettingsData({ ...settingsData, contactWhatsapp: e.target.value })
                     }
-                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-[#0C2340]"
+                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10"
                     placeholder="Contoh: +62 812-xxxx-xxxx"
                   />
                 </div>
@@ -1425,7 +1425,7 @@ export default function AdminDashboardClient() {
                     onChange={(e) =>
                       setSettingsData({ ...settingsData, contactEmail: e.target.value })
                     }
-                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-[#0C2340]"
+                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10"
                     placeholder="sekretariat@ikaums-jabodetabek.org"
                   />
                 </div>
@@ -1440,7 +1440,7 @@ export default function AdminDashboardClient() {
                     onChange={(e) =>
                       setSettingsData({ ...settingsData, firstKopdarDate: e.target.value })
                     }
-                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-[#0C2340]"
+                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10"
                     placeholder="Contoh: Sabtu, 28 November 2026"
                   />
                 </div>
@@ -1455,7 +1455,7 @@ export default function AdminDashboardClient() {
                     onChange={(e) =>
                       setSettingsData({ ...settingsData, firstKopdarLocation: e.target.value })
                     }
-                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-[#0C2340]"
+                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10"
                     placeholder="Contoh: Gedung Pertemuan Cilandak, Jakarta Selatan"
                   />
                 </div>
@@ -1470,13 +1470,13 @@ export default function AdminDashboardClient() {
                     onChange={(e) =>
                       setSettingsData({ ...settingsData, ppIkaUmsStatus: e.target.value })
                     }
-                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-[#FDFCF7] border border-[#0C2340]/20 text-[#0C2340]"
+                    className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10"
                     placeholder="Dalam koordinasi dengan PP IKA UMS Pusat"
                   />
                 </div>
               </div>
 
-              <div className="flex justify-end pt-4 border-t border-[#0C2340]/10">
+              <div className="flex justify-end pt-4 border-t border-slate-200">
                 <button
                   type="submit"
                   className="inline-flex items-center gap-2 min-h-[48px] px-6 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] text-white text-base font-semibold transition-colors cursor-pointer shadow-md"
@@ -1494,8 +1494,8 @@ export default function AdminDashboardClient() {
       {/* MODAL 1: TAMBAH ALUMNI MANUAL                                             */}
       {/* ========================================================================= */}
       <Dialog open={manualAlumniOpen} onOpenChange={setManualAlumniOpen}>
-        <DialogContent className="max-w-lg bg-[#FDFCF7] border border-[#0C2340]/20 p-6 sm:p-8 rounded-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader className="space-y-1.5 border-b border-[#0C2340]/10 pb-3">
+        <DialogContent className="max-w-lg bg-white border border-slate-200 shadow-xl p-6 sm:p-8 rounded-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader className="space-y-1.5 border-b border-slate-200 pb-3">
             <DialogTitle className="text-xl font-bold text-[#0C2340]">
               Tambah Data Alumni Manual
             </DialogTitle>
@@ -1515,7 +1515,7 @@ export default function AdminDashboardClient() {
                 value={newAlumni.namaLengkap}
                 onChange={(e) => setNewAlumni({ ...newAlumni, namaLengkap: e.target.value })}
                 placeholder="Contoh: Ir. Budi Santoso, M.T."
-                className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
               />
             </div>
 
@@ -1525,7 +1525,7 @@ export default function AdminDashboardClient() {
                 <select
                   value={newAlumni.angkatan}
                   onChange={(e) => setNewAlumni({ ...newAlumni, angkatan: Number(e.target.value) })}
-                  className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                  className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                 >
                   {ANGKATAN_OPTIONS.map((th) => (
                     <option key={th} value={th}>
@@ -1540,7 +1540,7 @@ export default function AdminDashboardClient() {
                 <select
                   value={newAlumni.wilayah}
                   onChange={(e) => setNewAlumni({ ...newAlumni, wilayah: e.target.value })}
-                  className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                  className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                 >
                   {WILAYAH_JABODETABEK.map((w) => (
                     <option key={w.id} value={w.nama}>
@@ -1556,7 +1556,7 @@ export default function AdminDashboardClient() {
               <select
                 value={newAlumni.prodi}
                 onChange={(e) => setNewAlumni({ ...newAlumni, prodi: e.target.value })}
-                className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
               >
                 {FAKULTAS_PRODI_UMS.flatMap((f) => f.prodi).map((p) => (
                   <option key={p} value={p}>
@@ -1575,7 +1575,7 @@ export default function AdminDashboardClient() {
                   placeholder="081234567890"
                   value={newAlumni.whatsapp}
                   onChange={(e) => setNewAlumni({ ...newAlumni, whatsapp: e.target.value })}
-                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                 />
               </div>
 
@@ -1586,7 +1586,7 @@ export default function AdminDashboardClient() {
                   placeholder="nama@email.com"
                   value={newAlumni.email}
                   onChange={(e) => setNewAlumni({ ...newAlumni, email: e.target.value })}
-                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                 />
               </div>
             </div>
@@ -1599,7 +1599,7 @@ export default function AdminDashboardClient() {
                   placeholder="Software Engineer"
                   value={newAlumni.pekerjaan}
                   onChange={(e) => setNewAlumni({ ...newAlumni, pekerjaan: e.target.value })}
-                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                 />
               </div>
               <div>
@@ -1609,7 +1609,7 @@ export default function AdminDashboardClient() {
                   placeholder="PT Nusantara / Wirausaha"
                   value={newAlumni.perusahaan}
                   onChange={(e) => setNewAlumni({ ...newAlumni, perusahaan: e.target.value })}
-                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                 />
               </div>
             </div>
@@ -1636,11 +1636,11 @@ export default function AdminDashboardClient() {
               </label>
             </div>
 
-            <div className="flex justify-end gap-2.5 pt-4 border-t border-[#0C2340]/10">
+            <div className="flex justify-end gap-2.5 pt-4 border-t border-slate-200">
               <button
                 type="button"
                 onClick={() => setManualAlumniOpen(false)}
-                className="min-h-[44px] px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-[#0C2340]/20 hover:bg-[#F3F1EA] text-[#0C2340]"
+                className="min-h-[44px] px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-300 hover:bg-slate-100 text-[#0C2340]"
               >
                 Batal
               </button>
@@ -1659,8 +1659,8 @@ export default function AdminDashboardClient() {
       {/* MODAL 2: TAMBAH JADWAL KOPDAR                                             */}
       {/* ========================================================================= */}
       <Dialog open={agendaModalOpen} onOpenChange={setAgendaModalOpen}>
-        <DialogContent className="max-w-lg bg-[#FDFCF7] border border-[#0C2340]/20 p-6 sm:p-8 rounded-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader className="space-y-1.5 border-b border-[#0C2340]/10 pb-3">
+        <DialogContent className="max-w-lg bg-white border border-slate-200 shadow-xl p-6 sm:p-8 rounded-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader className="space-y-1.5 border-b border-slate-200 pb-3">
             <DialogTitle className="text-xl font-bold text-[#0C2340]">
               Buat Jadwal Kopdar Baru
             </DialogTitle>
@@ -1680,7 +1680,7 @@ export default function AdminDashboardClient() {
                 placeholder="Contoh: Kopdar Temu Santai Alumni UMS Jaksel"
                 value={newAgenda.judul}
                 onChange={(e) => setNewAgenda({ ...newAgenda, judul: e.target.value })}
-                className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
               />
             </div>
 
@@ -1690,7 +1690,7 @@ export default function AdminDashboardClient() {
                 <select
                   value={newAgenda.jenis}
                   onChange={(e) => setNewAgenda({ ...newAgenda, jenis: e.target.value })}
-                  className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                  className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                 >
                   <option value="Kopdar Wilayah">Kopdar Wilayah</option>
                   <option value="Mentoring Alumni">Mentoring Alumni</option>
@@ -1703,7 +1703,7 @@ export default function AdminDashboardClient() {
                 <select
                   value={newAgenda.wilayah}
                   onChange={(e) => setNewAgenda({ ...newAgenda, wilayah: e.target.value })}
-                  className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                  className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                 >
                   {WILAYAH_JABODETABEK.map((w) => (
                     <option key={w.id} value={w.nama}>
@@ -1723,7 +1723,7 @@ export default function AdminDashboardClient() {
                   placeholder="Sabtu, 28 Nov 2026"
                   value={newAgenda.tanggalWIB}
                   onChange={(e) => setNewAgenda({ ...newAgenda, tanggalWIB: e.target.value })}
-                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                 />
               </div>
 
@@ -1734,7 +1734,7 @@ export default function AdminDashboardClient() {
                   placeholder="09.00 - 12.00 WIB"
                   value={newAgenda.jamWIB}
                   onChange={(e) => setNewAgenda({ ...newAgenda, jamWIB: e.target.value })}
-                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                 />
               </div>
             </div>
@@ -1749,7 +1749,7 @@ export default function AdminDashboardClient() {
                 placeholder="Aula Pertemuan TB Simatupang / Kafe Tebet"
                 value={newAgenda.lokasi}
                 onChange={(e) => setNewAgenda({ ...newAgenda, lokasi: e.target.value })}
-                className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
               />
             </div>
 
@@ -1762,7 +1762,7 @@ export default function AdminDashboardClient() {
                   max="500"
                   value={newAgenda.kapasitas}
                   onChange={(e) => setNewAgenda({ ...newAgenda, kapasitas: Number(e.target.value) })}
-                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                 />
               </div>
 
@@ -1773,16 +1773,16 @@ export default function AdminDashboardClient() {
                   placeholder="Panitia Kopdar Jaksel"
                   value={newAgenda.penanggungJawab}
                   onChange={(e) => setNewAgenda({ ...newAgenda, penanggungJawab: e.target.value })}
-                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                 />
               </div>
             </div>
 
-            <div className="flex justify-end gap-2.5 pt-4 border-t border-[#0C2340]/10">
+            <div className="flex justify-end gap-2.5 pt-4 border-t border-slate-200">
               <button
                 type="button"
                 onClick={() => setAgendaModalOpen(false)}
-                className="min-h-[44px] px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-[#0C2340]/20 hover:bg-[#F3F1EA] text-[#0C2340]"
+                className="min-h-[44px] px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-300 hover:bg-slate-100 text-[#0C2340]"
               >
                 Batal
               </button>
@@ -1801,8 +1801,8 @@ export default function AdminDashboardClient() {
       {/* MODAL 3: TAMBAH INFO LOKER BARU                                           */}
       {/* ========================================================================= */}
       <Dialog open={lokerModalOpen} onOpenChange={setLokerModalOpen}>
-        <DialogContent className="max-w-xl bg-[#FDFCF7] border border-[#0C2340]/20 p-6 sm:p-8 rounded-2xl max-h-[90vh] overflow-y-auto">
-          <DialogHeader className="space-y-1.5 border-b border-[#0C2340]/10 pb-3">
+        <DialogContent className="max-w-xl bg-white border border-slate-200 shadow-xl p-6 sm:p-8 rounded-2xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader className="space-y-1.5 border-b border-slate-200 pb-3">
             <DialogTitle className="text-xl font-bold text-[#0C2340]">
               Terbitkan Info Lowongan Kerja Baru
             </DialogTitle>
@@ -1823,7 +1823,7 @@ export default function AdminDashboardClient() {
                   placeholder="Contoh: Frontend Developer"
                   value={newLoker.posisi}
                   onChange={(e) => setNewLoker({ ...newLoker, posisi: e.target.value })}
-                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                 />
               </div>
 
@@ -1837,7 +1837,7 @@ export default function AdminDashboardClient() {
                   placeholder="Contoh: PT Teknologi Bangsa"
                   value={newLoker.perusahaan}
                   onChange={(e) => setNewLoker({ ...newLoker, perusahaan: e.target.value })}
-                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                 />
               </div>
             </div>
@@ -1850,7 +1850,7 @@ export default function AdminDashboardClient() {
                 <select
                   value={newLoker.industri}
                   onChange={(e) => setNewLoker({ ...newLoker, industri: e.target.value })}
-                  className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                  className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                 >
                   <option value="Teknologi Informasi & Software">Teknologi Informasi &amp; Software</option>
                   <option value="Konstruksi & Rekayasa Bangunan">Konstruksi &amp; Rekayasa</option>
@@ -1871,7 +1871,7 @@ export default function AdminDashboardClient() {
                 <select
                   value={newLoker.wilayah}
                   onChange={(e) => setNewLoker({ ...newLoker, wilayah: e.target.value })}
-                  className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                  className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                 >
                   {WILAYAH_JABODETABEK.map((w) => (
                     <option key={w.id} value={w.nama}>
@@ -1896,7 +1896,7 @@ export default function AdminDashboardClient() {
                       tipeKerja: e.target.value as 'Penuh Waktu' | 'Paruh Waktu' | 'Magang' | 'Kontrak',
                     })
                   }
-                  className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                  className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                 >
                   <option value="Penuh Waktu">Penuh Waktu (Full-time)</option>
                   <option value="Paruh Waktu">Paruh Waktu (Part-time)</option>
@@ -1917,7 +1917,7 @@ export default function AdminDashboardClient() {
                       sistemKerja: e.target.value as 'On-site' | 'Hybrid' | 'Remote',
                     })
                   }
-                  className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                  className="w-full min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                 >
                   <option value="Hybrid">Hybrid (Sebagian Kantor / Rumah)</option>
                   <option value="On-site">On-site (Wajib di Kantor/Lokasi)</option>
@@ -1936,7 +1936,7 @@ export default function AdminDashboardClient() {
                   placeholder="Contoh: Rp 7.000.000 - Rp 10.000.000"
                   value={newLoker.gajiPerkiraan}
                   onChange={(e) => setNewLoker({ ...newLoker, gajiPerkiraan: e.target.value })}
-                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                 />
               </div>
 
@@ -1949,7 +1949,7 @@ export default function AdminDashboardClient() {
                   placeholder="Contoh: Budi Santoso (Informatika '18)"
                   value={newLoker.alumniRujukan}
                   onChange={(e) => setNewLoker({ ...newLoker, alumniRujukan: e.target.value })}
-                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                 />
               </div>
             </div>
@@ -1964,7 +1964,7 @@ export default function AdminDashboardClient() {
                 placeholder={"Contoh:\n- Minimal S1 Informatika / Sistem Informasi\n- Pengalaman React & Next.js minimal 1 tahun\n- Disiplin & terbiasa kerja tim"}
                 value={newLoker.kualifikasi}
                 onChange={(e) => setNewLoker({ ...newLoker, kualifikasi: e.target.value })}
-                className="w-full px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                className="w-full px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
               />
             </div>
 
@@ -1978,7 +1978,7 @@ export default function AdminDashboardClient() {
                 placeholder="Tuliskan tugas harian, tantangan pekerjaan, serta fasilitas kerja..."
                 value={newLoker.deskripsi}
                 onChange={(e) => setNewLoker({ ...newLoker, deskripsi: e.target.value })}
-                className="w-full px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                className="w-full px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
               />
             </div>
 
@@ -1993,7 +1993,7 @@ export default function AdminDashboardClient() {
                   placeholder="hrd@kantor.com atau WA 0812..."
                   value={newLoker.kontakLamar}
                   onChange={(e) => setNewLoker({ ...newLoker, kontakLamar: e.target.value })}
-                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                 />
               </div>
 
@@ -2006,16 +2006,16 @@ export default function AdminDashboardClient() {
                   placeholder="https://perusahaan.com/karir"
                   value={newLoker.linkLamar}
                   onChange={(e) => setNewLoker({ ...newLoker, linkLamar: e.target.value })}
-                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-[#0C2340]/20 text-[#0C2340]"
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340]"
                 />
               </div>
             </div>
 
-            <div className="flex justify-end gap-2.5 pt-4 border-t border-[#0C2340]/10">
+            <div className="flex justify-end gap-2.5 pt-4 border-t border-slate-200">
               <button
                 type="button"
                 onClick={() => setLokerModalOpen(false)}
-                className="min-h-[44px] px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-[#0C2340]/20 hover:bg-[#F3F1EA] text-[#0C2340]"
+                className="min-h-[44px] px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-300 hover:bg-slate-100 text-[#0C2340]"
               >
                 Batal
               </button>

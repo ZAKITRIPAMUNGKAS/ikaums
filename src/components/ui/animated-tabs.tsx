@@ -37,7 +37,7 @@ export function AnimatedTabs({
     <div
       role="tablist"
       className={cn(
-        'inline-flex flex-wrap items-center gap-1 p-1 bg-[#F3F1EA] border border-[#0C2340]/10 rounded-xl',
+        'inline-flex flex-wrap items-center gap-1 p-1 bg-slate-100 border border-slate-200 rounded-xl',
         className
       )}
     >

@@ -11,16 +11,16 @@ const PENGURUS_SLOTS = [
 
 export function TrustPanel() {
   return (
-    <div className="rounded-xl border border-[#0C2340]/12 bg-[#F3F1EA] p-5 sm:p-6">
+    <div className="rounded-xl border border-slate-200 bg-slate-50 p-5 sm:p-6 shadow-xs">
       <div className="flex items-start gap-3">
         <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#0C2340] text-white">
           <ShieldCheck className="h-4 w-4" aria-hidden="true" />
         </span>
         <div>
-          <h2 id="pengurus-heading" className="text-lg font-bold text-[#0C2340]">
+          <h2 id="pengurus-heading" className="text-base sm:text-lg font-bold text-slate-900">
             Pengurus Wilayah
           </h2>
-          <p className="mt-1 text-base leading-[1.6] text-[#475569]">
+          <p className="mt-1 text-sm sm:text-base leading-[1.6] text-slate-600">
             Empat peran inti masih dalam penetapan musyawarah. Foto dan nama resmi dipasang
             di sini setelah dikonfirmasi.
           </p>
@@ -29,56 +29,56 @@ export function TrustPanel() {
 
       <ul className="mt-4 grid grid-cols-2 gap-3">
         {PENGURUS_SLOTS.map((slot) => (
-          <li key={slot.peran} className="rounded-lg border border-[#0C2340]/12 bg-[#FDFCF7] p-3">
+          <li key={slot.peran} className="rounded-lg border border-slate-200 bg-white p-3.5 shadow-2xs">
             <div
-              className="flex aspect-square w-full items-center justify-center rounded-md border border-dashed border-[#0C2340]/25 bg-white text-[#475569]"
+              className="flex aspect-square w-full items-center justify-center rounded-md border border-dashed border-slate-300 bg-slate-50 text-slate-400"
               role="img"
               aria-label={`Ruang foto pengurus: ${slot.peran}`}
             >
-              <UserRound className="h-8 w-8" aria-hidden="true" />
+              <UserRound className="h-7 w-7" aria-hidden="true" />
             </div>
-            <p className="mt-2 text-sm font-bold leading-snug text-[#0C2340]">{slot.peran}</p>
-            <p className="mt-0.5 text-sm leading-snug text-[#475569]">Foto &amp; nama menyusul</p>
-            <p className="mt-1 text-sm leading-snug text-[#475569]">{slot.catatan}</p>
+            <p className="mt-2 text-xs sm:text-sm font-bold leading-snug text-slate-900">{slot.peran}</p>
+            <p className="mt-0.5 text-xs leading-snug text-slate-500">Foto &amp; nama menyusul</p>
+            <p className="mt-1 text-xs leading-snug text-slate-600">{slot.catatan}</p>
           </li>
         ))}
       </ul>
 
-      <div className="mt-4 rounded-lg border border-[#92400E]/25 bg-[#FFF7ED] p-4">
-        <p className="text-base font-bold text-[#0C2340]">
+      <div className="mt-4 rounded-lg border border-amber-200 bg-amber-50/70 p-4">
+        <p className="text-sm sm:text-base font-bold text-slate-900">
           Dalam koordinasi dengan PP IKA UMS Pusat
         </p>
-        <p className="mt-1 text-base leading-[1.6] text-[#475569]">
+        <p className="mt-1 text-xs sm:text-sm leading-[1.6] text-slate-700">
           Struktur pengurus wilayah belum ber-SK. Situs ini menampilkan status apa adanya
           sampai koordinasi selesai.
         </p>
 
-        <div className="mt-3 flex items-center gap-3 rounded-lg border border-dashed border-[#92400E]/35 bg-white p-3">
-          <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-md border border-[#0C2340]/15 bg-[#FDFCF7] text-[#475569]">
+        <div className="mt-3 flex items-center gap-3 rounded-lg border border-dashed border-amber-300 bg-white p-3">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-slate-200 bg-slate-50 text-slate-500">
             <ImageIcon className="h-5 w-5" aria-hidden="true" />
           </span>
           <div>
-            <p className="text-sm font-semibold leading-snug text-[#0C2340]">
-              Ruang logo resmi PP IKA UMS Pusat
-            </p>
-            <p className="text-sm leading-snug text-[#475569]">
-              Dipasang setelah izin penggunaan logo dikonfirmasi.
-            </p>
+            <p className="text-xs sm:text-sm font-semibold text-slate-900">Ruang SK Pengurus</p>
+            <p className="text-xs text-slate-500">{COMMUNITY_PLACEHOLDERS.ppIkaUmsStatus}</p>
           </div>
         </div>
-
-        <Link
-          href="/tentang"
-          className="mt-3 inline-flex min-h-[44px] items-center gap-1.5 text-base font-semibold text-[#0C2340] underline decoration-[#92400E] underline-offset-4 hover:text-[#92400E]"
-        >
-          Baca status hubungan organisasi
-          <ArrowRight className="h-4 w-4" aria-hidden="true" />
-        </Link>
       </div>
 
-      <p className="mt-4 text-sm leading-[1.6] text-[#475569]">
-        {COMMUNITY_PLACEHOLDERS.ppIkaUmsStatus}.
-      </p>
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-2 pt-2">
+        <Link
+          href="/kepengurusan"
+          className="inline-flex min-h-[44px] items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#0C2340] underline decoration-[#D97706] underline-offset-4 hover:text-[#D97706] transition-colors"
+        >
+          Lihat struktur lengkap
+          <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+        </Link>
+        <Link
+          href="/tentang"
+          className="inline-flex min-h-[44px] items-center gap-1.5 text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 transition-colors"
+        >
+          Tentang komunitas
+        </Link>
+      </div>
     </div>
   );
 }

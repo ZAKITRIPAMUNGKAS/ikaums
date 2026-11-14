@@ -16,10 +16,10 @@ export const metadata: Metadata = {
 
 export default function PetaPage() {
   return (
-    <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-50 text-[#0C2340] flex flex-col font-sans">
       <Navbar />
 
-      <main className="flex-grow page-grain-base w-full">
+      <main className="flex-grow w-full">
         {/* Header Wilayah — pattern-contour topografi Jabodetabek */}
         <PatternSection
           as="section"
@@ -28,7 +28,7 @@ export default function PetaPage() {
           fade="top-right"
           patternOpacity={0.095}
           patternSize="180px"
-          className="border-b border-[#0C2340]/10"
+          className="border-b border-slate-200"
           contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 md:pt-8 md:pb-10"
         >
           {/* Breadcrumb */}

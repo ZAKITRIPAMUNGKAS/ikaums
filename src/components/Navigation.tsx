@@ -7,7 +7,6 @@ import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { Menu, X, ArrowRight, ChevronDown, ExternalLink } from 'lucide-react';
 import { IS_DEMO_MODE, COMMUNITY_PLACEHOLDERS } from '@/lib/config';
-import { PatternSection } from '@/components/PatternSection';
 
 interface NavSubItem {
   label: string;
@@ -201,8 +200,8 @@ export function Navbar() {
                       onClick={() => setDropdownState(null)}
                       className={`block rounded-lg px-3 py-2.5 min-h-[44px] transition-colors ${
                         active
-                          ? 'bg-[#F3F1EA] text-[#0C2340]'
-                          : 'hover:bg-[#FDFCF7] text-[#0C2340]'
+                          ? 'bg-slate-100 text-[#0C2340]'
+                          : 'hover:bg-slate-50 text-[#0C2340]'
                       }`}
                     >
                       <div className="flex items-center justify-between gap-2">
@@ -228,7 +227,7 @@ export function Navbar() {
   };
 
   return (
-    <header className="sticky top-0 z-50 bg-[#FDFCF7]/95 backdrop-blur-md border-b border-[#0C2340]/10">
+    <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/90 shadow-2xs">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16 sm:h-[72px] gap-4">
           {/* Brand Lockup IKA UMS Jabodetabek */}
@@ -244,10 +243,10 @@ export function Navbar() {
               <span className="text-base sm:text-[17px] font-extrabold tracking-[-0.03em] text-[#0C2340] leading-none">
                 IKA UMS
               </span>
-              <span className="mt-1 hidden text-xs font-semibold tracking-[0.06em] text-[#92400E] uppercase leading-none min-[420px]:block">
+              <span className="mt-1 hidden text-xs font-semibold tracking-[0.06em] text-[#B45309] uppercase leading-none min-[420px]:block">
                 Wilayah Jabodetabek
               </span>
-              <span className="mt-1 text-xs font-semibold tracking-[0.06em] text-[#92400E] uppercase leading-none min-[420px]:hidden">
+              <span className="mt-1 text-xs font-semibold tracking-[0.06em] text-[#B45309] uppercase leading-none min-[420px]:hidden">
                 Jabodetabek
               </span>
             </div>
@@ -346,12 +345,12 @@ export function Navbar() {
             animate={shouldReduceMotion ? { opacity: 1 } : { opacity: 1, height: 'auto' }}
             exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, height: 0 }}
             transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            className="lg:hidden border-b border-[#0C2340]/12 bg-[#FDFCF7] overflow-hidden shadow-xl"
+            className="lg:hidden border-b border-slate-200 bg-white overflow-hidden shadow-xl"
           >
             <nav aria-label="Menu navigasi seluler" className="px-4 sm:px-6 py-5 space-y-4 max-h-[calc(100vh-80px)] overflow-y-auto">
               {/* Grup Jaringan & Kegiatan */}
               <div className="space-y-1.5">
-                <span className="block text-xs font-bold uppercase tracking-wider text-[#92400E] px-1">
+                <span className="block text-xs font-bold uppercase tracking-wider text-[#B45309] px-1">
                   Jaringan &amp; Kegiatan
                 </span>
                 <div className="space-y-1">
@@ -368,13 +367,13 @@ export function Navbar() {
                       onClick={() => setIsOpen(false)}
                       className={`min-h-[44px] flex items-center justify-between px-3.5 py-2.5 rounded-lg border text-sm transition-colors ${
                         item.active
-                          ? 'bg-[#0C2340]/8 border-[#0C2340]/30 text-[#0C2340] font-bold'
-                          : 'bg-white border-[#0C2340]/12 text-[#0C2340] hover:bg-[#F3F1EA]/70 font-medium'
+                          ? 'bg-slate-100 border-slate-300 text-[#0C2340] font-bold'
+                          : 'bg-white border-slate-200 text-slate-800 hover:bg-slate-50 font-medium'
                       }`}
                     >
                       <span>{item.label}</span>
                       {item.active && (
-                        <span className="text-xs font-semibold text-[#92400E]">Aktif</span>
+                        <span className="text-xs font-semibold text-[#B45309]">Aktif</span>
                       )}
                     </Link>
                   ))}
@@ -382,8 +381,8 @@ export function Navbar() {
               </div>
 
               {/* Grup Tentang & Kontak */}
-              <div className="space-y-1.5 pt-2 border-t border-[#0C2340]/10">
-                <span className="block text-xs font-bold uppercase tracking-wider text-[#92400E] px-1">
+              <div className="space-y-1.5 pt-2 border-t border-slate-200">
+                <span className="block text-xs font-bold uppercase tracking-wider text-[#B45309] px-1">
                   Tentang Komunitas
                 </span>
                 <div className="space-y-1">
@@ -400,13 +399,13 @@ export function Navbar() {
                       onClick={() => setIsOpen(false)}
                       className={`min-h-[44px] flex items-center justify-between px-3.5 py-2.5 rounded-lg border text-sm transition-colors ${
                         item.active
-                          ? 'bg-[#0C2340]/8 border-[#0C2340]/30 text-[#0C2340] font-bold'
-                          : 'bg-white border-[#0C2340]/12 text-[#0C2340] hover:bg-[#F3F1EA]/70 font-medium'
+                          ? 'bg-slate-100 border-slate-300 text-[#0C2340] font-bold'
+                          : 'bg-white border-slate-200 text-slate-800 hover:bg-slate-50 font-medium'
                       }`}
                     >
                       <span>{item.label}</span>
                       {item.active && (
-                        <span className="text-xs font-semibold text-[#92400E]">Aktif</span>
+                        <span className="text-xs font-semibold text-[#B45309]">Aktif</span>
                       )}
                     </Link>
                   ))}
@@ -414,18 +413,18 @@ export function Navbar() {
               </div>
 
               {/* Tombol Aksi Bawah */}
-              <div className="pt-3 border-t border-[#0C2340]/10 grid grid-cols-2 gap-2.5">
+              <div className="pt-3 border-t border-slate-200 grid grid-cols-2 gap-2.5">
                 <Link
                   href="/masuk"
                   onClick={() => setIsOpen(false)}
-                  className="min-h-[44px] flex items-center justify-center text-center py-2.5 px-3 bg-white hover:bg-[#F3F1EA] border border-[#0C2340]/20 text-[#0C2340] text-sm font-semibold rounded-lg transition-colors"
+                  className="min-h-[44px] flex items-center justify-center text-center py-2.5 px-3 bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 text-sm font-semibold rounded-lg transition-colors"
                 >
                   Masuk Akun
                 </Link>
                 <Link
                   href="/gabung"
                   onClick={() => setIsOpen(false)}
-                  className="min-h-[44px] flex items-center justify-center text-center py-2.5 px-3 bg-[#0C2340] hover:bg-[#08182E] text-white text-sm font-semibold rounded-lg shadow-xs transition-colors"
+                  className="min-h-[44px] flex items-center justify-center text-center py-2.5 px-3 bg-[#0C2340] hover:bg-[#16325C] text-white text-sm font-semibold rounded-lg shadow-xs transition-colors"
                 >
                   Daftar Anggota
                 </Link>
@@ -440,135 +439,126 @@ export function Navbar() {
 
 export function Footer() {
   return (
-    <footer className="text-[#FDFCF7] font-sans border-t-2 border-[#92400E]/45">
-      <PatternSection
-        as="div"
-        variant="batik"
-        tone="brand-deep"
-        fade="bottom-soft"
-        patternOpacity={0.045}
-        patternSize="88px"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-14">
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10">
-            <div className="md:col-span-6 space-y-4">
-              <Link
-                href="/"
-                className="inline-flex items-center min-h-[44px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F59E0B] rounded-md"
-              >
-                <Image
-                  src="/images/logo-white-text.png"
-                  alt="Logo Ikatan Alumni UMS"
-                  width={165}
-                  height={64}
-                  className="h-14 sm:h-16 w-auto object-contain"
-                />
-              </Link>
-              <p className="text-base text-white/90 max-w-md leading-[1.6]">
-                Jaringan alumni Universitas Muhammadiyah Surakarta yang tinggal dan bekerja di Jakarta,
-                Bogor, Depok, Tangerang, dan Bekasi.
-              </p>
-              <div className="text-sm text-white/80 max-w-md space-y-2 leading-relaxed">
-                <div>{COMMUNITY_PLACEHOLDERS.ppIkaUmsStatus}.</div>
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-1">
-                  <Link
-                    href="/kepengurusan"
-                    className="inline-flex items-center min-h-[44px] text-[#F59E0B] hover:text-white underline underline-offset-4 transition-colors font-medium"
-                  >
-                    Pengurus &amp; Sekretariat
-                  </Link>
-                  <a
-                    href={COMMUNITY_PLACEHOLDERS.ppIkaUmsUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 min-h-[44px] text-white/85 hover:text-white underline underline-offset-4 transition-colors"
-                  >
-                    Situs Resmi UMS
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div className="md:col-span-6 grid grid-cols-2 gap-6 sm:gap-8">
-              <div className="min-w-0">
-                <h2 className="text-xs font-bold text-white uppercase tracking-wider mb-3 border-b border-white/15 pb-2">
-                  Komunitas
-                </h2>
-                <ul className="space-y-0.5 text-sm sm:text-base text-white/85">
-                  <li>
-                    <Link href="/" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
-                      Beranda
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/kegiatan" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
-                      Jadwal Kopdar
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/peluang" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
-                      Mentoring &amp; Kerja
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/peta" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
-                      Sebaran Wilayah
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/direktori" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
-                      Daftar Anggota
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="min-w-0">
-                <h2 className="text-xs font-bold text-white uppercase tracking-wider mb-3 border-b border-white/15 pb-2">
-                  Informasi &amp; Privasi
-                </h2>
-                <ul className="space-y-0.5 text-sm sm:text-base text-white/85">
-                  <li>
-                    <Link href="/tentang" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
-                      Tentang Komunitas
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/kepengurusan" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
-                      Pengurus &amp; Kontak
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/privasi" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
-                      Kebijakan Privasi
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/syarat" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
-                      Ketentuan Komunitas
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/gabung" className="inline-flex items-center min-h-[44px] hover:text-white transition-colors font-semibold text-[#F59E0B]">
-                      Daftar jadi anggota
-                    </Link>
-                  </li>
-                </ul>
+    <footer className="bg-[#0C2340] text-white font-sans border-t-2 border-[#D97706]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12">
+          <div className="md:col-span-6 space-y-4">
+            <Link
+              href="/"
+              className="inline-flex items-center min-h-[44px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F59E0B] rounded-md"
+            >
+              <Image
+                src="/images/logo-white-text.png"
+                alt="Logo Ikatan Alumni UMS"
+                width={165}
+                height={64}
+                className="h-14 sm:h-16 w-auto object-contain"
+              />
+            </Link>
+            <p className="text-base text-slate-200 max-w-md leading-[1.6]">
+              Jaringan alumni Universitas Muhammadiyah Surakarta yang tinggal dan bekerja di Jakarta,
+              Bogor, Depok, Tangerang, dan Bekasi.
+            </p>
+            <div className="text-sm text-slate-300 max-w-md space-y-2 leading-relaxed">
+              <div>{COMMUNITY_PLACEHOLDERS.ppIkaUmsStatus}.</div>
+              <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pt-1">
+                <Link
+                  href="/kepengurusan"
+                  className="inline-flex items-center min-h-[44px] text-[#F59E0B] hover:text-white underline underline-offset-4 transition-colors font-medium"
+                >
+                  Pengurus &amp; Sekretariat
+                </Link>
+                <a
+                  href={COMMUNITY_PLACEHOLDERS.ppIkaUmsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 min-h-[44px] text-slate-300 hover:text-white underline underline-offset-4 transition-colors"
+                >
+                  Situs Resmi UMS
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
               </div>
             </div>
           </div>
 
-          <div className="mt-8 sm:mt-10 pt-6 border-t border-white/15 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-sm text-white/80">
-            <span>
-              &copy; 2026 IKA UMS Wilayah Jabodetabek · Komunitas Alumni Universitas Muhammadiyah Surakarta.
-            </span>
-            <span className="text-white/75">
-              Tahap Prapeluncuran Jabodetabek
-            </span>
+          <div className="md:col-span-6 grid grid-cols-2 gap-6 sm:gap-8">
+            <div className="min-w-0">
+              <h2 className="text-xs font-bold text-slate-200 uppercase tracking-wider mb-3 border-b border-white/10 pb-2">
+                Komunitas
+              </h2>
+              <ul className="space-y-0.5 text-sm sm:text-base text-slate-300">
+                <li>
+                  <Link href="/" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
+                    Beranda
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/kegiatan" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
+                    Jadwal Kopdar
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/peluang" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
+                    Mentoring &amp; Kerja
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/peta" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
+                    Sebaran Wilayah
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/direktori" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
+                    Daftar Anggota
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div className="min-w-0">
+              <h2 className="text-xs font-bold text-slate-200 uppercase tracking-wider mb-3 border-b border-white/10 pb-2">
+                Informasi &amp; Privasi
+              </h2>
+              <ul className="space-y-0.5 text-sm sm:text-base text-slate-300">
+                <li>
+                  <Link href="/tentang" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
+                    Tentang Komunitas
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/kepengurusan" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
+                    Pengurus &amp; Kontak
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/privasi" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
+                    Kebijakan Privasi
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/syarat" className="inline-flex items-center min-h-[44px] hover:text-[#F59E0B] transition-colors">
+                    Ketentuan Komunitas
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/gabung" className="inline-flex items-center min-h-[44px] hover:text-white transition-colors font-semibold text-[#F59E0B]">
+                    Daftar jadi anggota
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-      </PatternSection>
+
+        <div className="mt-8 sm:mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-sm text-slate-400">
+          <span>
+            &copy; 2026 IKA UMS Wilayah Jabodetabek · Komunitas Alumni Universitas Muhammadiyah Surakarta.
+          </span>
+          <span className="text-slate-400">
+            Tahap Prapeluncuran Jabodetabek
+          </span>
+        </div>
+      </div>
     </footer>
   );
 }

@@ -13,10 +13,10 @@ export const metadata: Metadata = {
 
 export default function SyaratPage() {
   return (
-    <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
+    <div className="min-h-screen bg-slate-50 text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
       <Navbar />
 
-      <main className="flex-grow page-grain-base w-full">
+      <main className="flex-grow  w-full">
         <PatternSection
           as="section"
           variant="dots"
@@ -24,7 +24,7 @@ export default function SyaratPage() {
           fade="right-focus"
           patternOpacity={0.05}
           patternSize="24px"
-          className="border-b border-[#0C2340]/10"
+          className="border-b border-slate-200"
           contentClassName="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 sm:pt-8 sm:pb-10"
         >
           <nav aria-label="Breadcrumb" className="text-sm text-[#475569] mb-4 flex items-center gap-2">
@@ -122,7 +122,7 @@ export default function SyaratPage() {
           </section>
         </div>
 
-        <div className="pt-6 border-t border-[#0C2340]/10 flex flex-wrap items-center justify-between gap-4">
+        <div className="pt-6 border-t border-slate-200 flex flex-wrap items-center justify-between gap-4">
           <Link
             href="/privasi"
             className="inline-flex items-center min-h-[44px] text-sm font-semibold text-[#0C2340] hover:text-[#92400E] transition-colors"

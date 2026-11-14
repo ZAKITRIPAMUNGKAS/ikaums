@@ -16,8 +16,8 @@ export default function MobileRegionList({
   onSelectRegion,
 }: MobileRegionListProps) {
   return (
-    <div className="bg-white border border-[#0C2340]/15 rounded-xl p-4 shadow-xs">
-      <div className="flex items-center justify-between mb-3 pb-2 border-b border-[#0C2340]/10">
+    <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs">
+      <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-200">
         <h2 className="text-sm font-bold text-[#0C2340] flex items-center gap-1.5">
           <MapPin className="w-4 h-4 text-[#92400E]" />
           Daftar 9 Wilayah Jabodetabek
@@ -41,8 +41,8 @@ export default function MobileRegionList({
               onClick={() => onSelectRegion(r.regionId)}
               className={`w-full min-h-[44px] py-2.5 px-2.5 flex items-center justify-between text-left transition-colors rounded-lg cursor-pointer ${
                 isSelected
-                  ? 'bg-[#FDFCF7] font-semibold text-[#0C2340]'
-                  : 'hover:bg-[#FDFCF7] text-[#334155]'
+                  ? 'bg-slate-50 font-semibold text-[#0C2340]'
+                  : 'hover:bg-slate-50 text-[#334155]'
               }`}
             >
               <div className="flex items-center gap-2.5 min-w-0">
@@ -63,7 +63,7 @@ export default function MobileRegionList({
 
               <div className="flex items-center gap-2 shrink-0">
                 {IS_DEMO_MODE && (
-                  <span className="text-xs font-semibold text-[#0C2340] bg-[#F3F1EA] px-2.5 py-0.5 rounded">
+                  <span className="text-xs font-semibold text-[#0C2340] bg-slate-100 px-2.5 py-0.5 rounded">
                     {r.count}
                   </span>
                 )}

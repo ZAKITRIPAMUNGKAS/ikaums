@@ -56,10 +56,10 @@ export default function KegiatanPage() {
 
   if (!IS_DEMO_MODE || kegiatanList.length === 0) {
     return (
-      <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans">
+      <div className="min-h-screen bg-slate-50 text-[#0C2340] flex flex-col font-sans">
         <Navbar />
 
-        <main className="flex-grow page-grain-base w-full">
+        <main className="flex-grow w-full">
           <PatternSection
             as="section"
             variant="contour"
@@ -67,7 +67,7 @@ export default function KegiatanPage() {
             fade="top-right"
             patternOpacity={0.075}
             patternSize="180px"
-            className="border-b border-[#0C2340]/10"
+            className="border-b border-slate-200"
             contentClassName="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 sm:pt-8 sm:pb-10"
           >
             <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-[#475569] mb-4">
@@ -109,7 +109,7 @@ export default function KegiatanPage() {
 
               {/* 4 Langkah Alur */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                <div className="p-4 rounded-xl bg-[#FDFCF7] border border-[#0C2340]/10 space-y-1.5">
+                <div className="p-4 rounded-xl bg-white border border-slate-200 space-y-1.5">
                   <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#0C2340] text-white text-xs font-bold">1</span>
                   <h3 className="font-bold text-base text-[#0C2340]">Pendataan Domisili</h3>
                   <p className="text-sm text-[#475569] leading-relaxed">
@@ -117,7 +117,7 @@ export default function KegiatanPage() {
                   </p>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#FDFCF7] border border-[#0C2340]/10 space-y-1.5">
+                <div className="p-4 rounded-xl bg-white border border-slate-200 space-y-1.5">
                   <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#92400E] text-white text-xs font-bold">2</span>
                   <h3 className="font-bold text-base text-[#0C2340]">Musyawarah Titik Kumpul</h3>
                   <p className="text-sm text-[#475569] leading-relaxed">
@@ -125,7 +125,7 @@ export default function KegiatanPage() {
                   </p>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#FDFCF7] border border-[#0C2340]/10 space-y-1.5">
+                <div className="p-4 rounded-xl bg-white border border-slate-200 space-y-1.5">
                   <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#0C2340]/70 text-white text-xs font-bold">3</span>
                   <h3 className="font-bold text-base text-[#0C2340]">Kabar via WhatsApp</h3>
                   <p className="text-sm text-[#475569] leading-relaxed">
@@ -133,7 +133,7 @@ export default function KegiatanPage() {
                   </p>
                 </div>
 
-                <div className="p-4 rounded-xl bg-[#FDFCF7] border border-[#0C2340]/10 space-y-1.5">
+                <div className="p-4 rounded-xl bg-white border border-slate-200 space-y-1.5">
                   <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-emerald-700 text-white text-xs font-bold">4</span>
                   <h3 className="font-bold text-base text-[#0C2340]">Kopdar Pertama</h3>
                   <p className="text-sm text-[#475569] leading-relaxed">
@@ -143,7 +143,7 @@ export default function KegiatanPage() {
               </div>
 
               {/* Status Tempat & Waktu */}
-              <dl className="divide-y divide-[#0C2340]/10 border-y border-[#0C2340]/10 text-base">
+              <dl className="divide-y divide-[#0C2340]/10 border-y border-slate-200 text-base">
                 <div className="py-3.5 flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4">
                   <dt className="sm:w-44 text-sm font-semibold text-[#475569] shrink-0">
                     Waktu Pertemuan
@@ -167,7 +167,7 @@ export default function KegiatanPage() {
                 </Link>
                 <Link
                   href="/gabung"
-                  className="inline-flex items-center justify-center min-h-[48px] px-5 py-3 rounded-lg bg-white border border-[#0C2340]/20 hover:border-[#0C2340]/45 active:scale-[0.99] text-[#0C2340] text-base font-semibold transition-all duration-150"
+                  className="inline-flex items-center justify-center min-h-[48px] px-5 py-3 rounded-lg bg-white border border-slate-300 hover:border-slate-400 active:scale-[0.99] text-[#0C2340] text-base font-semibold transition-all duration-150"
                 >
                   Daftar jadi anggota
                 </Link>
@@ -190,10 +190,10 @@ export default function KegiatanPage() {
   const isFeaturedRsvp = rsvpDone[featuredEvent.id];
 
   return (
-    <div className="min-h-screen bg-[#FDFCF7] text-[#0C2340] flex flex-col font-sans">
+    <div className="min-h-screen bg-slate-50 text-[#0C2340] flex flex-col font-sans">
       <Navbar />
 
-      <main className="flex-grow page-grain-base w-full">
+      <main className="flex-grow w-full">
         <PatternSection
           as="section"
           variant="contour"
@@ -201,7 +201,7 @@ export default function KegiatanPage() {
           fade="top-right"
           patternOpacity={0.075}
           patternSize="180px"
-          className="border-b border-[#0C2340]/10"
+          className="border-b border-slate-200"
           contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 md:pt-8 md:pb-10"
         >
           <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-2 text-sm text-[#475569] mb-4">
@@ -327,9 +327,9 @@ export default function KegiatanPage() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="bg-white border border-[#0C2340]/12 rounded-xl overflow-hidden flex flex-col sm:flex-row shadow-2xs"
+                  className="bg-white border border-slate-200 rounded-xl overflow-hidden flex flex-col sm:flex-row shadow-2xs"
                 >
-                  <div className="aspect-[16/10] sm:aspect-auto sm:w-52 shrink-0 bg-[#F3F1EA] relative overflow-hidden">
+                  <div className="aspect-[16/10] sm:aspect-auto sm:w-52 shrink-0 bg-slate-100 relative overflow-hidden">
                     <Image
                       src={item.gambar || '/images/alumni-gathering-4.jpg'}
                       alt={item.judul}
@@ -342,7 +342,7 @@ export default function KegiatanPage() {
                   <div className="p-5 flex-1 flex flex-col justify-between gap-4">
                     <div className="space-y-1.5">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="inline-block bg-[#F3F1EA] text-[#0C2340] text-xs font-semibold px-2.5 py-0.5 rounded">
+                        <span className="inline-block bg-slate-100 text-[#0C2340] text-xs font-semibold px-2.5 py-0.5 rounded">
                           {item.jenis}
                         </span>
                         <span className="text-sm text-[#475569]">{item.tanggalWIB} · {item.wilayah}</span>
@@ -357,7 +357,7 @@ export default function KegiatanPage() {
                         className={`w-full sm:w-auto min-h-[44px] px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors cursor-pointer ${
                           isRsvped
                             ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                            : 'bg-[#F3F1EA] text-[#0C2340] hover:bg-[#0C2340] hover:text-white'
+                            : 'bg-slate-100 text-[#0C2340] hover:bg-[#0C2340] hover:text-white'
                         }`}
                       >
                         {isRsvped ? 'Tercatat ikut' : 'Daftar ikut'}
@@ -374,7 +374,7 @@ export default function KegiatanPage() {
               <button
                 type="button"
                 onClick={() => setVisibleCount((prev) => prev + 3)}
-                className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-lg border border-[#0C2340]/20 bg-white hover:bg-[#F3F1EA] text-[#0C2340] text-base font-semibold transition-colors cursor-pointer"
+                className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 text-[#0C2340] text-base font-semibold transition-colors cursor-pointer"
               >
                 Tampilkan jadwal lainnya ({filteredKegiatan.length - visibleCount} lagi)
               </button>

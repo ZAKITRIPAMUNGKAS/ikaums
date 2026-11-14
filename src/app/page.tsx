@@ -4,7 +4,6 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Navbar, Footer } from '@/components/Navigation';
-import { PatternSection } from '@/components/PatternSection';
 import { RegionPicker } from '@/components/home/RegionPicker';
 import { RegionInterestBoard } from '@/components/home/RegionInterestBoard';
 import { KopdarInterestForm } from '@/components/home/KopdarInterestForm';
@@ -53,145 +52,136 @@ export default function HomePage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#FDFCF7] pb-24 font-sans text-[#0C2340] selection:bg-[#0C2340] selection:text-white lg:pb-0">
+    <div className="flex min-h-screen flex-col bg-slate-50 pb-24 font-sans text-slate-900 selection:bg-[#0C2340] selection:text-white lg:pb-0">
       <Navbar />
 
-      <main className="flex-grow page-grain-base">
+      <main className="flex-grow">
         {/* 1. HERO: badge status, satu aksi utama, foto dokumentasi */}
-        <PatternSection
-          variant="batik"
-          tone="light"
-          fade="right-focus"
-          patternOpacity={0.06}
-          patternSize="64px"
-          contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12 sm:pt-12 lg:pt-14 lg:pb-16"
-        >
-          <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:items-center lg:gap-12">
-            <div className="space-y-5 lg:col-span-6">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-2 rounded-full border border-[#92400E]/30 bg-[#FFF7ED] px-3 py-1 text-sm font-semibold text-[#92400E]">
-                  <span className="h-2 w-2 rounded-full bg-[#92400E]" aria-hidden="true" />
-                  Tahap pendataan awal
-                </span>
-                {IS_DEMO_MODE && (
-                  <span className="inline-flex items-center rounded-full bg-amber-100 px-2.5 py-0.5 text-sm font-semibold text-[#92400E]">
-                    {DEMO_BADGE_LABEL}
+        <section className="bg-white border-b border-slate-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-12 sm:pt-12 lg:pt-16 lg:pb-20">
+            <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:items-center lg:gap-12">
+              <div className="space-y-5 lg:col-span-6">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1 text-xs sm:text-sm font-semibold text-[#B45309]">
+                    <span className="h-2 w-2 rounded-full bg-[#D97706]" aria-hidden="true" />
+                    Tahap pendataan awal
                   </span>
-                )}
-              </div>
-
-              <h1 className="text-[clamp(1.875rem,1.35rem+2.2vw,2.75rem)] font-extrabold leading-[1.12] tracking-[-0.025em] text-[#0C2340]">
-                Jaringan Alumni UMS di Jabodetabek
-              </h1>
-
-              <p className="max-w-[46ch] text-lg leading-[1.6] text-[#475569] sm:max-w-xl">
-                Tempat alumni Universitas Muhammadiyah Surakarta di Jakarta, Bogor, Depok,
-                Tangerang, dan Bekasi saling kenal lagi.
-              </p>
-              <p className="max-w-[46ch] text-base leading-[1.65] text-[#475569] sm:max-w-xl">
-                Kami sedang mendata domisili untuk menentukan kopdar pertama per wilayah.
-                Isi minatmu dulu, tanpa perlu membuat akun.
-              </p>
-
-              <div className="flex flex-col gap-3 pt-1 sm:flex-row sm:flex-wrap sm:items-center">
-                <a
-                  href="#kopdar"
-                  className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-lg bg-[#0C2340] px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-[#08182E] active:scale-[0.99]"
-                >
-                  Kirim minat kopdar
-                  <ArrowRight className="h-4 w-4 text-[#F59E0B]" aria-hidden="true" />
-                </a>
-                <Link
-                  href="/gabung"
-                  className="inline-flex min-h-[48px] items-center justify-center rounded-lg border border-[#0C2340]/25 bg-white px-5 py-3 text-base font-semibold text-[#0C2340] transition-colors hover:border-[#0C2340]/50 hover:bg-[#FDFCF7]"
-                >
-                  Daftar jadi anggota
-                </Link>
-              </div>
-              <p className="text-sm text-[#475569]">
-                Form minat ± 1 menit. Sudah mendaftar?{' '}
-                <Link
-                  href="/masuk"
-                  className="inline-flex min-h-[44px] items-center font-semibold text-[#0C2340] underline decoration-[#92400E] underline-offset-4 hover:text-[#92400E]"
-                >
-                  Masuk di sini
-                </Link>
-                .
-              </p>
-            </div>
-
-            <div className="lg:col-span-6">
-              <figure className="space-y-2.5">
-                <div className="relative aspect-[16/10] w-full overflow-hidden rounded-lg border border-[#0C2340]/12 bg-[#F3F1EA]">
-                  <Image
-                    src="/images/alumni-gathering-4.jpg"
-                    alt="Alumni Universitas Muhammadiyah Surakarta berjabat tangan di meja registrasi De Terras"
-                    width={1200}
-                    height={750}
-                    priority
-                    fetchPriority="high"
-                    sizes="(max-width: 1024px) 100vw, 46vw"
-                    className="h-full w-full object-cover"
-                  />
+                  {IS_DEMO_MODE && (
+                    <span className="inline-flex items-center rounded-full bg-slate-100 border border-slate-200 px-2.5 py-0.5 text-xs sm:text-sm font-semibold text-slate-700">
+                      {DEMO_BADGE_LABEL}
+                    </span>
+                  )}
                 </div>
-                <figcaption className="text-sm leading-relaxed text-[#475569]">
-                  {COMMUNITY_PLACEHOLDERS.heroPhotoCaption}
-                </figcaption>
-              </figure>
+
+                <h1 className="text-[clamp(1.875rem,1.35rem+2.2vw,2.75rem)] font-extrabold leading-[1.12] tracking-[-0.025em] text-slate-900">
+                  Jaringan Alumni UMS di Jabodetabek
+                </h1>
+
+                <p className="max-w-[46ch] text-base sm:text-lg leading-[1.6] text-slate-600 sm:max-w-xl">
+                  Tempat alumni Universitas Muhammadiyah Surakarta di Jakarta, Bogor, Depok,
+                  Tangerang, dan Bekasi saling kenal lagi.
+                </p>
+                <p className="max-w-[46ch] text-sm sm:text-base leading-[1.65] text-slate-600 sm:max-w-xl">
+                  Kami sedang mendata domisili untuk menentukan kopdar pertama per wilayah.
+                  Isi minatmu dulu, tanpa perlu membuat akun.
+                </p>
+
+                <div className="flex flex-col gap-3 pt-2 sm:flex-row sm:flex-wrap sm:items-center">
+                  <a
+                    href="#kopdar"
+                    className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-lg bg-[#0C2340] px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-[#08182E] shadow-xs active:scale-[0.99]"
+                  >
+                    Kirim minat kopdar
+                    <ArrowRight className="h-4 w-4 text-[#F59E0B]" aria-hidden="true" />
+                  </a>
+                  <Link
+                    href="/gabung"
+                    className="inline-flex min-h-[48px] items-center justify-center rounded-lg border border-slate-300 bg-white px-5 py-3 text-base font-semibold text-slate-800 transition-colors hover:border-slate-400 hover:bg-slate-50 shadow-2xs"
+                  >
+                    Daftar jadi anggota
+                  </Link>
+                </div>
+                <p className="text-xs sm:text-sm text-slate-500">
+                  Form minat ± 1 menit. Sudah mendaftar?{' '}
+                  <Link
+                    href="/masuk"
+                    className="inline-flex min-h-[44px] items-center font-semibold text-[#0C2340] underline decoration-[#D97706] underline-offset-4 hover:text-[#D97706]"
+                  >
+                    Masuk di sini
+                  </Link>
+                  .
+                </p>
+              </div>
+
+              <div className="lg:col-span-6">
+                <figure className="space-y-2.5">
+                  <div className="relative aspect-[16/10] w-full overflow-hidden rounded-xl border border-slate-200 bg-slate-100 shadow-xs">
+                    <Image
+                      src="/images/alumni-gathering-4.jpg"
+                      alt="Alumni Universitas Muhammadiyah Surakarta berjabat tangan di meja registrasi De Terras"
+                      width={1200}
+                      height={750}
+                      priority
+                      fetchPriority="high"
+                      sizes="(max-width: 1024px) 100vw, 46vw"
+                      className="h-full w-full object-cover"
+                    />
+                  </div>
+                  <figcaption className="text-xs sm:text-sm leading-relaxed text-slate-500">
+                    {COMMUNITY_PLACEHOLDERS.heroPhotoCaption}
+                  </figcaption>
+                </figure>
+              </div>
             </div>
           </div>
-        </PatternSection>
+        </section>
 
-        {/* 2. ALASAN: tiga kartu ikon, satu kalimat per poin */}
-        <PatternSection
+        {/* 2. ALASAN: tiga kartu ikon, bersih dan terukur */}
+        <section
           aria-labelledby="alasan-heading"
-          variant="dots"
-          tone="tint"
-          fade="soft-edges"
-          patternOpacity={0.055}
-          patternSize="24px"
-          className="border-y border-[#0C2340]/10"
-          contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16"
+          className="border-b border-slate-200 bg-slate-50 py-12 sm:py-16"
         >
-          <div className="max-w-2xl">
-            <h2
-              id="alasan-heading"
-              className="text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em] text-[#0C2340]"
-            >
-              Kenapa Didata Terlebih Dulu?
-            </h2>
-            <p className="mt-2 text-base leading-[1.6] text-[#475569]">
-              Supaya jadwal dan lokasi kopdar pertama benar-benar cocok dengan tempat tinggal
-              alumni, bukan tebakan pengurus.
-            </p>
-          </div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="max-w-2xl">
+              <h2
+                id="alasan-heading"
+                className="text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em] text-slate-900"
+              >
+                Kenapa Didata Terlebih Dulu?
+              </h2>
+              <p className="mt-2 text-sm sm:text-base leading-[1.6] text-slate-600">
+                Supaya jadwal dan lokasi kopdar pertama benar-benar cocok dengan tempat tinggal
+                alumni, bukan tebakan pengurus.
+              </p>
+            </div>
 
-          <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-3">
-            {ALASAN.map((item) => {
-              const Icon = item.icon;
-              return (
-                <div key={item.judul} className="surface-card rounded-xl p-5">
-                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#F3F1EA] text-[#92400E]">
-                    <Icon className="h-5 w-5" aria-hidden="true" />
-                  </span>
-                  <h3 className="mt-3 text-lg font-bold text-[#0C2340]">{item.judul}</h3>
-                  <p className="mt-1 text-base leading-[1.6] text-[#475569]">{item.isi}</p>
-                </div>
-              );
-            })}
+            <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+              {ALASAN.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <div key={item.judul} className="rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-xs">
+                    <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-amber-50 text-[#B45309] border border-amber-200/60">
+                      <Icon className="h-5 w-5" aria-hidden="true" />
+                    </span>
+                    <h3 className="mt-4 text-base sm:text-lg font-bold text-slate-900">{item.judul}</h3>
+                    <p className="mt-1.5 text-sm sm:text-base leading-[1.6] text-slate-600">{item.isi}</p>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </PatternSection>
+        </section>
 
         {/* 3. WILAYAH: foto dokumentasi, pemilih wilayah interaktif, papan minat */}
         <section
           id="wilayah"
           aria-labelledby="wilayah-heading"
-          className="relative z-[1] mx-auto max-w-7xl scroll-mt-20 px-4 py-12 sm:px-6 sm:py-16 lg:px-8"
+          className="mx-auto max-w-7xl scroll-mt-20 px-4 py-12 sm:px-6 sm:py-16 lg:px-8"
         >
           <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-12">
             <div className="lg:col-span-7">
               <figure className="space-y-2.5">
-                <div className="relative aspect-[16/9] w-full overflow-hidden rounded-lg border border-[#0C2340]/12 bg-[#F3F1EA]">
+                <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl border border-slate-200 bg-slate-100 shadow-xs">
                   <Image
                     src="/images/hero-kumpul-bolo-pisah.jpg"
                     alt="Foto bersama alumni Universitas Muhammadiyah Surakarta di aula Kumpul Bolo Pisah"
@@ -202,29 +192,29 @@ export default function HomePage() {
                     className="h-full w-full object-cover"
                   />
                 </div>
-                <figcaption className="text-sm leading-relaxed text-[#475569]">
+                <figcaption className="text-xs sm:text-sm leading-relaxed text-slate-500">
                   {COMMUNITY_PLACEHOLDERS.documentationCaption}
                 </figcaption>
               </figure>
             </div>
 
             <div className="space-y-3 lg:col-span-5">
-              <span className="inline-block text-sm font-semibold text-[#92400E]">
+              <span className="inline-block text-xs sm:text-sm font-semibold text-[#B45309]">
                 Sembilan wilayah
               </span>
               <h2
                 id="wilayah-heading"
-                className="text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em] text-[#0C2340]"
+                className="text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em] text-slate-900"
               >
                 Pilih wilayahmu, buka kopdar di kotamu
               </h2>
-              <p className="text-base leading-[1.6] text-[#475569]">
+              <p className="text-sm sm:text-base leading-[1.6] text-slate-600">
                 Klik kota atau kabupaten tempatmu tinggal. Form minat kopdar akan langsung
                 terisi dan papan minat di bawah ikut diperbarui.
               </p>
               <Link
                 href="/peta"
-                className="inline-flex min-h-[44px] items-center gap-2 px-1 text-base font-semibold text-[#0C2340] underline decoration-[#92400E] underline-offset-4 transition-colors hover:text-[#92400E]"
+                className="inline-flex min-h-[44px] items-center gap-2 text-sm sm:text-base font-semibold text-[#0C2340] underline decoration-[#D97706] underline-offset-4 transition-colors hover:text-[#D97706]"
               >
                 Lihat peta cakupan wilayah
                 <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -235,77 +225,73 @@ export default function HomePage() {
           <div className="mt-8">
             <RegionPicker selected={selectedWilayah} onSelect={handleSelectRegion} />
           </div>
-          <div className="mt-5">
+          <div className="mt-6">
             <RegionInterestBoard counts={counts} />
           </div>
         </section>
 
-        {/* 4. FORM MINAT KOPDAR: section sendiri, dekat status pengurus */}
-        <PatternSection
+        {/* 4. FORM MINAT KOPDAR: section khusus, dekat status pengurus */}
+        <section
           id="kopdar"
           aria-labelledby="kopdar-heading"
-          variant="contour"
-          tone="tint"
-          fade="top-right"
-          patternOpacity={0.075}
-          patternSize="180px"
-          className="scroll-mt-20 border-y border-[#0C2340]/10"
-          contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16"
+          className="scroll-mt-20 border-y border-slate-200 bg-white py-12 sm:py-16"
         >
-          <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-10">
-            <div className="order-2 space-y-5 lg:order-1 lg:col-span-5">
-              <div className="space-y-3">
-                <span className="inline-block text-sm font-semibold text-[#92400E]">
-                  Kopdar pertama
-                </span>
-                <h2
-                  id="kopdar-heading"
-                  className="text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em] text-[#0C2340]"
-                >
-                  Isi minat kopdar di wilayahmu
-                </h2>
-                <p className="text-base leading-[1.6] text-[#475569]">
-                  Tanggal dan lokasi belum ditetapkan. Pengurus memilih hari dan titik kumpul
-                  dari isian yang masuk, dimulai dari wilayah yang paling banyak peminatnya.
-                </p>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 items-start gap-8 lg:grid-cols-12 lg:gap-10">
+              <div className="order-2 space-y-5 lg:order-1 lg:col-span-5">
+                <div className="space-y-2">
+                  <span className="inline-block text-xs sm:text-sm font-semibold text-[#B45309]">
+                    Kopdar pertama
+                  </span>
+                  <h2
+                    id="kopdar-heading"
+                    className="text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em] text-slate-900"
+                  >
+                    Isi minat kopdar di wilayahmu
+                  </h2>
+                  <p className="text-sm sm:text-base leading-[1.6] text-slate-600">
+                    Tanggal dan lokasi belum ditetapkan. Pengurus memilih hari dan titik kumpul
+                    dari isian yang masuk, dimulai dari wilayah yang paling banyak peminatnya.
+                  </p>
+                </div>
+
+                <div className="rounded-xl border border-amber-200 bg-amber-50/70 p-4 sm:p-5">
+                  <p className="text-sm sm:text-base font-bold text-slate-900">
+                    Dalam koordinasi dengan PP IKA UMS Pusat
+                  </p>
+                  <p className="mt-1 text-xs sm:text-sm leading-[1.6] text-slate-700">
+                    Status resmi pengurus wilayah masih dalam penetapan. Nomor WhatsApp hanya
+                    dipakai pengurus untuk verifikasi dan info kopdar.
+                  </p>
+                </div>
+
+                <TrustPanel />
               </div>
 
-              <div className="rounded-lg border border-[#92400E]/25 bg-[#FFF7ED] p-4">
-                <p className="text-base font-bold text-[#0C2340]">
-                  Dalam koordinasi dengan PP IKA UMS Pusat
-                </p>
-                <p className="mt-1 text-base leading-[1.6] text-[#475569]">
-                  Status resmi pengurus wilayah masih dalam penetapan. Nomor WhatsApp hanya
-                  dipakai pengurus untuk verifikasi dan info kopdar.
-                </p>
+              <div className="order-1 lg:order-2 lg:col-span-7">
+                <KopdarInterestForm
+                  wilayah={selectedWilayah}
+                  onWilayahChange={setSelectedWilayah}
+                />
               </div>
-
-              <TrustPanel />
-            </div>
-
-            <div className="order-1 lg:order-2 lg:col-span-7">
-              <KopdarInterestForm
-                wilayah={selectedWilayah}
-                onWilayahChange={setSelectedWilayah}
-              />
             </div>
           </div>
-        </PatternSection>
+        </section>
 
         {/* 5. MENTORING: tanpa form, tautan ke /peluang */}
-        <section aria-labelledby="mentoring-heading" className="bg-[#FDFCF7]">
+        <section aria-labelledby="mentoring-heading" className="bg-slate-50 border-b border-slate-200">
           <div className="mx-auto grid max-w-7xl grid-cols-1 items-center gap-6 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-12 lg:gap-12 lg:px-8">
             <div className="lg:col-span-7">
-              <span className="inline-block text-sm font-semibold text-[#92400E]">
+              <span className="inline-block text-xs sm:text-sm font-semibold text-[#B45309]">
                 Mentoring Alumni
               </span>
               <h2
                 id="mentoring-heading"
-                className="mt-2 text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em] text-[#0C2340]"
+                className="mt-2 text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em] text-slate-900"
               >
                 Mentoring CV &amp; Berbagi Lowongan
               </h2>
-              <p className="mt-2 max-w-[60ch] text-base leading-[1.6] text-[#475569]">
+              <p className="mt-2 max-w-[60ch] text-sm sm:text-base leading-[1.6] text-slate-600">
                 Butuh teman diskusi sebelum melamar kerja, atau bersedia meluangkan waktu
                 untuk mengulas CV adik tingkat? Mulai dari halaman Mentoring &amp; Kerja.
               </p>
@@ -313,14 +299,14 @@ export default function HomePage() {
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center lg:col-span-5 lg:justify-end">
               <Link
                 href="/peluang#mentoring"
-                className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-lg bg-[#0C2340] px-5 py-3 text-base font-semibold text-white transition-colors hover:bg-[#08182E]"
+                className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-lg bg-[#0C2340] px-5 py-3 text-sm sm:text-base font-semibold text-white transition-colors hover:bg-[#08182E] shadow-xs"
               >
                 Cari mentor
                 <ArrowRight className="h-4 w-4 text-[#F59E0B]" aria-hidden="true" />
               </Link>
               <Link
                 href="/gabung?mentor=ya"
-                className="inline-flex min-h-[48px] items-center justify-center rounded-lg border border-[#0C2340]/25 bg-white px-5 py-3 text-base font-semibold text-[#0C2340] transition-colors hover:border-[#0C2340]/50"
+                className="inline-flex min-h-[48px] items-center justify-center rounded-lg border border-slate-300 bg-white px-5 py-3 text-sm sm:text-base font-semibold text-slate-800 transition-colors hover:border-slate-400 hover:bg-slate-50 shadow-2xs"
               >
                 Daftar jadi mentor
               </Link>
@@ -335,105 +321,105 @@ export default function HomePage() {
         <section
           id="tanya-jawab"
           aria-labelledby="faq-heading"
-          className="relative z-[1] bg-[#FDFCF7] py-12 sm:py-16"
+          className="bg-white py-12 sm:py-16"
         >
           <div className="mx-auto max-w-4xl space-y-10 px-4 sm:px-6 lg:px-8">
             <div>
               <h2
                 id="faq-heading"
-                className="mb-6 text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em] text-[#0C2340]"
+                className="mb-6 text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold tracking-[-0.015em] text-slate-900"
               >
                 Soal Pendataan &amp; Data Kamu
               </h2>
 
-              <div className="divide-y divide-[#0C2340]/12 border-y border-[#0C2340]/12">
-                <details className="group py-2">
-                  <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-4 py-2 text-base font-semibold text-[#0C2340]">
+              <div className="divide-y divide-slate-200 border-y border-slate-200">
+                <details className="group py-3">
+                  <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-4 py-2 text-sm sm:text-base font-semibold text-slate-900 hover:text-[#0C2340]">
                     <span>Apakah mengirim minat kopdar sama dengan mendaftar anggota?</span>
-                    <ChevronDown className="h-4 w-4 shrink-0 text-[#475569] transition-transform duration-150 group-open:rotate-180" aria-hidden="true" />
+                    <ChevronDown className="h-4 w-4 shrink-0 text-slate-500 transition-transform duration-150 group-open:rotate-180" aria-hidden="true" />
                   </summary>
-                  <p className="max-w-[60ch] pb-4 text-base leading-[1.6] text-[#475569]">
+                  <p className="max-w-[60ch] pb-3 text-sm sm:text-base leading-[1.6] text-slate-600">
                     Belum. Isian minat kopdar hanya berisi wilayah, waktu, nama, dan nomor
                     WhatsApp untuk kabar jadwal. Pendaftaran anggota penuh dengan data prodi
                     dan angkatan dilakukan terpisah lewat tombol Daftar jadi anggota.
                   </p>
                 </details>
 
-                <details className="group py-2">
-                  <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-4 py-2 text-base font-semibold text-[#0C2340]">
+                <details className="group py-3">
+                  <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-4 py-2 text-sm sm:text-base font-semibold text-slate-900 hover:text-[#0C2340]">
                     <span>Apakah nomor WhatsApp saya ditampilkan terbuka?</span>
-                    <ChevronDown className="h-4 w-4 shrink-0 text-[#475569] transition-transform duration-150 group-open:rotate-180" aria-hidden="true" />
+                    <ChevronDown className="h-4 w-4 shrink-0 text-slate-500 transition-transform duration-150 group-open:rotate-180" aria-hidden="true" />
                   </summary>
-                  <div className="space-y-2 pb-4">
-                    <p className="max-w-[60ch] text-base leading-[1.6] text-[#475569]">
+                  <div className="space-y-2 pb-3">
+                    <p className="max-w-[60ch] text-sm sm:text-base leading-[1.6] text-slate-600">
                       Tidak. Nomor hanya dipakai pengurus untuk mengabari jadwal kopdar
                       wilayahmu. Nomor dan email tidak pernah ditampilkan di halaman publik.
                     </p>
                     <Link
                       href="/privasi"
-                      className="inline-flex min-h-[44px] items-center gap-1.5 px-1 text-base font-semibold text-[#0C2340] underline decoration-[#92400E] underline-offset-4 hover:text-[#92400E]"
+                      className="inline-flex min-h-[44px] items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#0C2340] underline decoration-[#D97706] underline-offset-4 hover:text-[#D97706]"
                     >
                       Baca Kebijakan Privasi
-                      <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                      <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
                     </Link>
                   </div>
                 </details>
 
-                <details className="group py-2">
-                  <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-4 py-2 text-base font-semibold text-[#0C2340]">
+                <details className="group py-3">
+                  <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-4 py-2 text-sm sm:text-base font-semibold text-slate-900 hover:text-[#0C2340]">
                     <span>Kapan saya dihubungi pengurus?</span>
-                    <ChevronDown className="h-4 w-4 shrink-0 text-[#475569] transition-transform duration-150 group-open:rotate-180" aria-hidden="true" />
+                    <ChevronDown className="h-4 w-4 shrink-0 text-slate-500 transition-transform duration-150 group-open:rotate-180" aria-hidden="true" />
                   </summary>
-                  <p className="max-w-[60ch] pb-4 text-base leading-[1.6] text-[#475569]">
+                  <p className="max-w-[60ch] pb-3 text-sm sm:text-base leading-[1.6] text-slate-600">
                     Setelah isian dicocokkan, pengurus menghubungi lewat WhatsApp{' '}
                     {COMMUNITY_PLACEHOLDERS.verificationSla}. Tanggal dan lokasi kopdar
                     ditetapkan setelah suara wilayah terkumpul.
                   </p>
                 </details>
 
-                <details className="group py-2">
-                  <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-4 py-2 text-base font-semibold text-[#0C2340]">
+                <details className="group py-3">
+                  <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-4 py-2 text-sm sm:text-base font-semibold text-slate-900 hover:text-[#0C2340]">
                     <span>Bagaimana hubungannya dengan PP IKA UMS Pusat?</span>
-                    <ChevronDown className="h-4 w-4 shrink-0 text-[#475569] transition-transform duration-150 group-open:rotate-180" aria-hidden="true" />
+                    <ChevronDown className="h-4 w-4 shrink-0 text-slate-500 transition-transform duration-150 group-open:rotate-180" aria-hidden="true" />
                   </summary>
-                  <div className="space-y-2 pb-4">
-                    <p className="max-w-[60ch] text-base leading-[1.6] text-[#475569]">
+                  <div className="space-y-2 pb-3">
+                    <p className="max-w-[60ch] text-sm sm:text-base leading-[1.6] text-slate-600">
                       Jaringan wilayah ini disiapkan sebagai simpul daerah alumni
                       Universitas Muhammadiyah Surakarta. Status koordinasinya:{' '}
                       {COMMUNITY_PLACEHOLDERS.ppIkaUmsStatus}.
                     </p>
                     <Link
                       href="/tentang"
-                      className="inline-flex min-h-[44px] items-center gap-1.5 px-1 text-base font-semibold text-[#0C2340] underline decoration-[#92400E] underline-offset-4 hover:text-[#92400E]"
+                      className="inline-flex min-h-[44px] items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#0C2340] underline decoration-[#D97706] underline-offset-4 hover:text-[#D97706]"
                     >
                       Baca Tentang Komunitas
-                      <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                      <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
                     </Link>
                   </div>
                 </details>
               </div>
             </div>
 
-            <div className="flex flex-col justify-between gap-5 border-t border-[#0C2340]/12 pt-8 sm:flex-row sm:items-center">
+            <div className="flex flex-col justify-between gap-5 border-t border-slate-200 pt-8 sm:flex-row sm:items-center">
               <div className="max-w-lg space-y-1">
-                <h2 className="text-xl font-bold text-[#0C2340]">
+                <h2 className="text-lg sm:text-xl font-bold text-slate-900">
                   Siap ikut kopdar pertama?
                 </h2>
-                <p className="text-base leading-[1.6] text-[#475569]">
+                <p className="text-sm sm:text-base leading-[1.6] text-slate-600">
                   Pilih wilayahmu dan tinggalkan kontak. Pengurus yang mengurus jadwalnya.
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-3">
                 <a
                   href="#kopdar"
-                  className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-lg bg-[#0C2340] px-6 py-3 text-base font-semibold text-white transition-colors hover:bg-[#08182E] active:scale-[0.99]"
+                  className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-lg bg-[#0C2340] px-6 py-3 text-sm sm:text-base font-semibold text-white transition-colors hover:bg-[#08182E] active:scale-[0.99] shadow-xs"
                 >
                   Kirim minat kopdar
                   <ArrowRight className="h-4 w-4 text-[#F59E0B]" aria-hidden="true" />
                 </a>
                 <Link
                   href="/gabung"
-                  className="inline-flex min-h-[44px] items-center justify-center px-4 py-3 text-base font-semibold text-[#0C2340] underline decoration-[#92400E] underline-offset-4 transition-colors hover:text-[#92400E]"
+                  className="inline-flex min-h-[44px] items-center justify-center px-4 py-3 text-sm sm:text-base font-semibold text-[#0C2340] underline decoration-[#D97706] underline-offset-4 transition-colors hover:text-[#D97706]"
                 >
                   Daftar jadi anggota
                 </Link>
