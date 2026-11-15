@@ -234,6 +234,18 @@ test('Dashboard admin memakai struktur control room yang aksesibel', async () =>
   }
 });
 
+test('Dashboard admin memadatkan aksi cepat pada layar ponsel', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const source = await readFile(
+    new URL('../src/app/admin/AdminDashboardClient.tsx', import.meta.url),
+    'utf8'
+  );
+
+  assert.ok(source.includes('grid grid-cols-2 gap-2 sm:grid-cols-3'));
+  assert.ok(source.includes('col-span-2 sm:col-span-1'));
+  assert.ok(source.includes('flex flex-col items-stretch gap-1.5 border-b'));
+});
+
 test('Siluet kampus UMS dipakai sebagai ornamen pada hero publik dan dashboard', async () => {
   const { readFile, access } = await import('node:fs/promises');
   const [homeSource, adminSource] = await Promise.all([

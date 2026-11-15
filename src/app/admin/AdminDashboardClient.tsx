@@ -668,9 +668,9 @@ export default function AdminDashboardClient() {
     <div className="min-h-screen bg-slate-50 text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
       <Navbar />
 
-      <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-9 w-full space-y-6 sm:space-y-8">
-        <section className="overflow-hidden rounded-2xl bg-[#0C2340] text-white shadow-[0_18px_45px_-30px_rgba(12,35,64,0.8)]" aria-labelledby="admin-dashboard-title">
-          <div className="relative px-5 py-6 sm:px-8 sm:py-8">
+      <main className="flex-grow max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-9 w-full space-y-5 sm:space-y-8">
+        <section className="overflow-hidden rounded-xl sm:rounded-2xl bg-[#0C2340] text-white shadow-[0_18px_45px_-30px_rgba(12,35,64,0.8)]" aria-labelledby="admin-dashboard-title">
+          <div className="relative px-5 py-5 sm:px-8 sm:py-8">
             <Image
               src="/images/ums-campus-silhouette.png"
               alt=""
@@ -682,7 +682,7 @@ export default function AdminDashboardClient() {
             />
             <div aria-hidden="true" className="absolute -right-20 -top-24 h-64 w-64 rounded-full border border-white/10 bg-white/[0.03]" />
             <div aria-hidden="true" className="absolute right-20 top-10 h-20 w-20 rounded-full border border-[#F59E0B]/25" />
-            <div className="relative flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-white/15 pb-4 text-xs sm:text-sm">
+            <div className="relative flex flex-col items-stretch gap-1.5 border-b border-white/15 pb-3 text-xs sm:flex-row sm:items-center sm:justify-between sm:gap-x-4 sm:gap-y-2 sm:pb-4 sm:text-sm">
               <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-slate-300">
                 <Link href="/" className="inline-flex min-h-[44px] items-center font-medium transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
                   Beranda
@@ -690,7 +690,7 @@ export default function AdminDashboardClient() {
                 <span aria-hidden="true" className="text-slate-500">/</span>
                 <span className="font-semibold text-white">Pusat Kelola Data</span>
               </nav>
-              <div className="flex items-center gap-1 sm:gap-2">
+              <div className="flex items-center gap-1 border-t border-white/10 pt-1.5 sm:border-0 sm:pt-0 sm:gap-2">
                 <a href="/api/pendaftaran?format=csv" download className="inline-flex min-h-[44px] items-center gap-1.5 rounded-lg px-2.5 font-semibold text-slate-200 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
                   <Download className="h-3.5 w-3.5" /> Unduh CSV
                 </a>
@@ -700,13 +700,13 @@ export default function AdminDashboardClient() {
               </div>
             </div>
 
-            <header className="relative grid gap-6 pt-7 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+            <header className="relative grid gap-4 pt-5 sm:gap-6 sm:pt-7 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
               <div className="max-w-2xl">
-                <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#F59E0B]/35 bg-[#F59E0B]/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[#FCD34D]">
+                <div className="mb-2.5 inline-flex items-center gap-2 rounded-full border border-[#F59E0B]/35 bg-[#F59E0B]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#FCD34D] sm:mb-3 sm:text-[11px] sm:tracking-[0.14em]">
                   <ShieldCheck className="h-3.5 w-3.5" /> Sekretariat &amp; Koordinasi Wilayah
                 </div>
-                <h1 id="admin-dashboard-title" className="text-3xl font-extrabold tracking-tight sm:text-4xl">Pusat Data IKA UMS Jabodetabek</h1>
-                <p className="mt-3 max-w-xl text-sm leading-6 text-slate-300 sm:text-base">
+                <h1 id="admin-dashboard-title" className="text-[28px] font-extrabold leading-[1.1] tracking-tight sm:text-4xl">Pusat Data IKA UMS Jabodetabek</h1>
+                <p className="mt-2.5 max-w-xl text-sm leading-[1.45] text-slate-300 sm:mt-3 sm:text-base sm:leading-6">
                   Pantau pekerjaan organisasi, tangani alumni baru, dan kelola layanan untuk seluruh jaringan Jabodetabek.
                 </p>
                 {isLoading && (
@@ -716,11 +716,11 @@ export default function AdminDashboardClient() {
                 )}
               </div>
 
-              <div className="grid gap-2 sm:grid-cols-3 lg:flex lg:flex-wrap lg:justify-end">
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:flex lg:flex-wrap lg:justify-end">
             <button
               type="button"
               onClick={() => setManualAlumniOpen(true)}
-              className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg bg-white px-4 py-2 text-sm font-bold text-[#0C2340] shadow-sm transition-colors hover:bg-slate-100 cursor-pointer"
+              className="col-span-2 sm:col-span-1 inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg bg-white px-4 py-2 text-xs font-bold text-[#0C2340] shadow-sm transition-colors hover:bg-slate-100 sm:text-sm cursor-pointer"
             >
               <UserPlus className="w-4 h-4" />
               + Tambah Alumni
@@ -728,7 +728,7 @@ export default function AdminDashboardClient() {
             <button
               type="button"
               onClick={() => openAgendaCreate()}
-              className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/20 cursor-pointer"
+              className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-2 py-2 text-xs font-semibold text-white transition-colors hover:bg-white/20 sm:px-4 sm:text-sm cursor-pointer"
             >
               <Calendar className="w-4 h-4" />
               + Jadwal Kopdar
@@ -736,7 +736,7 @@ export default function AdminDashboardClient() {
             <button
               type="button"
               onClick={() => openLokerCreate()}
-              className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/20 cursor-pointer"
+              className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-2 py-2 text-xs font-semibold text-white transition-colors hover:bg-white/20 sm:px-4 sm:text-sm cursor-pointer"
             >
               <Briefcase className="w-4 h-4" />
               + Info Loker
