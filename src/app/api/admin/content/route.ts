@@ -7,6 +7,7 @@ import {
   saveKomunitasSettings,
   saveLokerItem,
   deleteLokerItem,
+  saveLandingContent,
 } from '@/lib/cms-store';
 import { getServerSession } from '@/lib/server-auth';
 import { IS_DEMO_MODE } from '@/lib/config';
@@ -58,6 +59,11 @@ export async function POST(request: NextRequest) {
     if (type === 'settings') {
       const saved = await saveKomunitasSettings(data);
       return NextResponse.json({ success: true, message: 'Pengaturan informasi komunitas berhasil disimpan.', data: saved });
+    }
+
+    if (type === 'landing') {
+      const saved = await saveLandingContent(data);
+      return NextResponse.json({ success: true, message: 'Konten beranda berhasil diperbarui.', data: saved });
     }
 
     return NextResponse.json({ error: 'Tipe konten tidak dikenal' }, { status: 400 });

@@ -248,6 +248,34 @@ export async function updatePendaftarStatus(
 }
 
 /**
+ * Menghapus satu catatan pendaftar beserta cache lokalnya.
+ */
+export async function deletePendaftar(id: string): Promise<boolean> {
+  const supabase = getSupabaseServerClient();
+
+  if (supabase) {
+    try {
+      const { error } = await supabase.from('pendaftar').delete().eq('id', id);
+      if (!error) {
+        const localList = await getLocalPendaftar();
+        await saveLocalPendaftar(localList.filter((p) => p.id !== id));
+        return true;
+      }
+    } catch {
+      // Fallback hapus lokal
+    }
+  }
+
+  try {
+    const list = await getLocalPendaftar();
+    await saveLocalPendaftar(list.filter((p) => p.id !== id));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Mengekspor seluruh pendaftar ke string berformat CSV
  */
 export async function exportPendaftarCsv(): Promise<string> {

@@ -47,12 +47,98 @@ export interface KomunitasSettings {
   heroPhotoCaption: string;
 }
 
+export interface LandingValueItem {
+  judul: string;
+  isi: string;
+}
+
+export interface LandingCityItem {
+  nama: string;
+  jumlah: string;
+}
+
+export interface LandingProgramItem {
+  judul: string;
+  deskripsi: string;
+  href: string;
+}
+
+export interface LandingContent {
+  heroEyebrow: string;
+  heroTitle: string;
+  heroHighlight: string;
+  heroSubtitle: string;
+  heroPrimaryCta: string;
+  heroSecondaryCta: string;
+  heroBadgeTitle: string;
+  heroBadgeSubtitle: string;
+  values: LandingValueItem[];
+  sebaranTitle: string;
+  sebaranDescription: string;
+  sebaranCta: string;
+  cities: LandingCityItem[];
+  programEyebrow: string;
+  programTitle: string;
+  programDescription: string;
+  programs: LandingProgramItem[];
+  kopdarEyebrow: string;
+  kopdarTitle: string;
+  kopdarDescription: string;
+  kopdarCta: string;
+  ceritaTitle: string;
+}
+
 export interface CmsStoreData {
   agendas: AgendaItem[];
   pengurus: PengurusData;
   settings: KomunitasSettings;
   lokers: LokerItem[];
+  landing: LandingContent;
 }
+
+export const DEFAULT_LANDING: LandingContent = {
+  heroEyebrow: 'Ikatan Keluarga Alumni UMS',
+  heroTitle: 'Jauh dari kampus, dekat sebagai',
+  heroHighlight: 'keluarga.',
+  heroSubtitle:
+    'Temukan kembali teman, bangun koneksi, dan bertumbuh bersama alumni Universitas Muhammadiyah Surakarta di Jabodetabek.',
+  heroPrimaryCta: 'Ikut kopdar terdekat',
+  heroSecondaryCta: 'Jelajahi jaringan',
+  heroBadgeTitle: 'Satu almamater. Banyak cerita.',
+  heroBadgeSubtitle: 'Keluarga besar UMS di perantauan.',
+  values: [
+    { judul: 'Perluas Jaringan', isi: 'Terhubung kembali dengan sesama alumni UMS.' },
+    { judul: 'Dukung Karier', isi: 'Mentoring, berbagi peluang, dan kolaborasi profesi.' },
+    { judul: 'Ruang Bertemu', isi: 'Kopdar, diskusi, dan berbagai kegiatan bermanfaat.' },
+  ],
+  sebaranTitle: 'Satu Jaringan. Lima Kota.',
+  sebaranDescription:
+    'Sebaran alumni UMS di wilayah Jabodetabek yang terus bertumbuh. Mari lengkapi datamu, agar jejaring kita semakin kuat.',
+  sebaranCta: 'Lihat sebaran alumni',
+  cities: [
+    { nama: 'Jakarta', jumlah: '' },
+    { nama: 'Bogor', jumlah: '' },
+    { nama: 'Depok', jumlah: '' },
+    { nama: 'Tangerang', jumlah: '' },
+    { nama: 'Bekasi', jumlah: '' },
+  ],
+  programEyebrow: 'Lebih dari Sekadar Kopdar',
+  programTitle: 'Program untuk Alumni UMS',
+  programDescription:
+    'Berbagai inisiatif untuk saling terhubung, berbagi pengalaman, dan tumbuh bersama.',
+  programs: [
+    { judul: 'Kopdar & Silaturahmi', deskripsi: 'Temu alumni di berbagai wilayah Jabodetabek.', href: '#kopdar-section' },
+    { judul: 'Mentoring Karier', deskripsi: 'Diskusi, bimbingan, dan berbagi pengalaman kerja.', href: '/peluang#mentoring' },
+    { judul: 'Peluang & Kolaborasi', deskripsi: 'Info karier, proyek, dan kolaborasi lintas alumni.', href: '/peluang#loker' },
+    { judul: 'Komunitas Minat', deskripsi: 'Ruang berkumpul sesuai minat dan bidang keahlian.', href: '/direktori' },
+  ],
+  kopdarEyebrow: 'Kopdar Pertama',
+  kopdarTitle: 'Mulai dari Kotamu',
+  kopdarDescription:
+    'Kami sedang memetakan minat kopdar pertama di tiap wilayah. Isi formulir singkat berikut agar kamu bisa kami kabari lebih dulu.',
+  kopdarCta: 'Isi minat kopdar sekarang',
+  ceritaTitle: 'Cerita dari Keluarga UMS',
+};
 
 const DEFAULT_PENGURUS: PengurusData = {
   dewanPembina: 'Dalam penetapan musyawarah',
@@ -150,6 +236,13 @@ async function ensureCmsFile(): Promise<CmsStoreData> {
       pengurus: { ...DEFAULT_PENGURUS, ...(parsed.pengurus || {}) },
       settings: { ...DEFAULT_SETTINGS, ...(parsed.settings || {}) },
       lokers: Array.isArray(parsed.lokers) ? parsed.lokers : DEFAULT_LOKERS,
+      landing: {
+        ...DEFAULT_LANDING,
+        ...(parsed.landing || {}),
+        values: Array.isArray(parsed.landing?.values) ? parsed.landing.values : DEFAULT_LANDING.values,
+        cities: Array.isArray(parsed.landing?.cities) ? parsed.landing.cities : DEFAULT_LANDING.cities,
+        programs: Array.isArray(parsed.landing?.programs) ? parsed.landing.programs : DEFAULT_LANDING.programs,
+      },
     };
   } catch {
     const initial: CmsStoreData = {
@@ -157,6 +250,7 @@ async function ensureCmsFile(): Promise<CmsStoreData> {
       pengurus: DEFAULT_PENGURUS,
       settings: DEFAULT_SETTINGS,
       lokers: DEFAULT_LOKERS,
+      landing: DEFAULT_LANDING,
     };
     try {
       await fs.writeFile(CMS_FILE, JSON.stringify(initial, null, 2), 'utf-8');
@@ -306,8 +400,14 @@ export async function saveLokerItem(loker: Omit<LokerItem, 'id' | 'createdAt'> &
   return newLoker;
 }
 
-export async function deleteLokerItem(id: string): Promise<boolean> {
+export async function saveLandingContent(landing: LandingContent): Promise<LandingContent> {
   const data = await getCmsData();
+  data.landing = landing;
+  await writeCmsFile(data);
+  return data.landing;
+}
+
+export async function deleteLokerItem(id: string): Promise<boolean> {  const data = await getCmsData();
   if (Array.isArray(data.lokers)) {
     data.lokers = data.lokers.filter((l) => l.id !== id);
     await writeCmsFile(data);

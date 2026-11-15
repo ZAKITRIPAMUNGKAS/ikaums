@@ -22,16 +22,16 @@ import {
   ShieldCheck,
   Trash2,
   Save,
-  UserPlus,
-  Phone,
+  UserPlus,  Phone,
   Mail,
   LogOut,
   MapPin,
   Search,
   Briefcase,
   Loader2,
+  LayoutTemplate,
 } from 'lucide-react';
-import type { AgendaItem, PengurusData, KomunitasSettings } from '@/lib/cms-store';
+import type { AgendaItem, PengurusData, KomunitasSettings, LandingContent } from '@/lib/cms-store';
 import { type LokerItem, DEFAULT_LOKERS } from '@/data/loker';
 
 interface PendaftarItem {
@@ -50,9 +50,14 @@ interface PendaftarItem {
   createdAt: string;
 }
 
+const adminFieldClass =
+  'w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:outline-hidden';
+
+const adminLabelClass = 'block text-xs font-bold text-[#0C2340] mb-1.5 uppercase';
+
 export default function AdminDashboardClient() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<'pendaftar' | 'agenda' | 'loker' | 'pengurus' | 'settings'>('pendaftar');
+  const [activeTab, setActiveTab] = useState<'pendaftar' | 'agenda' | 'loker' | 'pengurus' | 'landing' | 'settings'>('pendaftar');
   const [toastMsg, setToastMsg] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -75,6 +80,9 @@ export default function AdminDashboardClient() {
 
   // 5. Data Settings Komunitas
   const [settingsData, setSettingsData] = useState<KomunitasSettings | null>(null);
+
+  // 6. Data Konten Beranda (landing page)
+  const [landingData, setLandingData] = useState<LandingContent | null>(null);
 
   // Modals
   const [manualAlumniOpen, setManualAlumniOpen] = useState(false);
@@ -174,6 +182,9 @@ export default function AdminDashboardClient() {
         if (dataContent.settings) {
           setSettingsData(dataContent.settings);
         }
+        if (dataContent.landing) {
+          setLandingData(dataContent.landing);
+        }
       }
     } catch {
       showToast('Gagal memuat data dari server.');
@@ -210,6 +221,9 @@ export default function AdminDashboardClient() {
           }
           if (dataContent.settings) {
             setSettingsData(dataContent.settings);
+          }
+          if (dataContent.landing) {
+            setLandingData(dataContent.landing);
           }
         }
       } catch {
@@ -482,6 +496,63 @@ export default function AdminDashboardClient() {
     }
   };
 
+  // Handler: Simpan Konten Beranda
+  const handleSaveLanding = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!landingData) return;
+
+    try {
+      const res = await fetch('/api/admin/content', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'landing',
+          data: landingData,
+        }),
+      });
+      if (res.ok) {
+        showToast('Konten beranda berhasil disimpan dan langsung tampil di halaman utama.');
+      } else {
+        showToast('Gagal menyimpan konten beranda.');
+      }
+    } catch {
+      showToast('Terjadi kesalahan jaringan.');
+    }
+  };
+
+  const patchLanding = (patch: Partial<LandingContent>) =>
+    setLandingData((prev) => (prev ? { ...prev, ...patch } : prev));
+
+  const patchLandingList = (
+    key: 'values' | 'cities' | 'programs',
+    index: number,
+    patch: Record<string, string>
+  ) =>
+    setLandingData((prev) => {
+      if (!prev) return prev;
+      const list = prev[key].map((item, i) => (i === index ? { ...item, ...patch } : item));
+      return { ...prev, [key]: list } as LandingContent;
+    });
+
+  const addLandingListItem = (key: 'values' | 'cities' | 'programs') =>
+    setLandingData((prev) => {
+      if (!prev) return prev;
+      const blank =
+        key === 'values'
+          ? { judul: '', isi: '' }
+          : key === 'cities'
+            ? { nama: '', jumlah: '' }
+            : { judul: '', deskripsi: '', href: '' };
+      return { ...prev, [key]: [...prev[key], blank] } as LandingContent;
+    });
+
+  const removeLandingListItem = (key: 'values' | 'cities' | 'programs', index: number) =>
+    setLandingData((prev) => {
+      if (!prev) return prev;
+      return { ...prev, [key]: prev[key].filter((_, i) => i !== index) } as LandingContent;
+    });
+
+
   // Handler: Keluar Sesi Admin
   const handleLogout = async () => {
     await fetch('/api/auth', {
@@ -730,6 +801,19 @@ export default function AdminDashboardClient() {
           >
             <ShieldCheck className="w-4 h-4" />
             <span>Pengurus &amp; 9 Korwil</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setActiveTab('landing')}
+            className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+              activeTab === 'landing'
+                ? 'border-[#0C2340] text-[#0C2340]'
+                : 'border-transparent text-[#475569] hover:text-[#0C2340]'
+            }`}
+          >
+            <LayoutTemplate className="w-4 h-4" />
+            <span>Konten Beranda</span>
           </button>
 
           <button
@@ -1387,6 +1471,393 @@ export default function AdminDashboardClient() {
         {/* ========================================================================= */}
         {/* TAB 4: KONTAK & PENGATURAN KOMUNITAS                                      */}
         {/* ========================================================================= */}
+        {activeTab === 'landing' && landingData && (
+          <form onSubmit={handleSaveLanding} className="space-y-6">
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-5 shadow-xs">
+              <div className="space-y-1 border-b border-slate-200 pb-4">
+                <h2 className="text-lg sm:text-xl font-bold text-[#0C2340]">Hero Beranda</h2>
+                <p className="text-xs sm:text-sm text-[#475569]">
+                  Teks utama yang pertama kali dibaca pengunjung. Perubahan langsung tampil di
+                  halaman utama.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div>
+                  <label className={adminLabelClass}>Label Kecil di Atas Judul</label>
+                  <input
+                    type="text"
+                    value={landingData.heroEyebrow}
+                    onChange={(e) => patchLanding({ heroEyebrow: e.target.value })}
+                    className={adminFieldClass}
+                  />
+                </div>
+                <div>
+                  <label className={adminLabelClass}>Judul Utama</label>
+                  <input
+                    type="text"
+                    value={landingData.heroTitle}
+                    onChange={(e) => patchLanding({ heroTitle: e.target.value })}
+                    className={adminFieldClass}
+                  />
+                </div>
+                <div>
+                  <label className={adminLabelClass}>Kata Penekanan (warna emas)</label>
+                  <input
+                    type="text"
+                    value={landingData.heroHighlight}
+                    onChange={(e) => patchLanding({ heroHighlight: e.target.value })}
+                    className={adminFieldClass}
+                  />
+                </div>
+                <div>
+                  <label className={adminLabelClass}>Tombol Utama</label>
+                  <input
+                    type="text"
+                    value={landingData.heroPrimaryCta}
+                    onChange={(e) => patchLanding({ heroPrimaryCta: e.target.value })}
+                    className={adminFieldClass}
+                  />
+                </div>
+                <div>
+                  <label className={adminLabelClass}>Tombol Sekunder</label>
+                  <input
+                    type="text"
+                    value={landingData.heroSecondaryCta}
+                    onChange={(e) => patchLanding({ heroSecondaryCta: e.target.value })}
+                    className={adminFieldClass}
+                  />
+                </div>
+                <div>
+                  <label className={adminLabelClass}>Judul Kartu Foto</label>
+                  <input
+                    type="text"
+                    value={landingData.heroBadgeTitle}
+                    onChange={(e) => patchLanding({ heroBadgeTitle: e.target.value })}
+                    className={adminFieldClass}
+                  />
+                </div>
+                <div>
+                  <label className={adminLabelClass}>Subjudul Kartu Foto</label>
+                  <input
+                    type="text"
+                    value={landingData.heroBadgeSubtitle}
+                    onChange={(e) => patchLanding({ heroBadgeSubtitle: e.target.value })}
+                    className={adminFieldClass}
+                  />
+                </div>
+                <div className="sm:col-span-2">
+                  <label className={adminLabelClass}>Deskripsi Pembuka</label>
+                  <textarea
+                    rows={3}
+                    value={landingData.heroSubtitle}
+                    onChange={(e) => patchLanding({ heroSubtitle: e.target.value })}
+                    className={adminFieldClass}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-4 shadow-xs">
+              <div className="flex items-center justify-between gap-3 border-b border-slate-200 pb-4">
+                <div>
+                  <h2 className="text-lg sm:text-xl font-bold text-[#0C2340]">Tiga Nilai Utama</h2>
+                  <p className="text-xs sm:text-sm text-[#475569]">
+                    Kartu ringkas di bawah hero.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => addLandingListItem('values')}
+                  className="inline-flex items-center gap-1.5 min-h-[40px] px-3 rounded-lg border border-slate-300 text-sm font-semibold text-[#0C2340] hover:bg-slate-50"
+                >
+                  <Plus className="w-4 h-4" />
+                  Tambah
+                </button>
+              </div>
+
+              <div className="space-y-3">
+                {landingData.values.map((item, index) => (
+                  <div
+                    key={index}
+                    className="grid grid-cols-1 sm:grid-cols-[1fr_1.6fr_auto] gap-3 items-start rounded-xl border border-slate-200 p-3"
+                  >
+                    <input
+                      type="text"
+                      value={item.judul}
+                      onChange={(e) => patchLandingList('values', index, { judul: e.target.value })}
+                      placeholder="Judul kartu"
+                      className={adminFieldClass}
+                    />
+                    <input
+                      type="text"
+                      value={item.isi}
+                      onChange={(e) => patchLandingList('values', index, { isi: e.target.value })}
+                      placeholder="Satu kalimat penjelasan"
+                      className={adminFieldClass}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeLandingListItem('values', index)}
+                      className="inline-flex items-center justify-center min-h-[42px] w-11 rounded-lg text-red-600 hover:bg-red-50"
+                      aria-label={`Hapus nilai ${index + 1}`}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-5 shadow-xs">
+              <div className="space-y-1 border-b border-slate-200 pb-4">
+                <h2 className="text-lg sm:text-xl font-bold text-[#0C2340]">Sebaran Wilayah</h2>
+                <p className="text-xs sm:text-sm text-[#475569]">
+                  Isi jumlah alumni hanya bila angkanya nyata. Kosongkan bila belum ada data.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div>
+                  <label className={adminLabelClass}>Judul Bagian</label>
+                  <input
+                    type="text"
+                    value={landingData.sebaranTitle}
+                    onChange={(e) => patchLanding({ sebaranTitle: e.target.value })}
+                    className={adminFieldClass}
+                  />
+                </div>
+                <div>
+                  <label className={adminLabelClass}>Label Tombol</label>
+                  <input
+                    type="text"
+                    value={landingData.sebaranCta}
+                    onChange={(e) => patchLanding({ sebaranCta: e.target.value })}
+                    className={adminFieldClass}
+                  />
+                </div>
+                <div className="sm:col-span-2">
+                  <label className={adminLabelClass}>Deskripsi</label>
+                  <textarea
+                    rows={3}
+                    value={landingData.sebaranDescription}
+                    onChange={(e) => patchLanding({ sebaranDescription: e.target.value })}
+                    className={adminFieldClass}
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-xs font-bold uppercase text-[#0C2340]">Daftar Wilayah</p>
+                <button
+                  type="button"
+                  onClick={() => addLandingListItem('cities')}
+                  className="inline-flex items-center gap-1.5 min-h-[40px] px-3 rounded-lg border border-slate-300 text-sm font-semibold text-[#0C2340] hover:bg-slate-50"
+                >
+                  <Plus className="w-4 h-4" />
+                  Tambah wilayah
+                </button>
+              </div>
+
+              <div className="space-y-3">
+                {landingData.cities.map((kota, index) => (
+                  <div
+                    key={index}
+                    className="grid grid-cols-1 sm:grid-cols-[1.4fr_1fr_auto] gap-3 items-start rounded-xl border border-slate-200 p-3"
+                  >
+                    <input
+                      type="text"
+                      value={kota.nama}
+                      onChange={(e) => patchLandingList('cities', index, { nama: e.target.value })}
+                      placeholder="Nama wilayah"
+                      className={adminFieldClass}
+                    />
+                    <input
+                      type="text"
+                      value={kota.jumlah}
+                      onChange={(e) => patchLandingList('cities', index, { jumlah: e.target.value })}
+                      placeholder="Jumlah alumni (opsional)"
+                      className={adminFieldClass}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeLandingListItem('cities', index)}
+                      className="inline-flex items-center justify-center min-h-[42px] w-11 rounded-lg text-red-600 hover:bg-red-50"
+                      aria-label={`Hapus wilayah ${kota.nama || index + 1}`}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-5 shadow-xs">
+              <div className="space-y-1 border-b border-slate-200 pb-4">
+                <h2 className="text-lg sm:text-xl font-bold text-[#0C2340]">Program Alumni</h2>
+                <p className="text-xs sm:text-sm text-[#475569]">
+                  Kartu program di beranda. Kartu pertama tampil dengan latar navy.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div>
+                  <label className={adminLabelClass}>Label Kecil</label>
+                  <input
+                    type="text"
+                    value={landingData.programEyebrow}
+                    onChange={(e) => patchLanding({ programEyebrow: e.target.value })}
+                    className={adminFieldClass}
+                  />
+                </div>
+                <div>
+                  <label className={adminLabelClass}>Judul Bagian</label>
+                  <input
+                    type="text"
+                    value={landingData.programTitle}
+                    onChange={(e) => patchLanding({ programTitle: e.target.value })}
+                    className={adminFieldClass}
+                  />
+                </div>
+                <div className="sm:col-span-2">
+                  <label className={adminLabelClass}>Deskripsi</label>
+                  <textarea
+                    rows={2}
+                    value={landingData.programDescription}
+                    onChange={(e) => patchLanding({ programDescription: e.target.value })}
+                    className={adminFieldClass}
+                  />
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-xs font-bold uppercase text-[#0C2340]">Daftar Program</p>
+                <button
+                  type="button"
+                  onClick={() => addLandingListItem('programs')}
+                  className="inline-flex items-center gap-1.5 min-h-[40px] px-3 rounded-lg border border-slate-300 text-sm font-semibold text-[#0C2340] hover:bg-slate-50"
+                >
+                  <Plus className="w-4 h-4" />
+                  Tambah program
+                </button>
+              </div>
+
+              <div className="space-y-3">
+                {landingData.programs.map((program, index) => (
+                  <div
+                    key={index}
+                    className="grid grid-cols-1 sm:grid-cols-[1fr_1.4fr_1fr_auto] gap-3 items-start rounded-xl border border-slate-200 p-3"
+                  >
+                    <input
+                      type="text"
+                      value={program.judul}
+                      onChange={(e) =>
+                        patchLandingList('programs', index, { judul: e.target.value })
+                      }
+                      placeholder="Judul program"
+                      className={adminFieldClass}
+                    />
+                    <input
+                      type="text"
+                      value={program.deskripsi}
+                      onChange={(e) =>
+                        patchLandingList('programs', index, { deskripsi: e.target.value })
+                      }
+                      placeholder="Deskripsi singkat"
+                      className={adminFieldClass}
+                    />
+                    <input
+                      type="text"
+                      value={program.href}
+                      onChange={(e) =>
+                        patchLandingList('programs', index, { href: e.target.value })
+                      }
+                      placeholder="/peluang#mentoring"
+                      className={adminFieldClass}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => removeLandingListItem('programs', index)}
+                      className="inline-flex items-center justify-center min-h-[42px] w-11 rounded-lg text-red-600 hover:bg-red-50"
+                      aria-label={`Hapus program ${program.judul || index + 1}`}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-5 shadow-xs">
+              <div className="space-y-1 border-b border-slate-200 pb-4">
+                <h2 className="text-lg sm:text-xl font-bold text-[#0C2340]">Banner Kopdar &amp; Judul Cerita</h2>
+                <p className="text-xs sm:text-sm text-[#475569]">
+                  Kartu ajakan kopdar. Daftar cerita diambil otomatis dari agenda kegiatan yang
+                  aktif.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                <div>
+                  <label className={adminLabelClass}>Label Kecil</label>
+                  <input
+                    type="text"
+                    value={landingData.kopdarEyebrow}
+                    onChange={(e) => patchLanding({ kopdarEyebrow: e.target.value })}
+                    className={adminFieldClass}
+                  />
+                </div>
+                <div>
+                  <label className={adminLabelClass}>Judul Banner</label>
+                  <input
+                    type="text"
+                    value={landingData.kopdarTitle}
+                    onChange={(e) => patchLanding({ kopdarTitle: e.target.value })}
+                    className={adminFieldClass}
+                  />
+                </div>
+                <div>
+                  <label className={adminLabelClass}>Label Tombol</label>
+                  <input
+                    type="text"
+                    value={landingData.kopdarCta}
+                    onChange={(e) => patchLanding({ kopdarCta: e.target.value })}
+                    className={adminFieldClass}
+                  />
+                </div>
+                <div>
+                  <label className={adminLabelClass}>Judul Bagian Cerita</label>
+                  <input
+                    type="text"
+                    value={landingData.ceritaTitle}
+                    onChange={(e) => patchLanding({ ceritaTitle: e.target.value })}
+                    className={adminFieldClass}
+                  />
+                </div>
+                <div className="sm:col-span-2">
+                  <label className={adminLabelClass}>Deskripsi Banner</label>
+                  <textarea
+                    rows={3}
+                    value={landingData.kopdarDescription}
+                    onChange={(e) => patchLanding({ kopdarDescription: e.target.value })}
+                    className={adminFieldClass}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="flex justify-end pt-2">
+              <button
+                type="submit"
+                className="inline-flex items-center gap-2 min-h-[48px] px-6 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] text-white text-base font-semibold transition-colors cursor-pointer shadow-md"
+              >
+                <Save className="w-5 h-5" />
+                Simpan Konten Beranda
+              </button>
+            </div>
+          </form>
+        )}
+
         {activeTab === 'settings' && settingsData && (
           <form onSubmit={handleSaveSettings} className="space-y-6">
             <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs">
