@@ -428,7 +428,7 @@ export default function GabungPage() {
         });
         localStorage.setItem(SUBMISSIONS_KEY, JSON.stringify(existing));
 
-        // Simpan profil pengguna aktif lokal untuk ruang anggota
+        // Simpan data pendaftaran sementara lokal
         const userProfile = {
           nama: cleanName,
           angkatan: formData.angkatan,
@@ -442,7 +442,7 @@ export default function GabungPage() {
           tampilDiDirektori: formData.tampilDiDirektori,
           siapMentoring: formData.siapMentoring,
         };
-        localStorage.setItem('ikaums_current_user_profile', JSON.stringify(userProfile));
+        localStorage.setItem('ikaums_pending_registration', JSON.stringify(userProfile));
       } catch {
         // Abaikan error penyimpanan lokal
       }

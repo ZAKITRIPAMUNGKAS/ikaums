@@ -126,13 +126,14 @@ export default function MemberProfileClient({
   const [savedNotice, setSavedNotice] = useState<string | null>(null);
   const [copiedId, setCopiedId] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const [isLoadingProfile, setIsLoadingProfile] = useState(true);
 
   // Modal Edit Profil State
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editForm, setEditForm] = useState({
     nama: '',
     prodi: 'Teknik Informatika',
-    angkatan: '2011',
+    angkatan: '2015',
     wilayah: 'Jakarta Selatan',
     pekerjaan: '',
     perusahaan: '',
@@ -142,25 +143,57 @@ export default function MemberProfileClient({
   });
   const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
+  // Muat profil akun yang sedang login dari server
   useEffect(() => {
-    const timer = setTimeout(() => {
-      try {
-        const stored = localStorage.getItem('ikaums_current_user_profile');
-        if (stored) {
-          const parsed = JSON.parse(stored) as UserProfileData;
-          setUserProfile(parsed);
-          if (typeof parsed.tampilDiDirektori === 'boolean') {
-            setTampilDiDirektori(parsed.tampilDiDirektori);
+    let isSubscribed = true;
+    fetch('/api/auth')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (!isSubscribed) return;
+        if (data?.authenticated && data?.profile) {
+          setUserProfile(data.profile);
+          if (typeof data.profile.tampilDiDirektori === 'boolean') {
+            setTampilDiDirektori(data.profile.tampilDiDirektori);
           }
-          if (typeof parsed.siapMentoring === 'boolean') {
-            setTerbukaMentoring(parsed.siapMentoring);
+          if (typeof data.profile.siapMentoring === 'boolean') {
+            setTerbukaMentoring(data.profile.siapMentoring);
           }
+          try {
+            localStorage.setItem('ikaums_current_user_profile', JSON.stringify(data.profile));
+          } catch {}
+        } else {
+          // Fallback lokal jika sesi belum menyediakan profile penuh
+          try {
+            const stored = localStorage.getItem('ikaums_current_user_profile');
+            if (stored) {
+              const parsed = JSON.parse(stored) as UserProfileData;
+              setUserProfile(parsed);
+              if (typeof parsed.tampilDiDirektori === 'boolean') {
+                setTampilDiDirektori(parsed.tampilDiDirektori);
+              }
+              if (typeof parsed.siapMentoring === 'boolean') {
+                setTerbukaMentoring(parsed.siapMentoring);
+              }
+            }
+          } catch {}
         }
-      } catch {
-        // Abaikan bila storage diblokir
-      }
-    }, 0);
-    return () => clearTimeout(timer);
+      })
+      .catch(() => {
+        try {
+          const stored = localStorage.getItem('ikaums_current_user_profile');
+          if (stored) {
+            const parsed = JSON.parse(stored) as UserProfileData;
+            setUserProfile(parsed);
+          }
+        } catch {}
+      })
+      .finally(() => {
+        if (isSubscribed) setIsLoadingProfile(false);
+      });
+
+    return () => {
+      isSubscribed = false;
+    };
   }, []);
 
   // Auto-dismiss notice after 4 seconds
@@ -188,55 +221,86 @@ export default function MemberProfileClient({
     };
   }, []);
 
-  const displayName = userProfile?.nama || 'Zaki Maulana';
+  const displayName = userProfile?.nama || (isLoadingProfile ? 'Memuat profil...' : 'Alumni UMS');
   const firstName = displayName.split(' ')[0] || 'Alumni';
-  const displayAngkatan = String(userProfile?.angkatan || '2011');
-  const displayProdi = userProfile?.prodi || 'Teknik Informatika';
-  const displayProdiAngkatan = `${displayProdi} ’${displayAngkatan.slice(-2)}`;
+  const displayAngkatan = userProfile?.angkatan ? String(userProfile.angkatan) : '';
+  const displayProdi = userProfile?.prodi || (isLoadingProfile ? '...' : 'Alumni UMS');
+  const displayProdiAngkatan = displayAngkatan
+    ? `${displayProdi} ’${displayAngkatan.slice(-2)}`
+    : displayProdi;
   const displayPekerjaan = userProfile?.pekerjaan
     ? `${userProfile.pekerjaan}${userProfile.perusahaan ? ` di ${userProfile.perusahaan}` : ''}`
-    : 'Engineering Manager di Tech Co';
-  const displayWilayah = userProfile?.wilayah || 'Jakarta Selatan';
-  const displayFoto = userProfile?.fotoUrl || '/images/avatar-rizal.jpg';
-  const isCustomFoto = Boolean(userProfile?.fotoUrl?.startsWith('data:'));
+    : userProfile?.perusahaan
+    ? `Profesional di ${userProfile.perusahaan}`
+    : isLoadingProfile
+    ? 'Memuat...'
+    : 'Alumni Profesional';
+  const displayWilayah = userProfile?.wilayah || (isLoadingProfile ? '...' : 'Jabodetabek');
+  const displayFoto = userProfile?.fotoUrl;
+  const isCustomFoto = Boolean(displayFoto?.startsWith('data:'));
+
+  const nameParts = displayName.trim().split(/\s+/).filter(Boolean);
+  const avatarInitials =
+    nameParts.length >= 2
+      ? `${nameParts[0][0]}${nameParts[nameParts.length - 1][0]}`.toUpperCase()
+      : (nameParts[0]?.slice(0, 2) || 'AL').toUpperCase();
+
   const memberId =
     userProfile?.idAnggota ||
-    `UMS-JBD-${displayAngkatan.slice(-2)}${Math.abs(
-      (displayName.length * 37) % 900 + 100
-    )}`;
+    (displayAngkatan
+      ? `UMS-JBD-${displayAngkatan.slice(-2)}${Math.abs(
+          (displayName.length * 37 + (Number(displayAngkatan) || 0) * 13) % 900 + 100
+        )}`
+      : 'UMS-JBD-ALUMNI');
 
-  const handleToggleDirektori = () => {
+  const handleToggleDirektori = async () => {
     const nextVal = !tampilDiDirektori;
     setTampilDiDirektori(nextVal);
+    const updated = { ...(userProfile || {}), tampilDiDirektori: nextVal };
+    setUserProfile(updated);
     try {
-      const updated = { ...(userProfile || {}), tampilDiDirektori: nextVal };
-      setUserProfile(updated);
       localStorage.setItem('ikaums_current_user_profile', JSON.stringify(updated));
-      setSavedNotice(
-        nextVal
-          ? 'Preferensi disimpan: Profil kini dapat dicari di Direktori Anggota.'
-          : 'Preferensi disimpan: Profil kini disembunyikan dari Direktori Anggota.'
-      );
+      await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'update_profile',
+          profile: { tampilDiDirektori: nextVal },
+        }),
+      });
     } catch {
-      // Abaikan bila storage gagal
+      // Abaikan bila storage/jaringan gagal
     }
+    setSavedNotice(
+      nextVal
+        ? 'Preferensi disimpan: Profil kini dapat dicari di Direktori Anggota.'
+        : 'Preferensi disimpan: Profil kini disembunyikan dari Direktori Anggota.'
+    );
   };
 
-  const handleToggleMentoring = () => {
+  const handleToggleMentoring = async () => {
     const nextVal = !terbukaMentoring;
     setTerbukaMentoring(nextVal);
+    const updated = { ...(userProfile || {}), siapMentoring: nextVal };
+    setUserProfile(updated);
     try {
-      const updated = { ...(userProfile || {}), siapMentoring: nextVal };
-      setUserProfile(updated);
       localStorage.setItem('ikaums_current_user_profile', JSON.stringify(updated));
-      setSavedNotice(
-        nextVal
-          ? 'Preferensi disimpan: Status kesediaan mentoring alumni diaktifkan.'
-          : 'Preferensi disimpan: Status kesediaan mentoring alumni dinonaktifkan.'
-      );
+      await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'update_profile',
+          profile: { siapMentoring: nextVal },
+        }),
+      });
     } catch {
-      // Abaikan bila storage gagal
+      // Abaikan bila storage/jaringan gagal
     }
+    setSavedNotice(
+      nextVal
+        ? 'Preferensi disimpan: Status kesediaan mentoring alumni diaktifkan.'
+        : 'Preferensi disimpan: Status kesediaan mentoring alumni dinonaktifkan.'
+    );
   };
 
   const handleCopyMemberId = () => {
@@ -251,12 +315,12 @@ export default function MemberProfileClient({
 
   const handleOpenEditModal = () => {
     setEditForm({
-      nama: userProfile?.nama || displayName,
-      prodi: userProfile?.prodi || displayProdi,
-      angkatan: String(userProfile?.angkatan || displayAngkatan),
-      wilayah: userProfile?.wilayah || displayWilayah,
-      pekerjaan: userProfile?.pekerjaan || 'Engineering Manager',
-      perusahaan: userProfile?.perusahaan || 'Tech Co',
+      nama: userProfile?.nama || (displayName !== 'Alumni UMS' ? displayName : ''),
+      prodi: userProfile?.prodi || (displayProdi !== 'Alumni UMS' ? displayProdi : 'Teknik Informatika'),
+      angkatan: String(userProfile?.angkatan || displayAngkatan || '2015'),
+      wilayah: userProfile?.wilayah || (displayWilayah !== 'Jabodetabek' ? displayWilayah : 'Jakarta Selatan'),
+      pekerjaan: userProfile?.pekerjaan || '',
+      perusahaan: userProfile?.perusahaan || '',
       whatsapp: userProfile?.whatsapp || '',
       email: userProfile?.email || '',
       fotoUrl: userProfile?.fotoUrl || '',
@@ -265,7 +329,7 @@ export default function MemberProfileClient({
     setIsEditModalOpen(true);
   };
 
-  const handleSaveProfile = (e: React.FormEvent) => {
+  const handleSaveProfile = async (e: React.FormEvent) => {
     e.preventDefault();
     const errors: Record<string, string> = {};
 
@@ -306,7 +370,18 @@ export default function MemberProfileClient({
       };
 
       setUserProfile(updated);
-      localStorage.setItem('ikaums_current_user_profile', JSON.stringify(updated));
+      try {
+        localStorage.setItem('ikaums_current_user_profile', JSON.stringify(updated));
+        await fetch('/api/auth', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'update_profile',
+            profile: updated,
+          }),
+        });
+      } catch {}
+
       setIsEditModalOpen(false);
       setSavedNotice('Profil anggota berhasil diperbarui.');
     } catch {
@@ -317,6 +392,9 @@ export default function MemberProfileClient({
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
+      try {
+        localStorage.removeItem('ikaums_current_user_profile');
+      } catch {}
       await fetch('/api/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -482,14 +560,20 @@ export default function MemberProfileClient({
                 <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                   <div className="flex items-center gap-4">
                     <div className="relative h-16 w-16 sm:h-20 sm:w-20 shrink-0 overflow-hidden rounded-2xl border-2 border-[#D97706]/60 bg-slate-100 shadow-sm">
-                      <Image
-                        src={displayFoto}
-                        alt={`Foto profil ${displayName}`}
-                        fill
-                        unoptimized={isCustomFoto}
-                        sizes="80px"
-                        className="object-cover"
-                      />
+                      {displayFoto ? (
+                        <Image
+                          src={displayFoto}
+                          alt={`Foto profil ${displayName}`}
+                          fill
+                          unoptimized={isCustomFoto}
+                          sizes="80px"
+                          className="object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center font-extrabold text-xl sm:text-2xl bg-gradient-to-br from-[#0C2340] to-[#1E3A8A] text-white select-none">
+                          {avatarInitials}
+                        </div>
+                      )}
                     </div>
                     <div>
                       <div className="flex items-center gap-2">

@@ -588,3 +588,40 @@ test('Wilayah Karawang terdaftar dalam data master, metadata peta, dan GeoJSON',
   assert.equal(karawangFeature.properties.regionName, 'Karawang');
   assert.equal(karawangFeature.geometry.type, 'Polygon');
 });
+
+// 9. Sinkronisasi Sesi Autentikasi dengan Profil Anggota
+test('Autentikasi sesi mengikat profil anggota yang sedang masuk dan membersihkan cache akun lain', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const [sourceAuthRoute, sourceMemberClient, sourceMasukPage, sourceGabungPage, sourceStore] =
+    await Promise.all([
+      readFile(new URL('../src/app/api/auth/route.ts', import.meta.url), 'utf8'),
+      readFile(new URL('../src/app/app/MemberProfileClient.tsx', import.meta.url), 'utf8'),
+      readFile(new URL('../src/app/masuk/page.tsx', import.meta.url), 'utf8'),
+      readFile(new URL('../src/app/gabung/page.tsx', import.meta.url), 'utf8'),
+      readFile(new URL('../src/lib/pendaftaran-store.ts', import.meta.url), 'utf8'),
+    ]);
+
+  // 1. pendaftaran-store menyediakan pencarian dan pembaruan profil by ID
+  assert.ok(sourceStore.includes('export async function findPendaftarById('));
+  assert.ok(sourceStore.includes('export async function updatePendaftarProfile('));
+
+  // 2. Endpoint auth mengembalikan data profile pada GET dan POST login
+  assert.ok(sourceAuthRoute.includes('pendaftarToUserProfile'));
+  assert.ok(sourceAuthRoute.includes("action === 'update_profile'"));
+  assert.ok(sourceAuthRoute.includes('profile: memberProfile'));
+  assert.ok(sourceAuthRoute.includes('findPendaftarById(session.sub)'));
+
+  // 3. MasukPage membersihkan profil cache lama saat login dan logout
+  assert.ok(sourceMasukPage.includes("localStorage.removeItem('ikaums_current_user_profile')"));
+  assert.ok(sourceMasukPage.includes('data.profile'));
+
+  // 4. MemberProfileClient memuat data profil server dari /api/auth
+  assert.ok(sourceMemberClient.includes("fetch('/api/auth')"));
+  assert.ok(sourceMemberClient.includes('setUserProfile(data.profile)'));
+  assert.ok(sourceMemberClient.includes("action: 'update_profile'"));
+  assert.ok(sourceMemberClient.includes('avatarInitials'));
+
+  // 5. Form pendaftaran gabung tidak menimpa profil sesi login
+  assert.ok(!sourceGabungPage.includes("localStorage.setItem('ikaums_current_user_profile'"));
+  assert.ok(sourceGabungPage.includes("localStorage.setItem('ikaums_pending_registration'"));
+});

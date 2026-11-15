@@ -155,6 +155,78 @@ export async function POST(request: NextRequest) {
       return response;
     }
 
+    if (action === 'update_profile') {
+      const session = await getServerSession();
+      if (!session || session.role !== 'member') {
+        return NextResponse.json(
+          { error: 'Akses ditolak. Sesi masuk anggota diperlukan.' },
+          { status: 401 }
+        );
+      }
+
+      const profileInput = body.profile || {};
+      const updates: Partial<Omit<PendaftarRecord, 'id' | 'status' | 'createdAt'>> = {};
+
+      if (typeof profileInput.nama === 'string' && profileInput.nama.trim().length >= 3) {
+        updates.namaLengkap = profileInput.nama.trim();
+      }
+      if (profileInput.angkatan) {
+        const angk = Number(profileInput.angkatan);
+        if (angk >= 1980 && angk <= 2030) updates.angkatan = angk;
+      }
+      if (typeof profileInput.prodi === 'string' && profileInput.prodi.trim()) {
+        updates.prodi = profileInput.prodi.trim();
+      }
+      if (typeof profileInput.wilayah === 'string' && profileInput.wilayah.trim()) {
+        updates.wilayah = profileInput.wilayah.trim();
+      }
+      if (typeof profileInput.pekerjaan === 'string') {
+        updates.pekerjaan = profileInput.pekerjaan.trim() || undefined;
+      }
+      if (typeof profileInput.perusahaan === 'string') {
+        updates.perusahaan = profileInput.perusahaan.trim() || undefined;
+      }
+      if (typeof profileInput.whatsapp === 'string' && profileInput.whatsapp.trim()) {
+        const norm = normalizeIndonesianWhatsApp(profileInput.whatsapp);
+        if (norm) updates.whatsapp = norm;
+      }
+      if (typeof profileInput.email === 'string') {
+        updates.email = profileInput.email.trim() || undefined;
+      }
+      if (typeof profileInput.fotoUrl === 'string') {
+        updates.fotoUrl = profileInput.fotoUrl.trim() || undefined;
+      }
+      if (typeof profileInput.tampilDiDirektori === 'boolean') {
+        updates.tampilDiDirektori = profileInput.tampilDiDirektori;
+      }
+      if (typeof profileInput.siapMentoring === 'boolean') {
+        updates.siapMentoring = profileInput.siapMentoring;
+      }
+
+      const updatedRecord = await updatePendaftarProfile(session.sub, updates);
+      if (updatedRecord) {
+        return NextResponse.json({
+          success: true,
+          profile: pendaftarToUserProfile(updatedRecord),
+        });
+      }
+
+      if (IS_DEMO_MODE) {
+        return NextResponse.json({
+          success: true,
+          profile: {
+            ...getDemoMemberProfile(),
+            ...profileInput,
+          },
+        });
+      }
+
+      return NextResponse.json(
+        { error: 'Gagal memperbarui profil anggota.' },
+        { status: 400 }
+      );
+    }
+
     if (action === 'login') {
       const attemptKey = getLoginAttemptKey(request);
       if (isLoginRateLimited(attemptKey)) {
@@ -175,6 +247,7 @@ export async function POST(request: NextRequest) {
 
       let sessionSub = identifier;
       let memberName: string | undefined = undefined;
+      let memberProfile: ReturnType<typeof pendaftarToUserProfile> | null = null;
 
       // Verifikasi login anggota (berbasis WhatsApp yang sudah disetujui)
       if (role === 'member') {
@@ -203,6 +276,10 @@ export async function POST(request: NextRequest) {
 
           sessionSub = approvedMember.id;
           memberName = approvedMember.namaLengkap;
+          memberProfile = pendaftarToUserProfile(approvedMember);
+        } else {
+          memberProfile = getDemoMemberProfile();
+          memberName = memberProfile.nama;
         }
       }
 
@@ -257,6 +334,7 @@ export async function POST(request: NextRequest) {
         role,
         sub: sessionSub,
         nama: memberName,
+        profile: memberProfile,
         isDemo: IS_DEMO_MODE,
         exp,
       });

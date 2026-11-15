@@ -23,6 +23,7 @@ interface ActiveSession {
   sub: string;
   role: 'member' | 'admin';
   exp: number;
+  nama?: string;
 }
 
 export default function MasukPage() {
@@ -40,7 +41,15 @@ export default function MasukPage() {
       .then((res) => res.json())
       .then((data) => {
         if (data.authenticated && data.session) {
-          setActiveSession(data.session);
+          setActiveSession({
+            ...data.session,
+            nama: data.profile?.nama || data.session.nama,
+          });
+          if (data.profile) {
+            try {
+              localStorage.setItem('ikaums_current_user_profile', JSON.stringify(data.profile));
+            } catch {}
+          }
         }
       })
       .catch(() => {});
@@ -71,8 +80,18 @@ export default function MasukPage() {
         setActiveSession({
           sub: data.sub,
           role: data.role,
+          nama: data.nama || data.profile?.nama,
           exp: typeof data.exp === 'number' ? data.exp : Math.floor(Date.now() / 1000) + 30 * 24 * 3600,
         });
+
+        // Bersihkan profil sesi lama di peramban agar akun tidak pernah tertukar
+        try {
+          localStorage.removeItem('ikaums_current_user_profile');
+          if (data.profile) {
+            localStorage.setItem('ikaums_current_user_profile', JSON.stringify(data.profile));
+          }
+        } catch {}
+
         setSent(true);
         router.refresh();
         if (role === 'member') {
@@ -93,6 +112,9 @@ export default function MasukPage() {
   const handleLogout = async () => {
     setIsLoading(true);
     try {
+      try {
+        localStorage.removeItem('ikaums_current_user_profile');
+      } catch {}
       await fetch('/api/auth', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -211,7 +233,7 @@ export default function MasukPage() {
                 <div>
                   <p className="font-semibold text-sm">Sesi Aktif Terverifikasi</p>
                   <p className="text-xs text-[#475569]">
-                    Masuk sebagai <strong>{activeSession.sub}</strong> ({activeSession.role === 'admin' ? 'Pengurus Wilayah' : 'Anggota Alumni'})
+                    Masuk sebagai <strong>{activeSession.nama || activeSession.sub}</strong> ({activeSession.role === 'admin' ? 'Pengurus Wilayah' : 'Anggota Alumni'})
                   </p>
                 </div>
               </div>
