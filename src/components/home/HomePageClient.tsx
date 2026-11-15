@@ -8,6 +8,7 @@ import { Navbar, Footer } from '@/components/Navigation';
 import { KopdarInterestForm } from '@/components/home/KopdarInterestForm';
 import { TrustPanel } from '@/components/home/TrustPanel';
 import { MobileKopdarCta } from '@/components/home/MobileKopdarCta';
+import { RegisterModal } from '@/components/home/RegisterModal';
 import MapLoadingSkeleton from '@/components/peta/MapLoadingSkeleton';
 import type { LandingContent } from '@/lib/cms-store';
 import type { CommunityStats } from '@/lib/community-stats';
@@ -90,17 +91,18 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
   const [selectedWilayah, setSelectedWilayah] = useState('Jakarta Selatan');
   const [selectedKawasan, setSelectedKawasan] = useState('Jakarta');
   const [showFormModal, setShowFormModal] = useState(false);
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
 
   const totalAlumni = stats?.totalAlumni ?? 0;
   const kawasanCounts = stats?.kawasanCounts ?? {};
 
-  const handleOpenKopdar = (wilayahTarget?: string) => {
+  const handleOpenRegister = (wilayahTarget?: string) => {
     if (wilayahTarget) setSelectedWilayah(wilayahTarget);
-    setShowFormModal(true);
-    const target = document.getElementById('kopdar-section');
-    if (target) {
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    setShowRegisterModal(true);
+  };
+
+  const handleOpenKopdar = (wilayahTarget?: string) => {
+    handleOpenRegister(wilayahTarget);
   };
 
   const values = landing.values.slice(0, 3);
@@ -144,10 +146,10 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
                 <div className="grid grid-cols-2 gap-2.5 sm:flex sm:flex-wrap sm:items-center sm:gap-3 pt-1 sm:pt-2">
                   <button
                     type="button"
-                    onClick={() => handleOpenKopdar()}
+                    onClick={() => handleOpenRegister()}
                     className="inline-flex min-h-[44px] sm:min-h-[48px] items-center justify-center gap-1.5 sm:gap-2 rounded-xl bg-[#0C2340] px-4 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-base font-semibold text-white transition-all hover:bg-[#08182E] shadow-sm active:scale-[0.99] cursor-pointer"
                   >
-                    <span>{landing.heroPrimaryCta}</span>
+                    <span>Daftar Jadi Anggota</span>
                     <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#F59E0B]" aria-hidden="true" />
                   </button>
                   <Link
@@ -477,10 +479,10 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
                 <div className="pt-1 sm:pt-2">
                   <button
                     type="button"
-                    onClick={() => setShowFormModal(!showFormModal)}
+                    onClick={() => handleOpenRegister(selectedWilayah)}
                     className="inline-flex min-h-[44px] sm:min-h-[46px] items-center justify-center gap-2 rounded-xl bg-[#0C2340] px-5 sm:px-6 py-2.5 text-xs sm:text-base font-semibold text-white transition-all hover:bg-[#08182E] shadow-xs cursor-pointer active:scale-[0.99]"
                   >
-                    <span>{showFormModal ? 'Tutup formulir minat' : landing.kopdarCta}</span>
+                    <span>Daftar Jadi Anggota</span>
                     <ArrowRight className="h-4 w-4 text-[#F59E0B]" aria-hidden="true" />
                   </button>
                 </div>
@@ -583,7 +585,14 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
       <div className="mt-16 sm:mt-24">
         <Footer />
       </div>
-      <MobileKopdarCta onOpenForm={() => handleOpenKopdar()} />
+      <MobileKopdarCta onOpenForm={() => handleOpenRegister()} label="Daftar jadi anggota" />
+
+      {/* Modal Popup Pendaftaran Anggota IKA UMS */}
+      <RegisterModal
+        isOpen={showRegisterModal}
+        onClose={() => setShowRegisterModal(false)}
+        defaultWilayah={selectedWilayah}
+      />
     </div>
   );
 }

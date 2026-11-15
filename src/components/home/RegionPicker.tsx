@@ -60,7 +60,7 @@ export function RegionPicker({ selected, onSelect }: RegionPickerProps) {
         })}
       </div>
       <p className="mt-3 text-sm sm:text-base leading-[1.6] text-slate-600">
-        Klik wilayahmu untuk langsung mengisi form minat kopdar di bawah.
+        Klik wilayahmu untuk memilih domisili dan langsung mendaftar jadi anggota.
       </p>
     </div>
   );

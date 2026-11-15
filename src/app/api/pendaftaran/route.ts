@@ -91,6 +91,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const pekerjaan = String(body.pekerjaan || '').trim();
+    if (!pekerjaan) {
+      return NextResponse.json(
+        { error: 'Pekerjaan saat ini wajib diisi untuk pemetaan alumni.' },
+        { status: 400 }
+      );
+    }
+
     const validWa = normalizeIndonesianWhatsApp(String(body.whatsapp || ''));
     if (!validWa) {
       return NextResponse.json(

@@ -102,7 +102,7 @@ export const DEFAULT_LANDING: LandingContent = {
   heroHighlight: 'keluarga.',
   heroSubtitle:
     'Temukan kembali teman, bangun koneksi, dan bertumbuh bersama alumni Universitas Muhammadiyah Surakarta di Jabodetabek.',
-  heroPrimaryCta: 'Ikut kopdar terdekat',
+  heroPrimaryCta: 'Daftar jadi anggota',
   heroSecondaryCta: 'Jelajahi jaringan',
   heroBadgeTitle: 'Satu almamater. Banyak cerita.',
   heroBadgeSubtitle: 'Keluarga besar UMS di perantauan.',
@@ -136,7 +136,7 @@ export const DEFAULT_LANDING: LandingContent = {
   kopdarTitle: 'Mulai dari Kotamu',
   kopdarDescription:
     'Kami sedang memetakan minat kopdar pertama di tiap wilayah. Isi formulir singkat berikut agar kamu bisa kami kabari lebih dulu.',
-  kopdarCta: 'Isi minat kopdar sekarang',
+  kopdarCta: 'Daftar jadi anggota',
   ceritaTitle: 'Cerita dari Keluarga UMS',
 };
 

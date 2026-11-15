@@ -6,12 +6,13 @@ import { cn } from '@/lib/utils';
 
 interface MobileKopdarCtaProps {
   onOpenForm: () => void;
+  label?: string;
 }
 
 const ctaClass =
-  'inline-flex min-h-[48px] w-full cursor-pointer items-center justify-center gap-2 rounded-lg bg-[#0C2340] px-5 py-3 text-base font-semibold text-white transition-colors hover:bg-[#08182E] active:scale-[0.99]';
+  'inline-flex min-h-[48px] w-full cursor-pointer items-center justify-center gap-2 rounded-xl bg-[#0C2340] px-5 py-3 text-sm sm:text-base font-bold text-white transition-colors hover:bg-[#08182E] active:scale-[0.99] shadow-sm';
 
-export function MobileKopdarCta({ onOpenForm }: MobileKopdarCtaProps) {
+export function MobileKopdarCta({ onOpenForm, label = 'Daftar jadi anggota' }: MobileKopdarCtaProps) {
   const [formVisible, setFormVisible] = useState(false);
 
   useEffect(() => {
@@ -31,7 +32,7 @@ export function MobileKopdarCta({ onOpenForm }: MobileKopdarCtaProps) {
     <div
       aria-hidden={formVisible}
       className={cn(
-        'fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 backdrop-blur-md shadow-lg transition-transform duration-200 lg:hidden',
+        'fixed inset-x-0 bottom-0 z-40 border-t border-slate-200/90 bg-white/95 backdrop-blur-md shadow-lg transition-transform duration-200 lg:hidden',
         formVisible && 'pointer-events-none translate-y-full'
       )}
       style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
@@ -43,7 +44,7 @@ export function MobileKopdarCta({ onOpenForm }: MobileKopdarCtaProps) {
           tabIndex={formVisible ? -1 : 0}
           className={ctaClass}
         >
-          Isi minat kopdar
+          <span>{label}</span>
           <ArrowRight className="h-4 w-4 text-[#F59E0B]" aria-hidden="true" />
         </button>
       </div>

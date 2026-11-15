@@ -329,29 +329,65 @@ export function Navbar() {
 
           {/* Desktop Action Buttons */}
           <div className="hidden lg:flex items-center gap-2.5 shrink-0">
-            <Link
-              href="/masuk"
-              className="inline-flex items-center min-h-[44px] text-[13px] font-semibold text-[#0C2340] px-4 py-2 hover:bg-[#0C2340]/5 transition-colors rounded-lg whitespace-nowrap"
-            >
-              Masuk
-            </Link>
-            <Link
-              href="/gabung"
-              className="inline-flex items-center gap-1.5 min-h-[44px] text-[13px] font-semibold text-white bg-[#0C2340] hover:bg-[#16325C] px-4 py-2 transition-all shadow-xs rounded-lg group whitespace-nowrap"
-            >
-              <span>Bergabung di IKA UMS</span>
-              <ArrowRight className="w-3.5 h-3.5 text-[#F59E0B] group-hover:translate-x-0.5 transition-transform" />
-            </Link>
+            {pathname === '/app' ? (
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-800 bg-emerald-50 border border-emerald-300 px-3 py-1.5 rounded-lg">
+                  <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
+                  Sesi Anggota Aktif
+                </span>
+                <Link
+                  href="/direktori"
+                  className="inline-flex items-center min-h-[44px] text-[13px] font-semibold text-[#0C2340] px-4 py-2 hover:bg-[#0C2340]/5 transition-colors rounded-lg whitespace-nowrap"
+                >
+                  Cari Alumni
+                </Link>
+              </div>
+            ) : pathname.startsWith('/admin') ? (
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-800 bg-amber-50 border border-amber-300 px-3 py-1.5 rounded-lg">
+                  <span className="h-2 w-2 rounded-full bg-amber-500" aria-hidden="true" />
+                  Sesi Pengurus
+                </span>
+              </div>
+            ) : (
+              <>
+                <Link
+                  href="/masuk"
+                  className="inline-flex items-center min-h-[44px] text-[13px] font-semibold text-[#0C2340] px-4 py-2 hover:bg-[#0C2340]/5 transition-colors rounded-lg whitespace-nowrap"
+                >
+                  Masuk
+                </Link>
+                <Link
+                  href="/gabung"
+                  className="inline-flex items-center gap-1.5 min-h-[44px] text-[13px] font-semibold text-white bg-[#0C2340] hover:bg-[#16325C] px-4 py-2 transition-all shadow-xs rounded-lg group whitespace-nowrap"
+                >
+                  <span>Bergabung di IKA UMS</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-[#F59E0B] group-hover:translate-x-0.5 transition-transform" />
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile & Tablet Toggle */}
           <div className="flex lg:hidden items-center gap-2">
-            <Link
-              href="/gabung"
-              className="inline-flex items-center justify-center min-h-[44px] text-xs font-semibold text-white bg-[#0C2340] hover:bg-[#16325C] px-3.5 py-2 rounded-lg whitespace-nowrap"
-            >
-              Gabung
-            </Link>
+            {pathname === '/app' ? (
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-800 bg-emerald-50 border border-emerald-300 px-2.5 py-1.5 rounded-lg whitespace-nowrap">
+                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" aria-hidden="true" />
+                Ruang Anggota
+              </span>
+            ) : pathname.startsWith('/admin') ? (
+              <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-800 bg-amber-50 border border-amber-300 px-2.5 py-1.5 rounded-lg whitespace-nowrap">
+                <span className="h-2 w-2 rounded-full bg-amber-500" aria-hidden="true" />
+                Admin
+              </span>
+            ) : (
+              <Link
+                href="/gabung"
+                className="inline-flex items-center justify-center min-h-[44px] text-xs font-semibold text-white bg-[#0C2340] hover:bg-[#16325C] px-3.5 py-2 rounded-lg whitespace-nowrap"
+              >
+                Gabung
+              </Link>
+            )}
             <button
               onClick={() => setIsOpen(!isOpen)}
               type="button"
@@ -440,22 +476,41 @@ export function Navbar() {
                 <span>Pengurus Wilayah</span>
               </Link>
 
-              <div className="pt-3 border-t border-slate-200 grid grid-cols-2 gap-2.5">
-                <Link
-                  href="/masuk"
-                  onClick={() => setIsOpen(false)}
-                  className="min-h-[44px] flex items-center justify-center text-center py-2.5 px-3 bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 text-sm font-semibold rounded-lg transition-colors"
-                >
-                  Masuk Akun
-                </Link>
-                <Link
-                  href="/gabung"
-                  onClick={() => setIsOpen(false)}
-                  className="min-h-[44px] flex items-center justify-center text-center py-2.5 px-3 bg-[#0C2340] hover:bg-[#16325C] text-white text-sm font-semibold rounded-lg shadow-xs transition-colors"
-                >
-                  Bergabung
-                </Link>
-              </div>
+              {pathname === '/app' ? (
+                <div className="pt-3 border-t border-slate-200 grid grid-cols-2 gap-2.5">
+                  <Link
+                    href="/direktori"
+                    onClick={() => setIsOpen(false)}
+                    className="min-h-[44px] flex items-center justify-center text-center py-2.5 px-3 bg-[#0C2340] text-white text-sm font-semibold rounded-lg shadow-xs transition-colors"
+                  >
+                    Cari Alumni
+                  </Link>
+                  <Link
+                    href="/kegiatan"
+                    onClick={() => setIsOpen(false)}
+                    className="min-h-[44px] flex items-center justify-center text-center py-2.5 px-3 bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 text-sm font-semibold rounded-lg transition-colors"
+                  >
+                    Lihat Agenda
+                  </Link>
+                </div>
+              ) : (
+                <div className="pt-3 border-t border-slate-200 grid grid-cols-2 gap-2.5">
+                  <Link
+                    href="/masuk"
+                    onClick={() => setIsOpen(false)}
+                    className="min-h-[44px] flex items-center justify-center text-center py-2.5 px-3 bg-white hover:bg-slate-50 border border-slate-300 text-slate-800 text-sm font-semibold rounded-lg transition-colors"
+                  >
+                    Masuk Akun
+                  </Link>
+                  <Link
+                    href="/gabung"
+                    onClick={() => setIsOpen(false)}
+                    className="min-h-[44px] flex items-center justify-center text-center py-2.5 px-3 bg-[#0C2340] hover:bg-[#16325C] text-white text-sm font-semibold rounded-lg shadow-xs transition-colors"
+                  >
+                    Bergabung
+                  </Link>
+                </div>
+              )}
             </nav>
           </motion.div>
         )}

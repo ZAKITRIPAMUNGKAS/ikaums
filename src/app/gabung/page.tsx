@@ -52,6 +52,7 @@ interface FieldErrors {
   angkatan?: string;
   prodi?: string;
   wilayah?: string;
+  pekerjaan?: string;
   whatsapp?: string;
   email?: string;
   mentorContactConsent?: string;
@@ -338,6 +339,11 @@ export default function GabungPage() {
       errors.wilayah = 'Pilih wilayah domisili di Jabodetabek.';
     }
 
+    const cleanPekerjaan = formData.pekerjaan.trim();
+    if (!cleanPekerjaan) {
+      errors.pekerjaan = 'Pekerjaan saat ini wajib diisi untuk pemetaan potensi alumni.';
+    }
+
     const validWa = normalizeIndonesianWhatsApp(formData.whatsapp);
     if (!validWa) {
       errors.whatsapp =
@@ -369,6 +375,7 @@ export default function GabungPage() {
         ['angkatan', 'angkatan'],
         ['prodi', 'prodi'],
         ['wilayah', 'wilayah'],
+        ['pekerjaan', 'pekerjaan'],
         ['whatsapp', 'whatsapp'],
         ['email', 'email'],
         ['mentorContactConsent', 'mentorContactConsent'],
@@ -798,6 +805,45 @@ export default function GabungPage() {
                     </div>
                   </div>
 
+                  {/* Pekerjaan / Profesi Saat Ini (Wajib untuk Pemetaan) */}
+                  <div className="sm:col-span-2 space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <label htmlFor="pekerjaan" className="block text-sm sm:text-base font-bold text-[#0C2340]">
+                        Pekerjaan / Profesi Saat Ini <span className="text-[#92400E]">*</span>
+                      </label>
+                      <span className="text-[11px] font-semibold text-[#92400E] bg-amber-50 border border-amber-200/80 px-2.5 py-0.5 rounded-full">
+                        Wajib untuk Pemetaan
+                      </span>
+                    </div>
+                    <input
+                      id="pekerjaan"
+                      type="text"
+                      required
+                      autoComplete="organization-title"
+                      aria-invalid={fieldErrors.pekerjaan ? 'true' : undefined}
+                      aria-describedby={fieldErrors.pekerjaan ? 'hint-pekerjaan err-pekerjaan' : 'hint-pekerjaan'}
+                      placeholder="Contoh: Software Engineer, Guru, Wirausaha, Dokter, Fresh Graduate, dll."
+                      value={formData.pekerjaan}
+                      onChange={(e) => {
+                        setFormData({ ...formData, pekerjaan: e.target.value });
+                        clearError('pekerjaan');
+                      }}
+                      className={`w-full min-h-[50px] sm:min-h-[52px] px-4 py-3 rounded-xl sm:rounded-2xl bg-slate-50/40 hover:bg-white text-[16px] text-[#0C2340] placeholder:text-slate-400 border transition-all shadow-2xs focus:bg-white focus:outline-hidden focus:ring-4 ${
+                        fieldErrors.pekerjaan
+                          ? 'border-red-500 focus:ring-red-200'
+                          : 'border-slate-300/80 focus:border-[#0C2340] focus:ring-amber-500/15'
+                      }`}
+                    />
+                    <p id="hint-pekerjaan" className="text-xs text-[#475569]">
+                      Wajib diisi untuk pemetaan profesi, jejaring industri, dan direktori alumni IKA UMS.
+                    </p>
+                    {fieldErrors.pekerjaan && (
+                      <p id="err-pekerjaan" className="text-xs sm:text-sm text-red-700 font-medium pt-0.5">
+                        {fieldErrors.pekerjaan}
+                      </p>
+                    )}
+                  </div>
+
                   {/* Nomor WhatsApp */}
                   <div className="space-y-1.5">
                     <label htmlFor="whatsapp" className="block text-sm sm:text-base font-bold text-[#0C2340]">
@@ -883,7 +929,7 @@ export default function GabungPage() {
                   className="w-full min-h-[48px] p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border border-slate-200 bg-slate-50/70 hover:bg-slate-100/70 flex items-center justify-between text-left text-sm sm:text-base font-bold text-[#0C2340] transition-colors cursor-pointer"
                 >
                   <div className="flex items-center gap-2">
-                    <span>Pekerjaan &amp; Mentoring</span>
+                    <span>Instansi &amp; Mentoring</span>
                     <span className="text-[11px] px-2 py-0.5 rounded-full bg-slate-200 text-slate-600 font-medium">
                       Opsional
                     </span>
@@ -895,29 +941,15 @@ export default function GabungPage() {
 
                 {showOptional && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-4">
-                    <div className="space-y-1.5">
-                      <label htmlFor="pekerjaan" className="block text-sm sm:text-base font-bold text-[#0C2340]">
-                        Profesi / Bidang Kerja
-                      </label>
-                      <input
-                        id="pekerjaan"
-                        type="text"
-                        autoComplete="organization-title"
-                        placeholder="Contoh: Software Engineer, Wirausaha, Dokter"
-                        value={formData.pekerjaan}
-                        onChange={(e) => setFormData({ ...formData, pekerjaan: e.target.value })}
-                        className="w-full min-h-[50px] sm:min-h-[52px] px-4 py-3 rounded-xl sm:rounded-2xl bg-slate-50/40 hover:bg-white text-[16px] text-[#0C2340] placeholder:text-slate-400 border border-slate-300/80 transition-all shadow-2xs focus:bg-white focus:border-[#0C2340] focus:outline-hidden focus:ring-4 focus:ring-amber-500/15"
-                      />
-                    </div>
-                    <div className="space-y-1.5">
+                    <div className="sm:col-span-2 space-y-1.5">
                       <label htmlFor="perusahaan" className="block text-sm sm:text-base font-bold text-[#0C2340]">
-                        Instansi / Tempat Usaha
+                        Instansi / Tempat Usaha <span className="text-sm font-normal text-[#475569]">(Opsional)</span>
                       </label>
                       <input
                         id="perusahaan"
                         type="text"
                         autoComplete="organization"
-                        placeholder="Nama kantor atau brand usaha sendiri"
+                        placeholder="Nama kantor, instansi, atau brand usaha sendiri"
                         value={formData.perusahaan}
                         onChange={(e) => setFormData({ ...formData, perusahaan: e.target.value })}
                         className="w-full min-h-[50px] sm:min-h-[52px] px-4 py-3 rounded-xl sm:rounded-2xl bg-slate-50/40 hover:bg-white text-[16px] text-[#0C2340] placeholder:text-slate-400 border border-slate-300/80 transition-all shadow-2xs focus:bg-white focus:border-[#0C2340] focus:outline-hidden focus:ring-4 focus:ring-amber-500/15"
