@@ -90,7 +90,6 @@ interface HomePageClientProps {
 export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) {
   const [selectedWilayah, setSelectedWilayah] = useState('Jakarta Selatan');
   const [selectedKawasan, setSelectedKawasan] = useState('Jakarta');
-  const [showFormModal, setShowFormModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
 
   const totalAlumni = stats?.totalAlumni ?? 0;
@@ -99,10 +98,6 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
   const handleOpenRegister = (wilayahTarget?: string) => {
     if (wilayahTarget) setSelectedWilayah(wilayahTarget);
     setShowRegisterModal(true);
-  };
-
-  const handleOpenKopdar = (wilayahTarget?: string) => {
-    handleOpenRegister(wilayahTarget);
   };
 
   const values = landing.values.slice(0, 3);
@@ -504,7 +499,7 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
 
           <div
             id="form-kopdar-container"
-            className={`transition-all duration-300 ${showFormModal ? 'block' : 'hidden'}`}
+            className="transition-all duration-300 block"
           >
             <div className="grid grid-cols-1 items-start gap-8 border-t border-slate-200 pt-6 lg:grid-cols-12">
               <div className="lg:col-span-5">

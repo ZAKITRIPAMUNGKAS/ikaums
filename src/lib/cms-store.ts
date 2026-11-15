@@ -135,7 +135,7 @@ export const DEFAULT_LANDING: LandingContent = {
   kopdarEyebrow: 'Kopdar Pertama',
   kopdarTitle: 'Mulai dari Kotamu',
   kopdarDescription:
-    'Kami sedang memetakan minat kopdar pertama di tiap wilayah. Isi formulir singkat berikut agar kamu bisa kami kabari lebih dulu.',
+    'Kami sedang memetakan anggota dan agenda temu pertama di tiap wilayah Jabodetabek. Daftarkan dirimu sebagai anggota agar bisa kami kabari langsung lewat WhatsApp.',
   kopdarCta: 'Daftar jadi anggota',
   ceritaTitle: 'Cerita dari Keluarga UMS',
 };

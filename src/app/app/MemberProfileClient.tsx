@@ -3,14 +3,42 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { Navbar, Footer } from '@/components/Navigation';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
+import {
+  FAKULTAS_PRODI_UMS,
+  ANGKATAN_OPTIONS,
+  WILAYAH_JABODETABEK,
+  normalizeIndonesianWhatsApp,
+  isValidEmail,
+} from '@/data/ums-prodi';
 import { DEMO_BADGE_LABEL } from '@/lib/config';
-import { ArrowRight, Bell, Briefcase, CalendarDays, CheckCircle2, ChevronRight, CircleUserRound, MapPin, ShieldCheck, UsersRound } from 'lucide-react';
-
-const activityItems = [
-  { title: 'Profil anggota siap digunakan', detail: 'Perbarui informasi kerja dan domisili agar jaringanmu lebih relevan.', icon: CircleUserRound },
-  { title: 'Direktori anggota menanti persetujuanmu', detail: 'Pilih apakah profilmu boleh ditemukan oleh sesama alumni.', icon: UsersRound },
-];
+import {
+  ArrowRight,
+  Bell,
+  Briefcase,
+  CalendarDays,
+  Check,
+  CheckCircle2,
+  ChevronRight,
+  Copy,
+  GraduationCap,
+  LogOut,
+  MapPin,
+  Pencil,
+  Search,
+  ShieldCheck,
+  Sparkles,
+  Users,
+  X,
+} from 'lucide-react';
 
 interface UserProfileData {
   nama?: string;
@@ -20,15 +48,57 @@ interface UserProfileData {
   pekerjaan?: string;
   perusahaan?: string;
   fotoUrl?: string;
+  whatsapp?: string;
+  email?: string;
   tampilDiDirektori?: boolean;
   siapMentoring?: boolean;
+  idAnggota?: string;
 }
 
+const activityItems = [
+  {
+    title: 'Profil anggota siap digunakan',
+    detail: 'Informasi identitas, program studi, dan domisili aktif tersimpan.',
+    icon: CheckCircle2,
+    badge: 'Lengkap',
+  },
+  {
+    title: 'Direktori anggota menanti persetujuanmu',
+    detail: 'Sesuaikan pengaturan agar rekan satu angkatan mudah menemukanmu.',
+    icon: Users,
+    badge: 'Terkendali',
+  },
+  {
+    title: 'Jaringan korwil Jabodetabek',
+    detail: 'Terhubung dengan perwakilan alumni di wilayah tempat tinggalmu.',
+    icon: MapPin,
+    badge: 'Aktif',
+  },
+];
+
 export default function MemberProfileClient() {
-  const [tampilDiDirektori, setTampilDiDirektori] = useState(false);
+  const router = useRouter();
+  const [userProfile, setUserProfile] = useState<UserProfileData | null>(null);
+  const [tampilDiDirektori, setTampilDiDirektori] = useState(true);
   const [terbukaMentoring, setTerbukaMentoring] = useState(false);
   const [savedNotice, setSavedNotice] = useState<string | null>(null);
-  const [userProfile, setUserProfile] = useState<UserProfileData | null>(null);
+  const [copiedId, setCopiedId] = useState(false);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  // Modal Edit Profil State
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editForm, setEditForm] = useState({
+    nama: '',
+    prodi: 'Teknik Informatika',
+    angkatan: '2011',
+    wilayah: 'Jakarta Selatan',
+    pekerjaan: '',
+    perusahaan: '',
+    whatsapp: '',
+    email: '',
+    fotoUrl: '',
+  });
+  const [formErrors, setFormErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -51,87 +121,901 @@ export default function MemberProfileClient() {
     return () => clearTimeout(timer);
   }, []);
 
-  const displayName = userProfile?.nama || 'Rizal Hakim';
-  const displayProdiAngkatan = userProfile
-    ? `${userProfile.prodi || 'Teknik Informatika'} ’${String(userProfile.angkatan || '11').slice(-2)}`
-    : 'TI ’11';
+  // Auto-dismiss notice after 4 seconds
+  useEffect(() => {
+    if (!savedNotice) return;
+    const timeout = setTimeout(() => {
+      setSavedNotice(null);
+    }, 4000);
+    return () => clearTimeout(timeout);
+  }, [savedNotice]);
+
+  const displayName = userProfile?.nama || 'Zaki Maulana';
+  const firstName = displayName.split(' ')[0] || 'Alumni';
+  const displayAngkatan = String(userProfile?.angkatan || '2011');
+  const displayProdi = userProfile?.prodi || 'Teknik Informatika';
+  const displayProdiAngkatan = `${displayProdi} ’${displayAngkatan.slice(-2)}`;
   const displayPekerjaan = userProfile?.pekerjaan
     ? `${userProfile.pekerjaan}${userProfile.perusahaan ? ` di ${userProfile.perusahaan}` : ''}`
-    : 'Engineering Manager';
+    : 'Engineering Manager di Tech Co';
   const displayWilayah = userProfile?.wilayah || 'Jakarta Selatan';
   const displayFoto = userProfile?.fotoUrl || '/images/avatar-rizal.jpg';
   const isCustomFoto = Boolean(userProfile?.fotoUrl?.startsWith('data:'));
+  const memberId =
+    userProfile?.idAnggota ||
+    `UMS-JBD-${displayAngkatan.slice(-2)}${Math.abs(
+      (displayName.length * 37) % 900 + 100
+    )}`;
+
+  const handleToggleDirektori = () => {
+    const nextVal = !tampilDiDirektori;
+    setTampilDiDirektori(nextVal);
+    try {
+      const updated = { ...(userProfile || {}), tampilDiDirektori: nextVal };
+      setUserProfile(updated);
+      localStorage.setItem('ikaums_current_user_profile', JSON.stringify(updated));
+      setSavedNotice(
+        nextVal
+          ? 'Preferensi disimpan: Profil kini dapat dicari di Direktori Anggota.'
+          : 'Preferensi disimpan: Profil kini disembunyikan dari Direktori Anggota.'
+      );
+    } catch {
+      // Abaikan bila storage gagal
+    }
+  };
+
+  const handleToggleMentoring = () => {
+    const nextVal = !terbukaMentoring;
+    setTerbukaMentoring(nextVal);
+    try {
+      const updated = { ...(userProfile || {}), siapMentoring: nextVal };
+      setUserProfile(updated);
+      localStorage.setItem('ikaums_current_user_profile', JSON.stringify(updated));
+      setSavedNotice(
+        nextVal
+          ? 'Preferensi disimpan: Status kesediaan mentoring alumni diaktifkan.'
+          : 'Preferensi disimpan: Status kesediaan mentoring alumni dinonaktifkan.'
+      );
+    } catch {
+      // Abaikan bila storage gagal
+    }
+  };
+
+  const handleCopyMemberId = () => {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(memberId).then(() => {
+        setCopiedId(true);
+        setTimeout(() => setCopiedId(false), 2000);
+        setSavedNotice(`ID Anggota ${memberId} berhasil disalin ke papan klip.`);
+      });
+    }
+  };
+
+  const handleOpenEditModal = () => {
+    setEditForm({
+      nama: userProfile?.nama || displayName,
+      prodi: userProfile?.prodi || displayProdi,
+      angkatan: String(userProfile?.angkatan || displayAngkatan),
+      wilayah: userProfile?.wilayah || displayWilayah,
+      pekerjaan: userProfile?.pekerjaan || 'Engineering Manager',
+      perusahaan: userProfile?.perusahaan || 'Tech Co',
+      whatsapp: userProfile?.whatsapp || '',
+      email: userProfile?.email || '',
+      fotoUrl: userProfile?.fotoUrl || '',
+    });
+    setFormErrors({});
+    setIsEditModalOpen(true);
+  };
+
+  const handleSaveProfile = (e: React.FormEvent) => {
+    e.preventDefault();
+    const errors: Record<string, string> = {};
+
+    if (!editForm.nama.trim()) {
+      errors.nama = 'Nama lengkap wajib diisi.';
+    }
+
+    if (editForm.whatsapp.trim()) {
+      const validWa = normalizeIndonesianWhatsApp(editForm.whatsapp);
+      if (!validWa) {
+        errors.whatsapp = 'Format nomor WhatsApp tidak valid (contoh: 081234567890).';
+      }
+    }
+
+    if (editForm.email.trim() && !isValidEmail(editForm.email)) {
+      errors.email = 'Format alamat email tidak valid.';
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      return;
+    }
+
+    try {
+      const updated: UserProfileData = {
+        ...(userProfile || {}),
+        nama: editForm.nama.trim(),
+        prodi: editForm.prodi,
+        angkatan: editForm.angkatan,
+        wilayah: editForm.wilayah,
+        pekerjaan: editForm.pekerjaan.trim() || undefined,
+        perusahaan: editForm.perusahaan.trim() || undefined,
+        whatsapp: editForm.whatsapp.trim() ? normalizeIndonesianWhatsApp(editForm.whatsapp)! : undefined,
+        email: editForm.email.trim() || undefined,
+        fotoUrl: editForm.fotoUrl.trim() || undefined,
+        tampilDiDirektori,
+        siapMentoring: terbukaMentoring,
+      };
+
+      setUserProfile(updated);
+      localStorage.setItem('ikaums_current_user_profile', JSON.stringify(updated));
+      setIsEditModalOpen(false);
+      setSavedNotice('Profil anggota berhasil diperbarui.');
+    } catch {
+      setFormErrors({ general: 'Gagal menyimpan perubahan ke memori peramban.' });
+    }
+  };
+
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    try {
+      await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'logout' }),
+      });
+      router.push('/masuk');
+    } catch {
+      router.push('/masuk');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
       <Navbar />
+
       <main className="flex-grow w-full">
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-7 sm:py-10 lg:py-12 space-y-7 sm:space-y-9">
-          <section className="overflow-hidden rounded-[1.75rem] bg-[#0C2340] text-white shadow-[0_18px_45px_-28px_rgba(12,35,64,0.7)]">
-            <div className="grid lg:grid-cols-[1.35fr_0.65fr]">
-              <div className="p-6 sm:p-8 lg:p-10">
-                <div className="flex flex-wrap items-center gap-3 text-sm">
-                  <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1.5 font-semibold"><span className="h-2 w-2 rounded-full bg-[#F59E0B]" aria-hidden="true" />Ruang anggota</span>
-                  <span className="rounded-full bg-[#F59E0B]/20 px-3 py-1.5 font-semibold text-[#FDE5B2]">{DEMO_BADGE_LABEL}</span>
-                </div>
-                <div className="mt-7 max-w-2xl">
-                  <p className="text-[#FDE5B2] text-sm font-semibold">Selamat datang kembali, {displayName.split(' ')[0]}</p>
-                  <h1 className="mt-2 text-3xl sm:text-4xl lg:text-[2.7rem] leading-[1.08] tracking-[-0.04em] font-bold">Jaringan alumni, lebih dekat dengan langkahmu.</h1>
-                  <p className="mt-4 max-w-xl text-base sm:text-lg leading-relaxed text-white/75">Kelola kehadiran, perluas koneksi, dan buka ruang berbagi pengalaman bersama alumni UMS di Jabodetabek.</p>
-                </div>
-                <div className="mt-8 flex flex-wrap gap-3">
-                  <Link href="/kegiatan" className="inline-flex min-h-[46px] items-center justify-center gap-2 rounded-xl bg-[#F59E0B] px-4 py-2.5 text-sm font-bold text-[#0C2340] transition-colors hover:bg-[#FBBF24] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Lihat kegiatan<ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
-                  <Link href="/direktori" className="inline-flex min-h-[46px] items-center justify-center rounded-xl border border-white/25 px-4 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Cari alumni</Link>
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-9 lg:py-10 space-y-6 sm:space-y-8">
+          
+          {/* Header Panel Bento */}
+          <section
+            aria-labelledby="member-dashboard-title"
+            className="relative overflow-hidden rounded-2xl bg-[#0C2340] text-white shadow-[0_18px_45px_-30px_rgba(12,35,64,0.8)]"
+          >
+            {/* Watermark siluet kampus UMS */}
+            <Image
+              src="/images/ums-campus-silhouette.png"
+              alt=""
+              aria-hidden="true"
+              width={2200}
+              height={760}
+              sizes="(max-width: 1280px) 100vw, 1280px"
+              className="pointer-events-none absolute -bottom-24 right-[-15%] w-[780px] max-w-none opacity-[0.11] sm:right-[-5%] sm:opacity-[0.14]"
+            />
+            <div
+              aria-hidden="true"
+              className="absolute -right-20 -top-24 h-64 w-64 rounded-full border border-white/10 bg-white/[0.03]"
+            />
+            <div
+              aria-hidden="true"
+              className="absolute right-20 top-10 h-20 w-20 rounded-full border border-[#F59E0B]/25"
+            />
+
+            <div className="relative p-5 sm:p-7 lg:p-8 space-y-4 sm:space-y-6">
+              {/* Top Navigation & Status Badges */}
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-white/15 pb-4">
+                <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs sm:text-sm text-slate-300">
+                  <Link
+                    href="/"
+                    className="inline-flex min-h-[36px] items-center hover:text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  >
+                    Beranda
+                  </Link>
+                  <span aria-hidden="true" className="text-slate-500">/</span>
+                  <span className="font-semibold text-white">Ruang Anggota</span>
+                </nav>
+
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-200">
+                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
+                    Anggota Terverifikasi
+                  </span>
+                  <span className="rounded-full bg-[#F59E0B]/20 border border-[#F59E0B]/30 px-2.5 py-1 text-xs font-semibold text-[#FDE5B2]">
+                    {DEMO_BADGE_LABEL}
+                  </span>
                 </div>
               </div>
-              <div className="relative border-t border-white/15 bg-[#08182E] p-6 sm:p-8 lg:border-l lg:border-t-0 lg:p-10">
-                <div className="absolute inset-0 opacity-20 [background-image:radial-gradient(circle_at_1px_1px,_#F59E0B_1px,_transparent_0)] [background-size:18px_18px]" aria-hidden="true" />
-                <div className="relative"><p className="text-sm font-semibold text-[#FDE5B2]">Agenda terdekat</p><div className="mt-4 rounded-2xl border border-white/15 bg-white/[0.07] p-5 backdrop-blur-sm"><div className="flex items-start gap-4"><div className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl bg-[#F59E0B] text-[#0C2340]"><span className="text-[10px] font-bold leading-none">NOV</span><span className="mt-0.5 text-lg font-extrabold leading-none">28</span></div><div><h2 className="font-bold leading-snug">Kopdar Jabodetabek</h2><p className="mt-1 text-sm leading-relaxed text-white/70">Sabtu, 10.00 WIB · Jakarta Selatan</p></div></div><Link href="/kegiatan" className="mt-5 inline-flex min-h-[40px] items-center gap-1 text-sm font-semibold text-[#FDE5B2] hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">Lihat detail agenda <ChevronRight className="h-4 w-4" aria-hidden="true" /></Link></div></div>
+
+              {/* Welcome Headline & Quick CTAs */}
+              <div className="grid lg:grid-cols-[1fr_auto] gap-5 items-end">
+                <div className="max-w-2xl">
+                  <p className="text-[#FDE5B2] text-xs sm:text-sm font-bold uppercase tracking-wider">
+                    Selamat datang kembali, {firstName}
+                  </p>
+                  <h1
+                    id="member-dashboard-title"
+                    className="mt-1 text-2xl sm:text-3xl lg:text-4xl font-extrabold leading-tight tracking-tight text-white"
+                  >
+                    Jaringan alumni, lebih dekat dengan langkahmu.
+                  </h1>
+                  <p className="mt-2 text-xs sm:text-sm lg:text-base leading-relaxed text-slate-300">
+                    Kelola kehadiran kopdar, perluas jejaring profesional, dan buka ruang berbagi pengalaman bersama alumni UMS di Jabodetabek.
+                  </p>
+                </div>
+
+                {/* Hero Action Buttons */}
+                <div className="flex flex-wrap items-center gap-2.5 pt-1 sm:pt-0">
+                  <button
+                    type="button"
+                    onClick={handleOpenEditModal}
+                    className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-[#F59E0B] hover:bg-[#FBBF24] px-4 py-2 text-xs sm:text-sm font-bold text-[#0C2340] shadow-sm transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  >
+                    <Pencil className="h-4 w-4" aria-hidden="true" />
+                    <span>Edit Profil</span>
+                  </button>
+
+                  <Link
+                    href="/direktori"
+                    className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl border border-white/25 bg-white/10 hover:bg-white/20 px-4 py-2 text-xs sm:text-sm font-semibold text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                  >
+                    <Search className="h-4 w-4 text-[#FDE5B2]" aria-hidden="true" />
+                    <span>Cari Alumni</span>
+                  </Link>
+
+                  <button
+                    type="button"
+                    onClick={handleLogout}
+                    disabled={isLoggingOut}
+                    className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-xl border border-rose-400/30 bg-rose-500/10 hover:bg-rose-500/20 px-3.5 py-2 text-xs sm:text-sm font-semibold text-rose-200 transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                    title="Keluar dari sesi akun"
+                  >
+                    <LogOut className="h-4 w-4" aria-hidden="true" />
+                    <span className="hidden sm:inline">Keluar</span>
+                  </button>
+                </div>
               </div>
             </div>
           </section>
 
-          {savedNotice && <div role="status" className="flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900"><CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-700" /><span>{savedNotice}</span></div>}
+          {/* Toast Notification Alert */}
+          {savedNotice && (
+            <div
+              role="status"
+              className="flex items-center justify-between gap-3 rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-3 text-sm text-emerald-900 shadow-xs animate-in fade-in duration-200"
+            >
+              <div className="flex items-center gap-2.5">
+                <CheckCircle2 className="h-5 w-5 shrink-0 text-emerald-700" />
+                <span className="font-medium">{savedNotice}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSavedNotice(null)}
+                className="p-1 text-emerald-700 hover:text-emerald-900 rounded-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-800"
+                aria-label="Tutup notifikasi"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+          )}
 
-          <section aria-labelledby="summary-title" className="grid gap-5 lg:grid-cols-[1.05fr_0.95fr]">
-            <div className="surface-card rounded-2xl p-5 sm:p-6 lg:p-7">
-              <div className="flex items-start justify-between gap-4">
+          {/* Main Bento Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 sm:gap-6">
+            
+            {/* Card 1: Kartu Tanda Anggota (KTA) Digital (Col 7) */}
+            <section
+              aria-labelledby="summary-title"
+              className="lg:col-span-7 flex flex-col justify-between rounded-2xl border border-amber-200/90 bg-white shadow-xs overflow-hidden"
+            >
+              {/* Kartu Header Navy Strip */}
+              <div className="relative bg-[#0C2340] px-5 py-3.5 sm:px-6 text-white flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full bg-[#F59E0B]" aria-hidden="true" />
+                  <span className="text-[11px] sm:text-xs font-bold uppercase tracking-widest text-[#FDE5B2]">
+                    KARTU TANDA ANGGOTA DIGITAL
+                  </span>
+                </div>
+                <span className="text-xs font-bold text-[#FDE5B2] bg-white/10 px-2.5 py-0.5 rounded-full border border-white/15">
+                  Profil Saya
+                </span>
+              </div>
+
+              {/* Card Body */}
+              <div className="p-5 sm:p-6 lg:p-7 space-y-5">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                  <div className="flex items-center gap-4">
+                    <div className="relative h-16 w-16 sm:h-20 sm:w-20 shrink-0 overflow-hidden rounded-2xl border-2 border-[#D97706]/60 bg-slate-100 shadow-sm">
+                      <Image
+                        src={displayFoto}
+                        alt={`Foto profil ${displayName}`}
+                        fill
+                        unoptimized={isCustomFoto}
+                        sizes="80px"
+                        className="object-cover"
+                      />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h2 id="summary-title" className="text-xl sm:text-2xl font-bold tracking-tight text-[#0C2340]">
+                          {displayName}
+                        </h2>
+                        <span
+                          className="inline-flex items-center text-emerald-600"
+                          title="Anggota Terverifikasi"
+                        >
+                          <CheckCircle2 className="h-5 w-5" aria-hidden="true" />
+                        </span>
+                      </div>
+                      <p className="mt-0.5 text-xs sm:text-sm font-semibold text-[#92400E]">
+                        Alumni Universitas Muhammadiyah Surakarta
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Member ID Badge */}
+                  <div className="w-full sm:w-auto flex sm:flex-col items-center sm:items-end justify-between sm:justify-center p-2.5 sm:p-0 rounded-xl bg-slate-50 sm:bg-transparent border sm:border-0 border-slate-200">
+                    <span className="text-[11px] font-bold uppercase text-slate-500 tracking-wider">
+                      ID Anggota
+                    </span>
+                    <button
+                      type="button"
+                      onClick={handleCopyMemberId}
+                      className="inline-flex items-center gap-1.5 font-mono text-xs sm:text-sm font-bold text-[#0C2340] bg-white sm:bg-slate-100 border border-slate-200 hover:border-slate-300 px-2.5 py-1 rounded-lg transition-colors cursor-pointer"
+                      title="Klik untuk menyalin ID Anggota"
+                    >
+                      <span>{memberId}</span>
+                      {copiedId ? (
+                        <Check className="h-3.5 w-3.5 text-emerald-600" />
+                      ) : (
+                        <Copy className="h-3.5 w-3.5 text-slate-400" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                {/* Info Attributes Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 rounded-xl bg-slate-50 border border-slate-200/90 p-4 text-xs sm:text-sm">
+                  <div className="flex items-center gap-2.5 text-[#334155]">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-[#92400E]">
+                      <GraduationCap className="h-4 w-4" aria-hidden="true" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="block text-[11px] text-slate-500 font-medium">Program Studi &amp; Angkatan</span>
+                      <span className="block font-bold text-[#0C2340] truncate">{displayProdiAngkatan}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2.5 text-[#334155]">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-[#92400E]">
+                      <Briefcase className="h-4 w-4" aria-hidden="true" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="block text-[11px] text-slate-500 font-medium">Pekerjaan &amp; Instansi</span>
+                      <span className="block font-bold text-[#0C2340] truncate">{displayPekerjaan}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2.5 text-[#334155]">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-[#92400E]">
+                      <MapPin className="h-4 w-4" aria-hidden="true" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="block text-[11px] text-slate-500 font-medium">Wilayah Domisili</span>
+                      <span className="block font-bold text-[#0C2340] truncate">{displayWilayah}</span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2.5 text-[#334155]">
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-[#92400E]">
+                      <ShieldCheck className="h-4 w-4" aria-hidden="true" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="block text-[11px] text-slate-500 font-medium">Status Keanggotaan</span>
+                      <span className="block font-bold text-emerald-700">Aktif Terdaftar</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card Footer Actions */}
+              <div className="border-t border-slate-200/90 bg-slate-50/70 px-5 py-3.5 sm:px-6 flex flex-wrap items-center justify-between gap-3">
+                <button
+                  type="button"
+                  onClick={handleOpenEditModal}
+                  className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-[#0C2340] hover:text-[#92400E] transition-colors cursor-pointer"
+                >
+                  <Pencil className="h-3.5 w-3.5 text-[#F59E0B]" />
+                  <span>Ubah Data Profil</span>
+                </button>
+
+                <Link
+                  href="/direktori"
+                  className="inline-flex items-center gap-1 text-xs sm:text-sm font-bold text-[#0C2340] underline decoration-[#F59E0B] decoration-2 underline-offset-4 hover:text-[#92400E] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0C2340]"
+                >
+                  <span>Lihat profil publik</span>
+                  <ArrowRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+              </div>
+            </section>
+
+            {/* Card 2: Agenda Terdekat (Col 5) */}
+            <section
+              aria-labelledby="agenda-terdekat-title"
+              className="lg:col-span-5 flex flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 lg:p-7 shadow-xs"
+            >
+              <div>
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#0C2340] text-white">
+                      <CalendarDays className="h-4 w-4" aria-hidden="true" />
+                    </div>
+                    <div>
+                      <p className="text-xs font-bold text-[#92400E] uppercase tracking-wider">
+                        Agenda terdekat
+                      </p>
+                      <h2 id="agenda-terdekat-title" className="text-lg font-bold text-[#0C2340]">
+                        Kopdar Jabodetabek
+                      </h2>
+                    </div>
+                  </div>
+                  <span className="rounded-full bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700">
+                    Buka
+                  </span>
+                </div>
+
+                {/* Event Detail Box */}
+                <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-3">
+                  <div className="flex items-start gap-3.5">
+                    <div className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl bg-[#F59E0B] text-[#0C2340] font-bold shadow-xs">
+                      <span className="text-[10px] leading-none">NOV</span>
+                      <span className="mt-0.5 text-lg font-extrabold leading-none">28</span>
+                    </div>
+                    <div className="min-w-0">
+                      <h3 className="font-bold text-sm text-[#0C2340] leading-snug">
+                        Temu Akbar &amp; Sarasehan Alumni UMS
+                      </h3>
+                      <p className="mt-1 text-xs text-[#475569] leading-relaxed">
+                        Sabtu, 10.00 WIB · Jakarta Selatan
+                      </p>
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-slate-600 leading-relaxed border-t border-slate-200 pt-3">
+                    Lokasi: Aula Pertemuan Cilandak, TB Simatupang. Buka untuk seluruh alumni UMS di wilayah Jabodetabek.
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-5 pt-4 border-t border-slate-200 flex items-center justify-between">
+                <Link
+                  href="/kegiatan"
+                  className="inline-flex min-h-[40px] items-center gap-1.5 text-xs sm:text-sm font-bold text-[#0C2340] hover:text-[#92400E] transition-colors"
+                >
+                  <span>Lihat detail agenda</span>
+                  <ChevronRight className="h-4 w-4" aria-hidden="true" />
+                </Link>
+
+                <Link
+                  href="/kegiatan"
+                  className="inline-flex min-h-[36px] items-center justify-center rounded-lg bg-[#0C2340] hover:bg-[#16325C] px-3.5 py-1.5 text-xs font-semibold text-white transition-colors"
+                >
+                  Konfirmasi Kehadiran
+                </Link>
+              </div>
+            </section>
+
+            {/* Card 3: Pengaturan Privasi Tampilan (Col 7) */}
+            <section
+              aria-labelledby="privacy-title"
+              className="lg:col-span-7 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 lg:p-7 shadow-xs"
+            >
+              <div className="flex items-center gap-3">
+                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FDE5B2] text-[#92400E]">
+                  <ShieldCheck className="h-5 w-5" aria-hidden="true" />
+                </div>
                 <div>
-                  <p className="text-sm font-semibold text-[#92400E]">Profil Saya</p>
-                  <h2 id="summary-title" className="mt-1 text-xl font-bold tracking-[-0.02em]">{displayName}</h2>
-                </div>
-                <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-full border-2 border-[#D97706]/50 bg-slate-100 shadow-2xs">
-                  <Image
-                    src={displayFoto}
-                    alt={`Foto profil ${displayName}`}
-                    fill
-                    unoptimized={isCustomFoto}
-                    sizes="56px"
-                    className="object-cover"
-                  />
+                  <p className="text-xs font-bold text-[#92400E] uppercase tracking-wider">
+                    Pengaturan Privasi Tampilan
+                  </p>
+                  <h2 id="privacy-title" className="text-lg sm:text-xl font-bold tracking-tight text-[#0C2340]">
+                    Atur visibilitasmu
+                  </h2>
                 </div>
               </div>
-              <div className="mt-5 grid gap-3 border-y border-slate-200 py-4 text-sm sm:grid-cols-2">
-                <span className="flex items-center gap-2 text-[#475569]">
-                  <Briefcase className="h-4 w-4 text-[#92400E] shrink-0" />
-                  <span className="truncate">{displayPekerjaan} · {displayProdiAngkatan}</span>
-                </span>
-                <span className="flex items-center gap-2 text-[#475569]">
-                  <MapPin className="h-4 w-4 text-[#92400E] shrink-0" />
-                  <span>{displayWilayah}</span>
-                </span>
-              </div>
-              <Link href="/direktori" className="mt-5 inline-flex min-h-[40px] items-center gap-1 text-sm font-bold text-[#0C2340] underline decoration-[#F59E0B] decoration-2 underline-offset-4 hover:text-[#92400E] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#0C2340]">Lihat profil publik <ArrowRight className="h-4 w-4" aria-hidden="true" /></Link>
-            </div>
-            <div className="rounded-2xl border border-slate-200 bg-slate-100 p-5 sm:p-6 lg:p-7"><div className="flex items-center gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-[#92400E] shadow-sm"><Bell className="h-5 w-5" /></div><div><p className="text-sm font-semibold text-[#92400E]">Untuk kamu</p><h2 className="text-xl font-bold tracking-[-0.02em]">Aktivitas kamu</h2></div></div><div className="mt-5 space-y-3">{activityItems.map(({ title, detail, icon: Icon }) => <div key={title} className="flex gap-3 rounded-xl bg-white/80 p-3.5"><Icon className="mt-0.5 h-5 w-5 shrink-0 text-[#92400E]" aria-hidden="true" /><div><h3 className="text-sm font-bold">{title}</h3><p className="mt-1 text-sm leading-relaxed text-[#475569]">{detail}</p></div></div>)}</div></div>
-          </section>
 
-          <section aria-labelledby="quick-access-title" className="grid gap-5 lg:grid-cols-[0.95fr_1.05fr]">
-            <div className="surface-card rounded-2xl p-5 sm:p-6 lg:p-7"><div className="flex items-center gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0C2340] text-white"><CalendarDays className="h-5 w-5" /></div><div><p className="text-sm font-semibold text-[#92400E]">Mulai dari sini</p><h2 id="quick-access-title" className="text-xl font-bold tracking-[-0.02em]">Akses cepat</h2></div></div><div className="mt-5 grid gap-3 sm:grid-cols-2"><Link href="/kegiatan" className="group rounded-xl border border-slate-200 bg-white p-4 transition-colors hover:border-slate-300 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340]"><span className="block text-sm font-bold">Jadwal kopdar</span><span className="mt-1 block text-sm text-[#475569]">Temukan pertemuan terdekat.</span><ArrowRight className="mt-3 h-4 w-4 text-[#92400E] transition-transform group-hover:translate-x-1" /></Link><Link href="/peluang" className="group rounded-xl border border-slate-200 bg-white p-4 transition-colors hover:border-slate-300 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340]"><span className="block text-sm font-bold">Mentoring & kerja</span><span className="mt-1 block text-sm text-[#475569]">Bagikan atau temukan peluang.</span><ArrowRight className="mt-3 h-4 w-4 text-[#92400E] transition-transform group-hover:translate-x-1" /></Link></div></div>
-            <section aria-labelledby="privacy-title" className="surface-card rounded-2xl p-5 sm:p-6 lg:p-7"><div className="flex items-center gap-3"><div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#FDE5B2] text-[#92400E]"><ShieldCheck className="h-5 w-5" /></div><div><p className="text-sm font-semibold text-[#92400E]">Pengaturan Privasi Tampilan</p><h2 id="privacy-title" className="text-xl font-bold tracking-[-0.02em]">Atur visibilitasmu</h2></div></div><div className="mt-5 divide-y divide-[#0C2340]/10"><label htmlFor="pref-direktori" className="flex cursor-pointer items-start justify-between gap-4 py-3 first:pt-0"><span><span className="block text-sm font-bold">Tampilkan di Daftar Anggota</span><span className="mt-1 block text-sm leading-relaxed text-[#475569]">Hanya anggota yang masuk dapat melihat profilmu.</span></span><input id="pref-direktori" type="checkbox" checked={tampilDiDirektori} onChange={(event) => { setTampilDiDirektori(event.target.checked); setSavedNotice('Preferensi tampilan Daftar Anggota diperbarui.'); }} className="mt-1 h-5 w-5 shrink-0 accent-[#0C2340]" /></label><label htmlFor="pref-mentoring" className="flex cursor-pointer items-start justify-between gap-4 pt-4"><span><span className="block text-sm font-bold">Bersedia Jadi Mentor Alumni</span><span className="mt-1 block text-sm leading-relaxed text-[#475569]">Tandai kesiapanmu berbagi pengalaman karier.</span></span><input id="pref-mentoring" type="checkbox" checked={terbukaMentoring} onChange={(event) => { setTerbukaMentoring(event.target.checked); setSavedNotice('Preferensi kesediaan mentoring diperbarui.'); }} className="mt-1 h-5 w-5 shrink-0 accent-[#0C2340]" /></label></div></section>
-          </section>
+              <p className="mt-2 text-xs sm:text-sm text-[#475569] leading-relaxed">
+                Tentukan bagaimana identitas dan keahlianmu dapat ditemukan oleh sesama alumni di portal IKA UMS.
+              </p>
+
+              <div className="mt-6 space-y-4">
+                {/* Switch 1: Tampilkan di Daftar Anggota */}
+                <div className="flex items-start justify-between gap-4 rounded-xl border border-slate-200 p-4 transition-colors hover:border-slate-300">
+                  <div className="min-w-0 pr-2">
+                    <div className="flex items-center gap-2">
+                      <span className="block text-sm font-bold text-[#0C2340]">
+                        Tampilkan di Daftar Anggota
+                      </span>
+                      <span
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                          tampilDiDirektori
+                            ? 'bg-emerald-100 text-emerald-800'
+                            : 'bg-slate-200 text-slate-700'
+                        }`}
+                      >
+                        {tampilDiDirektori ? 'Publik' : 'Disembunyikan'}
+                      </span>
+                    </div>
+                    <p className="mt-1 text-xs text-[#475569] leading-relaxed">
+                      Hanya anggota yang masuk dapat melihat profilmu. Kontak pribadi (WhatsApp/Email) tetap aman terlindungi.
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={tampilDiDirektori}
+                    onClick={handleToggleDirektori}
+                    id="pref-direktori"
+                    className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] ${
+                      tampilDiDirektori ? 'bg-[#0C2340]' : 'bg-slate-300'
+                    }`}
+                  >
+                    <span className="sr-only">Toggle Tampilkan di Daftar Anggota</span>
+                    <span
+                      aria-hidden="true"
+                      className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
+                        tampilDiDirektori ? 'translate-x-5' : 'translate-x-0'
+                      }`}
+                    />
+                  </button>
+                </div>
+
+                {/* Switch 2: Bersedia Jadi Mentor Alumni */}
+                <div className="flex items-start justify-between gap-4 rounded-xl border border-slate-200 p-4 transition-colors hover:border-slate-300">
+                  <div className="min-w-0 pr-2">
+                    <div className="flex items-center gap-2">
+                      <span className="block text-sm font-bold text-[#0C2340]">
+                        Bersedia Jadi Mentor Alumni
+                      </span>
+                      <span
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                          terbukaMentoring
+                            ? 'bg-amber-100 text-amber-800'
+                            : 'bg-slate-200 text-slate-700'
+                        }`}
+                      >
+                        {terbukaMentoring ? 'Siap Berbagi' : 'Belum Aktif'}
+                      </span>
+                    </div>
+                    <p className="mt-1 text-xs text-[#475569] leading-relaxed">
+                      Tandai kesiapanmu berbagi pengalaman karier, konsultasi kerja, atau bimbingan alumni muda UMS di Jabodetabek.
+                    </p>
+                  </div>
+
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={terbukaMentoring}
+                    onClick={handleToggleMentoring}
+                    id="pref-mentoring"
+                    className={`relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] ${
+                      terbukaMentoring ? 'bg-[#F59E0B]' : 'bg-slate-300'
+                    }`}
+                  >
+                    <span className="sr-only">Toggle Bersedia Jadi Mentor Alumni</span>
+                    <span
+                      aria-hidden="true"
+                      className={`pointer-events-none inline-block h-6 w-6 transform rounded-full bg-white shadow-md ring-0 transition duration-200 ease-in-out ${
+                        terbukaMentoring ? 'translate-x-5' : 'translate-x-0'
+                      }`}
+                    />
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            {/* Card 4: Pintasan Akses Cepat (Col 5) */}
+            <section
+              aria-labelledby="quick-access-title"
+              className="lg:col-span-5 rounded-2xl border border-slate-200 bg-white p-5 sm:p-6 lg:p-7 shadow-xs flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center gap-2.5">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0C2340] text-white">
+                    <Sparkles className="h-5 w-5 text-[#F59E0B]" aria-hidden="true" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-[#92400E] uppercase tracking-wider">
+                      Mulai dari sini
+                    </p>
+                    <h2 id="quick-access-title" className="text-lg sm:text-xl font-bold tracking-tight text-[#0C2340]">
+                      Akses cepat
+                    </h2>
+                  </div>
+                </div>
+
+                <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <Link
+                    href="/kegiatan"
+                    className="group rounded-xl border border-slate-200 bg-slate-50/70 p-3.5 transition-colors hover:border-slate-300 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340]"
+                  >
+                    <span className="block text-xs sm:text-sm font-bold text-[#0C2340]">Jadwal kopdar</span>
+                    <span className="mt-1 block text-xs text-[#475569]">Temukan pertemuan terdekat.</span>
+                    <ArrowRight className="mt-2.5 h-3.5 w-3.5 text-[#92400E] transition-transform group-hover:translate-x-1" />
+                  </Link>
+
+                  <Link
+                    href="/peluang"
+                    className="group rounded-xl border border-slate-200 bg-slate-50/70 p-3.5 transition-colors hover:border-slate-300 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340]"
+                  >
+                    <span className="block text-xs sm:text-sm font-bold text-[#0C2340]">Mentoring &amp; kerja</span>
+                    <span className="mt-1 block text-xs text-[#475569]">Bagikan atau cari peluang.</span>
+                    <ArrowRight className="mt-2.5 h-3.5 w-3.5 text-[#92400E] transition-transform group-hover:translate-x-1" />
+                  </Link>
+
+                  <Link
+                    href="/direktori"
+                    className="group rounded-xl border border-slate-200 bg-slate-50/70 p-3.5 transition-colors hover:border-slate-300 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340]"
+                  >
+                    <span className="block text-xs sm:text-sm font-bold text-[#0C2340]">Cari Teman Kampus</span>
+                    <span className="mt-1 block text-xs text-[#475569]">Jelajahi kawan satu prodi.</span>
+                    <ArrowRight className="mt-2.5 h-3.5 w-3.5 text-[#92400E] transition-transform group-hover:translate-x-1" />
+                  </Link>
+
+                  <Link
+                    href="/peta"
+                    className="group rounded-xl border border-slate-200 bg-slate-50/70 p-3.5 transition-colors hover:border-slate-300 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340]"
+                  >
+                    <span className="block text-xs sm:text-sm font-bold text-[#0C2340]">Peta 9 Korwil</span>
+                    <span className="mt-1 block text-xs text-[#475569]">Sebaran alumni Jabodetabek.</span>
+                    <ArrowRight className="mt-2.5 h-3.5 w-3.5 text-[#92400E] transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </div>
+              </div>
+            </section>
+
+            {/* Card 5: Rekomendasi & Aktivitas Personal (Col 12) */}
+            <section
+              aria-labelledby="activity-title"
+              className="lg:col-span-12 rounded-2xl border border-slate-200 bg-slate-100/80 p-5 sm:p-6 lg:p-7 shadow-xs"
+            >
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white text-[#92400E] shadow-xs">
+                    <Bell className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs font-bold text-[#92400E] uppercase tracking-wider">
+                      Untuk kamu
+                    </p>
+                    <h2 id="activity-title" className="text-lg sm:text-xl font-bold tracking-tight text-[#0C2340]">
+                      Aktivitas kamu
+                    </h2>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-semibold text-slate-500">Kesiapan Akun:</span>
+                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-bold text-emerald-800">
+                    <Check className="h-3 w-3" /> 100% Siap
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-3.5">
+                {activityItems.map(({ title, detail, icon: Icon, badge }) => (
+                  <div
+                    key={title}
+                    className="flex flex-col justify-between rounded-xl bg-white p-4 border border-slate-200/80 shadow-2xs"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between gap-2">
+                        <Icon className="h-5 w-5 text-[#92400E]" aria-hidden="true" />
+                        <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-700 px-2 py-0.5 rounded-md">
+                          {badge}
+                        </span>
+                      </div>
+                      <h3 className="mt-3 text-xs sm:text-sm font-bold text-[#0C2340] leading-snug">
+                        {title}
+                      </h3>
+                      <p className="mt-1.5 text-xs leading-relaxed text-[#475569]">
+                        {detail}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+          </div>
         </div>
       </main>
+
+      {/* Modal Dialog: Edit Profil Anggota */}
+      <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
+        <DialogContent className="max-w-xl">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-[#0C2340] flex items-center gap-2">
+              <Pencil className="h-5 w-5 text-[#F59E0B]" />
+              <span>Edit Profil Anggota</span>
+            </DialogTitle>
+            <DialogDescription className="text-xs sm:text-sm text-[#475569]">
+              Perbarui data pribadi dan pekerjaanmu untuk memperkuat jaringan sesama alumni UMS di Jabodetabek.
+            </DialogDescription>
+          </DialogHeader>
+
+          <form onSubmit={handleSaveProfile} className="space-y-4 pt-2">
+            {formErrors.general && (
+              <div className="rounded-lg bg-rose-50 border border-rose-200 p-3 text-xs text-rose-800">
+                {formErrors.general}
+              </div>
+            )}
+
+            {/* Nama Lengkap */}
+            <div>
+              <label htmlFor="edit-nama" className="block text-xs font-bold text-[#0C2340] uppercase mb-1">
+                Nama Lengkap *
+              </label>
+              <input
+                id="edit-nama"
+                type="text"
+                value={editForm.nama}
+                onChange={(e) => setEditForm({ ...editForm, nama: e.target.value })}
+                className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:outline-hidden"
+                placeholder="Contoh: Zaki Maulana, S.Kom."
+                required
+              />
+              {formErrors.nama && (
+                <p className="mt-1 text-xs text-rose-600">{formErrors.nama}</p>
+              )}
+            </div>
+
+            {/* Prodi & Angkatan */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label htmlFor="edit-prodi" className="block text-xs font-bold text-[#0C2340] uppercase mb-1">
+                  Program Studi
+                </label>
+                <select
+                  id="edit-prodi"
+                  value={editForm.prodi}
+                  onChange={(e) => setEditForm({ ...editForm, prodi: e.target.value })}
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:outline-hidden"
+                >
+                  {FAKULTAS_PRODI_UMS.flatMap((f) => f.prodi).map((p) => (
+                    <option key={p} value={p}>
+                      {p}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label htmlFor="edit-angkatan" className="block text-xs font-bold text-[#0C2340] uppercase mb-1">
+                  Angkatan Masuk
+                </label>
+                <select
+                  id="edit-angkatan"
+                  value={editForm.angkatan}
+                  onChange={(e) => setEditForm({ ...editForm, angkatan: e.target.value })}
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:outline-hidden"
+                >
+                  {ANGKATAN_OPTIONS.map((a) => (
+                    <option key={a} value={a}>
+                      {a}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Wilayah Domisili */}
+            <div>
+              <label htmlFor="edit-wilayah" className="block text-xs font-bold text-[#0C2340] uppercase mb-1">
+                Wilayah Domisili di Jabodetabek
+              </label>
+              <select
+                id="edit-wilayah"
+                value={editForm.wilayah}
+                onChange={(e) => setEditForm({ ...editForm, wilayah: e.target.value })}
+                className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:outline-hidden"
+              >
+                {WILAYAH_JABODETABEK.map((w) => (
+                  <option key={w.id} value={w.nama}>
+                    {w.nama} ({w.provinsi})
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Pekerjaan & Perusahaan */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label htmlFor="edit-pekerjaan" className="block text-xs font-bold text-[#0C2340] uppercase mb-1">
+                  Pekerjaan / Jabatan
+                </label>
+                <input
+                  id="edit-pekerjaan"
+                  type="text"
+                  value={editForm.pekerjaan}
+                  onChange={(e) => setEditForm({ ...editForm, pekerjaan: e.target.value })}
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:outline-hidden"
+                  placeholder="Contoh: Software Engineer"
+                />
+              </div>
+
+              <div>
+                <label htmlFor="edit-perusahaan" className="block text-xs font-bold text-[#0C2340] uppercase mb-1">
+                  Instansi / Perusahaan
+                </label>
+                <input
+                  id="edit-perusahaan"
+                  type="text"
+                  value={editForm.perusahaan}
+                  onChange={(e) => setEditForm({ ...editForm, perusahaan: e.target.value })}
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:outline-hidden"
+                  placeholder="Contoh: PT Teknologi Maju"
+                />
+              </div>
+            </div>
+
+            {/* WhatsApp & Email */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label htmlFor="edit-wa" className="block text-xs font-bold text-[#0C2340] uppercase mb-1">
+                  Nomor WhatsApp
+                </label>
+                <input
+                  id="edit-wa"
+                  type="tel"
+                  value={editForm.whatsapp}
+                  onChange={(e) => setEditForm({ ...editForm, whatsapp: e.target.value })}
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:outline-hidden"
+                  placeholder="081234567890"
+                />
+                {formErrors.whatsapp && (
+                  <p className="mt-1 text-xs text-rose-600">{formErrors.whatsapp}</p>
+                )}
+              </div>
+
+              <div>
+                <label htmlFor="edit-email" className="block text-xs font-bold text-[#0C2340] uppercase mb-1">
+                  Alamat Email
+                </label>
+                <input
+                  id="edit-email"
+                  type="email"
+                  value={editForm.email}
+                  onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:outline-hidden"
+                  placeholder="nama@email.com"
+                />
+                {formErrors.email && (
+                  <p className="mt-1 text-xs text-rose-600">{formErrors.email}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Modal Actions */}
+            <div className="mt-6 pt-4 border-t border-slate-200 flex items-center justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => setIsEditModalOpen(false)}
+                className="inline-flex min-h-[44px] items-center justify-center rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer"
+              >
+                Batal
+              </button>
+              <button
+                type="submit"
+                className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-[#0C2340] hover:bg-[#16325C] px-5 py-2 text-sm font-bold text-white shadow-sm transition-colors cursor-pointer"
+              >
+                <Check className="h-4 w-4 text-[#F59E0B]" />
+                <span>Simpan Perubahan</span>
+              </button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+
       <Footer />
     </div>
   );
