@@ -86,6 +86,7 @@ export default function PeluangPage() {
   const [bookingDone, setBookingDone] = useState(false);
 
   // 2. Info Loker State
+  const [activeTab, setActiveTab] = useState<'loker' | 'mentoring'>('loker');
   const [lokerList, setLokerList] = useState<LokerItem[]>([]);
   const [lokerSearch, setLokerSearch] = useState('');
   const [filterWilayah, setFilterWilayah] = useState('semua');
@@ -148,6 +149,23 @@ export default function PeluangPage() {
       }
     };
     void fetchLokers();
+
+    if (typeof window !== 'undefined') {
+      const applyHash = () => {
+        if (window.location.hash === '#mentoring') {
+          setActiveTab('mentoring');
+        } else if (window.location.hash === '#loker') {
+          setActiveTab('loker');
+        }
+      };
+      applyHash();
+      window.addEventListener('hashchange', applyHash);
+      return () => {
+        isSubscribed = false;
+        window.removeEventListener('hashchange', applyHash);
+      };
+    }
+
     return () => {
       isSubscribed = false;
     };
@@ -392,174 +410,229 @@ export default function PeluangPage() {
           </nav>
 
           <header className="space-y-2.5">
-            <span className="inline-block text-sm font-semibold text-[#92400E]">
-              Pengembangan Karier &amp; Jejaring Bisnis Alumni
+            <span className="inline-block text-xs sm:text-sm font-bold tracking-wide uppercase text-[#B45309]">
+              Karier &amp; Jejaring Bisnis Alumni
             </span>
             <h1 className="text-[clamp(1.75rem,1.3rem+1.8vw,2.5rem)] font-extrabold tracking-[-0.02em] text-[#0C2340]">
               Mentoring Alumni serta Info Kerja &amp; Usaha
             </h1>
-            <p className="text-base text-[#475569] max-w-[48ch] sm:max-w-3xl leading-[1.6]">
-              Ruang bersama untuk mencocokkan kebutuhan bimbingan karier lulusan baru dengan praktisi
-              alumni senior UMS, serta pusat berbagi informasi lowongan kerja, kemitraan proyek, dan peluang usaha terpercaya se-Jabodetabek.
+            <p className="text-sm sm:text-base text-slate-600 max-w-2xl leading-relaxed">
+              Pusat berbagi info lowongan kerja alumni UMS dan program bimbingan karier 1-on-1 se-Jabodetabek.
             </p>
+
+            {/* Tab Navigasi - Ringkas & Gampang Diakses */}
+            <div className="flex flex-wrap items-center gap-2 pt-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveTab('loker');
+                  if (typeof window !== 'undefined') history.replaceState(null, '', '#loker');
+                }}
+                className={`inline-flex items-center gap-2 min-h-[44px] px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                  activeTab === 'loker'
+                    ? 'bg-[#0C2340] text-white shadow-xs'
+                    : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50'
+                }`}
+              >
+                <Briefcase className={`w-4 h-4 ${activeTab === 'loker' ? 'text-[#F59E0B]' : 'text-[#D97706]'}`} />
+                <span>Lowongan Kerja ({lokerList.length})</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveTab('mentoring');
+                  if (typeof window !== 'undefined') history.replaceState(null, '', '#mentoring');
+                }}
+                className={`inline-flex items-center gap-2 min-h-[44px] px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
+                  activeTab === 'mentoring'
+                    ? 'bg-[#0C2340] text-white shadow-xs'
+                    : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-50'
+                }`}
+              >
+                <HeartHandshake className={`w-4 h-4 ${activeTab === 'mentoring' ? 'text-[#F59E0B]' : 'text-[#D97706]'}`} />
+                <span>Mentoring Alumni</span>
+              </button>
+            </div>
           </header>
         </PatternSection>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 w-full space-y-16 relative z-[1]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-8 w-full relative z-[1]">
           {/* ========================================================================= */}
-          {/* Bagian 1: Mentoring Alumni                                                */}
+          {/* TAB 1: Mentoring Alumni                                                   */}
           {/* ========================================================================= */}
-          <section id="mentoring" aria-labelledby="heading-mentoring" className="space-y-6">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-              <div className="space-y-2 max-w-2xl">
+          {activeTab === 'mentoring' && (
+            <section id="mentoring" aria-labelledby="heading-mentoring" className="space-y-6">
+              <div className="space-y-1.5">
                 <div className="inline-flex items-center gap-2 text-xs font-bold text-[#92400E] uppercase tracking-wider">
                   <HeartHandshake className="w-4 h-4 text-[#92400E]" />
                   <span>Program Bimbingan Karier</span>
                 </div>
-                <h2 id="heading-mentoring" className="text-2xl sm:text-3xl font-bold text-[#0C2340]">
+                <h2 id="heading-mentoring" className="text-xl sm:text-2xl font-bold text-[#0C2340]">
                   Mentoring Alumni
                 </h2>
-                <p className="text-base text-[#475569] leading-[1.6]">
-                  Sesi bimbingan 1-on-1 bersama kakak tingkat untuk bedah CV, persiapan wawancara kerja,
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-2xl">
+                  Sesi bimbingan 1-on-1 bersama alumni senior untuk bedah CV, persiapan wawancara kerja,
                   atau konsultasi arah karier di industri Jabodetabek.
                 </p>
               </div>
 
-              <div className="flex flex-wrap items-center gap-3 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => handleOpenBooking(null)}
-                  className="inline-flex items-center gap-2 min-h-[48px] px-5 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] active:scale-[0.99] text-white text-base font-semibold transition-all duration-150 cursor-pointer shadow-xs"
-                >
-                  Cari Mentor
-                  <ArrowRight className="w-4 h-4 text-[#F59E0B]" />
-                </button>
-                <Link
-                  href="/gabung?mentor=ya"
-                  className="inline-flex items-center min-h-[48px] px-5 py-3 rounded-lg bg-white border border-slate-300 hover:border-slate-400 text-[#0C2340] text-base font-semibold transition-colors"
-                >
-                  Daftar Jadi Mentor
-                </Link>
-              </div>
-            </div>
-
-            {!IS_DEMO_MODE ? (
-              <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-xs">
-                <div className="space-y-2 max-w-xl">
-                  <div className="inline-flex items-center gap-2 text-sm font-bold text-[#92400E]">
-                    <HeartHandshake className="w-4 h-4" />
-                    <span>Pencocokan Mentor Prapeluncuran</span>
+              {/* 2 Bento Action Cards (Ringkas & Gampang) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {/* Kartu 1: Cari Mentor */}
+                <div className="bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 shadow-2xs space-y-4 flex flex-col justify-between hover:border-slate-300 transition-all">
+                  <div className="space-y-2.5">
+                    <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#0C2340] flex items-center justify-center">
+                      <HeartHandshake className="w-5 h-5 text-[#0C2340]" />
+                    </div>
+                    <div>
+                      <span className="text-[11px] font-bold text-[#92400E] uppercase tracking-wide">
+                        Untuk Alumni &amp; Fresh Graduate
+                      </span>
+                      <h3 className="text-base sm:text-lg font-bold text-[#0C2340] mt-0.5">
+                        Cari Mentor &amp; Bedah CV
+                      </h3>
+                    </div>
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                      Ajukan sesi bimbingan 1-on-1 gratis. Pengurus wilayah akan membantumu mencocokkan dengan alumni senior sesuai bidang tujuanmu.
+                    </p>
                   </div>
-                  <h3 className="text-xl font-bold text-[#0C2340]">
-                    Daftar Mentor Sedang Dihimpun dari Pendaftar Awal
-                  </h3>
-                  <p className="text-base text-[#475569] leading-[1.6]">
-                    Untuk menjaga privasi nama dan tempat kerja alumni, profil mentor baru ditampilkan
-                    setelah pendaftar memverifikasi data dan menyetujui pencantuman dirinya. Sementara
-                    itu, kamu tetap bisa mengirim permintaan butuh mentor melalui tombol Cari Mentor di
-                    atas agar pengurus membantu mencocokkan.
+
+                  <button
+                    type="button"
+                    onClick={() => handleOpenBooking(null)}
+                    className="w-full inline-flex items-center justify-center gap-2 min-h-[44px] px-4 py-2.5 rounded-xl bg-[#0C2340] hover:bg-[#16325C] active:scale-[0.99] text-white text-xs sm:text-sm font-bold transition-all shadow-2xs cursor-pointer"
+                  >
+                    <span>Cari Mentor</span>
+                    <ArrowRight className="w-4 h-4 text-[#F59E0B]" />
+                  </button>
+                </div>
+
+                {/* Kartu 2: Daftar Jadi Mentor */}
+                <div className="bg-white border border-slate-200/90 rounded-2xl p-5 sm:p-6 shadow-2xs space-y-4 flex flex-col justify-between hover:border-slate-300 transition-all">
+                  <div className="space-y-2.5">
+                    <div className="w-10 h-10 rounded-xl bg-amber-50 text-[#D97706] flex items-center justify-center">
+                      <UserCheck className="w-5 h-5 text-[#D97706]" />
+                    </div>
+                    <div>
+                      <span className="text-[11px] font-bold text-[#92400E] uppercase tracking-wide">
+                        Untuk Praktisi Alumni Senior
+                      </span>
+                      <h3 className="text-base sm:text-lg font-bold text-[#0C2340] mt-0.5">
+                        Daftar Jadi Mentor
+                      </h3>
+                    </div>
+                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                      Bantu adik tingkat almamater UMS merintis karier di Jabodetabek. Waktu mentoring fleksibel sesuai kesediaanmu.
+                    </p>
+                  </div>
+
+                  <Link
+                    href="/gabung?mentor=ya"
+                    className="w-full inline-flex items-center justify-center gap-2 min-h-[44px] px-4 py-2.5 rounded-xl bg-white border border-slate-300 hover:border-[#0C2340] hover:bg-slate-50 active:scale-[0.99] text-[#0C2340] text-xs sm:text-sm font-bold transition-all shadow-2xs"
+                  >
+                    <span>Daftar Jadi Mentor</span>
+                    <ExternalLink className="w-4 h-4 text-slate-500" />
+                  </Link>
+                </div>
+              </div>
+
+              {/* Note Privasi Ringkas */}
+              <div className="flex items-center gap-2 text-xs text-slate-500 bg-slate-100/80 rounded-xl px-3.5 py-2.5 border border-slate-200/70">
+                <span className="h-2 w-2 rounded-full bg-emerald-500 shrink-0" aria-hidden="true" />
+                <span>
+                  Daftar Mentor Sedang Dihimpun dari Pendaftar Awal: Profil mentor diverifikasi berkala oleh pengurus untuk menjaga privasi kerja.
+                </span>
+              </div>
+
+              {IS_DEMO_MODE && (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
+                  {mentors.map((m) => (
+                    <article
+                      key={m.id}
+                      className="bg-white border border-slate-200 rounded-2xl p-5 flex flex-col justify-between gap-4 shadow-xs hover:border-slate-300 transition-all"
+                    >
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 rounded-full overflow-hidden bg-slate-100 relative shrink-0">
+                            {m.avatarUrl ? (
+                              <Image
+                                src={m.avatarUrl}
+                                alt={`Foto ${m.nama}`}
+                                fill
+                                sizes="48px"
+                                className="object-cover"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center bg-[#0C2340] text-[#F59E0B] font-bold text-sm">
+                                {m.avatarInitials}
+                              </div>
+                            )}
+                          </div>
+                          <div className="min-w-0">
+                            <h3 className="text-base font-bold text-[#0C2340] truncate">{m.nama}</h3>
+                            <span className="block text-sm text-[#475569] truncate">
+                              {m.prodi} &apos;{String(m.angkatan).slice(-2)}
+                            </span>
+                          </div>
+                        </div>
+                        <p className="text-base font-semibold text-[#0C2340] leading-[1.5]">
+                          {m.mentoringFokus || m.pekerjaan}
+                        </p>
+                        <span className="text-sm text-[#475569] flex items-center gap-1.5">
+                          <MapPin className="w-4 h-4 text-[#92400E] shrink-0" />
+                          {m.wilayah}
+                        </span>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handleOpenBooking(m)}
+                        className="w-full min-h-[44px] rounded-lg bg-slate-100 hover:bg-[#0C2340] text-[#0C2340] hover:text-white text-xs font-semibold transition-colors cursor-pointer"
+                      >
+                        Ajukan Sesi ({DEMO_BADGE_LABEL})
+                      </button>
+                    </article>
+                  ))}
+                </div>
+              )}
+            </section>
+          )}
+
+          {/* ========================================================================= */}
+          {/* TAB 2: Info Kerja & Peluang Karier Alumni                                 */}
+          {/* ========================================================================= */}
+          {activeTab === 'loker' && (
+            <section id="loker" aria-labelledby="heading-info-kerja" className="space-y-6">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="space-y-1">
+                  <div className="inline-flex items-center gap-2 text-xs font-bold text-[#92400E] uppercase tracking-wider">
+                    <Briefcase className="w-4 h-4 text-[#92400E]" />
+                    <span>Portal Lowongan &amp; Kemitraan Alumni</span>
+                  </div>
+                  <h2 id="heading-info-kerja" className="text-xl sm:text-2xl font-bold text-[#0C2340]">
+                    Info Lowongan Kerja &amp; Peluang Bisnis
+                  </h2>
+                  <p className="text-xs sm:text-sm text-slate-600 leading-relaxed max-w-2xl">
+                    Papan lowongan kerja terkurasi dari kantor dan usaha sesama alumni UMS di wilayah Jabodetabek.
                   </p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => handleOpenBooking(null)}
-                  className="inline-flex items-center justify-center min-h-[48px] px-5 py-3 rounded-lg bg-slate-100 hover:bg-[#E7E3D7] text-[#0C2340] text-base font-semibold transition-colors shrink-0 cursor-pointer"
-                >
-                  Ajukan Topik Mentoring
-                </button>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                {mentors.map((m) => (
-                  <article
-                    key={m.id}
-                    className="bg-white border border-slate-200 rounded-2xl p-5 flex flex-col justify-between gap-4 shadow-xs hover:border-slate-300 transition-all"
+
+                <div className="flex items-center gap-2.5 shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShareDone(false);
+                      setLokerFormErrors({});
+                      setShareLokerOpen(true);
+                    }}
+                    className="inline-flex items-center gap-2 min-h-[44px] px-4 py-2.5 rounded-xl bg-[#0C2340] hover:bg-[#16325C] active:scale-[0.99] text-white text-xs sm:text-sm font-bold transition-all shadow-xs cursor-pointer"
                   >
-                    <div className="space-y-3">
-                      <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-full overflow-hidden bg-slate-100 relative shrink-0">
-                          {m.avatarUrl ? (
-                            <Image
-                              src={m.avatarUrl}
-                              alt={`Foto ${m.nama}`}
-                              fill
-                              sizes="48px"
-                              className="object-cover"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex items-center justify-center bg-[#0C2340] text-[#F59E0B] font-bold text-sm">
-                              {m.avatarInitials}
-                            </div>
-                          )}
-                        </div>
-                        <div className="min-w-0">
-                          <h3 className="text-base font-bold text-[#0C2340] truncate">{m.nama}</h3>
-                          <span className="block text-sm text-[#475569] truncate">
-                            {m.prodi} &apos;{String(m.angkatan).slice(-2)}
-                          </span>
-                        </div>
-                      </div>
-                      <p className="text-base font-semibold text-[#0C2340] leading-[1.5]">
-                        {m.mentoringFokus || m.pekerjaan}
-                      </p>
-                      <span className="text-sm text-[#475569] flex items-center gap-1.5">
-                        <MapPin className="w-4 h-4 text-[#92400E] shrink-0" />
-                        {m.wilayah}
-                      </span>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() => handleOpenBooking(m)}
-                      className="w-full min-h-[44px] rounded-lg bg-slate-100 hover:bg-[#0C2340] text-[#0C2340] hover:text-white text-xs font-semibold transition-colors cursor-pointer"
-                    >
-                      Ajukan Sesi ({DEMO_BADGE_LABEL})
-                    </button>
-                  </article>
-                ))}
-              </div>
-            )}
-          </section>
-
-          {/* ========================================================================= */}
-          {/* Bagian 2: Info Kerja & Peluang Karier Alumni                              */}
-          {/* ========================================================================= */}
-          <section id="loker" aria-labelledby="heading-info-kerja" className="pt-10 border-t border-slate-200 space-y-8">
-            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-              <div className="space-y-2 max-w-2xl">
-                <div className="inline-flex items-center gap-2 text-xs font-bold text-[#92400E] uppercase tracking-wider">
-                  <Briefcase className="w-4 h-4 text-[#92400E]" />
-                  <span>Portal Lowongan &amp; Kemitraan Alumni</span>
+                    <Plus className="w-4 h-4 text-[#F59E0B]" />
+                    <span>Bagikan Info Loker</span>
+                  </button>
                 </div>
-                <h2 id="heading-info-kerja" className="text-2xl sm:text-3xl font-bold text-[#0C2340]">
-                  Info Lowongan Kerja &amp; Peluang Bisnis
-                </h2>
-                <p className="text-base text-[#475569] leading-[1.6]">
-                  Papan lowongan kerja terkurasi dari kantor dan usaha sesama alumni UMS di wilayah Jabodetabek. Membuka jalur rekomendasi internal dan kolaborasi profesional.
-                </p>
               </div>
-
-              <div className="flex flex-wrap items-center gap-3 shrink-0">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShareDone(false);
-                    setLokerFormErrors({});
-                    setShareLokerOpen(true);
-                  }}
-                  className="inline-flex items-center gap-2 min-h-[48px] px-5 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] text-white text-base font-semibold transition-all shadow-xs cursor-pointer"
-                >
-                  <Plus className="w-5 h-5 text-[#F59E0B]" />
-                  <span>Bagikan Info Loker</span>
-                </button>
-                <Link
-                  href="/kepengurusan"
-                  className="inline-flex items-center min-h-[48px] px-5 py-3 rounded-lg bg-white border border-slate-300 hover:border-slate-400 text-[#0C2340] text-base font-semibold transition-colors"
-                >
-                  Kontak Pengurus
-                </Link>
-              </div>
-            </div>
 
             {/* Filter Bar & Pencarian Lowongan */}
             <div className="bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-xs space-y-4">
@@ -772,6 +845,7 @@ export default function PeluangPage() {
               </div>
             )}
           </section>
+          )}
         </div>
       </main>
 

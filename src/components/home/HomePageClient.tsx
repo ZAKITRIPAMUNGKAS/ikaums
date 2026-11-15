@@ -4,9 +4,9 @@ import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
+import { motion, useReducedMotion } from 'motion/react';
 import { Navbar, Footer } from '@/components/Navigation';
 import { KopdarInterestForm } from '@/components/home/KopdarInterestForm';
-import { TrustPanel } from '@/components/home/TrustPanel';
 import { MobileKopdarCta } from '@/components/home/MobileKopdarCta';
 import { RegisterModal } from '@/components/home/RegisterModal';
 import MapLoadingSkeleton from '@/components/peta/MapLoadingSkeleton';
@@ -91,6 +91,7 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
   const [selectedWilayah, setSelectedWilayah] = useState('Jakarta Selatan');
   const [selectedKawasan, setSelectedKawasan] = useState('Jakarta');
   const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const shouldReduceMotion = useReducedMotion();
 
   const totalAlumni = stats?.totalAlumni ?? 0;
   const kawasanCounts = stats?.kawasanCounts ?? {};
@@ -102,6 +103,39 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
 
   const values = landing.values.slice(0, 3);
   const programs = landing.programs.slice(0, 4);
+
+  // Smooth custom easing curves
+  const easeOutCustom = [0.22, 1, 0.36, 1] as const;
+
+  const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: shouldReduceMotion ? 0 : 0.12,
+        delayChildren: shouldReduceMotion ? 0 : 0.08,
+      },
+    },
+  };
+
+  const cardVariant = {
+    hidden: { opacity: 0, y: shouldReduceMotion ? 0 : 26 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: easeOutCustom,
+      },
+    },
+  };
+
+  const sectionFadeIn = {
+    initial: { opacity: 0, y: shouldReduceMotion ? 0 : 28 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, margin: '-50px' as const },
+    transition: { duration: 0.65, ease: easeOutCustom },
+  };
 
   return (
     <div className="flex min-h-screen flex-col bg-white font-sans text-slate-900 selection:bg-[#0C2340] selection:text-white pb-20 lg:pb-0">
@@ -121,24 +155,46 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
           />
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-8">
+              
+              {/* Kolom Kiri Hero (Teks & Aksi Muncul Bertahap) */}
               <div className="space-y-4 sm:space-y-6 lg:col-span-6 z-10">
-                <div className="flex items-center gap-2">
+                <motion.div
+                  initial={{ opacity: 0, x: shouldReduceMotion ? 0 : -14 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.05, ease: easeOutCustom }}
+                  className="flex items-center gap-2"
+                >
                   <span className="w-6 h-[2px] bg-[#C07A28] rounded-full" aria-hidden="true" />
                   <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#B45309]">
                     {landing.heroEyebrow}
                   </span>
-                </div>
+                </motion.div>
 
-                <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold leading-[1.18] sm:leading-[1.12] tracking-[-0.02em] text-[#0C2340]">
+                <motion.h1
+                  initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.15, ease: easeOutCustom }}
+                  className="text-2xl sm:text-4xl lg:text-5xl font-extrabold leading-[1.18] sm:leading-[1.12] tracking-[-0.02em] text-[#0C2340]"
+                >
                   {landing.heroTitle}{' '}
                   <span className="text-[#C07A28]">{landing.heroHighlight}</span>
-                </h1>
+                </motion.h1>
 
-                <p className="text-sm sm:text-base lg:text-lg leading-relaxed text-slate-600 max-w-xl">
+                <motion.p
+                  initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.25, ease: easeOutCustom }}
+                  className="text-sm sm:text-base lg:text-lg leading-relaxed text-slate-600 max-w-xl"
+                >
                   {landing.heroSubtitle}
-                </p>
+                </motion.p>
 
-                <div className="grid grid-cols-2 gap-2.5 sm:flex sm:flex-wrap sm:items-center sm:gap-3 pt-1 sm:pt-2">
+                <motion.div
+                  initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.35, ease: easeOutCustom }}
+                  className="grid grid-cols-2 gap-2.5 sm:flex sm:flex-wrap sm:items-center sm:gap-3 pt-1 sm:pt-2"
+                >
                   <button
                     type="button"
                     onClick={() => handleOpenRegister()}
@@ -154,10 +210,15 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
                     <span>{landing.heroSecondaryCta}</span>
                     <ArrowUpRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-500" aria-hidden="true" />
                   </Link>
-                </div>
+                </motion.div>
 
                 {/* Social Proof: Lingkaran Profil Alumni + Counter */}
-                <div className="flex items-center gap-3 pt-1">
+                <motion.div
+                  initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.45, ease: easeOutCustom }}
+                  className="flex items-center gap-3 pt-1"
+                >
                   <div className="flex items-center -space-x-2 overflow-hidden shrink-0">
                     {totalAlumni > 0 ? (
                       HERO_ALUMNI_AVATARS.slice(0, Math.min(totalAlumni, 4)).map((avatar, idx) => (
@@ -192,10 +253,16 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
                         : 'Pendaftaran perdana wilayah Jabodetabek baru dibuka'}
                     </p>
                   </div>
-                </div>
+                </motion.div>
               </div>
 
-              <div className="lg:col-span-6 relative flex items-center justify-center lg:justify-end pt-2 pb-6 lg:py-0">
+              {/* Kolom Kanan Hero (Foto & Floating Badge) */}
+              <motion.div
+                initial={{ opacity: 0, scale: shouldReduceMotion ? 1 : 0.96, y: shouldReduceMotion ? 0 : 20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.2, ease: easeOutCustom }}
+                className="lg:col-span-6 relative flex items-center justify-center lg:justify-end pt-2 pb-6 lg:py-0"
+              >
                 <div className="relative w-full max-w-[560px] lg:max-w-none">
                   <div
                     aria-hidden="true"
@@ -220,7 +287,12 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
                     />
                   </div>
 
-                  <div className="relative sm:absolute sm:-bottom-5 sm:right-4 lg:-bottom-6 lg:-right-4 z-20 mt-2 sm:mt-0 max-w-full sm:max-w-md rounded-xl sm:rounded-2xl bg-[#0C2340] p-3 sm:p-5 text-white shadow-lg border border-white/10 flex items-center justify-between gap-3 sm:gap-4">
+                  <motion.div
+                    initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 18 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.45, ease: easeOutCustom }}
+                    className="relative sm:absolute sm:-bottom-5 sm:right-4 lg:-bottom-6 lg:-right-4 z-20 mt-2 sm:mt-0 max-w-full sm:max-w-md rounded-xl sm:rounded-2xl bg-[#0C2340] p-3 sm:p-5 text-white shadow-lg border border-white/10 flex items-center justify-between gap-3 sm:gap-4"
+                  >
                     <div className="border-l-2 border-[#D97706] pl-3 space-y-0.5">
                       <p className="text-xs sm:text-base font-bold text-white tracking-tight">
                         {landing.heroBadgeTitle}
@@ -239,22 +311,31 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
                         className="object-contain object-right"
                       />
                     </div>
-                  </div>
+                  </motion.div>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>
 
-        {/* 2. STRIP 3 NILAI UTAMA - Simple Bento */}
+        {/* 2. STRIP 3 NILAI UTAMA - Simple Bento (Muncul Satu per Satu) */}
         <section aria-label="Keunggulan Komunitas" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-4 lg:gap-5">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-50px' }}
+            className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-4 lg:gap-5"
+          >
             {values.map((item, index) => {
               const Icon = [Users, Briefcase, Calendar][index] ?? Users;
               return (
-                <div
+                <motion.div
                   key={`${item.judul}-${index}`}
-                  className="flex items-center gap-3.5 p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:border-slate-300 transition-all"
+                  variants={cardVariant}
+                  whileHover={{ y: shouldReduceMotion ? 0 : -3 }}
+                  transition={{ duration: 0.2 }}
+                  className="flex items-center gap-3.5 p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:border-slate-300 hover:shadow-xs transition-colors"
                 >
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-[#C07A28] border border-amber-200/60">
                     <Icon className="h-5 w-5" aria-hidden="true" />
@@ -267,14 +348,18 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
                       {item.isi}
                     </p>
                   </div>
-                </div>
+                </motion.div>
               );
             })}
-          </div>
+          </motion.div>
         </section>
 
         {/* 3. SEBARAN WILAYAH: Simple Integrated Bento Map */}
-        <section aria-labelledby="sebaran-heading" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.section
+          {...sectionFadeIn}
+          aria-labelledby="sebaran-heading"
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+        >
           <div className="rounded-2xl sm:rounded-3xl border border-slate-200/80 bg-[#F8FAFC] p-4 sm:p-8 lg:p-10 shadow-xs space-y-4">
             {/* Header Bento */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200/70">
@@ -363,11 +448,17 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
               </span>
             </div>
           </div>
-        </section>
+        </motion.section>
 
-        {/* 4. PROGRAM */}
+        {/* 4. PROGRAM (Muncul Satu per Satu) */}
         <section aria-labelledby="program-heading" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 sm:gap-4">
+          <motion.div
+            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.55, ease: easeOutCustom }}
+            className="flex flex-col md:flex-row md:items-end justify-between gap-3 sm:gap-4"
+          >
             <div className="space-y-1.5 sm:space-y-2 max-w-xl">
               <div className="flex items-center gap-2">
                 <span className="w-6 h-[2px] bg-[#C07A28] rounded-full" aria-hidden="true" />
@@ -385,59 +476,72 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
             <p className="text-xs sm:text-sm text-slate-600 max-w-sm leading-relaxed">
               {landing.programDescription}
             </p>
-          </div>
+          </motion.div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 lg:gap-5">
+          <motion.div
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-50px' }}
+            className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 lg:gap-5"
+          >
             {programs.map((item, index) => {
               const Icon = PROGRAM_ICONS[index] ?? Calendar;
               const isDark = index === 0;
 
               return (
-                <Link
+                <motion.div
                   key={`${item.judul}-${index}`}
-                  href={item.href || '#kopdar-section'}
-                  className={`group relative flex flex-col justify-between rounded-xl sm:rounded-2xl p-3.5 sm:p-6 transition-all duration-200 min-h-[145px] sm:min-h-[220px] ${
-                    isDark
-                      ? 'bg-[#0C2340] text-white shadow-md'
-                      : 'bg-white border border-slate-200/90 text-slate-900 shadow-2xs hover:shadow-xs hover:border-slate-300'
-                  }`}
+                  variants={cardVariant}
+                  whileHover={{ y: shouldReduceMotion ? 0 : -4 }}
+                  transition={{ duration: 0.2 }}
+                  className="h-full"
                 >
-                  <div className="space-y-2.5 sm:space-y-4">
-                    <div
-                      className={`flex h-8 w-8 sm:h-11 sm:w-11 items-center justify-center rounded-lg sm:rounded-xl ${
-                        isDark
-                          ? 'bg-white/10 text-white'
-                          : 'bg-amber-50 text-[#C07A28] border border-amber-200/60'
-                      }`}
-                    >
-                      <Icon className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
-                    </div>
-
-                    <div className="space-y-1 sm:space-y-1.5">
-                      <h3 className="text-xs sm:text-base lg:text-lg font-bold leading-snug line-clamp-2">{item.judul}</h3>
-                      <p
-                        className={`text-[11px] sm:text-xs lg:text-sm leading-snug sm:leading-relaxed line-clamp-2 ${
-                          isDark ? 'text-slate-300' : 'text-slate-600'
+                  <Link
+                    href={item.href || '#kopdar-section'}
+                    className={`group relative flex flex-col justify-between rounded-xl sm:rounded-2xl p-3.5 sm:p-6 transition-all duration-200 min-h-[145px] sm:min-h-[220px] h-full ${
+                      isDark
+                        ? 'bg-[#0C2340] text-white shadow-md'
+                        : 'bg-white border border-slate-200/90 text-slate-900 shadow-2xs hover:shadow-xs hover:border-slate-300'
+                    }`}
+                  >
+                    <div className="space-y-2.5 sm:space-y-4">
+                      <div
+                        className={`flex h-8 w-8 sm:h-11 sm:w-11 items-center justify-center rounded-lg sm:rounded-xl ${
+                          isDark
+                            ? 'bg-white/10 text-white'
+                            : 'bg-amber-50 text-[#C07A28] border border-amber-200/60'
                         }`}
                       >
-                        {item.deskripsi}
-                      </p>
-                    </div>
-                  </div>
+                        <Icon className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
+                      </div>
 
-                  <div className="flex justify-end pt-2 sm:pt-4">
-                    <div
-                      className={`flex h-6 w-6 sm:h-8 sm:w-8 items-center justify-center rounded-full transition-transform group-hover:translate-x-1 ${
-                        isDark ? 'bg-white/15 text-white' : 'bg-slate-100 text-slate-700'
-                      }`}
-                    >
-                      <ArrowRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" aria-hidden="true" />
+                      <div className="space-y-1 sm:space-y-1.5">
+                        <h3 className="text-xs sm:text-base lg:text-lg font-bold leading-snug line-clamp-2">{item.judul}</h3>
+                        <p
+                          className={`text-[11px] sm:text-xs lg:text-sm leading-snug sm:leading-relaxed line-clamp-2 ${
+                            isDark ? 'text-slate-300' : 'text-slate-600'
+                          }`}
+                        >
+                          {item.deskripsi}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                </Link>
+
+                    <div className="flex justify-end pt-2 sm:pt-4">
+                      <div
+                        className={`flex h-6 w-6 sm:h-8 sm:w-8 items-center justify-center rounded-full transition-transform group-hover:translate-x-1 ${
+                          isDark ? 'bg-white/15 text-white' : 'bg-slate-100 text-slate-700'
+                        }`}
+                      >
+                        <ArrowRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" aria-hidden="true" />
+                      </div>
+                    </div>
+                  </Link>
+                </motion.div>
               );
             })}
-          </div>
+          </motion.div>
         </section>
 
         {/* 5. BANNER KOPDAR PERTAMA */}
@@ -446,7 +550,10 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
           aria-labelledby="banner-kopdar-heading"
           className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24 space-y-6 sm:space-y-8"
         >
-          <div className="rounded-3xl border border-slate-200/80 bg-white shadow-xs overflow-hidden">
+          <motion.div
+            {...sectionFadeIn}
+            className="rounded-3xl border border-slate-200/80 bg-white shadow-xs overflow-hidden"
+          >
             <div className="grid grid-cols-1 items-center lg:grid-cols-12 gap-0 lg:gap-8">
               <div className="lg:col-span-5 h-48 sm:h-72 lg:h-full min-h-[200px] sm:min-h-[260px] relative overflow-hidden bg-slate-100">
                 <Image
@@ -495,29 +602,34 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
                 </div>
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          <div
+          <motion.div
+            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.6, delay: 0.15, ease: easeOutCustom }}
             id="form-kopdar-container"
             className="transition-all duration-300 block"
           >
-            <div className="grid grid-cols-1 items-start gap-8 border-t border-slate-200 pt-6 lg:grid-cols-12">
-              <div className="lg:col-span-5">
-                <TrustPanel />
-              </div>
-              <div className="lg:col-span-7">
-                <KopdarInterestForm
-                  wilayah={selectedWilayah}
-                  onWilayahChange={setSelectedWilayah}
-                />
-              </div>
+            <div className="border-t border-slate-200 pt-6 max-w-3xl mx-auto">
+              <KopdarInterestForm
+                wilayah={selectedWilayah}
+                onWilayahChange={setSelectedWilayah}
+              />
             </div>
-          </div>
+          </motion.div>
         </section>
 
-        {/* 6. CERITA DARI KELUARGA UMS */}
+        {/* 6. CERITA DARI KELUARGA UMS (Muncul Satu per Satu) */}
         <section aria-labelledby="cerita-heading" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-          <div className="flex items-center justify-between gap-4">
+          <motion.div
+            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.55, ease: easeOutCustom }}
+            className="flex items-center justify-between gap-4"
+          >
             <h2
               id="cerita-heading"
               className="text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight text-[#0C2340]"
@@ -531,7 +643,7 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
               <span>Lihat semua kegiatan</span>
               <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
             </Link>
-          </div>
+          </motion.div>
 
           {cerita.length === 0 ? (
             <p className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-6 text-sm text-slate-600">
@@ -539,40 +651,53 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
               pengurus menambahkannya.
             </p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
+            <motion.div
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: '-50px' }}
+              className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6"
+            >
               {cerita.map((item) => (
-                <Link
+                <motion.div
                   key={item.id}
-                  href={item.href}
-                  className="group flex flex-col rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:shadow-xs hover:border-slate-300 transition-all overflow-hidden"
+                  variants={cardVariant}
+                  whileHover={{ y: shouldReduceMotion ? 0 : -4 }}
+                  transition={{ duration: 0.2 }}
+                  className="h-full"
                 >
-                  <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-100">
-                    <Image
-                      src={item.gambar}
-                      alt={item.judul}
-                      width={400}
-                      height={225}
-                      className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
-                    />
-                    <div className="absolute top-3 left-3 z-10">
-                      <span className="inline-block rounded-md bg-white/95 backdrop-blur-xs px-2.5 py-0.5 text-xs font-bold text-[#0C2340] shadow-2xs">
-                        {item.kategori}
-                      </span>
+                  <Link
+                    href={item.href}
+                    className="group flex flex-col rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:shadow-xs hover:border-slate-300 transition-all overflow-hidden h-full"
+                  >
+                    <div className="relative aspect-[16/9] w-full overflow-hidden bg-slate-100">
+                      <Image
+                        src={item.gambar}
+                        alt={item.judul}
+                        width={400}
+                        height={225}
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                      />
+                      <div className="absolute top-3 left-3 z-10">
+                        <span className="inline-block rounded-md bg-white/95 backdrop-blur-xs px-2.5 py-0.5 text-xs font-bold text-[#0C2340] shadow-2xs">
+                          {item.kategori}
+                        </span>
+                      </div>
                     </div>
-                  </div>
 
-                  <div className="p-4 sm:p-5 flex-grow flex flex-col justify-between space-y-3">
-                    <h3 className="text-base font-bold text-[#0C2340] group-hover:text-[#C07A28] transition-colors leading-snug">
-                      {item.judul}
-                    </h3>
-                    <div className="flex items-center gap-1.5 text-xs text-slate-500 pt-1 border-t border-slate-100">
-                      <CalendarDays className="h-3.5 w-3.5 text-slate-400" aria-hidden="true" />
-                      <span>{item.tanggal}</span>
+                    <div className="p-4 sm:p-5 flex-grow flex flex-col justify-between space-y-3">
+                      <h3 className="text-base font-bold text-[#0C2340] group-hover:text-[#C07A28] transition-colors leading-snug">
+                        {item.judul}
+                      </h3>
+                      <div className="flex items-center gap-1.5 text-xs text-slate-500 pt-1 border-t border-slate-100">
+                        <CalendarDays className="h-3.5 w-3.5 text-slate-400" aria-hidden="true" />
+                        <span>{item.tanggal}</span>
+                      </div>
                     </div>
-                  </div>
-                </Link>
+                  </Link>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           )}
         </section>
       </main>
