@@ -3,17 +3,18 @@
 import React from 'react';
 import { REGIONS_METADATA } from '@/data/jabodetabek-geo-meta';
 import { WILAYAH_JABODETABEK } from '@/data/ums-prodi';
-import { IS_DEMO_MODE, DEMO_BADGE_LABEL } from '@/lib/config';
 import { ChevronRight, MapPin } from 'lucide-react';
 
 interface MobileRegionListProps {
   selectedRegionId: string;
   onSelectRegion: (regionId: string) => void;
+  regionCounts?: Record<string, number>;
 }
 
 export default function MobileRegionList({
   selectedRegionId,
   onSelectRegion,
+  regionCounts = {},
 }: MobileRegionListProps) {
   return (
     <div className="bg-white border border-slate-200 rounded-xl p-4 shadow-xs">
@@ -22,17 +23,13 @@ export default function MobileRegionList({
           <MapPin className="w-4 h-4 text-[#92400E]" />
           Daftar 9 Wilayah Jabodetabek
         </h2>
-        {IS_DEMO_MODE && (
-          <span className="text-xs font-semibold text-[#92400E] bg-amber-100 px-2 py-0.5 rounded">
-            {DEMO_BADGE_LABEL}
-          </span>
-        )}
       </div>
 
       <div className="grid grid-cols-1 divide-y divide-[#0C2340]/10">
         {REGIONS_METADATA.map((r) => {
           const isSelected = r.regionId === selectedRegionId;
           const master = WILAYAH_JABODETABEK.find((w) => w.nama === r.regionName);
+          const count = regionCounts[r.regionId] ?? 0;
 
           return (
             <button
@@ -54,19 +51,17 @@ export default function MobileRegionList({
                 <div className="min-w-0">
                   <div className="text-base font-semibold text-[#0C2340]">{r.regionName}</div>
                   <div className="text-sm text-[#475569] truncate">
-                    {IS_DEMO_MODE
-                      ? `${r.mentorCount} mentor · ${r.activePercent} aktif kopdar`
+                    {count > 0
+                      ? `${count} alumni terdata`
                       : master?.cakupan || 'Wilayah Jabodetabek'}
                   </div>
                 </div>
               </div>
 
               <div className="flex items-center gap-2 shrink-0">
-                {IS_DEMO_MODE && (
-                  <span className="text-xs font-semibold text-[#0C2340] bg-slate-100 px-2.5 py-0.5 rounded">
-                    {r.count}
-                  </span>
-                )}
+                <span className="text-xs font-semibold text-[#0C2340] bg-slate-100 px-2.5 py-0.5 rounded">
+                  {count}
+                </span>
                 <ChevronRight className="w-4 h-4 text-[#475569]" />
               </div>
             </button>

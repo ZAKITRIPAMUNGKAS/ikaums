@@ -10,6 +10,7 @@ import { TrustPanel } from '@/components/home/TrustPanel';
 import { MobileKopdarCta } from '@/components/home/MobileKopdarCta';
 import MapLoadingSkeleton from '@/components/peta/MapLoadingSkeleton';
 import type { LandingContent } from '@/lib/cms-store';
+import type { CommunityStats } from '@/lib/community-stats';
 import {
   ArrowRight,
   ArrowUpRight,
@@ -32,31 +33,31 @@ const KAWASAN_LIST = [
   {
     nama: 'Jakarta',
     sublabel: 'Tebet · Blok M · Rawamangun',
-    count: 589,
+    count: 0,
     slug: 'Jakarta',
   },
   {
     nama: 'Tangerang',
     sublabel: 'BSD City · Bintaro · Serpong',
-    count: 126,
+    count: 0,
     slug: 'Tangerang',
   },
   {
     nama: 'Bekasi',
     sublabel: 'Summarecon & Harapan Indah',
-    count: 117,
+    count: 0,
     slug: 'Bekasi',
   },
   {
     nama: 'Depok',
     sublabel: 'Margonda & Cinere',
-    count: 93,
+    count: 0,
     slug: 'Depok',
   },
   {
     nama: 'Bogor',
     sublabel: 'Pajajaran & Sentul City',
-    count: 86,
+    count: 0,
     slug: 'Bogor',
   },
 ];
@@ -82,12 +83,16 @@ export interface HomeCeritaItem {
 interface HomePageClientProps {
   landing: LandingContent;
   cerita: HomeCeritaItem[];
+  stats?: CommunityStats;
 }
 
-export function HomePageClient({ landing, cerita }: HomePageClientProps) {
+export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) {
   const [selectedWilayah, setSelectedWilayah] = useState('Jakarta Selatan');
   const [selectedKawasan, setSelectedKawasan] = useState('Jakarta');
   const [showFormModal, setShowFormModal] = useState(false);
+
+  const totalAlumni = stats?.totalAlumni ?? 0;
+  const kawasanCounts = stats?.kawasanCounts ?? {};
 
   const handleOpenKopdar = (wilayahTarget?: string) => {
     if (wilayahTarget) setSelectedWilayah(wilayahTarget);
@@ -157,31 +162,37 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
                 {/* Social Proof: Lingkaran Profil Alumni + Counter */}
                 <div className="flex items-center gap-3 pt-1">
                   <div className="flex items-center -space-x-2 overflow-hidden shrink-0">
-                    {HERO_ALUMNI_AVATARS.map((avatar, idx) => (
-                      <div
-                        key={idx}
-                        className="relative inline-block h-7 w-7 sm:h-8 sm:w-8 rounded-full ring-2 ring-white overflow-hidden shadow-2xs shrink-0"
-                      >
-                        <Image
-                          src={avatar.src}
-                          alt={avatar.alt}
-                          fill
-                          sizes="32px"
-                          className="object-cover"
-                        />
-                      </div>
-                    ))}
+                    {totalAlumni > 0 ? (
+                      HERO_ALUMNI_AVATARS.slice(0, Math.min(totalAlumni, 4)).map((avatar, idx) => (
+                        <div
+                          key={idx}
+                          className="relative inline-block h-7 w-7 sm:h-8 sm:w-8 rounded-full ring-2 ring-white overflow-hidden shadow-2xs shrink-0"
+                        >
+                          <Image
+                            src={avatar.src}
+                            alt={avatar.alt}
+                            fill
+                            sizes="32px"
+                            className="object-cover"
+                          />
+                        </div>
+                      ))
+                    ) : null}
                     <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-[#0C2340] text-white text-[10px] sm:text-[11px] font-bold ring-2 ring-white shadow-2xs shrink-0">
-                      +500
+                      {totalAlumni > 0 ? `+${totalAlumni}` : '0'}
                     </div>
                   </div>
 
                   <div className="text-xs leading-tight">
                     <p className="font-bold text-[#0C2340]">
-                      +500 alumni terhubung
+                      {totalAlumni > 0
+                        ? `+${totalAlumni} alumni terhubung`
+                        : '0 alumni terhubung'}
                     </p>
                     <p className="text-[10px] sm:text-[11px] text-slate-500 mt-0.5">
-                      di Jakarta, Bogor, Depok, Tangerang &amp; Bekasi
+                      {totalAlumni > 0
+                        ? 'di Jakarta, Bogor, Depok, Tangerang & Bekasi'
+                        : 'Pendaftaran perdana wilayah Jabodetabek baru dibuka'}
                     </p>
                   </div>
                 </div>
@@ -279,7 +290,9 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
                   id="sebaran-heading"
                   className="text-lg sm:text-2xl font-extrabold tracking-tight text-[#0C2340]"
                 >
-                  Satu Jaringan. 1.011 Alumni.
+                  {totalAlumni > 0
+                    ? `Satu Jaringan. ${totalAlumni.toLocaleString('id-ID')} Alumni.`
+                    : 'Satu Jaringan. 0 Alumni.'}
                 </h2>
               </div>
 
@@ -305,6 +318,7 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
             <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 pt-1">
               {KAWASAN_LIST.map((kawasan) => {
                 const isSelected = selectedKawasan === kawasan.nama;
+                const count = kawasanCounts[kawasan.nama] ?? 0;
                 return (
                   <button
                     key={kawasan.nama}
@@ -325,7 +339,7 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
                           : 'bg-amber-50 text-[#B45309] border border-amber-200/60'
                       }`}
                     >
-                      {kawasan.count}
+                      {count}
                     </span>
                   </button>
                 );
@@ -337,6 +351,7 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
               <HomeMapWidget
                 selectedKawasan={selectedKawasan}
                 onSelectKawasan={(k) => setSelectedKawasan(k)}
+                kawasanCounts={kawasanCounts}
               />
             </div>
 

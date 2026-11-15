@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import { RegionMetadata } from '@/data/jabodetabek-geo-meta';
 import { WILAYAH_JABODETABEK } from '@/data/ums-prodi';
-import { IS_DEMO_MODE, COMMUNITY_PLACEHOLDERS, DEMO_BADGE_LABEL } from '@/lib/config';
+import { IS_DEMO_MODE, DEMO_BADGE_LABEL } from '@/lib/config';
 import {
   MapPin,
   Briefcase,
@@ -17,6 +17,7 @@ interface PetaContextualPanelProps {
   region: RegionMetadata;
   allRegions?: RegionMetadata[];
   onSelectRegion?: (regionId: string) => void;
+  count?: number;
 }
 
 const REGION_PROVINCE: Record<string, string> = {
@@ -31,7 +32,7 @@ const REGION_PROVINCE: Record<string, string> = {
   'bogor': 'Jawa Barat · Kota & Kabupaten Bogor',
 };
 
-export default function PetaContextualPanel({ region }: PetaContextualPanelProps) {
+export default function PetaContextualPanel({ region, count = 0 }: PetaContextualPanelProps) {
   const scopeLabel = REGION_PROVINCE[region.regionId] || 'Wilayah Jabodetabek';
   const master = WILAYAH_JABODETABEK.find((w) => w.nama === region.regionName);
 
@@ -63,7 +64,9 @@ export default function PetaContextualPanel({ region }: PetaContextualPanelProps
                 Jumlah Alumni Terdata
               </div>
               <p className="text-base text-[#475569] leading-[1.6]">
-                {COMMUNITY_PLACEHOLDERS.coordinatorCount}. Angka resmi per kota akan ditampilkan setelah verifikasi pendaftar awal berjalan.
+                {count > 0
+                  ? `${count} alumni telah terverifikasi di ${region.regionName}.`
+                  : `0 alumni terdata di ${region.regionName}. Jadilah yang pertama mendaftar di wilayah ini!`}
               </p>
             </div>
 

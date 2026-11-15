@@ -393,3 +393,51 @@ test('Asisten nama merapikan kapitalisasi dan gelar tanpa mengubah ejaan', async
   assert.equal(formatIndonesianName('maria de la cruz, s.psi.'), 'Maria de la Cruz, S.Psi.');
   assert.equal(formatIndonesianName('ANDI M. YUSUF'), 'Andi M. Yusuf');
 });
+
+test('Statistik alumni dan wilayah organik menghasilkan 0 saat pendaftar kosong', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const typescript = await import('typescript');
+  const source = await readFile(
+    new URL('../src/lib/community-stats.ts', import.meta.url),
+    'utf8'
+  );
+  const compiled = typescript.transpileModule(source, {
+    compilerOptions: { module: typescript.ModuleKind.CommonJS, target: typescript.ScriptTarget.ES2022 },
+  }).outputText;
+  const moduleObj = { exports: {} };
+  const mockRequire = () => ({ getAllPendaftar: async () => [] });
+  new Function('exports', 'module', 'require', compiled)(moduleObj.exports, moduleObj, mockRequire);
+  const { calculateCommunityStatsFromPendaftar } = moduleObj.exports;
+
+  // Case 1: Database pendaftar kosong menghasilkan 0
+  const emptyStats = calculateCommunityStatsFromPendaftar([]);
+  assert.equal(emptyStats.totalAlumni, 0);
+  assert.equal(emptyStats.totalMentor, 0);
+  assert.equal(emptyStats.kawasanCounts.Jakarta, 0);
+  assert.equal(emptyStats.regionCounts['jkt-selatan'], 0);
+
+  // Case 2: Pendaftar berstatus menunggu tidak dihitung sebagai alumni resmi
+  const pendingStats = calculateCommunityStatsFromPendaftar([
+    { wilayah: 'Jakarta Selatan', status: 'menunggu', siapMentoring: true },
+  ]);
+  assert.equal(pendingStats.totalAlumni, 0);
+  assert.equal(pendingStats.kawasanCounts.Jakarta, 0);
+
+  // Case 3: Pendaftar disetujui dihitung secara organik
+  const approvedStats = calculateCommunityStatsFromPendaftar([
+    { wilayah: 'Jakarta Selatan', status: 'disetujui', siapMentoring: true },
+    { wilayah: 'Tangerang Raya', status: 'disetujui', siapMentoring: false },
+    { wilayah: 'Kota Bekasi', status: 'disetujui', siapMentoring: true },
+    { wilayah: 'Depok', status: 'ditolak', siapMentoring: true },
+  ]);
+  assert.equal(approvedStats.totalAlumni, 3);
+  assert.equal(approvedStats.totalMentor, 2);
+  assert.equal(approvedStats.kawasanCounts.Jakarta, 1);
+  assert.equal(approvedStats.kawasanCounts.Tangerang, 1);
+  assert.equal(approvedStats.kawasanCounts.Bekasi, 1);
+  assert.equal(approvedStats.kawasanCounts.Depok, 0);
+  assert.equal(approvedStats.regionCounts['jkt-selatan'], 1);
+  assert.equal(approvedStats.regionCounts['tangerang'], 1);
+  assert.equal(approvedStats.regionCounts['bekasi'], 1);
+  assert.equal(approvedStats.regionCounts['depok'], 0);
+});

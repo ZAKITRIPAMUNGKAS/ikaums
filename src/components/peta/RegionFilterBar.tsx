@@ -2,16 +2,17 @@
 
 import React from 'react';
 import { REGIONS_METADATA } from '@/data/jabodetabek-geo-meta';
-import { IS_DEMO_MODE } from '@/lib/config';
 
 interface RegionFilterBarProps {
   selectedRegionId: string;
   onSelectRegion: (regionId: string) => void;
+  regionCounts?: Record<string, number>;
 }
 
 export default function RegionFilterBar({
   selectedRegionId,
   onSelectRegion,
+  regionCounts = {},
 }: RegionFilterBarProps) {
   return (
     <div className="w-full">
@@ -22,6 +23,7 @@ export default function RegionFilterBar({
 
         {REGIONS_METADATA.map((r) => {
           const isSelected = r.regionId === selectedRegionId;
+          const count = regionCounts[r.regionId] ?? 0;
           return (
             <button
               key={r.regionId}
@@ -34,15 +36,13 @@ export default function RegionFilterBar({
               }`}
             >
               <span>{r.regionName}</span>
-              {IS_DEMO_MODE && (
-                <span
-                  className={`text-[11px] px-1.5 py-0.5 rounded font-semibold leading-none ${
-                    isSelected ? 'bg-white/15 text-[#F59E0B]' : 'bg-slate-100 text-[#475569]'
-                  }`}
-                >
-                  {r.count}
-                </span>
-              )}
+              <span
+                className={`text-[11px] px-1.5 py-0.5 rounded font-semibold leading-none ${
+                  isSelected ? 'bg-white/15 text-[#F59E0B]' : 'bg-slate-100 text-[#475569]'
+                }`}
+              >
+                {count}
+              </span>
             </button>
           );
         })}

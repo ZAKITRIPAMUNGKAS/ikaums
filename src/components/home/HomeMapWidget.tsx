@@ -22,7 +22,7 @@ export const KAWASAN_REGION_IDS: Record<string, string[]> = {
 export const KAWASAN_MARKERS = [
   {
     nama: 'Jakarta',
-    count: 589,
+    count: 0,
     lngLat: [106.827, -6.220] as [number, number],
     bounds: [
       [106.68, -6.37],
@@ -31,7 +31,7 @@ export const KAWASAN_MARKERS = [
   },
   {
     nama: 'Tangerang',
-    count: 126,
+    count: 0,
     lngLat: [106.580, -6.220] as [number, number],
     bounds: [
       [106.33, -6.45],
@@ -40,7 +40,7 @@ export const KAWASAN_MARKERS = [
   },
   {
     nama: 'Bekasi',
-    count: 117,
+    count: 0,
     lngLat: [107.030, -6.240] as [number, number],
     bounds: [
       [106.88, -6.42],
@@ -49,7 +49,7 @@ export const KAWASAN_MARKERS = [
   },
   {
     nama: 'Depok',
-    count: 93,
+    count: 0,
     lngLat: [106.818, -6.402] as [number, number],
     bounds: [
       [106.72, -6.46],
@@ -58,7 +58,7 @@ export const KAWASAN_MARKERS = [
   },
   {
     nama: 'Bogor',
-    count: 86,
+    count: 0,
     lngLat: [106.800, -6.595] as [number, number],
     bounds: [
       [106.40, -6.79],
@@ -70,11 +70,13 @@ export const KAWASAN_MARKERS = [
 interface HomeMapWidgetProps {
   selectedKawasan: string;
   onSelectKawasan: (kawasan: string) => void;
+  kawasanCounts?: Record<string, number>;
 }
 
 export default function HomeMapWidget({
   selectedKawasan,
   onSelectKawasan,
+  kawasanCounts,
 }: HomeMapWidgetProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<Map | null>(null);
@@ -83,10 +85,15 @@ export default function HomeMapWidget({
 
   const initialKawasanRef = useRef(selectedKawasan);
   const onSelectRef = useRef(onSelectKawasan);
+  const kawasanCountsRef = useRef(kawasanCounts);
 
   useEffect(() => {
     onSelectRef.current = onSelectKawasan;
   }, [onSelectKawasan]);
+
+  useEffect(() => {
+    kawasanCountsRef.current = kawasanCounts;
+  }, [kawasanCounts]);
 
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
@@ -219,7 +226,8 @@ export default function HomeMapWidget({
         // Angka Alumni
         const count = document.createElement('span');
         count.className = `font-bold ${isInitActive ? 'text-[#F59E0B]' : 'text-[#B45309]'}`;
-        count.textContent = String(k.count);
+        const val = kawasanCountsRef.current?.[k.nama] ?? 0;
+        count.textContent = String(val);
         btn.appendChild(count);
 
         btn.addEventListener('click', (e) => {
@@ -295,6 +303,9 @@ export default function HomeMapWidget({
         const dot = el.querySelector('span:first-child');
         if (!btn) return;
 
+        const val = kawasanCounts?.[nama] ?? 0;
+        if (countSpan) countSpan.textContent = String(val);
+
         const isActive = nama === selectedKawasan;
         if (isActive) {
           btn.className =
@@ -321,7 +332,7 @@ export default function HomeMapWidget({
     } catch {
       // Abaikan jika map belum siap
     }
-  }, [selectedKawasan]);
+  }, [selectedKawasan, kawasanCounts]);
 
   const handleZoomIn = () => mapRef.current?.zoomIn();
   const handleZoomOut = () => mapRef.current?.zoomOut();

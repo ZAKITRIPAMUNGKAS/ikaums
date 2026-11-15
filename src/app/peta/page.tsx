@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { connection } from 'next/server';
 import { Navbar, Footer } from '@/components/Navigation';
 import { PatternSection } from '@/components/PatternSection';
 import { MapInteractiveSection } from '@/components/MapInteractiveSection';
-import { IS_DEMO_MODE, COMMUNITY_PLACEHOLDERS, DEMO_BADGE_LABEL } from '@/lib/config';
-import { STATS_JABODETABEK } from '@/data/simulasi';
+import { IS_DEMO_MODE, DEMO_BADGE_LABEL } from '@/lib/config';
+import { getCommunityStats } from '@/lib/community-stats';
 import { ShieldCheck, Users, Award, ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -14,7 +15,10 @@ export const metadata: Metadata = {
     'Cakupan 9 wilayah kota dan kabupaten Ikatan Alumni Universitas Muhammadiyah Surakarta di Jabodetabek untuk koordinasi kopdar terdekat.',
 };
 
-export default function PetaPage() {
+async function PetaContent() {
+  await connection();
+  const stats = await getCommunityStats();
+
   return (
     <div className="min-h-screen bg-slate-50 text-[#0C2340] flex flex-col font-sans">
       <Navbar />
@@ -59,49 +63,39 @@ export default function PetaPage() {
                   Sebaran 9 Wilayah Jabodetabek
                 </h1>
                 <p className="text-base text-[#475569] mt-2 max-w-[48ch] sm:max-w-2xl leading-[1.6]">
-                  {IS_DEMO_MODE
-                    ? 'Contoh tampilan peta sebaran alumni dan mentor di sembilan kota dan kabupaten Jabodetabek.'
-                    : 'Pilih kota atau kabupaten di peta untuk melihat cakupan area dan mendaftarkan domisilimu guna persiapan kopdar pertama.'}
+                  Pilih kota atau kabupaten di peta untuk melihat cakupan area dan mendaftarkan domisilimu guna persiapan kopdar pertama.
                 </p>
               </div>
 
-              {IS_DEMO_MODE ? (
-                <div className="flex flex-wrap items-center gap-4 text-xs text-[#475569] shrink-0">
-                  <div className="flex items-center gap-1.5 font-medium">
-                    <Users className="w-4 h-4 text-[#0C2340]" />
-                    <span>
-                      <strong className="text-[#0C2340]">{STATS_JABODETABEK.totalAlumni.toLocaleString('id-ID')}</strong> ({DEMO_BADGE_LABEL})
-                    </span>
-                  </div>
-                  <span className="text-[#CBD5E1]">·</span>
-                  <div className="flex items-center gap-1.5 font-medium">
-                    <Award className="w-4 h-4 text-[#92400E]" />
-                    <span>
-                      <strong className="text-[#0C2340]">{STATS_JABODETABEK.totalMentor}</strong> mentor ({DEMO_BADGE_LABEL})
-                    </span>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex flex-wrap items-center gap-3 shrink-0">
-                  <span className="text-sm text-[#475569]">
-                    {COMMUNITY_PLACEHOLDERS.coordinatorCount}
+              <div className="flex flex-wrap items-center gap-4 text-xs text-[#475569] shrink-0">
+                <div className="flex items-center gap-1.5 font-medium">
+                  <Users className="w-4 h-4 text-[#0C2340]" />
+                  <span>
+                    <strong className="text-[#0C2340]">{stats.totalAlumni.toLocaleString('id-ID')}</strong> alumni terdata
                   </span>
-                  <Link
-                    href="/gabung"
-                    className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 rounded-lg bg-[#0C2340] hover:bg-[#16325C] text-white text-sm font-semibold transition-colors"
-                  >
-                    Daftar jadi anggota
-                    <ArrowRight className="w-4 h-4 text-[#F59E0B]" />
-                  </Link>
                 </div>
-              )}
+                <span className="text-[#CBD5E1]">·</span>
+                <div className="flex items-center gap-1.5 font-medium">
+                  <Award className="w-4 h-4 text-[#92400E]" />
+                  <span>
+                    <strong className="text-[#0C2340]">{stats.totalMentor}</strong> mentor
+                  </span>
+                </div>
+                <Link
+                  href="/gabung"
+                  className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 rounded-lg bg-[#0C2340] hover:bg-[#16325C] text-white text-sm font-semibold transition-colors ml-2"
+                >
+                  Daftar jadi anggota
+                  <ArrowRight className="w-4 h-4 text-[#F59E0B]" />
+                </Link>
+              </div>
             </div>
           </div>
         </PatternSection>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 w-full relative z-[1]">
           {/* Map & Regional Panel */}
-          <MapInteractiveSection />
+          <MapInteractiveSection stats={stats} />
 
           {/* Catatan Sumber & Privasi Ringkas */}
           <section className="mt-10 surface-card rounded-xl p-5 sm:p-6">
@@ -124,5 +118,13 @@ export default function PetaPage() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function PetaPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-slate-50" aria-hidden="true" />}>
+      <PetaContent />
+    </Suspense>
   );
 }

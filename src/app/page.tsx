@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { connection } from 'next/server';
 import { getCmsData } from '@/lib/cms-store';
+import { getCommunityStats } from '@/lib/community-stats';
 import { HomePageClient, type HomeCeritaItem } from '@/components/home/HomePageClient';
 
 const CERITA_IMAGES = [
@@ -11,7 +12,10 @@ const CERITA_IMAGES = [
 
 async function Beranda() {
   await connection();
-  const { landing, agendas } = await getCmsData();
+  const [{ landing, agendas }, stats] = await Promise.all([
+    getCmsData(),
+    getCommunityStats(),
+  ]);
 
   const cerita: HomeCeritaItem[] = agendas.slice(0, 3).map((agenda, index) => ({
     id: agenda.id,
@@ -24,7 +28,7 @@ async function Beranda() {
     href: '/kegiatan',
   }));
 
-  return <HomePageClient landing={landing} cerita={cerita} />;
+  return <HomePageClient landing={landing} cerita={cerita} stats={stats} />;
 }
 
 export default function HomePage() {

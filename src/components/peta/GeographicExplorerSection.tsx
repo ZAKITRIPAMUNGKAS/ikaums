@@ -7,6 +7,7 @@ import RegionFilterBar from './RegionFilterBar';
 import PetaContextualPanel from './PetaContextualPanel';
 import MobileRegionList from './MobileRegionList';
 import MapLoadingSkeleton from './MapLoadingSkeleton';
+import type { CommunityStats } from '@/lib/community-stats';
 
 const MapLibreExplorer = dynamic(
   () => import('./MapLibreExplorer'),
@@ -16,12 +17,19 @@ const MapLibreExplorer = dynamic(
   }
 );
 
-export default function GeographicExplorerSection() {
+interface GeographicExplorerSectionProps {
+  stats?: CommunityStats;
+}
+
+export default function GeographicExplorerSection({ stats }: GeographicExplorerSectionProps) {
   const [selectedRegionId, setSelectedRegionId] = useState<string>('jkt-selatan');
 
   const selectedRegion = REGIONS_METADATA.find(
     (r) => r.regionId === selectedRegionId
   ) || REGIONS_METADATA[0];
+
+  const regionCounts = stats?.regionCounts ?? {};
+  const currentRegionCount = regionCounts[selectedRegion.regionId] ?? 0;
 
   return (
     <div className="space-y-5 w-full">
@@ -29,6 +37,7 @@ export default function GeographicExplorerSection() {
       <RegionFilterBar
         selectedRegionId={selectedRegionId}
         onSelectRegion={setSelectedRegionId}
+        regionCounts={regionCounts}
       />
 
       {/* 2. Workspace Utama */}
@@ -38,12 +47,13 @@ export default function GeographicExplorerSection() {
           <MapLibreExplorer
             selectedRegionId={selectedRegionId}
             onSelectRegion={setSelectedRegionId}
+            regionCounts={regionCounts}
           />
         </div>
 
         {/* Panel Detail Wilayah (~33% lebar desktop) */}
         <div className="lg:col-span-4 w-full">
-          <PetaContextualPanel region={selectedRegion} />
+          <PetaContextualPanel region={selectedRegion} count={currentRegionCount} />
         </div>
       </div>
 
@@ -52,6 +62,7 @@ export default function GeographicExplorerSection() {
         <MobileRegionList
           selectedRegionId={selectedRegionId}
           onSelectRegion={setSelectedRegionId}
+          regionCounts={regionCounts}
         />
       </div>
     </div>

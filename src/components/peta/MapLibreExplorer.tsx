@@ -19,11 +19,13 @@ if (typeof window !== 'undefined') {
 interface MapLibreExplorerProps {
   selectedRegionId: string;
   onSelectRegion: (regionId: string) => void;
+  regionCounts?: Record<string, number>;
 }
 
 export default function MapLibreExplorer({
   selectedRegionId,
   onSelectRegion,
+  regionCounts = {},
 }: MapLibreExplorerProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<Map | null>(null);
@@ -32,9 +34,15 @@ export default function MapLibreExplorer({
 
   const initialSelectedRef = useRef(selectedRegionId);
   const onSelectRef = useRef(onSelectRegion);
+  const regionCountsRef = useRef(regionCounts);
+
   useEffect(() => {
     onSelectRef.current = onSelectRegion;
   }, [onSelectRegion]);
+
+  useEffect(() => {
+    regionCountsRef.current = regionCounts;
+  }, [regionCounts]);
 
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
@@ -165,14 +173,13 @@ export default function MapLibreExplorer({
             : 'bg-white/95 text-[#0C1222] border-[#CBD5E1] hover:bg-[#F8F9FA] hover:border-[#94A3B8]'
         }`;
 
-        if (IS_DEMO_MODE) {
-          const countSpan = document.createElement('span');
-          countSpan.className = `text-xs font-bold ${
-            region.regionId === initialSelectedRef.current ? 'text-[#F59E0B]' : 'text-[#92400E]'
-          }`;
-          countSpan.textContent = String(region.count);
-          btn.appendChild(countSpan);
-        }
+        const countSpan = document.createElement('span');
+        countSpan.className = `felt-count-span text-xs font-bold ${
+          region.regionId === initialSelectedRef.current ? 'text-[#F59E0B]' : 'text-[#92400E]'
+        }`;
+        const countVal = regionCountsRef.current?.[region.regionId] ?? 0;
+        countSpan.textContent = String(countVal);
+        btn.appendChild(countSpan);
 
         const labelSpan = document.createElement('span');
         labelSpan.className = 'text-xs tracking-tight';
@@ -250,6 +257,15 @@ export default function MapLibreExplorer({
       const rId = parent?.dataset.regionId;
       const isSelected = rId === selectedRegionId;
 
+      const countSpan = btn.querySelector('.felt-count-span');
+      if (countSpan && rId) {
+        const c = regionCounts?.[rId] ?? 0;
+        countSpan.textContent = String(c);
+        countSpan.className = `felt-count-span text-xs font-bold ${
+          isSelected ? 'text-[#F59E0B]' : 'text-[#92400E]'
+        }`;
+      }
+
       if (isSelected) {
         btn.className =
           'felt-marker-btn flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-semibold shadow-md transition-all duration-200 border cursor-pointer select-none bg-[#0B1D3A] text-white border-[#D97706] ring-2 ring-[#D97706]/50 scale-105';
@@ -269,7 +285,7 @@ export default function MapLibreExplorer({
         essential: true,
       });
     }
-  }, [selectedRegionId, isMapLoaded]);
+  }, [selectedRegionId, isMapLoaded, regionCounts]);
 
   const handleZoomIn = () => mapRef.current?.zoomIn({ duration: 300 });
   const handleZoomOut = () => mapRef.current?.zoomOut({ duration: 300 });
@@ -320,31 +336,12 @@ export default function MapLibreExplorer({
       </div>
 
       <div className="absolute bottom-3 left-3 sm:bottom-3.5 sm:left-3.5 z-10 bg-white/95 backdrop-blur-xs border border-slate-200 rounded-lg p-2.5 sm:p-3 shadow-sm max-w-[250px]">
-        {IS_DEMO_MODE ? (
-          <>
-            <div className="flex items-center justify-between gap-3 mb-1.5">
-              <span className="text-xs font-semibold text-[#0C2340]">
-                Contoh Sebaran Alumni
-              </span>
-            </div>
-            <div className="grid grid-cols-4 gap-1 h-2 rounded overflow-hidden mb-1">
-              <div className="bg-[#CBD8E6]" />
-              <div className="bg-[#98B5D3]" />
-              <div className="bg-[#4B76A6]" />
-              <div className="bg-[#102A54]" />
-            </div>
-            <div className="flex items-center justify-between text-xs text-[#475569] font-medium">
-              <span>70</span>
-              <span>100</span>
-              <span>125</span>
-              <span className="font-bold text-[#0C2340]">184+</span>
-            </div>
-          </>
-        ) : (
-          <span className="block text-xs font-semibold text-[#0C2340] leading-snug">
-            Cakupan 9 Wilayah Jabodetabek · Angka per wilayah tampil setelah data terverifikasi.
-          </span>
-        )}
+        <span className="block text-xs font-semibold text-[#0C2340] leading-snug">
+          Cakupan 9 Wilayah Jabodetabek
+        </span>
+        <span className="block text-xs text-[#475569] mt-1 leading-snug">
+          Angka pada pin menunjukkan alumni terverifikasi di tiap wilayah.
+        </span>
 
         <span className="block text-xs text-[#475569] mt-2 leading-snug border-t border-slate-200 pt-1.5">
           Batas wilayah resmi BPS · geoBoundaries (CC BY 3.0 IGO).
