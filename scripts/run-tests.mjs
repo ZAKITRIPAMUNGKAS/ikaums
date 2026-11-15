@@ -477,3 +477,66 @@ test('Statistik alumni dan wilayah organik menghasilkan 0 saat pendaftar kosong'
   assert.equal(approvedStats.regionCounts['bekasi'], 1);
   assert.equal(approvedStats.regionCounts['depok'], 0);
 });
+
+test('Masa aktif sesi (session life) bertahan lama dan mendukung perpanjangan otomatis (sliding session)', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const typescript = await import('typescript');
+  const [sourceAuth, sourceProxy, sourceRoute] = await Promise.all([
+    readFile(new URL('../src/lib/server-auth.ts', import.meta.url), 'utf8'),
+    readFile(new URL('../src/proxy.ts', import.meta.url), 'utf8'),
+    readFile(new URL('../src/app/api/auth/route.ts', import.meta.url), 'utf8'),
+  ]);
+
+  const compiled = typescript.transpileModule(sourceAuth, {
+    compilerOptions: { module: typescript.ModuleKind.CommonJS, target: typescript.ScriptTarget.ES2022 },
+  }).outputText;
+
+  const loadAuthModule = (customEnv = {}) => {
+    const moduleObj = { exports: {} };
+    const mockRequire = (id) => {
+      if (id === 'next/headers') return { cookies: async () => ({ get: () => undefined }) };
+      return {};
+    };
+    new Function('exports', 'module', 'require', 'process', compiled)(
+      moduleObj.exports,
+      moduleObj,
+      mockRequire,
+      { env: { ...process.env, ...customEnv } }
+    );
+    return moduleObj.exports;
+  };
+
+  const defaultAuth = loadAuthModule({});
+  assert.equal(defaultAuth.DEFAULT_SESSION_MAX_AGE_DAYS, 30);
+  assert.equal(defaultAuth.getSessionMaxAgeDays(), 30);
+  assert.equal(defaultAuth.getSessionMaxAgeSeconds(), 30 * 24 * 3600);
+
+  // Dapat dikonfigurasi via AUTH_SESSION_MAX_AGE_DAYS
+  const customAuth = loadAuthModule({ AUTH_SESSION_MAX_AGE_DAYS: '60' });
+  assert.equal(customAuth.getSessionMaxAgeDays(), 60);
+  assert.equal(customAuth.getSessionMaxAgeSeconds(), 60 * 24 * 3600);
+
+  // Cookie options
+  const cookieOpts = defaultAuth.getSessionCookieOptions();
+  assert.equal(cookieOpts.name, defaultAuth.SESSION_COOKIE_NAME);
+  assert.equal(cookieOpts.httpOnly, true);
+  assert.equal(cookieOpts.path, '/');
+  assert.equal(cookieOpts.sameSite, 'lax');
+  assert.equal(cookieOpts.maxAge, 30 * 24 * 3600);
+  assert.ok(cookieOpts.expires instanceof Date);
+  assert.ok(cookieOpts.expires.getTime() > Date.now());
+
+  // Sliding session detection
+  const now = Math.floor(Date.now() / 1000);
+  const freshSession = { sub: 'user-1', role: 'member', exp: now + 28 * 24 * 3600 };
+  assert.equal(defaultAuth.isSessionExpiringSoon(freshSession), false);
+
+  const expiringSession = { sub: 'user-1', role: 'member', exp: now + 5 * 24 * 3600 };
+  assert.equal(defaultAuth.isSessionExpiringSoon(expiringSession), true);
+
+  // Verifikasi proxy dan route memakai sliding session
+  assert.ok(sourceProxy.includes('isSessionExpiringSoon'));
+  assert.ok(sourceProxy.includes('signSessionToken'));
+  assert.ok(sourceRoute.includes('isSessionExpiringSoon'));
+  assert.ok(sourceRoute.includes('getSessionMaxAgeSeconds'));
+});

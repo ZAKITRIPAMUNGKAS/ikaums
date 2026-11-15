@@ -1,7 +1,7 @@
 import { type EmailOtpType } from '@supabase/supabase-js';
 import { NextRequest, NextResponse } from 'next/server';
 import { findApprovedPendaftarByEmail } from '@/lib/pendaftaran-store';
-import { signSessionToken, SESSION_COOKIE_NAME } from '@/lib/server-auth';
+import { signSessionToken, getSessionCookieOptions } from '@/lib/server-auth';
 import { getSupabaseAuthClient } from '@/lib/supabase';
 
 function loginRedirect(request: NextRequest, error?: string): NextResponse {
@@ -38,13 +38,8 @@ export async function GET(request: NextRequest) {
 
   const response = NextResponse.redirect(new URL('/app', request.url));
   response.cookies.set({
-    name: SESSION_COOKIE_NAME,
+    ...getSessionCookieOptions(),
     value: token,
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 7 * 24 * 3600,
   });
   return response;
 }

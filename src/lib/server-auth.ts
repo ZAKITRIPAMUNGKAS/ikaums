@@ -2,6 +2,12 @@ import { cookies } from 'next/headers';
 
 export const SESSION_COOKIE_NAME = 'ikaums_session';
 
+/**
+ * Masa aktif default sesi cookie dalam hari (30 hari).
+ * Dapat dikonfigurasi lebih panjang melalui env `AUTH_SESSION_MAX_AGE_DAYS`.
+ */
+export const DEFAULT_SESSION_MAX_AGE_DAYS = 30;
+
 export type SessionRole = 'member' | 'admin';
 
 export interface ServerSession {
@@ -10,7 +16,65 @@ export interface ServerSession {
   exp: number;
 }
 
+export interface SessionCookieOptions {
+  name: string;
+  httpOnly: boolean;
+  secure: boolean;
+  sameSite: 'lax' | 'strict' | 'none';
+  path: string;
+  maxAge: number;
+  expires: Date;
+}
+
 const textEncoder = new TextEncoder();
+
+/**
+ * Mendapatkan durasi masa aktif sesi dalam satuan hari dari konfigurasi env atau default.
+ */
+export function getSessionMaxAgeDays(): number {
+  const envVal = process.env.AUTH_SESSION_MAX_AGE_DAYS?.replace(/^[\uFEFF\s]+|[\uFEFF\s]+$/g, '');
+  if (envVal) {
+    const parsed = Number(envVal);
+    if (!Number.isNaN(parsed) && parsed > 0 && Number.isFinite(parsed)) {
+      return Math.floor(parsed);
+    }
+  }
+  return DEFAULT_SESSION_MAX_AGE_DAYS;
+}
+
+/**
+ * Mendapatkan durasi masa aktif sesi dalam satuan detik.
+ */
+export function getSessionMaxAgeSeconds(): number {
+  return getSessionMaxAgeDays() * 24 * 3600;
+}
+
+/**
+ * Opsi standar cookie sesi HTTP-only yang persisten dan aman.
+ */
+export function getSessionCookieOptions(maxAgeSeconds?: number): SessionCookieOptions {
+  const maxAge = maxAgeSeconds ?? getSessionMaxAgeSeconds();
+  return {
+    name: SESSION_COOKIE_NAME,
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/',
+    maxAge,
+    expires: new Date(Date.now() + maxAge * 1000),
+  };
+}
+
+/**
+ * Mengecek apakah token sesi mendekati kedaluwarsa (misal sisa < 50% dari total masa aktif)
+ * sehingga layak diperpanjang secara otomatis (sliding session).
+ */
+export function isSessionExpiringSoon(session: ServerSession, thresholdRatio = 0.5): boolean {
+  const now = Math.floor(Date.now() / 1000);
+  const remaining = session.exp - now;
+  const totalDuration = getSessionMaxAgeSeconds();
+  return remaining > 0 && remaining < totalDuration * thresholdRatio;
+}
 
 export function getSessionSecret(): string | null {
   const secret = process.env.AUTH_SESSION_SECRET?.replace(/^[\uFEFF\s]+|[\uFEFF\s]+$/g, '');
@@ -64,7 +128,7 @@ export async function signSessionToken(payload: {
   const secret = getSessionSecret();
   if (!secret) return null;
 
-  const exp = payload.exp ?? Math.floor(Date.now() / 1000) + 7 * 24 * 3600; // 7 hari
+  const exp = payload.exp ?? Math.floor(Date.now() / 1000) + getSessionMaxAgeSeconds();
   const sessionData: ServerSession = {
     sub: payload.sub,
     role: payload.role,

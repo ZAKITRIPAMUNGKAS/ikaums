@@ -3,6 +3,9 @@ import {
   getServerSession,
   signSessionToken,
   SESSION_COOKIE_NAME,
+  getSessionMaxAgeSeconds,
+  getSessionCookieOptions,
+  isSessionExpiringSoon,
   type SessionRole,
 } from '@/lib/server-auth';
 import { IS_DEMO_MODE } from '@/lib/config';
@@ -39,10 +42,33 @@ function recordFailedLogin(key: string): void {
 
 export async function GET() {
   const session = await getServerSession();
-  return NextResponse.json({
-    authenticated: session !== null,
+  if (!session) {
+    return NextResponse.json({
+      authenticated: false,
+      session: null,
+    });
+  }
+
+  const response = NextResponse.json({
+    authenticated: true,
     session,
   });
+
+  // Perpanjang sesi otomatis jika masa aktif tersisa kurang dari separuh (sliding session)
+  if (isSessionExpiringSoon(session)) {
+    const refreshedToken = await signSessionToken({
+      sub: session.sub,
+      role: session.role,
+    });
+    if (refreshedToken) {
+      response.cookies.set({
+        ...getSessionCookieOptions(),
+        value: refreshedToken,
+      });
+    }
+  }
+
+  return response;
 }
 
 export async function POST(request: NextRequest) {
@@ -53,6 +79,13 @@ export async function POST(request: NextRequest) {
     if (action === 'logout') {
       const response = NextResponse.json({ success: true, message: 'Berhasil keluar' });
       response.cookies.delete(SESSION_COOKIE_NAME);
+      response.cookies.set({
+        name: SESSION_COOKIE_NAME,
+        value: '',
+        path: '/',
+        maxAge: 0,
+        expires: new Date(0),
+      });
       return response;
     }
 
@@ -135,9 +168,13 @@ export async function POST(request: NextRequest) {
         }
       }
 
+      const maxAge = getSessionMaxAgeSeconds();
+      const exp = Math.floor(Date.now() / 1000) + maxAge;
+
       const token = await signSessionToken({
         sub: sessionSub,
         role,
+        exp,
       });
 
       if (!token) {
@@ -155,16 +192,12 @@ export async function POST(request: NextRequest) {
         sub: sessionSub,
         nama: memberName,
         isDemo: IS_DEMO_MODE,
+        exp,
       });
 
       response.cookies.set({
-        name: SESSION_COOKIE_NAME,
+        ...getSessionCookieOptions(maxAge),
         value: token,
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        path: '/',
-        maxAge: 7 * 24 * 3600, // 7 hari
       });
 
       return response;

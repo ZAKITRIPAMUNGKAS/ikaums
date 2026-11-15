@@ -39,6 +39,12 @@ import {
   EyeOff,
   Globe,
   Image as ImageIcon,
+  ChevronLeft,
+  ChevronRight,
+  Clock,
+  ArrowRight,
+  X,
+  ExternalLink,
 } from 'lucide-react';
 import type { AgendaItem, PengurusData, KomunitasSettings, LandingContent, BeritaItem } from '@/lib/cms-store';
 import { type LokerItem } from '@/data/loker';
@@ -109,6 +115,37 @@ export default function AdminDashboardClient() {
   const [activeTab, setActiveTab] = useState<'pendaftar' | 'agenda' | 'loker' | 'berita' | 'pengurus' | 'landing' | 'settings'>('pendaftar');
   const [toastMsg, setToastMsg] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Tab horizontal scroll support
+  const tabScrollRef = React.useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  const checkTabScroll = () => {
+    const el = tabScrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 6);
+    setCanScrollRight(el.scrollLeft < el.scrollWidth - el.clientWidth - 6);
+  };
+
+  useEffect(() => {
+    const timer = setTimeout(checkTabScroll, 150);
+    window.addEventListener('resize', checkTabScroll);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', checkTabScroll);
+    };
+  }, [activeTab]);
+
+  const scrollTabs = (direction: 'left' | 'right') => {
+    const el = tabScrollRef.current;
+    if (!el) return;
+    el.scrollBy({
+      left: direction === 'left' ? -280 : 280,
+      behavior: 'smooth',
+    });
+    setTimeout(checkTabScroll, 320);
+  };
 
   // 1. Data Pendaftar
   const [pendaftarList, setPendaftarList] = useState<PendaftarItem[]>([]);
@@ -885,13 +922,65 @@ export default function AdminDashboardClient() {
     return true;
   });
 
+  const tabItems = [
+    {
+      id: 'pendaftar' as const,
+      label: 'Pendaftar & Anggota',
+      icon: Users,
+      badgeText: countMenunggu > 0 ? `${countMenunggu} baru` : `${pendaftarList.length}`,
+      badgeColor:
+        countMenunggu > 0
+          ? 'bg-amber-100 text-amber-900 border border-amber-300 font-bold'
+          : 'bg-slate-100 text-[#0C2340]',
+    },
+    {
+      id: 'agenda' as const,
+      label: 'Jadwal Kopdar',
+      icon: Calendar,
+      badgeText: String(agendaList.length),
+      badgeColor: 'bg-slate-100 text-[#0C2340]',
+    },
+    {
+      id: 'loker' as const,
+      label: 'Lowongan Kerja',
+      icon: Briefcase,
+      badgeText: String(lokerList.length),
+      badgeColor: 'bg-emerald-100 text-emerald-800 font-bold',
+    },
+    {
+      id: 'berita' as const,
+      label: 'Dokumentasi & Berita',
+      icon: Camera,
+      badgeText: String(beritaList.length),
+      badgeColor: 'bg-amber-100 text-amber-900 font-bold',
+    },
+    {
+      id: 'pengurus' as const,
+      label: 'Pengurus & Korwil',
+      icon: ShieldCheck,
+      badgeText: '9 Korwil',
+      badgeColor: 'bg-slate-100 text-slate-700',
+    },
+    {
+      id: 'landing' as const,
+      label: 'Konten Beranda',
+      icon: LayoutTemplate,
+    },
+    {
+      id: 'settings' as const,
+      label: 'Kontak & Komunitas',
+      icon: Settings,
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-slate-50 text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
       <Navbar />
 
-      <main className="flex-grow max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-9 w-full space-y-5 sm:space-y-8">
-        <section className="overflow-hidden rounded-xl sm:rounded-2xl bg-[#0C2340] text-white shadow-[0_18px_45px_-30px_rgba(12,35,64,0.8)]" aria-labelledby="admin-dashboard-title">
-          <div className="relative px-5 py-5 sm:px-8 sm:py-8">
+      <main className="flex-grow max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 w-full space-y-6">
+        {/* Header / Hero Dashboard */}
+        <section className="overflow-hidden rounded-2xl bg-[#0C2340] text-white shadow-xl relative" aria-labelledby="admin-dashboard-title">
+          <div className="relative px-5 py-5 sm:px-7 sm:py-6">
             <Image
               src="/images/ums-campus-silhouette.png"
               alt=""
@@ -903,91 +992,261 @@ export default function AdminDashboardClient() {
             />
             <div aria-hidden="true" className="absolute -right-20 -top-24 h-64 w-64 rounded-full border border-white/10 bg-white/[0.03]" />
             <div aria-hidden="true" className="absolute right-20 top-10 h-20 w-20 rounded-full border border-[#F59E0B]/25" />
-            <div className="relative flex flex-col items-stretch gap-1.5 border-b border-white/15 pb-3 text-xs sm:flex-row sm:items-center sm:justify-between sm:gap-x-4 sm:gap-y-2 sm:pb-4 sm:text-sm">
+
+            {/* Top Bar: Breadcrumb + Quick Tools */}
+            <div className="relative flex flex-col items-stretch gap-2 border-b border-white/15 pb-3 text-xs sm:flex-row sm:items-center sm:justify-between sm:text-sm">
               <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-slate-300">
-                <Link href="/" className="inline-flex min-h-[44px] items-center font-medium transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+                <Link href="/" className="inline-flex min-h-[36px] items-center font-medium transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
                   Beranda
                 </Link>
                 <span aria-hidden="true" className="text-slate-500">/</span>
-                <span className="font-semibold text-white">Pusat Kelola Data</span>
+                <span className="font-semibold text-white">Pusat Data Pengurus</span>
               </nav>
-              <div className="flex items-center gap-1 border-t border-white/10 pt-1.5 sm:border-0 sm:pt-0 sm:gap-2">
-                <a href="/api/pendaftaran?format=csv" download className="inline-flex min-h-[44px] items-center gap-1.5 rounded-lg px-2.5 font-semibold text-slate-200 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
-                  <Download className="h-3.5 w-3.5" /> Unduh CSV
+              <div className="flex items-center gap-2">
+                <a
+                  href="/api/pendaftaran?format=csv"
+                  download
+                  className="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg border border-white/15 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-200 transition-colors hover:bg-white/15 hover:text-white"
+                  title="Unduh data seluruh anggota dalam format CSV"
+                >
+                  <Download className="h-3.5 w-3.5 text-amber-300" />
+                  <span>Unduh CSV</span>
                 </a>
-                <button type="button" onClick={handleLogout} className="inline-flex min-h-[44px] items-center gap-1.5 rounded-lg px-2.5 font-semibold text-rose-200 transition-colors hover:bg-rose-400/15 hover:text-rose-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white cursor-pointer">
-                  <LogOut className="h-3.5 w-3.5" /> Keluar
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg border border-rose-400/20 bg-rose-500/10 px-3 py-1 text-xs font-semibold text-rose-200 transition-colors hover:bg-rose-500/20 hover:text-rose-100 cursor-pointer"
+                >
+                  <LogOut className="h-3.5 w-3.5" />
+                  <span>Keluar</span>
                 </button>
               </div>
             </div>
 
-            <header className="relative grid gap-4 pt-5 sm:gap-6 sm:pt-7 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
-              <div className="max-w-2xl">
-                <div className="mb-2.5 inline-flex items-center gap-2 rounded-full border border-[#F59E0B]/35 bg-[#F59E0B]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#FCD34D] sm:mb-3 sm:text-[11px] sm:tracking-[0.14em]">
-                  <ShieldCheck className="h-3.5 w-3.5" /> Sekretariat &amp; Koordinasi Wilayah
+            {/* Main Header Content & Quick Actions */}
+            <header className="relative grid gap-5 pt-4 sm:pt-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
+              <div className="max-w-2xl space-y-1.5">
+                <div className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/35 bg-amber-400/10 px-3 py-0.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-amber-300">
+                  <ShieldCheck className="h-3.5 w-3.5 text-amber-400" />
+                  <span>Sesi Pengurus · Sekretariat Jabodetabek</span>
                 </div>
-                <h1 id="admin-dashboard-title" className="text-[28px] font-extrabold leading-[1.1] tracking-tight sm:text-4xl">Pusat Data IKA UMS Jabodetabek</h1>
-                <p className="mt-2.5 max-w-xl text-sm leading-[1.45] text-slate-300 sm:mt-3 sm:text-base sm:leading-6">
-                  Pantau pekerjaan organisasi, tangani alumni baru, dan kelola layanan untuk seluruh jaringan Jabodetabek.
+                <h1 id="admin-dashboard-title" className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white leading-tight">
+                  Pusat Kelola Data IKA UMS
+                </h1>
+                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-xl">
+                  Pantau verifikasi anggota baru, jadwal kopdar wilayah, info lowongan kerja, liputan kegiatan, dan kepengurusan 9 korwil.
                 </p>
                 {isLoading && (
-                  <span className="mt-4 inline-flex items-center gap-2 text-xs font-medium text-slate-300">
-                    <Loader2 className="h-3.5 w-3.5 animate-spin text-[#FCD34D]" /> Memperbarui data...
+                  <span className="inline-flex items-center gap-2 text-xs font-medium text-amber-300 pt-1">
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" /> Memperbarui data real-time...
                   </span>
                 )}
               </div>
 
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:flex lg:flex-wrap lg:justify-end">
-            <button
-              type="button"
-              onClick={() => setManualAlumniOpen(true)}
-              className="col-span-2 sm:col-span-1 inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg bg-white px-4 py-2 text-xs font-bold text-[#0C2340] shadow-sm transition-colors hover:bg-slate-100 sm:text-sm cursor-pointer"
-            >
-              <UserPlus className="w-4 h-4" />
-              + Tambah Alumni
-            </button>
-            <button
-              type="button"
-              onClick={() => openAgendaCreate()}
-              className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-2 py-2 text-xs font-semibold text-white transition-colors hover:bg-white/20 sm:px-4 sm:text-sm cursor-pointer"
-            >
-              <Calendar className="w-4 h-4" />
-              + Jadwal Kopdar
-            </button>
-            <button
-              type="button"
-              onClick={() => openLokerCreate()}
-              className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-2 py-2 text-xs font-semibold text-white transition-colors hover:bg-white/20 sm:px-4 sm:text-sm cursor-pointer"
-            >
-              <Briefcase className="w-4 h-4" />
-              + Info Loker
-            </button>
-            <button
-              type="button"
-              onClick={() => openBeritaCreate()}
-              className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg border border-amber-400/40 bg-amber-400/20 px-2.5 py-2 text-xs font-bold text-[#FCD34D] transition-colors hover:bg-amber-400/30 sm:px-4 sm:text-sm cursor-pointer"
-            >
-              <Camera className="w-4 h-4" />
-              + Dokumentasi / Berita
-            </button>
+              {/* 4 Action Buttons Cohesively Styled */}
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 lg:flex lg:flex-wrap lg:items-center lg:justify-end">
+                <button
+                  type="button"
+                  onClick={() => setManualAlumniOpen(true)}
+                  className="inline-flex min-h-[42px] items-center justify-center gap-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 px-4 py-2 text-xs sm:text-sm font-bold shadow-sm transition-all cursor-pointer"
+                >
+                  <UserPlus className="w-4 h-4 text-slate-950" />
+                  <span>+ Tambah Alumni</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => openAgendaCreate()}
+                  className="inline-flex min-h-[42px] items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 text-white px-3.5 py-2 text-xs sm:text-sm font-semibold backdrop-blur-xs transition-all cursor-pointer"
+                >
+                  <Calendar className="w-4 h-4 text-amber-300" />
+                  <span>+ Jadwal Kopdar</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => openLokerCreate()}
+                  className="inline-flex min-h-[42px] items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 text-white px-3.5 py-2 text-xs sm:text-sm font-semibold backdrop-blur-xs transition-all cursor-pointer"
+                >
+                  <Briefcase className="w-4 h-4 text-emerald-300" />
+                  <span>+ Info Loker</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => openBeritaCreate()}
+                  className="inline-flex min-h-[42px] items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 text-white px-3.5 py-2 text-xs sm:text-sm font-semibold backdrop-blur-xs transition-all cursor-pointer"
+                >
+                  <Camera className="w-4 h-4 text-sky-300" />
+                  <span>+ Dokumentasi</span>
+                </button>
               </div>
             </header>
           </div>
         </section>
 
-        {/* Kartu Statistik Cepat */}
-        <section className="grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-[1.45fr_repeat(4,minmax(0,1fr))]" aria-label="Ringkasan data">
-          <div className="col-span-2 rounded-2xl border border-amber-200 bg-amber-50 p-4 sm:p-5">
-            <div className="flex items-start justify-between gap-3">
-              <div><p className="text-xs font-bold uppercase tracking-wider text-amber-900">Prioritas hari ini</p><p className="mt-1 text-sm text-amber-800">Alumni menunggu verifikasi</p></div>
-              <span className="grid h-9 min-w-9 place-items-center rounded-full bg-amber-500 px-2 text-sm font-extrabold text-white">{countMenunggu}</span>
+        {/* 5 Kartu Statistik Ringkasan (Responsive Grid: 5 Kolom Desktop, Bebas Gantung!) */}
+        <section className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4" aria-label="Ringkasan data pengurus">
+          {/* Card 1: Prioritas Verifikasi */}
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => { setActiveTab('pendaftar'); setStatusFilter('menunggu'); }}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { setActiveTab('pendaftar'); setStatusFilter('menunggu'); } }}
+            className={`col-span-2 sm:col-span-1 lg:col-span-1 rounded-2xl border p-4 sm:p-4.5 flex flex-col justify-between transition-all cursor-pointer group shadow-2xs hover:shadow-md ${
+              countMenunggu > 0
+                ? 'border-amber-300 bg-linear-to-br from-amber-50 to-amber-100/70 hover:border-amber-400'
+                : 'border-slate-200 bg-white hover:border-[#0C2340]/30 hover:bg-slate-50/70'
+            }`}
+          >
+            <div className="flex items-center justify-between gap-2">
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-amber-900">
+                <Clock className="w-3.5 h-3.5 text-amber-600" />
+                Prioritas Verifikasi
+              </span>
+              {countMenunggu > 0 ? (
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500" />
+                </span>
+              ) : (
+                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+              )}
             </div>
-            <button type="button" onClick={() => setActiveTab('pendaftar')} className="mt-4 inline-flex min-h-[44px] items-center rounded-lg bg-[#0C2340] px-3 text-xs font-bold text-white transition-colors hover:bg-[#08182E] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] cursor-pointer">Tinjau pendaftar</button>
+            <div className="mt-3">
+              <p className={`text-2xl sm:text-3xl font-extrabold ${countMenunggu > 0 ? 'text-amber-950' : 'text-[#0C2340]'}`}>
+                {countMenunggu}
+              </p>
+              <p className={`mt-0.5 text-xs font-medium ${countMenunggu > 0 ? 'text-amber-800' : 'text-slate-500'}`}>
+                {countMenunggu > 0 ? 'alumni menunggu tinjauan' : 'semua pendaftar terverifikasi'}
+              </p>
+            </div>
+            <div className="mt-3.5 pt-2 border-t border-amber-200/60 flex items-center justify-between text-xs font-bold text-amber-900 group-hover:text-amber-950">
+              <span>{countMenunggu > 0 ? 'Tinjau Sekarang' : 'Lihat Pendaftar'}</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+            </div>
           </div>
-          <div className="min-h-[132px] rounded-2xl border border-slate-200 bg-white p-3.5 sm:p-4"><p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">Anggota</p><p className="mt-2 text-2xl font-extrabold text-[#0C2340]">{pendaftarList.length}</p><p className="mt-1 text-xs font-medium text-emerald-700">{countDisetujui} terverifikasi</p></div>
-          <div className="min-h-[132px] rounded-2xl border border-slate-200 bg-white p-3.5 sm:p-4"><p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">Kopdar aktif</p><p className="mt-2 text-2xl font-extrabold text-[#0C2340]">{agendaList.length}</p><p className="mt-1 text-xs text-slate-500">agenda wilayah</p></div>
-          <div className="min-h-[132px] rounded-2xl border border-slate-200 bg-white p-3.5 sm:p-4"><p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">Lowongan aktif</p><p className="mt-2 text-2xl font-extrabold text-emerald-700">{lokerList.length}</p><p className="mt-1 text-xs text-slate-500">peluang terbuka</p></div>
-          <div className="min-h-[132px] rounded-2xl border border-slate-200 bg-white p-3.5 sm:p-4"><p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">Cakupan</p><p className="mt-2 text-2xl font-extrabold text-[#0C2340]">{WILAYAH_JABODETABEK.length}</p><p className="mt-1 text-xs text-slate-500">kota &amp; kabupaten</p></div>
+
+          {/* Card 2: Total Anggota */}
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => { setActiveTab('pendaftar'); setStatusFilter('semua'); }}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { setActiveTab('pendaftar'); setStatusFilter('semua'); } }}
+            className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-4.5 flex flex-col justify-between transition-all cursor-pointer group shadow-2xs hover:border-[#0C2340]/30 hover:shadow-md"
+          >
+            <div className="flex items-center justify-between gap-2">
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                <Users className="w-3.5 h-3.5 text-sky-600" />
+                Total Anggota
+              </span>
+              <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                Aktif
+              </span>
+            </div>
+            <div className="mt-3">
+              <p className="text-2xl sm:text-3xl font-extrabold text-[#0C2340]">
+                {pendaftarList.length}
+              </p>
+              <p className="mt-0.5 text-xs font-medium text-emerald-700">
+                {countDisetujui} terverifikasi
+              </p>
+            </div>
+            <div className="mt-3.5 pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-[#0C2340] group-hover:text-amber-600">
+              <span>Kelola Anggota</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </div>
+
+          {/* Card 3: Kopdar Aktif */}
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => setActiveTab('agenda')}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setActiveTab('agenda'); }}
+            className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-4.5 flex flex-col justify-between transition-all cursor-pointer group shadow-2xs hover:border-[#0C2340]/30 hover:shadow-md"
+          >
+            <div className="flex items-center justify-between gap-2">
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                <Calendar className="w-3.5 h-3.5 text-amber-600" />
+                Kopdar Aktif
+              </span>
+              <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full">
+                Wilayah
+              </span>
+            </div>
+            <div className="mt-3">
+              <p className="text-2xl sm:text-3xl font-extrabold text-[#0C2340]">
+                {agendaList.length}
+              </p>
+              <p className="mt-0.5 text-xs font-medium text-slate-500">
+                agenda temu alumni
+              </p>
+            </div>
+            <div className="mt-3.5 pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-[#0C2340] group-hover:text-amber-600">
+              <span>Kelola Jadwal</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </div>
+
+          {/* Card 4: Lowongan Kerja */}
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => setActiveTab('loker')}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setActiveTab('loker'); }}
+            className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-4.5 flex flex-col justify-between transition-all cursor-pointer group shadow-2xs hover:border-[#0C2340]/30 hover:shadow-md"
+          >
+            <div className="flex items-center justify-between gap-2">
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                <Briefcase className="w-3.5 h-3.5 text-emerald-600" />
+                Lowongan Kerja
+              </span>
+              <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                Peluang
+              </span>
+            </div>
+            <div className="mt-3">
+              <p className="text-2xl sm:text-3xl font-extrabold text-emerald-700">
+                {lokerList.length}
+              </p>
+              <p className="mt-0.5 text-xs font-medium text-slate-500">
+                peluang karier aktif
+              </p>
+            </div>
+            <div className="mt-3.5 pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-[#0C2340] group-hover:text-amber-600">
+              <span>Kelola Loker</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </div>
+
+          {/* Card 5: Cakupan Korwil */}
+          <div
+            role="button"
+            tabIndex={0}
+            onClick={() => setActiveTab('pengurus')}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setActiveTab('pengurus'); }}
+            className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-4.5 flex flex-col justify-between transition-all cursor-pointer group shadow-2xs hover:border-[#0C2340]/30 hover:shadow-md"
+          >
+            <div className="flex items-center justify-between gap-2">
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                <MapPin className="w-3.5 h-3.5 text-indigo-600" />
+                Cakupan Korwil
+              </span>
+              <span className="text-[11px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-200">
+                Jabodetabek
+              </span>
+            </div>
+            <div className="mt-3">
+              <p className="text-2xl sm:text-3xl font-extrabold text-[#0C2340]">
+                {WILAYAH_JABODETABEK.length}
+              </p>
+              <p className="mt-0.5 text-xs font-medium text-slate-500">
+                9 kota &amp; kabupaten
+              </p>
+            </div>
+            <div className="mt-3.5 pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-[#0C2340] group-hover:text-amber-600">
+              <span>Struktur Korwil</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+            </div>
+          </div>
         </section>
 
         {/* Toast Notifikasi */}
@@ -1003,138 +1262,78 @@ export default function AdminDashboardClient() {
             <button
               type="button"
               onClick={() => setToastMsg(null)}
-              className="text-xs text-emerald-800 hover:text-emerald-950 font-bold px-2 py-1"
+              className="text-xs text-emerald-800 hover:text-emerald-950 font-bold px-2 py-1 cursor-pointer"
             >
               Tutup
             </button>
           </div>
         )}
 
-        {/* Tab Navigasi Pengelolaan */}
-        <div role="tablist" aria-label="Modul pengelolaan organisasi" className="rounded-2xl border border-slate-200 bg-white p-1.5 shadow-xs flex overflow-x-auto gap-1 no-scrollbar">
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === 'pendaftar'}
-            aria-controls="admin-panel-pendaftar"
-            onClick={() => setActiveTab('pendaftar')}
-            className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] ${
-              activeTab === 'pendaftar'
-                ? 'border-[#0C2340] bg-[#0C2340] text-white rounded-xl'
-                : 'border-transparent text-[#475569] hover:text-[#0C2340] hover:bg-slate-50 rounded-xl'
-            }`}
-          >
-            <Users className="w-4 h-4" />
-            <span>Pendaftaran &amp; Anggota</span>
-            <span className="px-2 py-0.5 rounded-full text-xs bg-slate-100 text-[#0C2340]">
-              {pendaftarList.length}
-            </span>
-          </button>
+        {/* Tab Navigasi Pengelolaan dengan Navigasi Geser (Smooth Scroll Chevrons) */}
+        <div className="relative">
+          {canScrollLeft && (
+            <button
+              type="button"
+              onClick={() => scrollTabs('left')}
+              aria-label="Geser tab ke kiri"
+              className="absolute left-1 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-white/95 border border-slate-200 shadow-md flex items-center justify-center text-slate-700 hover:text-[#0C2340] hover:bg-white transition-all cursor-pointer"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+          )}
 
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === 'agenda'}
-            aria-controls="admin-panel-agenda"
-            onClick={() => setActiveTab('agenda')}
-            className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] ${
-              activeTab === 'agenda'
-                ? 'border-[#0C2340] bg-[#0C2340] text-white rounded-xl'
-                : 'border-transparent text-[#475569] hover:text-[#0C2340] hover:bg-slate-50 rounded-xl'
-            }`}
+          <div
+            ref={tabScrollRef}
+            onScroll={checkTabScroll}
+            role="tablist"
+            aria-label="Modul pengelolaan organisasi"
+            className="rounded-2xl border border-slate-200 bg-white p-1.5 shadow-2xs flex overflow-x-auto gap-1.5 scroll-smooth no-scrollbar"
           >
-            <Calendar className="w-4 h-4" />
-            <span>Jadwal Kopdar &amp; Agenda</span>
-            <span className="px-2 py-0.5 rounded-full text-xs bg-slate-100 text-[#0C2340]">
-              {agendaList.length}
-            </span>
-          </button>
+            {tabItems.map((tab) => {
+              const isActive = activeTab === tab.id;
+              const Icon = tab.icon;
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  aria-controls={`admin-panel-${tab.id}`}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`min-h-[44px] px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-semibold rounded-xl transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] shrink-0 ${
+                    isActive
+                      ? 'bg-[#0C2340] text-white shadow-xs'
+                      : 'text-slate-600 hover:text-[#0C2340] hover:bg-slate-100'
+                  }`}
+                >
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-amber-300' : 'text-slate-500'}`} />
+                  <span>{tab.label}</span>
+                  {tab.badgeText && (
+                    <span
+                      className={`px-2 py-0.5 rounded-full text-[11px] leading-tight transition-colors ${
+                        isActive
+                          ? 'bg-white/20 text-white font-bold'
+                          : tab.badgeColor
+                      }`}
+                    >
+                      {tab.badgeText}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
 
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === 'loker'}
-            aria-controls="admin-panel-loker"
-            onClick={() => setActiveTab('loker')}
-            className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] ${
-              activeTab === 'loker'
-                ? 'border-[#0C2340] bg-[#0C2340] text-white rounded-xl'
-                : 'border-transparent text-[#475569] hover:text-[#0C2340] hover:bg-slate-50 rounded-xl'
-            }`}
-          >
-            <Briefcase className="w-4 h-4" />
-            <span>Info Lowongan Kerja</span>
-            <span className="px-2 py-0.5 rounded-full text-xs bg-emerald-100 text-emerald-800 font-bold">
-              {lokerList.length}
-            </span>
-          </button>
-
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === 'berita'}
-            aria-controls="admin-panel-berita"
-            onClick={() => setActiveTab('berita')}
-            className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] ${
-              activeTab === 'berita'
-                ? 'border-[#0C2340] bg-[#0C2340] text-white rounded-xl'
-                : 'border-transparent text-[#475569] hover:text-[#0C2340] hover:bg-slate-50 rounded-xl'
-            }`}
-          >
-            <Camera className="w-4 h-4" />
-            <span>Dokumentasi &amp; Berita</span>
-            <span className="px-2 py-0.5 rounded-full text-xs bg-amber-100 text-amber-900 font-bold">
-              {beritaList.length}
-            </span>
-          </button>
-
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === 'pengurus'}
-            aria-controls="admin-panel-pengurus"
-            onClick={() => setActiveTab('pengurus')}
-            className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] ${
-              activeTab === 'pengurus'
-                ? 'border-[#0C2340] bg-[#0C2340] text-white rounded-xl'
-                : 'border-transparent text-[#475569] hover:text-[#0C2340] hover:bg-slate-50 rounded-xl'
-            }`}
-          >
-            <ShieldCheck className="w-4 h-4" />
-            <span>Pengurus &amp; 9 Korwil</span>
-          </button>
-
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === 'landing'}
-            aria-controls="admin-panel-landing"
-            onClick={() => setActiveTab('landing')}
-            className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] ${
-              activeTab === 'landing'
-                ? 'border-[#0C2340] bg-[#0C2340] text-white rounded-xl'
-                : 'border-transparent text-[#475569] hover:text-[#0C2340] hover:bg-slate-50 rounded-xl'
-            }`}
-          >
-            <LayoutTemplate className="w-4 h-4" />
-            <span>Konten Beranda</span>
-          </button>
-
-          <button
-            type="button"
-            role="tab"
-            aria-selected={activeTab === 'settings'}
-            aria-controls="admin-panel-settings"
-            onClick={() => setActiveTab('settings')}
-            className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] ${
-              activeTab === 'settings'
-                ? 'border-[#0C2340] bg-[#0C2340] text-white rounded-xl'
-                : 'border-transparent text-[#475569] hover:text-[#0C2340] hover:bg-slate-50 rounded-xl'
-            }`}
-          >
-            <Settings className="w-4 h-4" />
-            <span>Kontak &amp; Komunitas</span>
-          </button>
+          {canScrollRight && (
+            <button
+              type="button"
+              onClick={() => scrollTabs('right')}
+              aria-label="Geser tab ke kanan"
+              className="absolute right-1 top-1/2 -translate-y-1/2 z-10 h-8 w-8 rounded-full bg-white/95 border border-slate-200 shadow-md flex items-center justify-center text-slate-700 hover:text-[#0C2340] hover:bg-white transition-all cursor-pointer"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          )}
         </div>
 
         {/* ========================================================================= */}
@@ -1142,43 +1341,82 @@ export default function AdminDashboardClient() {
         {/* ========================================================================= */}
         {activeTab === 'pendaftar' && (
           <section id="admin-panel-pendaftar" role="tabpanel" aria-label="Pendaftaran dan anggota" className="space-y-6">
-            {/* Filter Bar & Search */}
-            <div className="bg-white border border-slate-200 rounded-xl p-3.5 sm:p-5 flex flex-col md:flex-row gap-3 sm:gap-4 justify-between items-stretch md:items-center shadow-xs">
-              <div className="relative flex-1">
-                <Search className="w-4 h-4 text-[#475569] absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  placeholder="Cari nama alumni, prodi, angkatan, atau pekerjaan..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full min-h-[42px] pl-10 pr-4 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:outline-hidden focus:ring-2 focus:ring-[#0C2340]/15"
-                />
+            {/* Header Modul & Filter */}
+            <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-xs space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-lg sm:text-xl font-bold text-[#0C2340] flex items-center gap-2">
+                    <Users className="w-5 h-5 text-sky-600" />
+                    <span>Data Pendaftar &amp; Keanggotaan Alumni</span>
+                  </h2>
+                  <p className="text-xs sm:text-sm text-slate-600 mt-1">
+                    Verifikasi pendaftar baru, perbarui status keanggotaan, dan kirim notifikasi aktivasi via WhatsApp.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setManualAlumniOpen(true)}
+                  className="inline-flex min-h-[42px] items-center justify-center gap-2 rounded-xl bg-[#0C2340] hover:bg-[#08182E] text-white px-4 py-2 text-xs sm:text-sm font-bold shadow-xs transition-colors cursor-pointer self-start sm:self-auto"
+                >
+                  <UserPlus className="w-4 h-4 text-amber-300" />
+                  <span>+ Tambah Alumni Manual</span>
+                </button>
               </div>
 
-              <div className="grid grid-cols-2 w-full gap-2 md:flex md:w-auto md:items-center md:gap-2.5">
-                <select
-                  value={statusFilter}
-                  onChange={(e) => setStatusFilter(e.target.value as 'semua' | 'menunggu' | 'disetujui' | 'ditolak')}
-                  className="w-full min-w-0 min-h-[42px] px-2.5 sm:px-3 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:ring-2 focus:ring-[#0C2340]/15 cursor-pointer font-medium"
-                >
-                  <option value="semua">Semua Status</option>
-                  <option value="menunggu">Menunggu Verifikasi ({countMenunggu})</option>
-                  <option value="disetujui">Disetujui ({countDisetujui})</option>
-                  <option value="ditolak">Ditolak / Review</option>
-                </select>
+              {/* Filter Bar & Search */}
+              <div className="flex flex-col sm:flex-row gap-3 pt-3 border-t border-slate-100 items-stretch sm:items-center">
+                <div className="relative flex-1">
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    placeholder="Cari nama alumni, prodi, angkatan, atau pekerjaan..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full min-h-[42px] pl-10 pr-9 py-2 text-sm rounded-xl bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/15 focus:outline-hidden"
+                  />
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setSearchQuery('')}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 text-slate-400 hover:text-slate-600 rounded-full cursor-pointer"
+                      aria-label="Bersihkan pencarian"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
 
-                <select
-                  value={wilayahFilter}
-                  onChange={(e) => setWilayahFilter(e.target.value)}
-                  className="w-full min-w-0 min-h-[42px] px-2.5 sm:px-3 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:ring-2 focus:ring-[#0C2340]/15 cursor-pointer font-medium"
-                >
-                  <option value="semua">Semua 9 Wilayah</option>
-                  {WILAYAH_JABODETABEK.map((w) => (
-                    <option key={w.id} value={w.nama}>
-                      {w.nama}
-                    </option>
-                  ))}
-                </select>
+                <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center sm:gap-2.5">
+                  <select
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value as 'semua' | 'menunggu' | 'disetujui' | 'ditolak')}
+                    className="w-full sm:w-auto min-h-[42px] px-3 py-2 text-xs sm:text-sm rounded-xl bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/15 focus:outline-hidden cursor-pointer font-medium"
+                  >
+                    <option value="semua">Semua Status ({pendaftarList.length})</option>
+                    <option value="menunggu">Menunggu Verifikasi ({countMenunggu})</option>
+                    <option value="disetujui">Disetujui ({countDisetujui})</option>
+                    <option value="ditolak">Ditolak / Review Ulang</option>
+                  </select>
+
+                  <select
+                    value={wilayahFilter}
+                    onChange={(e) => setWilayahFilter(e.target.value)}
+                    className="w-full sm:w-auto min-h-[42px] px-3 py-2 text-xs sm:text-sm rounded-xl bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/15 focus:outline-hidden cursor-pointer font-medium"
+                  >
+                    <option value="semua">Semua 9 Wilayah</option>
+                    {WILAYAH_JABODETABEK.map((w) => (
+                      <option key={w.id} value={w.nama}>
+                        {w.nama}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <div className="text-xs text-slate-500 font-medium">
+                Menampilkan <strong className="text-[#0C2340]">{filteredPendaftar.length}</strong> alumni
+                {statusFilter !== 'semua' ? ` dengan status ${statusFilter}` : ''}
+                {wilayahFilter !== 'semua' ? ` di wilayah ${wilayahFilter}` : ''}
               </div>
             </div>
 
@@ -1321,21 +1559,30 @@ export default function AdminDashboardClient() {
         {/* ========================================================================= */}
         {activeTab === 'agenda' && (
           <section id="admin-panel-agenda" role="tabpanel" aria-label="Jadwal kopdar dan agenda" className="space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <h2 className="text-xl font-bold text-[#0C2340]">Daftar Jadwal Kopdar &amp; Temu Alumni</h2>
-                <p className="text-sm text-[#475569]">
-                  Jadwal di bawah ini tampil di halaman publik Jadwal Kopdar (/kegiatan) dan Beranda.
-                </p>
+            <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-xs space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-lg sm:text-xl font-bold text-[#0C2340] flex items-center gap-2">
+                    <Calendar className="w-5 h-5 text-amber-500" />
+                    <span>Jadwal Kopdar &amp; Agenda Wilayah</span>
+                  </h2>
+                  <p className="text-xs sm:text-sm text-slate-600 mt-1">
+                    Jadwal aktif langsung tampil di halaman publik Kegiatan (/kegiatan) dan Beranda.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => openAgendaCreate()}
+                  className="inline-flex min-h-[42px] items-center justify-center gap-2 rounded-xl bg-[#0C2340] hover:bg-[#08182E] text-white px-4 py-2 text-xs sm:text-sm font-bold shadow-xs transition-colors cursor-pointer self-start sm:self-auto"
+                >
+                  <Plus className="w-4 h-4 text-amber-300" />
+                  <span>+ Tambah Jadwal Baru</span>
+                </button>
               </div>
-              <button
-                type="button"
-                onClick={() => openAgendaCreate()}
-                className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 rounded-lg bg-[#0C2340] hover:bg-[#08182E] text-white text-sm font-semibold transition-colors cursor-pointer shadow-xs self-start sm:self-auto"
-              >
-                <Plus className="w-4 h-4" />
-                + Tambah Jadwal Baru
-              </button>
+
+              <div className="text-xs text-slate-500 font-medium pt-2 border-t border-slate-100">
+                Menampilkan <strong className="text-[#0C2340]">{agendaList.length}</strong> jadwal agenda &amp; kopdar wilayah
+              </div>
             </div>
 
             {agendaList.length === 0 ? (
@@ -1420,41 +1667,54 @@ export default function AdminDashboardClient() {
         {/* ========================================================================= */}
         {activeTab === 'loker' && (
           <section id="admin-panel-loker" role="tabpanel" aria-label="Info lowongan kerja" className="space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <h2 className="text-xl font-bold text-[#0C2340]">Daftar Lowongan Kerja &amp; Peluang Bisnis</h2>
-                <p className="text-sm text-[#475569]">
-                  Kelola informasi karier alumni. Lowongan aktif langsung tampil di halaman publik (/peluang#loker).
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => openLokerCreate()}
-                className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 rounded-lg bg-[#0C2340] hover:bg-[#08182E] text-white text-sm font-semibold transition-colors cursor-pointer shadow-xs self-start sm:self-auto"
-              >
-                <Plus className="w-4 h-4 text-[#F59E0B]" />
-                + Tambah Info Loker
-              </button>
-            </div>
-
-            {/* Filter Bar Loker */}
-            <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center shadow-xs">
-              <div className="relative flex-1">
-                <Search className="w-4 h-4 text-[#475569] absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  placeholder="Cari lowongan berdasarkan posisi, perusahaan, atau rujukan..."
-                  value={lokerSearch}
-                  onChange={(e) => setLokerSearch(e.target.value)}
-                  className="w-full min-h-[42px] pl-10 pr-4 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:outline-hidden focus:ring-2 focus:ring-[#0C2340]/15"
-                />
+            <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-xs space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-lg sm:text-xl font-bold text-[#0C2340] flex items-center gap-2">
+                    <Briefcase className="w-5 h-5 text-emerald-600" />
+                    <span>Lowongan Kerja &amp; Peluang Bisnis</span>
+                  </h2>
+                  <p className="text-xs sm:text-sm text-slate-600 mt-1">
+                    Kelola informasi karier alumni. Lowongan aktif langsung tampil di halaman publik (/peluang#loker).
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => openLokerCreate()}
+                  className="inline-flex min-h-[42px] items-center justify-center gap-2 rounded-xl bg-[#0C2340] hover:bg-[#08182E] text-white px-4 py-2 text-xs sm:text-sm font-bold shadow-xs transition-colors cursor-pointer self-start sm:self-auto"
+                >
+                  <Plus className="w-4 h-4 text-emerald-300" />
+                  <span>+ Terbitkan Lowongan Baru</span>
+                </button>
               </div>
 
-              <div className="flex flex-wrap items-center gap-2.5">
+              {/* Filter Bar Loker */}
+              <div className="flex flex-col sm:flex-row gap-3 pt-3 border-t border-slate-100 items-stretch sm:items-center">
+                <div className="relative flex-1">
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    placeholder="Cari lowongan berdasarkan posisi, perusahaan, atau rujukan..."
+                    value={lokerSearch}
+                    onChange={(e) => setLokerSearch(e.target.value)}
+                    className="w-full min-h-[42px] pl-10 pr-9 py-2 text-sm rounded-xl bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/15 focus:outline-hidden"
+                  />
+                  {lokerSearch && (
+                    <button
+                      type="button"
+                      onClick={() => setLokerSearch('')}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 text-slate-400 hover:text-slate-600 rounded-full cursor-pointer"
+                      aria-label="Bersihkan pencarian loker"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+
                 <select
                   value={lokerWilayahFilter}
                   onChange={(e) => setLokerWilayahFilter(e.target.value)}
-                  className="min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:ring-2 focus:ring-[#0C2340]/15 cursor-pointer font-medium"
+                  className="min-h-[42px] px-3.5 py-2 text-xs sm:text-sm rounded-xl bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/15 focus:outline-hidden cursor-pointer font-medium"
                 >
                   <option value="semua">Semua Wilayah</option>
                   {WILAYAH_JABODETABEK.map((w) => (
@@ -1464,6 +1724,11 @@ export default function AdminDashboardClient() {
                   ))}
                   <option value="Jabodetabek / Remote">Jabodetabek / Remote</option>
                 </select>
+              </div>
+
+              <div className="text-xs text-slate-500 font-medium">
+                Menampilkan <strong className="text-[#0C2340]">{filteredLokers.length}</strong> lowongan kerja
+                {lokerWilayahFilter !== 'semua' ? ` di wilayah ${lokerWilayahFilter}` : ''}
               </div>
             </div>
 
@@ -1572,23 +1837,26 @@ export default function AdminDashboardClient() {
             <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-xs space-y-4">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <h2 className="text-xl font-bold text-[#0C2340]">Dokumentasi &amp; Berita Kegiatan</h2>
-                  <p className="text-sm text-slate-600 mt-0.5">
+                  <h2 className="text-lg sm:text-xl font-bold text-[#0C2340] flex items-center gap-2">
+                    <Camera className="w-5 h-5 text-amber-500" />
+                    <span>Dokumentasi &amp; Berita Kegiatan</span>
+                  </h2>
+                  <p className="text-xs sm:text-sm text-slate-600 mt-1">
                     Kelola foto, liputan, dan rilis berita kegiatan alumni untuk ditampilkan di Beranda dan halaman Cerita.
                   </p>
                 </div>
                 <button
                   type="button"
                   onClick={() => openBeritaCreate()}
-                  className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-[#0C2340] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#08182E] shadow-sm cursor-pointer"
+                  className="inline-flex min-h-[42px] items-center justify-center gap-2 rounded-xl bg-[#0C2340] hover:bg-[#08182E] text-white px-4 py-2 text-xs sm:text-sm font-bold shadow-xs transition-colors cursor-pointer self-start sm:self-auto"
                 >
-                  <Plus className="w-4 h-4" />
-                  + Unggah Dokumentasi / Berita
+                  <Plus className="w-4 h-4 text-amber-300" />
+                  <span>+ Unggah Dokumentasi / Berita</span>
                 </button>
               </div>
 
               {/* Filter & Pencarian */}
-              <div className="flex flex-col sm:flex-row gap-3 pt-2 border-t border-slate-100">
+              <div className="flex flex-col sm:flex-row gap-3 pt-3 border-t border-slate-100 items-stretch sm:items-center">
                 <div className="relative flex-1">
                   <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                   <input
@@ -1596,13 +1864,24 @@ export default function AdminDashboardClient() {
                     value={beritaSearch}
                     onChange={(e) => setBeritaSearch(e.target.value)}
                     placeholder="Cari judul, ringkasan, atau wilayah..."
-                    className="w-full pl-9 pr-4 py-2 text-sm rounded-lg border border-slate-300 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:outline-hidden"
+                    className="w-full min-h-[42px] pl-10 pr-9 py-2 text-sm rounded-xl border border-slate-300 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/15 focus:outline-hidden"
                   />
+                  {beritaSearch && (
+                    <button
+                      type="button"
+                      onClick={() => setBeritaSearch('')}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 text-slate-400 hover:text-slate-600 rounded-full cursor-pointer"
+                      aria-label="Bersihkan pencarian berita"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
                 </div>
+
                 <select
                   value={beritaKategoriFilter}
                   onChange={(e) => setBeritaKategoriFilter(e.target.value)}
-                  className="px-3 py-2 text-sm rounded-lg border border-slate-300 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:outline-hidden bg-white text-slate-800"
+                  className="min-h-[42px] px-3.5 py-2 text-xs sm:text-sm rounded-xl border border-slate-300 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/15 focus:outline-hidden bg-white text-slate-800 font-medium cursor-pointer"
                 >
                   <option value="semua">Semua Kategori</option>
                   <option value="Kopdar & Temu Alumni">Kopdar &amp; Temu Alumni</option>
@@ -1611,6 +1890,11 @@ export default function AdminDashboardClient() {
                   <option value="Info Organisasi">Info Organisasi</option>
                   <option value="Prestasi Alumni">Prestasi Alumni</option>
                 </select>
+              </div>
+
+              <div className="text-xs text-slate-500 font-medium">
+                Menampilkan <strong className="text-[#0C2340]">{filteredBeritas.length}</strong> dokumentasi &amp; liputan berita
+                {beritaKategoriFilter !== 'semua' ? ` kategori ${beritaKategoriFilter}` : ''}
               </div>
             </div>
 

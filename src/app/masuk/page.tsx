@@ -71,7 +71,7 @@ export default function MasukPage() {
         setActiveSession({
           sub: data.sub,
           role: data.role,
-          exp: Math.floor(Date.now() / 1000) + 7 * 24 * 3600,
+          exp: typeof data.exp === 'number' ? data.exp : Math.floor(Date.now() / 1000) + 30 * 24 * 3600,
         });
         setSent(true);
         router.refresh();
