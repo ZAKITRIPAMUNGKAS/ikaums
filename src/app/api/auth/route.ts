@@ -84,7 +84,7 @@ export async function POST(request: NextRequest) {
         const expectedPasskey = process.env.ADMIN_PASSKEY;
         const providedPasskey = String(body.passkey || '').trim();
 
-        if (!expectedPasskey || expectedPasskey.length < 16) {
+        if (!expectedPasskey || expectedPasskey.length < 8) {
           return NextResponse.json(
             { error: 'Akses pengurus belum dikonfigurasi dengan aman.' },
             { status: 503 }
