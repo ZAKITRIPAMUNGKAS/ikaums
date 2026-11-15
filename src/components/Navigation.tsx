@@ -391,6 +391,20 @@ export function Navbar() {
                 )}
               </Link>
               <Link
+                href="/peta"
+                onClick={() => setIsOpen(false)}
+                className={`min-h-[44px] flex items-center justify-between px-3.5 py-2.5 rounded-lg border text-sm transition-colors ${
+                  pathname === '/peta'
+                    ? 'bg-slate-100 border-slate-300 text-[#0C2340] font-bold'
+                    : 'bg-white border-slate-200 text-slate-800 hover:bg-slate-50 font-medium'
+                }`}
+              >
+                <span>Sebaran Wilayah (Peta)</span>
+                {pathname === '/peta' && (
+                  <span className="text-xs font-semibold text-[#B45309]">Aktif</span>
+                )}
+              </Link>
+              <Link
                 href="/direktori"
                 onClick={() => setIsOpen(false)}
                 className="min-h-[44px] flex items-center justify-between px-3.5 py-2.5 rounded-lg border border-slate-200 text-slate-800 hover:bg-slate-50 font-medium text-sm"

@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Navbar, Footer } from '@/components/Navigation';
 import {
   WILAYAH_JABODETABEK,
@@ -11,7 +12,18 @@ import {
   isValidEmail,
 } from '@/data/ums-prodi';
 import { COMMUNITY_PLACEHOLDERS, IS_DEMO_MODE, DEMO_BADGE_LABEL } from '@/lib/config';
-import { CheckCircle2, AlertCircle, ArrowRight, Share2, ChevronDown, Loader2, ExternalLink } from 'lucide-react';
+import {
+  CheckCircle2,
+  AlertCircle,
+  ArrowRight,
+  Share2,
+  ChevronDown,
+  Loader2,
+  ExternalLink,
+  Camera,
+  Upload,
+  X,
+} from 'lucide-react';
 
 const SUBMISSIONS_KEY = 'ikaums_prelaunch_submissions';
 
@@ -57,6 +69,52 @@ export default function GabungPage() {
   const [submitted, setSubmitted] = useState(false);
   const [normalizedWa, setNormalizedWa] = useState('');
   const submittingRef = useRef(false);
+
+  // Upload foto profil akun
+  const [fotoProfil, setFotoProfil] = useState<string | null>(null);
+  const [fotoProfilName, setFotoProfilName] = useState<string | null>(null);
+  const [fotoError, setFotoError] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!validTypes.includes(file.type)) {
+      setFotoError('Format berkas harus JPG, PNG, atau WebP.');
+      return;
+    }
+
+    const MAX_SIZE = 3 * 1024 * 1024;
+    if (file.size > MAX_SIZE) {
+      setFotoError('Ukuran berkas melebihi 3 MB. Pilih foto dengan ukuran lebih kecil.');
+      return;
+    }
+
+    setFotoError(null);
+    setFotoProfilName(file.name);
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      if (typeof reader.result === 'string') {
+        setFotoProfil(reader.result);
+      }
+    };
+    reader.onerror = () => {
+      setFotoError('Gagal membaca berkas gambar. Silakan coba lagi.');
+    };
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemoveFoto = () => {
+    setFotoProfil(null);
+    setFotoProfilName(null);
+    setFotoError(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -212,6 +270,7 @@ export default function GabungPage() {
           namaLengkap: cleanName,
           whatsapp: validWa,
           email: cleanEmail || undefined,
+          fotoUrl: fotoProfil || undefined,
         }),
       });
 
@@ -237,6 +296,22 @@ export default function GabungPage() {
           wilayah: formData.wilayah,
         });
         localStorage.setItem(SUBMISSIONS_KEY, JSON.stringify(existing));
+
+        // Simpan profil pengguna aktif lokal untuk ruang anggota
+        const userProfile = {
+          nama: cleanName,
+          angkatan: formData.angkatan,
+          prodi: formData.prodi,
+          wilayah: formData.wilayah,
+          whatsapp: validWa,
+          email: cleanEmail || undefined,
+          pekerjaan: formData.pekerjaan || undefined,
+          perusahaan: formData.perusahaan || undefined,
+          fotoUrl: fotoProfil || undefined,
+          tampilDiDirektori: formData.tampilDiDirektori,
+          siapMentoring: formData.siapMentoring,
+        };
+        localStorage.setItem('ikaums_current_user_profile', JSON.stringify(userProfile));
       } catch {
         // Abaikan error penyimpanan lokal
       }
@@ -332,6 +407,95 @@ export default function GabungPage() {
                 </legend>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  {/* Unggah Foto Profil Akun */}
+                  <div className="sm:col-span-2 rounded-xl border border-slate-200 bg-slate-50/70 p-4 sm:p-5">
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+                      <div className="relative h-20 w-20 shrink-0 mx-auto sm:mx-0">
+                        {fotoProfil ? (
+                          <div className="relative h-20 w-20 overflow-hidden rounded-full border-2 border-[#D97706] shadow-xs">
+                            <Image
+                              src={fotoProfil}
+                              alt="Pratinjau foto profil alumni"
+                              fill
+                              unoptimized
+                              className="object-cover"
+                            />
+                          </div>
+                        ) : (
+                          <div className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-dashed border-slate-300 bg-white text-slate-400">
+                            <Camera className="h-8 w-8 text-slate-400" aria-hidden="true" />
+                          </div>
+                        )}
+                        {fotoProfil && (
+                          <button
+                            type="button"
+                            onClick={handleRemoveFoto}
+                            className="absolute -top-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white shadow-xs hover:bg-red-700 transition-colors cursor-pointer"
+                            aria-label="Hapus foto profil"
+                            title="Hapus foto profil"
+                          >
+                            <X className="h-3.5 w-3.5" />
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="flex-1 space-y-1.5 text-center sm:text-left">
+                        <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
+                          <label htmlFor="foto-profil-input" className="text-sm font-bold text-[#0C2340] cursor-pointer">
+                            Foto Profil Akun
+                          </label>
+                          <span className="text-xs px-2 py-0.5 rounded-full bg-slate-200/80 text-slate-700 font-medium">
+                            Opsional
+                          </span>
+                        </div>
+                        <p className="text-xs sm:text-sm text-[#475569] leading-relaxed">
+                          Foto ini digunakan pada kartu anggota digital dan ruang akun IKA UMS. Format JPG, PNG, atau WebP (maks. 3 MB).
+                        </p>
+
+                        <div className="pt-1 flex flex-wrap items-center justify-center sm:justify-start gap-2.5">
+                          <input
+                            ref={fileInputRef}
+                            id="foto-profil-input"
+                            type="file"
+                            accept="image/jpeg,image/png,image/webp"
+                            className="sr-only"
+                            onChange={handleFileChange}
+                          />
+                          <button
+                            type="button"
+                            onClick={() => fileInputRef.current?.click()}
+                            className="inline-flex min-h-[44px] items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white border border-slate-300 hover:border-[#0C2340] hover:bg-slate-50 text-xs sm:text-sm font-semibold text-[#0C2340] transition-colors shadow-2xs cursor-pointer"
+                          >
+                            <Upload className="h-4 w-4 text-[#D97706]" />
+                            <span>{fotoProfil ? 'Ganti Foto' : 'Unggah Foto Profil'}</span>
+                          </button>
+
+                          {fotoProfil && (
+                            <button
+                              type="button"
+                              onClick={handleRemoveFoto}
+                              className="inline-flex min-h-[44px] items-center gap-1 px-3 py-2 text-xs sm:text-sm font-medium text-red-600 hover:text-red-700 transition-colors cursor-pointer"
+                            >
+                              Hapus
+                            </button>
+                          )}
+
+                          {fotoProfilName && (
+                            <span className="text-xs text-slate-500 truncate max-w-[180px]">
+                              {fotoProfilName}
+                            </span>
+                          )}
+                        </div>
+
+                        {fotoError && (
+                          <p className="text-xs text-red-600 font-medium pt-0.5">
+                            {fotoError}
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="sm:col-span-2">
                     <label htmlFor="namaLengkap" className="block text-sm font-semibold text-[#0C2340] mb-1.5">
                       Nama Lengkap dengan Gelar <span className="text-[#92400E]">*</span>
@@ -733,8 +897,22 @@ export default function GabungPage() {
           <div className="pattern-surface pattern-dots pattern-tone-light pattern-fade-soft-edges py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
             <div className="max-w-3xl mx-auto relative z-[1]">
               <section className="surface-card rounded-2xl p-6 sm:p-10 text-center max-w-2xl mx-auto space-y-6">
-            <div className="w-12 h-12 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center mx-auto">
-              <CheckCircle2 className="w-6 h-6" />
+            <div className="relative mx-auto">
+              {fotoProfil ? (
+                <div className="relative h-20 w-20 overflow-hidden rounded-full border-2 border-[#D97706] shadow-md mx-auto">
+                  <Image
+                    src={fotoProfil}
+                    alt={formData.namaLengkap}
+                    fill
+                    unoptimized
+                    className="object-cover"
+                  />
+                </div>
+              ) : (
+                <div className="w-12 h-12 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center mx-auto">
+                  <CheckCircle2 className="w-6 h-6" />
+                </div>
+              )}
             </div>
 
             <div className="space-y-2.5">
@@ -775,6 +953,13 @@ export default function GabungPage() {
             </div>
 
             <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3">
+              <Link
+                href="/app"
+                className="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 py-2.5 rounded-lg bg-[#D97706] hover:bg-[#B45309] text-white text-sm font-bold transition-colors shadow-2xs"
+              >
+                <span>Buka Ruang Anggota</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
               <a
                 href={whatsappShareUrl}
                 target="_blank"

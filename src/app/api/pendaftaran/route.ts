@@ -123,6 +123,7 @@ export async function POST(request: NextRequest) {
       email,
       pekerjaan: body.pekerjaan ? String(body.pekerjaan).trim() : undefined,
       perusahaan: body.perusahaan ? String(body.perusahaan).trim() : undefined,
+      fotoUrl: body.fotoUrl ? String(body.fotoUrl).trim() : undefined,
       siapMentoring: Boolean(body.siapMentoring),
       tampilDiDirektori: Boolean(body.tampilDiDirektori),
     });

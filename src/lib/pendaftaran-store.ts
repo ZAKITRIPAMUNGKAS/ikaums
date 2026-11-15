@@ -12,6 +12,7 @@ export interface PendaftarRecord {
   email?: string;
   pekerjaan?: string;
   perusahaan?: string;
+  fotoUrl?: string;
   siapMentoring: boolean;
   tampilDiDirektori: boolean;
   status: 'menunggu' | 'disetujui' | 'ditolak';
@@ -30,6 +31,7 @@ interface SupabasePendaftarRow {
   email: string | null;
   pekerjaan: string | null;
   perusahaan: string | null;
+  foto_url?: string | null;
   siap_mentoring: boolean;
   tampil_di_direktori: boolean;
   status: 'menunggu' | 'disetujui' | 'ditolak';
@@ -59,6 +61,7 @@ function mapRowToRecord(row: SupabasePendaftarRow): PendaftarRecord {
     email: row.email ?? undefined,
     pekerjaan: row.pekerjaan ?? undefined,
     perusahaan: row.perusahaan ?? undefined,
+    fotoUrl: row.foto_url ?? undefined,
     siapMentoring: Boolean(row.siap_mentoring),
     tampilDiDirektori: Boolean(row.tampil_di_direktori),
     status: row.status,
@@ -146,6 +149,7 @@ export async function savePendaftar(
           email: input.email || null,
           pekerjaan: input.pekerjaan || null,
           perusahaan: input.perusahaan || null,
+          foto_url: input.fotoUrl || null,
           siap_mentoring: input.siapMentoring,
           tampil_di_direktori: input.tampilDiDirektori,
           status: 'menunggu',

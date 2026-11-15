@@ -405,39 +405,69 @@ export default function KepengurusanPage() {
               </div>
             </>
           ) : (
-            <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
-              <table className="w-full text-left border-collapse">
-                <thead>
-                  <tr className="bg-slate-100 border-b border-slate-200 text-xs font-bold text-[#0C2340]">
-                    <th className="py-3.5 px-6 whitespace-nowrap">Wilayah</th>
-                    <th className="py-3.5 px-5">Titik Kumpul</th>
-                    <th className="py-3.5 px-5">Koordinator ({DEMO_BADGE_LABEL})</th>
-                    <th className="py-3.5 px-6 text-right">Daftar Anggota</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[#0C2340]/10 text-base">
-                  {demoWilayah.map((w) => (
-                    <tr key={w.id} className="hover:bg-white transition-colors">
-                      <td className="py-4 px-6 align-top">
-                        <span className="block font-bold text-[#0C2340]">{w.nama}</span>
-                        <span className="block text-sm text-[#475569]">{w.provinsi}</span>
-                      </td>
-                      <td className="py-4 px-5 text-[#475569] align-top">{w.titikKumpul}</td>
-                      <td className="py-4 px-5 font-medium text-[#0C2340] align-top">{w.koordinator}</td>
-                      <td className="py-4 px-6 text-right align-top">
-                        <Link
-                          href={`/direktori?wilayah=${w.id}`}
-                          className="inline-flex items-center gap-1 min-h-[44px] text-sm font-semibold text-[#0C2340] hover:text-[#92400E]"
-                        >
-                          Lihat Anggota
-                          <ArrowRight className="w-3.5 h-3.5" />
-                        </Link>
-                      </td>
+            <>
+              {/* Desktop Table View */}
+              <div className="hidden md:block bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-xs">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-slate-100 border-b border-slate-200 text-xs font-bold text-[#0C2340]">
+                      <th className="py-3.5 px-6 whitespace-nowrap">Wilayah</th>
+                      <th className="py-3.5 px-5">Titik Kumpul</th>
+                      <th className="py-3.5 px-5">Koordinator ({DEMO_BADGE_LABEL})</th>
+                      <th className="py-3.5 px-6 text-right">Daftar Anggota</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="divide-y divide-[#0C2340]/10 text-base">
+                    {demoWilayah.map((w) => (
+                      <tr key={w.id} className="hover:bg-white transition-colors">
+                        <td className="py-4 px-6 align-top">
+                          <span className="block font-bold text-[#0C2340]">{w.nama}</span>
+                          <span className="block text-sm text-[#475569]">{w.provinsi}</span>
+                        </td>
+                        <td className="py-4 px-5 text-[#475569] align-top">{w.titikKumpul}</td>
+                        <td className="py-4 px-5 font-medium text-[#0C2340] align-top">{w.koordinator}</td>
+                        <td className="py-4 px-6 text-right align-top">
+                          <Link
+                            href={`/direktori?wilayah=${w.id}`}
+                            className="inline-flex items-center gap-1 min-h-[44px] text-sm font-semibold text-[#0C2340] hover:text-[#92400E]"
+                          >
+                            Lihat Anggota
+                            <ArrowRight className="w-3.5 h-3.5" />
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Mobile Single-Column Clean List */}
+              <div className="md:hidden divide-y divide-[#0C2340]/12 border-y border-slate-200 bg-white rounded-xl px-4">
+                {demoWilayah.map((w) => (
+                  <article key={w.id} className="py-4 space-y-2">
+                    <div className="flex flex-wrap items-baseline justify-between gap-2">
+                      <h3 className="text-lg font-bold text-[#0C2340]">{w.nama}</h3>
+                      <span className="text-sm text-[#475569]">{w.provinsi}</span>
+                    </div>
+                    <p className="text-sm text-[#475569]">
+                      <strong className="text-[#0C2340]">Titik Kumpul:</strong> {w.titikKumpul}
+                    </p>
+                    <p className="text-sm text-[#475569]">
+                      <strong className="text-[#0C2340]">Koordinator:</strong> {w.koordinator}
+                    </p>
+                    <div className="pt-1">
+                      <Link
+                        href={`/direktori?wilayah=${w.id}`}
+                        className="inline-flex items-center gap-1 min-h-[44px] text-sm font-semibold text-[#0C2340] hover:text-[#92400E]"
+                      >
+                        Lihat Anggota ({DEMO_BADGE_LABEL})
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </>
           )}
         </section>
 
