@@ -6,6 +6,7 @@ import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { motion, useReducedMotion } from 'motion/react';
 import { Navbar, Footer } from '@/components/Navigation';
+import { KopdarInterestForm } from '@/components/home/KopdarInterestForm';
 import { MobileKopdarCta } from '@/components/home/MobileKopdarCta';
 import { RegisterModal } from '@/components/home/RegisterModal';
 import MapLoadingSkeleton from '@/components/peta/MapLoadingSkeleton';
@@ -624,6 +625,33 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
                 </div>
               </div>
             </div>
+          </motion.div>
+
+          {/* Form Polling & Usulan Jadwal Kopdar Wilayah Berikutnya */}
+          <motion.div
+            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-50px' }}
+            transition={{ duration: 0.6, delay: 0.1, ease: easeOutCustom }}
+            className="max-w-2xl mx-auto pt-2"
+          >
+            <div className="text-center space-y-1.5 mb-4">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200/60 text-[#0C2340] text-xs font-semibold">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#D97706]" aria-hidden="true" />
+                Rencana Temu Alumni Wilayah Berikutnya
+              </span>
+              <h3 className="text-lg sm:text-xl font-extrabold text-[#0C2340] tracking-tight">
+                Usulkan Jadwal Kopdar di Wilayahmu
+              </h3>
+              <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto">
+                Bantu pengurus menyusun titik temu terdekat berikutnya dengan mengisi preferensi hari luangmu.
+              </p>
+            </div>
+
+            <KopdarInterestForm
+              wilayah={selectedWilayah}
+              onWilayahChange={setSelectedWilayah}
+            />
           </motion.div>
         </section>
 
