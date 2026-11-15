@@ -14,6 +14,13 @@ import {
 import { COMMUNITY_PLACEHOLDERS, IS_DEMO_MODE, DEMO_BADGE_LABEL } from '@/lib/config';
 import { formatIndonesianName } from '@/lib/name-format';
 import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
+import {
   CheckCircle2,
   AlertCircle,
   ArrowRight,
@@ -35,6 +42,7 @@ import {
   GraduationCap,
   MapPin,
   Phone,
+  Sliders,
 } from 'lucide-react';
 
 const SUBMISSIONS_KEY = 'ikaums_prelaunch_submissions';
@@ -56,6 +64,57 @@ interface StoredSubmission {
   email?: string;
   nama: string;
   wilayah: string;
+}
+
+function cropImageToCanvas(
+  src: string,
+  zoom: number,
+  xPercent: number,
+  yPercent: number,
+  outputSize = 400
+): Promise<string> {
+  return new Promise((resolve, reject) => {
+    if (typeof window === 'undefined') {
+      resolve(src);
+      return;
+    }
+    const img = new window.Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      try {
+        const canvas = document.createElement('canvas');
+        canvas.width = outputSize;
+        canvas.height = outputSize;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          resolve(src);
+          return;
+        }
+
+        const baseScale = Math.max(outputSize / img.naturalWidth, outputSize / img.naturalHeight);
+        const scale = baseScale * zoom;
+        const rw = img.naturalWidth * scale;
+        const rh = img.naturalHeight * scale;
+
+        const extraX = Math.max(0, rw - outputSize);
+        const extraY = Math.max(0, rh - outputSize);
+
+        const dx = -(extraX * (xPercent / 100));
+        const dy = -(extraY * (yPercent / 100));
+
+        ctx.clearRect(0, 0, outputSize, outputSize);
+        ctx.imageSmoothingEnabled = true;
+        ctx.imageSmoothingQuality = 'high';
+        ctx.drawImage(img, dx, dy, rw, rh);
+
+        resolve(canvas.toDataURL('image/jpeg', 0.88));
+      } catch {
+        resolve(src);
+      }
+    };
+    img.onerror = () => reject(new Error('Gagal memuat gambar'));
+    img.src = src;
+  });
 }
 
 export default function GabungPage() {
@@ -83,11 +142,59 @@ export default function GabungPage() {
   const [nameSuggestion, setNameSuggestion] = useState<string | null>(null);
   const submittingRef = useRef(false);
 
-  // Upload foto profil akun
+  // Upload foto profil akun & kontrol centering/crop
   const [fotoProfil, setFotoProfil] = useState<string | null>(null);
+  const [rawImageSrc, setRawImageSrc] = useState<string | null>(null);
   const [fotoProfilName, setFotoProfilName] = useState<string | null>(null);
   const [fotoError, setFotoError] = useState<string | null>(null);
+  const [isCropModalOpen, setIsCropModalOpen] = useState(false);
+  const [cropZoom, setCropZoom] = useState(1.15);
+  const [cropX, setCropX] = useState(50);
+  const [cropY, setCropY] = useState(25);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const previewCanvasRef = useRef<HTMLCanvasElement>(null);
+
+  // Render preview canvas real-time saat slider centering/crop digeser
+  useEffect(() => {
+    if (!isCropModalOpen || !rawImageSrc || !previewCanvasRef.current) return;
+    const canvas = previewCanvasRef.current;
+    const img = new window.Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => {
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      const width = canvas.width;
+      const height = canvas.height;
+
+      const baseScale = Math.max(width / img.naturalWidth, height / img.naturalHeight);
+      const scale = baseScale * cropZoom;
+      const rw = img.naturalWidth * scale;
+      const rh = img.naturalHeight * scale;
+
+      const extraX = Math.max(0, rw - width);
+      const extraY = Math.max(0, rh - height);
+
+      const dx = -(extraX * (cropX / 100));
+      const dy = -(extraY * (cropY / 100));
+
+      ctx.clearRect(0, 0, width, height);
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = 'high';
+      ctx.drawImage(img, dx, dy, rw, rh);
+    };
+    img.src = rawImageSrc;
+  }, [isCropModalOpen, rawImageSrc, cropZoom, cropX, cropY]);
+
+  const handleApplyCrop = async () => {
+    if (!rawImageSrc) return;
+    try {
+      const cropped = await cropImageToCanvas(rawImageSrc, cropZoom, cropX, cropY, 400);
+      setFotoProfil(cropped);
+      setIsCropModalOpen(false);
+    } catch {
+      setFotoError('Gagal memproses posisi foto.');
+    }
+  };
 
   const suggestNameFormat = () => {
     const formatted = formatIndonesianName(formData.namaLengkap);
@@ -123,7 +230,16 @@ export default function GabungPage() {
     const reader = new FileReader();
     reader.onload = () => {
       if (typeof reader.result === 'string') {
-        setFotoProfil(reader.result);
+        const raw = reader.result;
+        setRawImageSrc(raw);
+        setCropZoom(1.15);
+        setCropX(50);
+        setCropY(25);
+        setIsCropModalOpen(true);
+        // Pre-crop otomatis fokus wajah agar default foto langsung rapi
+        void cropImageToCanvas(raw, 1.15, 50, 25, 400).then((res) => {
+          setFotoProfil(res);
+        });
       }
     };
     reader.onerror = () => {
@@ -134,6 +250,7 @@ export default function GabungPage() {
 
   const handleRemoveFoto = () => {
     setFotoProfil(null);
+    setRawImageSrc(null);
     setFotoProfilName(null);
     setFotoError(null);
     if (fileInputRef.current) {
@@ -489,6 +606,17 @@ export default function GabungPage() {
                             <Upload className="h-3.5 w-3.5 text-[#D97706]" />
                             <span>{fotoProfil ? 'Ganti Foto' : 'Pilih Foto dari HP'}</span>
                           </button>
+
+                          {fotoProfil && rawImageSrc && (
+                            <button
+                              type="button"
+                              onClick={() => setIsCropModalOpen(true)}
+                              className="inline-flex min-h-[44px] items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-50 border border-amber-200/80 hover:bg-amber-100 text-xs sm:text-sm font-semibold text-[#92400E] transition-colors shadow-2xs cursor-pointer active:scale-[0.98]"
+                            >
+                              <Sliders className="h-3.5 w-3.5" />
+                              <span>Atur Centering</span>
+                            </button>
+                          )}
 
                           {fotoProfil && (
                             <button
@@ -992,25 +1120,27 @@ export default function GabungPage() {
             <div className="max-w-xl mx-auto relative z-[1]">
               <section className="surface-card rounded-2xl p-5 sm:p-8 text-center space-y-6 shadow-sm">
                 {/* Avatar / Foto Profil */}
-                <div className="relative mx-auto inline-block">
-                  {fotoProfil ? (
-                    <div className="relative h-20 w-20 sm:h-24 sm:w-24 overflow-hidden rounded-full border-3 border-[#D97706] shadow-md mx-auto">
-                      <Image
-                        src={fotoProfil}
-                        alt={formData.namaLengkap}
-                        fill
-                        unoptimized
-                        className="object-cover"
-                      />
-                    </div>
-                  ) : (
-                    <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-600 flex items-center justify-center mx-auto shadow-2xs">
-                      <CheckCircle2 className="w-8 h-8" />
-                    </div>
-                  )}
-                  <span className="absolute -bottom-1 -right-1 inline-flex items-center justify-center w-6 h-6 rounded-full bg-emerald-600 text-white ring-2 ring-white">
-                    <CheckCircle2 className="w-4 h-4" />
-                  </span>
+                <div className="flex justify-center items-center w-full">
+                  <div className="relative">
+                    {fotoProfil ? (
+                      <div className="relative h-20 w-20 sm:h-24 sm:w-24 overflow-hidden rounded-full border-3 border-[#D97706] shadow-md">
+                        <Image
+                          src={fotoProfil}
+                          alt={formData.namaLengkap}
+                          fill
+                          unoptimized
+                          className="object-cover object-center"
+                        />
+                      </div>
+                    ) : (
+                      <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-600 flex items-center justify-center shadow-2xs">
+                        <CheckCircle2 className="w-8 h-8" />
+                      </div>
+                    )}
+                    <span className="absolute bottom-0 right-0 inline-flex items-center justify-center w-6 h-6 rounded-full bg-emerald-600 text-white ring-2 ring-white">
+                      <CheckCircle2 className="w-4 h-4" />
+                    </span>
+                  </div>
                 </div>
 
                 {/* Judul & Sambutan */}
@@ -1145,6 +1275,137 @@ export default function GabungPage() {
           </div>
         )}
       </main>
+
+      {/* Modal Dialog Atur Centering & Posisi Foto Profil */}
+      <Dialog open={isCropModalOpen} onOpenChange={setIsCropModalOpen}>
+        <DialogContent className="max-w-md p-5 sm:p-6">
+          <DialogHeader className="text-left space-y-1">
+            <DialogTitle className="text-base sm:text-lg font-bold text-[#0C2340]">
+              Pusatkan &amp; Atur Posisi Foto
+            </DialogTitle>
+            <DialogDescription className="text-xs text-slate-500">
+              Geser posisi vertikal/horizontal agar wajah kamu pas di tengah lingkaran profil.
+            </DialogDescription>
+          </DialogHeader>
+
+          {/* Pratinjau Lingkaran Avatar Nyata (WYSIWYG) */}
+          <div className="flex justify-center my-1 sm:my-2">
+            <div className="relative w-44 h-44 sm:w-52 sm:h-52 rounded-full overflow-hidden border-4 border-[#D97706] shadow-md bg-slate-900 ring-4 ring-amber-100">
+              <canvas
+                ref={previewCanvasRef}
+                width={400}
+                height={400}
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </div>
+
+          {/* Pengaturan Slider & Preset */}
+          <div className="space-y-3 pt-1">
+            <div>
+              <div className="flex justify-between items-center text-xs font-semibold text-slate-700 mb-1">
+                <label htmlFor="cropY">Posisi Vertikal (Atas ↔ Bawah)</label>
+                <span className="text-slate-500 font-mono text-[11px]">{cropY}%</span>
+              </div>
+              <input
+                id="cropY"
+                type="range"
+                min="0"
+                max="100"
+                value={cropY}
+                onChange={(e) => setCropY(Number(e.target.value))}
+                className="w-full accent-[#D97706] cursor-pointer"
+              />
+              <div className="flex justify-between text-[10px] text-slate-400 mt-0.5">
+                <span>0% (Fokus Kepala/Rambut)</span>
+                <span>100% (Bawah)</span>
+              </div>
+            </div>
+
+            <div>
+              <div className="flex justify-between items-center text-xs font-semibold text-slate-700 mb-1">
+                <label htmlFor="cropX">Posisi Horizontal (Kiri ↔ Kanan)</label>
+                <span className="text-slate-500 font-mono text-[11px]">{cropX}%</span>
+              </div>
+              <input
+                id="cropX"
+                type="range"
+                min="0"
+                max="100"
+                value={cropX}
+                onChange={(e) => setCropX(Number(e.target.value))}
+                className="w-full accent-[#D97706] cursor-pointer"
+              />
+              <div className="flex justify-between text-[10px] text-slate-400 mt-0.5">
+                <span>Kiri</span>
+                <span>50% (Tengah)</span>
+                <span>Kanan</span>
+              </div>
+            </div>
+
+            <div>
+              <div className="flex justify-between items-center text-xs font-semibold text-slate-700 mb-1">
+                <label htmlFor="cropZoom">Perbesar / Skala Zoom</label>
+                <span className="text-slate-500 font-mono text-[11px]">{cropZoom.toFixed(1)}x</span>
+              </div>
+              <input
+                id="cropZoom"
+                type="range"
+                min="1"
+                max="2.5"
+                step="0.05"
+                value={cropZoom}
+                onChange={(e) => setCropZoom(Number(e.target.value))}
+                className="w-full accent-[#D97706] cursor-pointer"
+              />
+            </div>
+
+            {/* Tombol Preset Cepat */}
+            <div className="grid grid-cols-2 gap-2 pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  setCropY(20);
+                  setCropX(50);
+                  setCropZoom(1.15);
+                }}
+                className="py-1.5 px-2.5 text-xs font-semibold rounded-lg bg-amber-50 hover:bg-amber-100 text-[#92400E] border border-amber-200/80 transition-colors cursor-pointer"
+              >
+                👤 Fokus Wajah
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setCropY(50);
+                  setCropX(50);
+                  setCropZoom(1.0);
+                }}
+                className="py-1.5 px-2.5 text-xs font-semibold rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-200 transition-colors cursor-pointer"
+              >
+                🎯 Tengah Simetris
+              </button>
+            </div>
+          </div>
+
+          {/* Tombol Aksi Simpan / Batal */}
+          <div className="grid grid-cols-2 gap-2.5 pt-3 border-t border-slate-200">
+            <button
+              type="button"
+              onClick={() => setIsCropModalOpen(false)}
+              className="min-h-[44px] py-2 px-3 rounded-xl border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
+            >
+              Batal
+            </button>
+            <button
+              type="button"
+              onClick={handleApplyCrop}
+              className="min-h-[44px] py-2 px-3 rounded-xl bg-[#D97706] hover:bg-[#B45309] text-white text-xs sm:text-sm font-bold transition-colors shadow-xs cursor-pointer active:scale-[0.98]"
+            >
+              Terapkan Foto
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
       <Footer />
     </div>
