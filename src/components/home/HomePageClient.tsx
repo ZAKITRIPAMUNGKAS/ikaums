@@ -63,12 +63,11 @@ const KAWASAN_LIST = [
   },
 ];
 
-const HERO_ALUMNI_AVATARS = [
-  { src: '/images/avatar-aditya.jpg', alt: 'Alumni UMS' },
-  { src: '/images/avatar-amalia.jpg', alt: 'Alumni UMS' },
-  { src: '/images/avatar-dian.jpg', alt: 'Alumni UMS' },
-  { src: '/images/avatar-nurul.jpg', alt: 'Alumni UMS' },
-];
+function getInitials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length >= 2) return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+  return (parts[0]?.slice(0, 2) || 'AL').toUpperCase();
+}
 
 const PROGRAM_ICONS = [Calendar, Briefcase, Rocket, Users];
 
@@ -212,7 +211,7 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
                   </Link>
                 </motion.div>
 
-                {/* Social Proof: Lingkaran Profil Alumni + Counter */}
+                {/* Social Proof: Lingkaran Profil Alumni Asli + Counter */}
                 <motion.div
                   initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 14 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -220,31 +219,49 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
                   className="flex items-center gap-3 pt-1"
                 >
                   <div className="flex items-center -space-x-2 overflow-hidden shrink-0">
-                    {totalAlumni > 0 ? (
-                      HERO_ALUMNI_AVATARS.slice(0, Math.min(totalAlumni, 4)).map((avatar, idx) => (
+                    {stats?.recentAlumni && stats.recentAlumni.length > 0 ? (
+                      stats.recentAlumni.map((alumni, idx) => (
                         <div
-                          key={idx}
-                          className="relative inline-block h-7 w-7 sm:h-8 sm:w-8 rounded-full ring-2 ring-white overflow-hidden shadow-2xs shrink-0"
+                          key={alumni.id || idx}
+                          title={alumni.nama}
+                          className="relative inline-block h-7 w-7 sm:h-8 sm:w-8 rounded-full ring-2 ring-white overflow-hidden shadow-2xs shrink-0 bg-slate-200"
                         >
-                          <Image
-                            src={avatar.src}
-                            alt={avatar.alt}
-                            fill
-                            sizes="32px"
-                            className="object-cover"
-                          />
+                          {alumni.fotoUrl ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={alumni.fotoUrl}
+                              alt={alumni.nama}
+                              className="h-full w-full object-cover"
+                            />
+                          ) : (
+                            <div className="flex h-full w-full items-center justify-center bg-[#0C2340] text-white text-[10px] sm:text-[11px] font-bold">
+                              {getInitials(alumni.nama)}
+                            </div>
+                          )}
                         </div>
                       ))
+                    ) : totalAlumni > 0 ? (
+                      <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-[#0C2340] text-white text-[10px] sm:text-[11px] font-bold ring-2 ring-white shadow-2xs shrink-0">
+                        {totalAlumni}
+                      </div>
+                    ) : (
+                      <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-blue-50 text-[#0C2340] ring-2 ring-white shadow-2xs shrink-0 border border-blue-200/60">
+                        <Users className="h-3.5 w-3.5 text-[#0C2340]" aria-hidden="true" />
+                      </div>
+                    )}
+
+                    {/* Sisa alumni (overflow) hanya ditampilkan jika totalAlumni melebihi avatar yang dirender */}
+                    {totalAlumni > (stats?.recentAlumni?.length || 0) ? (
+                      <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-[#0C2340] text-white text-[10px] sm:text-[11px] font-bold ring-2 ring-white shadow-2xs shrink-0">
+                        +{totalAlumni - (stats?.recentAlumni?.length || 0)}
+                      </div>
                     ) : null}
-                    <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-[#0C2340] text-white text-[10px] sm:text-[11px] font-bold ring-2 ring-white shadow-2xs shrink-0">
-                      {totalAlumni > 0 ? `+${totalAlumni}` : '0'}
-                    </div>
                   </div>
 
                   <div className="text-xs leading-tight">
                     <p className="font-bold text-[#0C2340]">
                       {totalAlumni > 0
-                        ? `+${totalAlumni} alumni terhubung`
+                        ? `${totalAlumni.toLocaleString('id-ID')} alumni terhubung`
                         : '0 alumni terhubung'}
                     </p>
                     <p className="text-[10px] sm:text-[11px] text-slate-500 mt-0.5">

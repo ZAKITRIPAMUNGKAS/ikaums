@@ -63,10 +63,32 @@ interface LokerFormErrors {
 }
 
 export default function PeluangPage() {
-  const mentors = useMemo(
-    () => getAlumniList().filter((a) => a.bersediaMentoring).slice(0, 4),
-    []
+  const [mentors, setMentors] = useState<AlumniProfile[]>(() =>
+    getAlumniList().filter((a) => a.bersediaMentoring).slice(0, 4)
   );
+
+  useEffect(() => {
+    let isMounted = true;
+    fetch('/api/alumni')
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data: AlumniProfile[]) => {
+        if (!isMounted) return;
+        if (Array.isArray(data) && data.length > 0) {
+          const realMentors = data.filter((a) => a.bersediaMentoring);
+          if (realMentors.length > 0) {
+            setMentors(
+              IS_DEMO_MODE
+                ? [...realMentors, ...getAlumniList().filter((a) => a.bersediaMentoring)].slice(0, 4)
+                : realMentors.slice(0, 4)
+            );
+          }
+        }
+      })
+      .catch(() => {});
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // 1. Mentoring State
   const [mentorModalOpen, setMentorModalOpen] = useState(false);
@@ -561,6 +583,7 @@ export default function PeluangPage() {
                                 alt={`Foto ${m.nama}`}
                                 fill
                                 sizes="48px"
+                                unoptimized={m.avatarUrl.startsWith('data:')}
                                 className="object-cover"
                               />
                             ) : (

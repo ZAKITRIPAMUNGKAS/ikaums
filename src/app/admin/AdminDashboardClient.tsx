@@ -23,7 +23,8 @@ import {
   ShieldCheck,
   Trash2,
   Save,
-  UserPlus,  Phone,
+  UserPlus,
+  Phone,
   Mail,
   LogOut,
   MapPin,
@@ -33,8 +34,13 @@ import {
   LayoutTemplate,
   Pencil,
   MessageCircle,
+  Camera,
+  Eye,
+  EyeOff,
+  Globe,
+  Image as ImageIcon,
 } from 'lucide-react';
-import type { AgendaItem, PengurusData, KomunitasSettings, LandingContent } from '@/lib/cms-store';
+import type { AgendaItem, PengurusData, KomunitasSettings, LandingContent, BeritaItem } from '@/lib/cms-store';
 import { type LokerItem } from '@/data/loker';
 
 interface PendaftarItem {
@@ -85,9 +91,22 @@ const BLANK_LOKER = {
   status: 'Aktif' as LokerItem['status'],
 };
 
+const BLANK_BERITA = {
+  judul: '',
+  kategori: 'Kopdar & Temu Alumni',
+  tanggal: '',
+  wilayah: 'Jakarta Pusat',
+  ringkasan: '',
+  konten: '',
+  fotoUrl: '',
+  captionFoto: '',
+  penulis: 'Pengurus IKA UMS Jabodetabek',
+  published: true,
+};
+
 export default function AdminDashboardClient() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<'pendaftar' | 'agenda' | 'loker' | 'pengurus' | 'landing' | 'settings'>('pendaftar');
+  const [activeTab, setActiveTab] = useState<'pendaftar' | 'agenda' | 'loker' | 'berita' | 'pengurus' | 'landing' | 'settings'>('pendaftar');
   const [toastMsg, setToastMsg] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -105,21 +124,32 @@ export default function AdminDashboardClient() {
   const [lokerSearch, setLokerSearch] = useState<string>('');
   const [lokerWilayahFilter, setLokerWilayahFilter] = useState<string>('semua');
 
-  // 4. Data Pengurus & Korwil
+  // 4. Data Dokumentasi & Berita
+  const [beritaList, setBeritaList] = useState<BeritaItem[]>([]);
+  const [beritaSearch, setBeritaSearch] = useState<string>('');
+  const [beritaKategoriFilter, setBeritaKategoriFilter] = useState<string>('semua');
+
+  // 5. Data Pengurus & Korwil
   const [pengurusData, setPengurusData] = useState<PengurusData | null>(null);
 
-  // 5. Data Settings Komunitas
+  // 6. Data Settings Komunitas
   const [settingsData, setSettingsData] = useState<KomunitasSettings | null>(null);
 
-  // 6. Data Konten Beranda (landing page)
+  // 7. Data Konten Beranda (landing page)
   const [landingData, setLandingData] = useState<LandingContent | null>(null);
 
   // Modals
   const [manualAlumniOpen, setManualAlumniOpen] = useState(false);
   const [agendaModalOpen, setAgendaModalOpen] = useState(false);
   const [lokerModalOpen, setLokerModalOpen] = useState(false);
+  const [beritaModalOpen, setBeritaModalOpen] = useState(false);
   const [editingAgendaId, setEditingAgendaId] = useState<string | null>(null);
   const [editingLokerId, setEditingLokerId] = useState<string | null>(null);
+  const [editingBeritaId, setEditingBeritaId] = useState<string | null>(null);
+  const [fotoUploadLoading, setFotoUploadLoading] = useState(false);
+
+  // Form State: Tambah/Ubah Berita
+  const [newBerita, setNewBerita] = useState<typeof BLANK_BERITA>({ ...BLANK_BERITA });
 
   // Form State: Tambah Loker Baru
   const [newLoker, setNewLoker] = useState<{
@@ -187,6 +217,9 @@ export default function AdminDashboardClient() {
         if (Array.isArray(dataContent.lokers)) {
           setLokerList(dataContent.lokers);
         }
+        if (Array.isArray(dataContent.beritas)) {
+          setBeritaList(dataContent.beritas);
+        }
         if (dataContent.pengurus) {
           setPengurusData(dataContent.pengurus);
         }
@@ -226,6 +259,9 @@ export default function AdminDashboardClient() {
           }
           if (Array.isArray(dataContent.lokers)) {
             setLokerList(dataContent.lokers);
+          }
+          if (Array.isArray(dataContent.beritas)) {
+            setBeritaList(dataContent.beritas);
           }
           if (dataContent.pengurus) {
             setPengurusData(dataContent.pengurus);
@@ -515,6 +551,178 @@ export default function AdminDashboardClient() {
     }
   };
 
+  // Handler Buka Modal Berita
+  const openBeritaCreate = () => {
+    setEditingBeritaId(null);
+    setNewBerita({
+      ...BLANK_BERITA,
+      tanggal: new Date().toLocaleDateString('id-ID', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      }),
+    });
+    setBeritaModalOpen(true);
+  };
+
+  const openBeritaEdit = (item: BeritaItem) => {
+    setEditingBeritaId(item.id);
+    setNewBerita({
+      judul: item.judul,
+      kategori: item.kategori,
+      tanggal: item.tanggal,
+      wilayah: item.wilayah || 'Jakarta Pusat',
+      ringkasan: item.ringkasan,
+      konten: item.konten,
+      fotoUrl: item.fotoUrl || '',
+      captionFoto: item.captionFoto || '',
+      penulis: item.penulis || 'Pengurus IKA UMS Jabodetabek',
+      published: item.published ?? true,
+    });
+    setBeritaModalOpen(true);
+  };
+
+  const handleSaveBerita = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!newBerita.judul.trim()) {
+      showToast('Judul dokumentasi/berita wajib diisi.');
+      return;
+    }
+    if (!newBerita.ringkasan.trim()) {
+      showToast('Ringkasan singkat wajib diisi.');
+      return;
+    }
+
+    try {
+      const dataToSend = {
+        ...(editingBeritaId ? { id: editingBeritaId } : {}),
+        ...newBerita,
+      };
+
+      const res = await fetch('/api/admin/content', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'berita',
+          data: dataToSend,
+        }),
+      });
+
+      if (res.ok) {
+        setBeritaModalOpen(false);
+        setEditingBeritaId(null);
+        setNewBerita({ ...BLANK_BERITA });
+        await loadData();
+        showToast(
+          editingBeritaId
+            ? 'Perubahan berita & dokumentasi berhasil disimpan.'
+            : 'Berita & dokumentasi kegiatan berhasil diterbitkan.'
+        );
+      } else {
+        showToast('Gagal menyimpan berita & dokumentasi.');
+      }
+    } catch {
+      showToast('Terjadi kendala jaringan.');
+    }
+  };
+
+  const handleDeleteBerita = async (id: string, judul: string) => {
+    if (!confirm(`Hapus dokumentasi/berita "${judul}"? Tindakan ini tidak dapat dibatalkan.`)) return;
+    try {
+      const res = await fetch('/api/admin/content', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'berita-delete',
+          id,
+        }),
+      });
+      if (res.ok) {
+        setBeritaList((prev) => prev.filter((item) => item.id !== id));
+        showToast('Dokumentasi/berita berhasil dihapus.');
+      } else {
+        showToast('Gagal menghapus berita.');
+      }
+    } catch {
+      showToast('Terjadi kesalahan jaringan.');
+    }
+  };
+
+  const handleTogglePublishBerita = async (item: BeritaItem) => {
+    try {
+      const updated = { ...item, published: !item.published };
+      const res = await fetch('/api/admin/content', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          type: 'berita',
+          data: updated,
+        }),
+      });
+      if (res.ok) {
+        setBeritaList((prev) => prev.map((b) => (b.id === item.id ? updated : b)));
+        showToast(
+          updated.published
+            ? 'Dokumentasi kini tayang di web publik.'
+            : 'Dokumentasi diubah menjadi draft internal.'
+        );
+      } else {
+        showToast('Gagal mengubah status publikasi.');
+      }
+    } catch {
+      showToast('Terjadi kendala jaringan.');
+    }
+  };
+
+  const handleBeritaPhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      showToast('Format berkas harus berupa gambar (JPG, PNG, atau WebP).');
+      return;
+    }
+
+    setFotoUploadLoading(true);
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = document.createElement('img');
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const maxDim = 1200;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxDim || height > maxDim) {
+          if (width > height) {
+            height = Math.round((height * maxDim) / width);
+            width = maxDim;
+          } else {
+            width = Math.round((width * maxDim) / height);
+            height = maxDim;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+          ctx.drawImage(img, 0, 0, width, height);
+          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.82);
+          setNewBerita((prev) => ({ ...prev, fotoUrl: compressedBase64 }));
+          showToast('Foto dokumentasi berhasil dipilih & dioptimalkan.');
+        }
+        setFotoUploadLoading(false);
+      };
+      img.onerror = () => {
+        setFotoUploadLoading(false);
+        showToast('Gagal memproses gambar.');
+      };
+      img.src = event.target?.result as string;
+    };
+    reader.readAsDataURL(file);
+  };
+
   // Handler: Simpan Data Pengurus
   const handleSavePengurus = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -664,6 +872,19 @@ export default function AdminDashboardClient() {
     return true;
   });
 
+  // Filter dokumentasi & berita
+  const filteredBeritas = beritaList.filter((item) => {
+    if (beritaKategoriFilter !== 'semua' && item.kategori !== beritaKategoriFilter) return false;
+    if (beritaSearch.trim()) {
+      const q = beritaSearch.toLowerCase();
+      const matchJudul = item.judul.toLowerCase().includes(q);
+      const matchRingkasan = item.ringkasan.toLowerCase().includes(q);
+      const matchWilayah = item.wilayah?.toLowerCase().includes(q);
+      return matchJudul || matchRingkasan || matchWilayah;
+    }
+    return true;
+  });
+
   return (
     <div className="min-h-screen bg-slate-50 text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
       <Navbar />
@@ -740,6 +961,14 @@ export default function AdminDashboardClient() {
             >
               <Briefcase className="w-4 h-4" />
               + Info Loker
+            </button>
+            <button
+              type="button"
+              onClick={() => openBeritaCreate()}
+              className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg border border-amber-400/40 bg-amber-400/20 px-2.5 py-2 text-xs font-bold text-[#FCD34D] transition-colors hover:bg-amber-400/30 sm:px-4 sm:text-sm cursor-pointer"
+            >
+              <Camera className="w-4 h-4" />
+              + Dokumentasi / Berita
             </button>
               </div>
             </header>
@@ -837,6 +1066,25 @@ export default function AdminDashboardClient() {
             <span>Info Lowongan Kerja</span>
             <span className="px-2 py-0.5 rounded-full text-xs bg-emerald-100 text-emerald-800 font-bold">
               {lokerList.length}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            role="tab"
+            aria-selected={activeTab === 'berita'}
+            aria-controls="admin-panel-berita"
+            onClick={() => setActiveTab('berita')}
+            className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] ${
+              activeTab === 'berita'
+                ? 'border-[#0C2340] bg-[#0C2340] text-white rounded-xl'
+                : 'border-transparent text-[#475569] hover:text-[#0C2340] hover:bg-slate-50 rounded-xl'
+            }`}
+          >
+            <Camera className="w-4 h-4" />
+            <span>Dokumentasi &amp; Berita</span>
+            <span className="px-2 py-0.5 rounded-full text-xs bg-amber-100 text-amber-900 font-bold">
+              {beritaList.length}
             </span>
           </button>
 
@@ -1307,6 +1555,193 @@ export default function AdminDashboardClient() {
                         <Trash2 className="w-3.5 h-3.5" />
                         Hapus Loker
                       </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </section>
+        )}
+
+        {/* ========================================================================= */}
+        {/* TAB: DOKUMENTASI & BERITA KEGIATAN                                         */}
+        {/* ========================================================================= */}
+        {activeTab === 'berita' && (
+          <section id="admin-panel-berita" role="tabpanel" aria-label="Dokumentasi dan berita kegiatan" className="space-y-6">
+            {/* Header Modul & Filter */}
+            <div className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-xs space-y-4">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h2 className="text-xl font-bold text-[#0C2340]">Dokumentasi &amp; Berita Kegiatan</h2>
+                  <p className="text-sm text-slate-600 mt-0.5">
+                    Kelola foto, liputan, dan rilis berita kegiatan alumni untuk ditampilkan di Beranda dan halaman Cerita.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => openBeritaCreate()}
+                  className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-[#0C2340] px-4 py-2.5 text-sm font-bold text-white transition-colors hover:bg-[#08182E] shadow-sm cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  + Unggah Dokumentasi / Berita
+                </button>
+              </div>
+
+              {/* Filter & Pencarian */}
+              <div className="flex flex-col sm:flex-row gap-3 pt-2 border-t border-slate-100">
+                <div className="relative flex-1">
+                  <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                  <input
+                    type="text"
+                    value={beritaSearch}
+                    onChange={(e) => setBeritaSearch(e.target.value)}
+                    placeholder="Cari judul, ringkasan, atau wilayah..."
+                    className="w-full pl-9 pr-4 py-2 text-sm rounded-lg border border-slate-300 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:outline-hidden"
+                  />
+                </div>
+                <select
+                  value={beritaKategoriFilter}
+                  onChange={(e) => setBeritaKategoriFilter(e.target.value)}
+                  className="px-3 py-2 text-sm rounded-lg border border-slate-300 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:outline-hidden bg-white text-slate-800"
+                >
+                  <option value="semua">Semua Kategori</option>
+                  <option value="Kopdar & Temu Alumni">Kopdar &amp; Temu Alumni</option>
+                  <option value="Sosial & Pengabdian">Sosial &amp; Pengabdian</option>
+                  <option value="Karier & Bisnis">Karier &amp; Bisnis</option>
+                  <option value="Info Organisasi">Info Organisasi</option>
+                  <option value="Prestasi Alumni">Prestasi Alumni</option>
+                </select>
+              </div>
+            </div>
+
+            {/* List Berita / Dokumentasi */}
+            {filteredBeritas.length === 0 ? (
+              <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center space-y-3">
+                <Camera className="w-10 h-10 text-slate-400 mx-auto" />
+                <h3 className="text-lg font-bold text-[#0C2340]">Belum Ada Dokumentasi Kegiatan</h3>
+                <p className="text-sm text-slate-600 max-w-md mx-auto">
+                  Unggah liputan kopdar perdana, foto bersama, dan kabar terbaru alumni agar tampil di web publik.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => openBeritaCreate()}
+                  className="inline-flex items-center gap-2 min-h-[44px] px-4 py-2 rounded-lg bg-[#0C2340] text-white text-sm font-semibold hover:bg-[#08182E] transition-colors cursor-pointer"
+                >
+                  <Plus className="w-4 h-4" />
+                  Unggah Sekarang
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {filteredBeritas.map((berita) => (
+                  <div
+                    key={berita.id}
+                    className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-2xs flex flex-col justify-between"
+                  >
+                    <div>
+                      {/* Image Thumbnail */}
+                      <div className="relative aspect-[16/9] w-full bg-slate-100 overflow-hidden">
+                        {berita.fotoUrl ? (
+                          <Image
+                            src={berita.fotoUrl}
+                            alt={berita.judul}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex flex-col items-center justify-center bg-slate-100 text-slate-400 gap-2">
+                            <ImageIcon className="w-8 h-8" />
+                            <span className="text-xs">Belum ada foto</span>
+                          </div>
+                        )}
+                        <div className="absolute top-3 left-3 flex items-center gap-2">
+                          <span className="rounded-md bg-white/95 backdrop-blur-xs px-2.5 py-1 text-xs font-bold text-[#0C2340] shadow-2xs">
+                            {berita.kategori}
+                          </span>
+                          {berita.wilayah && (
+                            <span className="rounded-md bg-[#0C2340]/90 backdrop-blur-xs px-2.5 py-1 text-xs font-semibold text-white shadow-2xs">
+                              {berita.wilayah}
+                            </span>
+                          )}
+                        </div>
+                        <div className="absolute top-3 right-3">
+                          <span
+                            className={`rounded-full px-2.5 py-0.5 text-xs font-bold shadow-2xs ${
+                              berita.published
+                                ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                                : 'bg-slate-200 text-slate-700 border border-slate-300'
+                            }`}
+                          >
+                            {berita.published ? '✓ Tayang' : 'Draft'}
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Content Body */}
+                      <div className="p-5 space-y-2.5">
+                        <div className="flex items-center gap-2 text-xs text-slate-500">
+                          <Calendar className="w-3.5 h-3.5 text-amber-600" />
+                          <span>{berita.tanggal}</span>
+                          {berita.penulis && (
+                            <>
+                              <span>•</span>
+                              <span>{berita.penulis}</span>
+                            </>
+                          )}
+                        </div>
+                        <h3 className="text-lg font-bold text-[#0C2340] leading-snug">
+                          {berita.judul}
+                        </h3>
+                        <p className="text-sm text-slate-600 line-clamp-2 leading-relaxed">
+                          {berita.ringkasan}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Footer Actions */}
+                    <div className="px-5 py-3.5 bg-slate-50 border-t border-slate-100 flex flex-wrap items-center justify-between gap-2 text-xs">
+                      <div className="flex items-center gap-2">
+                        <Link
+                          href="/cerita"
+                          target="_blank"
+                          className="inline-flex items-center gap-1 font-semibold text-[#0C2340] hover:text-amber-600"
+                        >
+                          <Globe className="w-3.5 h-3.5" />
+                          <span>Halaman Cerita</span>
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={() => handleTogglePublishBerita(berita)}
+                          className={`inline-flex items-center gap-1 font-semibold px-2 py-1 rounded transition-colors ${
+                            berita.published
+                              ? 'text-amber-700 hover:bg-amber-100'
+                              : 'text-emerald-700 hover:bg-emerald-100'
+                          }`}
+                        >
+                          {berita.published ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                          <span>{berita.published ? 'Set Draft' : 'Tayangkan'}</span>
+                        </button>
+                      </div>
+
+                      <div className="flex items-center gap-1">
+                        <button
+                          type="button"
+                          onClick={() => openBeritaEdit(berita)}
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-slate-700 hover:bg-white hover:shadow-2xs font-semibold transition-colors cursor-pointer"
+                        >
+                          <Pencil className="w-3.5 h-3.5 text-[#0C2340]" />
+                          <span>Edit</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDeleteBerita(berita.id, berita.judul)}
+                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-rose-600 hover:bg-rose-50 font-semibold transition-colors cursor-pointer"
+                        >
+                          <Trash2 className="w-3.5 h-3.5" />
+                          <span>Hapus</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -2592,6 +3027,269 @@ export default function AdminDashboardClient() {
                 className="min-h-[44px] px-5 py-2 rounded-lg bg-[#0C2340] hover:bg-[#08182E] text-white text-xs sm:text-sm font-semibold"
               >
                 Simpan &amp; Terbitkan Loker
+              </button>
+            </div>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* ========================================================================= */}
+      {/* MODAL 4: UNGGAH / UBAH DOKUMENTASI & BERITA KEGIATAN                       */}
+      {/* ========================================================================= */}
+      <Dialog open={beritaModalOpen} onOpenChange={setBeritaModalOpen}>
+        <DialogContent className="max-w-2xl bg-white border border-slate-200 shadow-xl p-6 sm:p-8 rounded-2xl max-h-[92vh] overflow-y-auto">
+          <DialogHeader className="space-y-1.5 border-b border-slate-200 pb-3">
+            <DialogTitle className="text-xl font-bold text-[#0C2340]">
+              {editingBeritaId ? 'Ubah Berita & Dokumentasi Kegiatan' : 'Unggah Dokumentasi & Berita Kegiatan'}
+            </DialogTitle>
+            <DialogDescription className="text-xs text-[#475569]">
+              Dokumentasi yang ditayangkan otomatis muncul di halaman Cerita (/cerita) dan Beranda publik.
+            </DialogDescription>
+          </DialogHeader>
+
+          <form onSubmit={handleSaveBerita} className="space-y-4 pt-3">
+            {/* Judul Berita */}
+            <div>
+              <label className="block text-xs font-bold text-[#0C2340] mb-1 uppercase">
+                Judul Berita / Dokumentasi *
+              </label>
+              <input
+                type="text"
+                required
+                placeholder="Contoh: Kopdar Perdana IKA UMS Jabodetabek Sukses Digelar"
+                value={newBerita.judul}
+                onChange={(e) => setNewBerita({ ...newBerita, judul: e.target.value })}
+                className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340] focus:border-[#0C2340] focus:outline-hidden"
+              />
+            </div>
+
+            {/* Kategori & Wilayah */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div>
+                <label className="block text-xs font-bold text-[#0C2340] mb-1 uppercase">
+                  Kategori Kegiatan *
+                </label>
+                <select
+                  value={newBerita.kategori}
+                  onChange={(e) => setNewBerita({ ...newBerita, kategori: e.target.value })}
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340] focus:border-[#0C2340] focus:outline-hidden"
+                >
+                  <option value="Kopdar & Temu Alumni">Kopdar &amp; Temu Alumni</option>
+                  <option value="Sosial & Pengabdian">Sosial &amp; Pengabdian</option>
+                  <option value="Karier & Bisnis">Karier &amp; Bisnis</option>
+                  <option value="Info Organisasi">Info Organisasi</option>
+                  <option value="Prestasi Alumni">Prestasi Alumni</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#0C2340] mb-1 uppercase">
+                  Wilayah / Titik Temu
+                </label>
+                <select
+                  value={newBerita.wilayah}
+                  onChange={(e) => setNewBerita({ ...newBerita, wilayah: e.target.value })}
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340] focus:border-[#0C2340] focus:outline-hidden"
+                >
+                  <option value="Seluruh Jabodetabek">Seluruh Jabodetabek</option>
+                  {WILAYAH_JABODETABEK.map((w) => (
+                    <option key={w.nama} value={w.nama}>
+                      {w.nama}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Tanggal Pelaksanaan & Penulis */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+              <div>
+                <label className="block text-xs font-bold text-[#0C2340] mb-1 uppercase">
+                  Tanggal Kegiatan *
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="Contoh: 15 Februari 2026"
+                  value={newBerita.tanggal}
+                  onChange={(e) => setNewBerita({ ...newBerita, tanggal: e.target.value })}
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340] focus:border-[#0C2340] focus:outline-hidden"
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-[#0C2340] mb-1 uppercase">
+                  Penulis / Rilis Oleh
+                </label>
+                <input
+                  type="text"
+                  placeholder="Pengurus IKA UMS Jabodetabek"
+                  value={newBerita.penulis}
+                  onChange={(e) => setNewBerita({ ...newBerita, penulis: e.target.value })}
+                  className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340] focus:border-[#0C2340] focus:outline-hidden"
+                />
+              </div>
+            </div>
+
+            {/* Unggah Foto Dokumentasi */}
+            <div className="space-y-2 rounded-xl border border-slate-200 bg-slate-50/70 p-3.5">
+              <label className="block text-xs font-bold text-[#0C2340] uppercase">
+                Foto Dokumentasi / Cover Berita
+              </label>
+
+              {newBerita.fotoUrl ? (
+                <div className="relative rounded-lg overflow-hidden border border-slate-300 aspect-[16/9] w-full max-h-56 bg-slate-900">
+                  <Image
+                    src={newBerita.fotoUrl}
+                    alt="Pratinjau Foto Berita"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 600px"
+                    className="object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setNewBerita({ ...newBerita, fotoUrl: '' })}
+                    className="absolute top-2 right-2 rounded-md bg-rose-600/90 text-white text-xs font-semibold px-2.5 py-1 hover:bg-rose-700 shadow-sm cursor-pointer"
+                  >
+                    Ganti / Hapus Foto
+                  </button>
+                </div>
+              ) : (
+                <div className="space-y-2.5">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <label className="inline-flex min-h-[40px] items-center gap-2 px-3.5 py-1.5 rounded-lg bg-[#0C2340] text-white text-xs font-semibold cursor-pointer hover:bg-[#08182E] transition-colors">
+                      <Camera className="w-4 h-4" />
+                      <span>{fotoUploadLoading ? 'Memproses...' : 'Pilih Foto dari Perangkat'}</span>
+                      <input
+                        type="file"
+                        accept="image/png,image/jpeg,image/webp"
+                        onChange={handleBeritaPhotoUpload}
+                        className="hidden"
+                        disabled={fotoUploadLoading}
+                      />
+                    </label>
+
+                    <div className="text-[11px] text-slate-500">
+                      atau pilih preset dokumentasi:
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setNewBerita({
+                          ...newBerita,
+                          fotoUrl: '/images/hero-kumpul-bolo-pisah.jpg',
+                          captionFoto: 'Dokumentasi kopdar silaturahmi alumni UMS Jabodetabek.',
+                        })
+                      }
+                      className="px-2 py-1 rounded bg-white border border-slate-300 text-[11px] font-medium text-slate-700 hover:bg-slate-100"
+                    >
+                      Kumpul Alumni
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setNewBerita({
+                          ...newBerita,
+                          fotoUrl: '/images/event-kopdar.jpg',
+                          captionFoto: 'Temu akrab alumni UMS di perantauan.',
+                        })
+                      }
+                      className="px-2 py-1 rounded bg-white border border-slate-300 text-[11px] font-medium text-slate-700 hover:bg-slate-100"
+                    >
+                      Kopdar Santai
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setNewBerita({
+                          ...newBerita,
+                          fotoUrl: '/images/alumni-gathering-3.jpg',
+                          captionFoto: 'Suasana diskusi dan jejaring alumni UMS.',
+                        })
+                      }
+                      className="px-2 py-1 rounded bg-white border border-slate-300 text-[11px] font-medium text-slate-700 hover:bg-slate-100"
+                    >
+                      Gathering
+                    </button>
+                  </div>
+
+                  <input
+                    type="text"
+                    placeholder="Atau masukkan tautan URL foto gambar di sini (https://... atau /images/...)"
+                    value={newBerita.fotoUrl}
+                    onChange={(e) => setNewBerita({ ...newBerita, fotoUrl: e.target.value })}
+                    className="w-full min-h-[38px] px-3 py-1.5 text-xs rounded-lg bg-white border border-slate-300 text-[#0C2340]"
+                  />
+                </div>
+              )}
+
+              {/* Caption Foto */}
+              <input
+                type="text"
+                placeholder="Keterangan foto / caption (contoh: Suasana temu alumni UMS di Tebet)"
+                value={newBerita.captionFoto}
+                onChange={(e) => setNewBerita({ ...newBerita, captionFoto: e.target.value })}
+                className="w-full min-h-[38px] px-3 py-1.5 text-xs rounded-lg bg-white border border-slate-300 text-[#0C2340]"
+              />
+            </div>
+
+            {/* Ringkasan Singkat */}
+            <div>
+              <label className="block text-xs font-bold text-[#0C2340] mb-1 uppercase">
+                Ringkasan Singkat (Lead / Teaser) *
+              </label>
+              <textarea
+                required
+                rows={2}
+                placeholder="Tulis 1-2 kalimat ringkasan yang menarik perhatian di kartu beranda..."
+                value={newBerita.ringkasan}
+                onChange={(e) => setNewBerita({ ...newBerita, ringkasan: e.target.value })}
+                className="w-full p-3 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340] focus:border-[#0C2340] focus:outline-hidden"
+              />
+            </div>
+
+            {/* Isi Konten Lengkap */}
+            <div>
+              <label className="block text-xs font-bold text-[#0C2340] mb-1 uppercase">
+                Isi Konten &amp; Narasi Berita Lengkap
+              </label>
+              <textarea
+                rows={6}
+                placeholder="Ceritakan detail kegiatan, testimoni peserta, hasil musyawarah, susunan acara, dsb..."
+                value={newBerita.konten}
+                onChange={(e) => setNewBerita({ ...newBerita, konten: e.target.value })}
+                className="w-full p-3 text-sm rounded-lg bg-white border border-slate-300 text-[#0C2340] focus:border-[#0C2340] focus:outline-hidden"
+              />
+            </div>
+
+            {/* Status Publikasi */}
+            <div className="flex items-center gap-2.5 pt-1">
+              <input
+                type="checkbox"
+                id="berita-publish-checkbox"
+                checked={newBerita.published}
+                onChange={(e) => setNewBerita({ ...newBerita, published: e.target.checked })}
+                className="h-4 w-4 rounded border-slate-300 text-[#0C2340] focus:ring-[#0C2340]"
+              />
+              <label htmlFor="berita-publish-checkbox" className="text-xs sm:text-sm font-semibold text-slate-800 cursor-pointer">
+                Tayangkan langsung ke web publik (Halaman Cerita &amp; Beranda)
+              </label>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex justify-end gap-2.5 pt-4 border-t border-slate-200">
+              <button
+                type="button"
+                onClick={() => setBeritaModalOpen(false)}
+                className="min-h-[44px] px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold border border-slate-300 hover:bg-slate-100 text-[#0C2340]"
+              >
+                Batal
+              </button>
+              <button
+                type="submit"
+                className="min-h-[44px] px-5 py-2 rounded-lg bg-[#0C2340] hover:bg-[#08182E] text-white text-xs sm:text-sm font-semibold"
+              >
+                Simpan &amp; Terbitkan Berita
               </button>
             </div>
           </form>

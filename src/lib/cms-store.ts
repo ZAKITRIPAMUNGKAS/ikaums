@@ -6,6 +6,22 @@ import { type LokerItem, DEFAULT_LOKERS } from '@/data/loker';
 
 export { type LokerItem, DEFAULT_LOKERS };
 
+export interface BeritaItem {
+  id: string;
+  judul: string;
+  slug: string;
+  kategori: string;
+  tanggal: string;
+  wilayah?: string;
+  ringkasan: string;
+  konten: string;
+  fotoUrl?: string;
+  captionFoto?: string;
+  penulis?: string;
+  published: boolean;
+  createdAt: string;
+}
+
 export interface AgendaItem {
   id: string;
   judul: string;
@@ -93,6 +109,7 @@ export interface CmsStoreData {
   pengurus: PengurusData;
   settings: KomunitasSettings;
   lokers: LokerItem[];
+  beritas: BeritaItem[];
   landing: LandingContent;
 }
 
@@ -210,6 +227,26 @@ const DEFAULT_SETTINGS: KomunitasSettings = {
 
 const DEFAULT_AGENDAS: AgendaItem[] = [];
 
+export const DEFAULT_BERITAS: BeritaItem[] = [
+  {
+    id: 'berita-kopdar-perdana-2026',
+    judul: 'Kopdar Perdana IKA UMS Jabodetabek Sukses Digelar di Jakarta',
+    slug: 'kopdar-perdana-ika-ums-jabodetabek-2026',
+    kategori: 'Kopdar & Temu Alumni',
+    tanggal: '15 Februari 2026',
+    wilayah: 'Jakarta Pusat',
+    ringkasan:
+      'Silaturahmi tatap muka perdana alumni Universitas Muhammadiyah Surakarta di Jabodetabek berlangsung hangat, mempererat kebersamaan lintas fakultas dan angkatan.',
+    konten:
+      'Alumni Universitas Muhammadiyah Surakarta (UMS) yang berdomisili dan berkarier di wilayah Jakarta, Bogor, Depok, Tangerang, dan Bekasi sukses menyelenggarakan pertemuan tatap muka (Kopdar) perdana.\n\nKegiatan ini dihadiri oleh puluhan alumni lintas fakultas mulai dari Teknik, Ekonomi, Hukum, Farmasi, FKIP, Psikologi, Agama Islam, Geografi, hingga FKI dari angkatan senior hingga lulusan muda.\n\nDalam temu perdana ini, para alumni bersepakat memperkuat simpul komunikasi di 9 wilayah Jabodetabek, menyusun program pendampingan karier bagi lulusan baru, serta memperkuat sinergi profesional sesama alumni di perantauan.',
+    fotoUrl: '/images/hero-kumpul-bolo-pisah.jpg',
+    captionFoto: 'Kebersamaan alumni UMS lintas angkatan saat gelaran kopdar perdana di Jakarta.',
+    penulis: 'Humas IKA UMS Jabodetabek',
+    published: true,
+    createdAt: '2026-02-15T10:00:00.000Z',
+  },
+];
+
 const DATA_DIR = path.join(process.cwd(), '.data');
 const CMS_FILE = path.join(DATA_DIR, 'cms.json');
 
@@ -223,6 +260,7 @@ async function ensureCmsFile(): Promise<CmsStoreData> {
       pengurus: { ...DEFAULT_PENGURUS, ...(parsed.pengurus || {}) },
       settings: { ...DEFAULT_SETTINGS, ...(parsed.settings || {}) },
       lokers: Array.isArray(parsed.lokers) ? parsed.lokers : DEFAULT_LOKERS,
+      beritas: Array.isArray(parsed.beritas) ? parsed.beritas : DEFAULT_BERITAS,
       landing: {
         ...DEFAULT_LANDING,
         ...(parsed.landing || {}),
@@ -237,6 +275,7 @@ async function ensureCmsFile(): Promise<CmsStoreData> {
       pengurus: DEFAULT_PENGURUS,
       settings: DEFAULT_SETTINGS,
       lokers: DEFAULT_LOKERS,
+      beritas: DEFAULT_BERITAS,
       landing: DEFAULT_LANDING,
     };
     try {
@@ -394,9 +433,54 @@ export async function saveLandingContent(landing: LandingContent): Promise<Landi
   return data.landing;
 }
 
-export async function deleteLokerItem(id: string): Promise<boolean> {  const data = await getCmsData();
+export async function deleteLokerItem(id: string): Promise<boolean> {
+  const data = await getCmsData();
   if (Array.isArray(data.lokers)) {
     data.lokers = data.lokers.filter((l) => l.id !== id);
+    await writeCmsFile(data);
+  }
+  return true;
+}
+
+export async function saveBeritaItem(
+  berita: Omit<BeritaItem, 'id' | 'createdAt'> & { id?: string }
+): Promise<BeritaItem> {
+  const data = await getCmsData();
+  const id = berita.id || `berita-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
+  const slug =
+    berita.slug ||
+    berita.judul
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '')
+      .slice(0, 70);
+
+  const newBerita: BeritaItem = {
+    ...berita,
+    id,
+    slug,
+    createdAt: new Date().toISOString(),
+  };
+
+  if (!Array.isArray(data.beritas)) {
+    data.beritas = [];
+  }
+
+  const existingIdx = data.beritas.findIndex((b) => b.id === id);
+  if (existingIdx !== -1) {
+    data.beritas[existingIdx] = newBerita;
+  } else {
+    data.beritas.unshift(newBerita);
+  }
+
+  await writeCmsFile(data);
+  return newBerita;
+}
+
+export async function deleteBeritaItem(id: string): Promise<boolean> {
+  const data = await getCmsData();
+  if (Array.isArray(data.beritas)) {
+    data.beritas = data.beritas.filter((b) => b.id !== id);
     await writeCmsFile(data);
   }
   return true;

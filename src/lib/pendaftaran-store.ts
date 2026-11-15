@@ -2,6 +2,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import { getSupabaseServerClient, isSupabaseConfigured } from './supabase';
 import { normalizeIndonesianWhatsApp } from '@/data/ums-prodi';
+import type { AlumniProfile } from '@/types';
 
 export interface PendaftarRecord {
   id: string;
@@ -365,6 +366,46 @@ export async function exportPendaftarCsv(): Promise<string> {
   );
 
   return [headers.map(escapeCsv).join(','), ...rows].join('\r\n');
+}
+
+/**
+ * Mengambil daftar alumni yang sudah diverifikasi dan disetujui untuk ditampilkan secara publik
+ */
+export async function getApprovedAlumniProfiles(): Promise<AlumniProfile[]> {
+  try {
+    const list = await getAllPendaftar();
+    const approved = list.filter((p) => p.status === 'disetujui' && p.tampilDiDirektori !== false);
+
+    return approved.map((p) => {
+      const parts = (p.namaLengkap || '').trim().split(/\s+/).filter(Boolean);
+      const initials =
+        parts.length >= 2
+          ? `${parts[0][0]}${parts[parts.length - 1][0]}`.toUpperCase()
+          : (parts[0]?.slice(0, 2) || 'AL').toUpperCase();
+
+      return {
+        id: p.id,
+        nama: p.namaLengkap,
+        prodi: p.prodi,
+        angkatan: p.angkatan,
+        wilayah: p.wilayah,
+        industri: p.perusahaan
+          ? `${p.pekerjaan || 'Profesional'} di ${p.perusahaan}`
+          : p.pekerjaan || 'Alumni',
+        pekerjaan: p.pekerjaan || 'Alumni UMS',
+        perusahaan: p.perusahaan || undefined,
+        bio: `Alumni ${p.prodi} UMS angkatan ${p.angkatan}, berdomisili di ${p.wilayah}.`,
+        keahlian: p.pekerjaan ? [p.pekerjaan] : ['Networking & Karier'],
+        mentoringFokus: p.siapMentoring ? 'Sharing pengalaman karier & industri' : undefined,
+        isVerified: true,
+        bersediaMentoring: Boolean(p.siapMentoring),
+        avatarInitials: initials,
+        avatarUrl: p.fotoUrl || undefined,
+      };
+    });
+  } catch {
+    return [];
+  }
 }
 
 export { isSupabaseConfigured };

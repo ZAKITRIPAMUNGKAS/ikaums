@@ -41,7 +41,23 @@ export default function DirektoriPage() {
   const [visibleCount, setVisibleCount] = useState(4);
   const shouldReduceMotion = useReducedMotion();
 
-  const alumniList = useMemo(() => getAlumniList(), []);
+  const [alumniList, setAlumniList] = useState<AlumniProfile[]>(() => getAlumniList());
+
+  useEffect(() => {
+    let isMounted = true;
+    fetch('/api/alumni')
+      .then((res) => (res.ok ? res.json() : []))
+      .then((realData: AlumniProfile[]) => {
+        if (!isMounted) return;
+        if (Array.isArray(realData) && realData.length > 0) {
+          setAlumniList(IS_DEMO_MODE ? [...realData, ...getAlumniList()] : realData);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const regions = useMemo(
     () => ['Semua Wilayah', ...WILAYAH_JABODETABEK.map((w) => w.nama)],
@@ -334,7 +350,8 @@ export default function DirektoriPage() {
           <div className="flex items-center justify-between text-sm text-[#475569] pt-2 border-t border-[#0C2340]/8">
             <span>
               Menampilkan <strong className="text-[#0C2340]">{Math.min(visibleCount, filteredAlumni.length)}</strong> dari{' '}
-              <strong className="text-[#0C2340]">{filteredAlumni.length}</strong> profil ({DEMO_BADGE_LABEL})
+              <strong className="text-[#0C2340]">{filteredAlumni.length}</strong> profil
+              {IS_DEMO_MODE ? ` (${DEMO_BADGE_LABEL})` : ''}
               {selectedRegion !== 'Semua Wilayah' ? ` di ${selectedRegion}` : ''}
             </span>
             {(searchTerm || selectedRegion !== 'Semua Wilayah' || mentorOnly) && (
@@ -398,6 +415,7 @@ export default function DirektoriPage() {
                           fill
                           loading="lazy"
                           sizes="48px"
+                          unoptimized={alumni.avatarUrl.startsWith('data:')}
                           className="object-cover"
                         />
                       ) : (
@@ -464,6 +482,7 @@ export default function DirektoriPage() {
                         alt={`Foto ${selectedAlumni.nama}`}
                         fill
                         sizes="80px"
+                        unoptimized={selectedAlumni.avatarUrl.startsWith('data:')}
                         className="object-cover"
                       />
                     ) : (

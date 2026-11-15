@@ -1,10 +1,17 @@
 import { getAllPendaftar } from './pendaftaran-store';
 
+export interface HeroAlumniPreview {
+  id: string;
+  nama: string;
+  fotoUrl?: string;
+}
+
 export interface CommunityStats {
   totalAlumni: number;
   totalMentor: number;
   kawasanCounts: Record<string, number>;
   regionCounts: Record<string, number>;
+  recentAlumni?: HeroAlumniPreview[];
 }
 
 export const INITIAL_COMMUNITY_STATS: CommunityStats = {
@@ -28,12 +35,17 @@ export const INITIAL_COMMUNITY_STATS: CommunityStats = {
     depok: 0,
     bogor: 0,
   },
+  recentAlumni: [],
 };
 
 export function calculateCommunityStatsFromPendaftar(
   pendaftarList: Array<{
+    id?: string;
+    namaLengkap?: string;
     wilayah?: string;
     siapMentoring?: boolean;
+    tampilDiDirektori?: boolean;
+    fotoUrl?: string;
     status: string;
   }>
 ): CommunityStats {
@@ -58,11 +70,21 @@ export function calculateCommunityStatsFromPendaftar(
       depok: 0,
       bogor: 0,
     },
+    recentAlumni: [],
   };
 
   const approved = pendaftarList.filter((p) => p.status === 'disetujui');
   stats.totalAlumni = approved.length;
   stats.totalMentor = approved.filter((p) => Boolean(p.siapMentoring)).length;
+
+  stats.recentAlumni = approved
+    .filter((p) => p.tampilDiDirektori !== false)
+    .slice(0, 4)
+    .map((p) => ({
+      id: p.id || '',
+      nama: p.namaLengkap || 'Alumni UMS',
+      fotoUrl: p.fotoUrl || undefined,
+    }));
 
   for (const p of approved) {
     const w = (p.wilayah || '').toLowerCase();

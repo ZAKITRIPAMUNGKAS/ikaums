@@ -7,6 +7,8 @@ import {
   saveKomunitasSettings,
   saveLokerItem,
   deleteLokerItem,
+  saveBeritaItem,
+  deleteBeritaItem,
   saveLandingContent,
 } from '@/lib/cms-store';
 import { getServerSession } from '@/lib/server-auth';
@@ -16,7 +18,10 @@ export async function GET() {
   const data = await getCmsData();
 
   if (session?.role !== 'admin') {
-    return NextResponse.json({ lokers: data.lokers });
+    return NextResponse.json({
+      lokers: data.lokers,
+      beritas: (data.beritas || []).filter((b) => b.published),
+    });
   }
 
   return NextResponse.json(data);
@@ -53,6 +58,24 @@ export async function POST(request: NextRequest) {
       if (!id) return NextResponse.json({ error: 'ID lowongan kerja diperlukan' }, { status: 400 });
       await deleteLokerItem(id);
       return NextResponse.json({ success: true, message: 'Info lowongan kerja berhasil dihapus.' });
+    }
+
+    if (type === 'berita') {
+      const saved = await saveBeritaItem(data);
+      return NextResponse.json({
+        success: true,
+        message: 'Berita & dokumentasi kegiatan berhasil disimpan.',
+        item: saved,
+      });
+    }
+
+    if (type === 'berita-delete') {
+      if (!id) return NextResponse.json({ error: 'ID berita diperlukan' }, { status: 400 });
+      await deleteBeritaItem(id);
+      return NextResponse.json({
+        success: true,
+        message: 'Berita & dokumentasi kegiatan berhasil dihapus.',
+      });
     }
 
     if (type === 'pengurus') {
