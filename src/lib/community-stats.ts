@@ -82,7 +82,6 @@ export function calculateCommunityStatsFromPendaftar(
   stats.totalMentor = approved.filter((p) => Boolean(p.siapMentoring)).length;
 
   stats.recentAlumni = approved
-    .filter((p) => p.tampilDiDirektori !== false)
     .slice(0, 4)
     .map((p) => ({
       id: p.id || '',

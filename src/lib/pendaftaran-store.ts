@@ -374,7 +374,7 @@ export async function exportPendaftarCsv(): Promise<string> {
 export async function getApprovedAlumniProfiles(): Promise<AlumniProfile[]> {
   try {
     const list = await getAllPendaftar();
-    const approved = list.filter((p) => p.status === 'disetujui' && p.tampilDiDirektori !== false);
+    const approved = list.filter((p) => p.status === 'disetujui');
 
     return approved.map((p) => {
       const parts = (p.namaLengkap || '').trim().split(/\s+/).filter(Boolean);

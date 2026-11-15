@@ -64,7 +64,7 @@ interface LokerFormErrors {
 
 export default function PeluangPage() {
   const [mentors, setMentors] = useState<AlumniProfile[]>(() =>
-    getAlumniList().filter((a) => a.bersediaMentoring).slice(0, 4)
+    getAlumniList().slice(0, 8)
   );
 
   useEffect(() => {
@@ -74,14 +74,16 @@ export default function PeluangPage() {
       .then((data: AlumniProfile[]) => {
         if (!isMounted) return;
         if (Array.isArray(data) && data.length > 0) {
-          const realMentors = data.filter((a) => a.bersediaMentoring);
-          if (realMentors.length > 0) {
-            setMentors(
-              IS_DEMO_MODE
-                ? [...realMentors, ...getAlumniList().filter((a) => a.bersediaMentoring)].slice(0, 4)
-                : realMentors.slice(0, 4)
-            );
-          }
+          // Tampilkan semua alumni terverifikasi (baik mentor maupun bukan mentor)
+          // Urutkan alumni yang bersedia mentoring di depan
+          const sorted = [...data].sort((a, b) => {
+            if (a.bersediaMentoring && !b.bersediaMentoring) return -1;
+            if (!a.bersediaMentoring && b.bersediaMentoring) return 1;
+            return 0;
+          });
+          setMentors(
+            IS_DEMO_MODE ? [...sorted, ...getAlumniList()] : sorted
+          );
         }
       })
       .catch(() => {});
@@ -567,7 +569,7 @@ export default function PeluangPage() {
                 </span>
               </div>
 
-              {IS_DEMO_MODE && (
+              {mentors.length > 0 && (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
                   {mentors.map((m) => (
                     <article
@@ -599,11 +601,24 @@ export default function PeluangPage() {
                             </span>
                           </div>
                         </div>
-                        <p className="text-base font-semibold text-[#0C2340] leading-[1.5]">
-                          {m.mentoringFokus || m.pekerjaan}
+
+                        <div className="flex items-center gap-1.5">
+                          {m.bersediaMentoring ? (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-50 text-[#B45309] border border-amber-200/60">
+                              Siap Mentoring
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                              Jejaring Alumni
+                            </span>
+                          )}
+                        </div>
+
+                        <p className="text-xs sm:text-sm font-semibold text-[#0C2340] leading-snug line-clamp-2">
+                          {m.mentoringFokus || m.industri || m.pekerjaan}
                         </p>
-                        <span className="text-sm text-[#475569] flex items-center gap-1.5">
-                          <MapPin className="w-4 h-4 text-[#92400E] shrink-0" />
+                        <span className="text-xs text-[#475569] flex items-center gap-1.5">
+                          <MapPin className="w-3.5 h-3.5 text-[#92400E] shrink-0" />
                           {m.wilayah}
                         </span>
                       </div>
@@ -611,9 +626,11 @@ export default function PeluangPage() {
                       <button
                         type="button"
                         onClick={() => handleOpenBooking(m)}
-                        className="w-full min-h-[44px] rounded-lg bg-slate-100 hover:bg-[#0C2340] text-[#0C2340] hover:text-white text-xs font-semibold transition-colors cursor-pointer"
+                        className="w-full min-h-[44px] rounded-xl bg-slate-100 hover:bg-[#0C2340] text-[#0C2340] hover:text-white text-xs font-semibold transition-colors cursor-pointer"
                       >
-                        Ajukan Sesi ({DEMO_BADGE_LABEL})
+                        {m.bersediaMentoring
+                          ? IS_DEMO_MODE ? `Ajukan Sesi (${DEMO_BADGE_LABEL})` : 'Ajukan Sesi Mentoring'
+                          : 'Terhubung dengan Alumni'}
                       </button>
                     </article>
                   ))}

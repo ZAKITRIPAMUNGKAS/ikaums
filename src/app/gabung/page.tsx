@@ -130,7 +130,7 @@ export default function GabungPage() {
     perusahaan: '',
     siapMentoring: false,
     mentorContactConsent: false,
-    tampilDiDirektori: false,
+    tampilDiDirektori: true,
     agreeConsent: false,
     website: '', // honeypot anti-spam
   });
