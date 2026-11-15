@@ -401,18 +401,21 @@ export default function GabungPage() {
               )}
 
               {/* Langkah 1: Data Inti */}
-              <fieldset className="space-y-5">
-                <legend className="text-base font-bold text-[#0C2340] pb-2 border-b border-slate-200 w-full">
-                  Data Dasar Alumni (Wajib)
+              <fieldset className="space-y-6">
+                <legend className="text-base sm:text-lg font-bold text-[#0C2340] pb-2.5 border-b border-slate-200 w-full flex items-center justify-between">
+                  <span>Data Dasar Alumni (Wajib)</span>
+                  <span className="text-xs font-semibold text-[#92400E] bg-amber-50 border border-amber-200/80 px-2.5 py-1 rounded-full">
+                    Langkah 1
+                  </span>
                 </legend>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  {/* Unggah Foto Profil Akun */}
-                  <div className="sm:col-span-2 rounded-xl border border-slate-200 bg-slate-50/70 p-4 sm:p-5">
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                      <div className="relative h-20 w-20 shrink-0 mx-auto sm:mx-0">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
+                  {/* Unggah Foto Profil Akun - Cozy Card */}
+                  <div className="sm:col-span-2 rounded-2xl border border-amber-200/70 bg-gradient-to-br from-amber-50/40 via-white to-slate-50/80 p-4 sm:p-6 shadow-2xs">
+                    <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-5">
+                      <div className="relative shrink-0">
                         {fotoProfil ? (
-                          <div className="relative h-20 w-20 overflow-hidden rounded-full border-2 border-[#D97706] shadow-xs">
+                          <div className="relative h-22 w-22 sm:h-24 sm:w-24 overflow-hidden rounded-full ring-4 ring-amber-100 border-2 border-[#D97706] shadow-sm">
                             <Image
                               src={fotoProfil}
                               alt="Pratinjau foto profil alumni"
@@ -422,34 +425,45 @@ export default function GabungPage() {
                             />
                           </div>
                         ) : (
-                          <div className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-dashed border-slate-300 bg-white text-slate-400">
-                            <Camera className="h-8 w-8 text-slate-400" aria-hidden="true" />
+                          <div
+                            onClick={() => fileInputRef.current?.click()}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' || e.key === ' ') {
+                                fileInputRef.current?.click();
+                              }
+                            }}
+                            className="flex h-22 w-22 sm:h-24 sm:w-24 items-center justify-center rounded-full ring-4 ring-slate-100 border-2 border-dashed border-amber-300/80 bg-white text-slate-400 hover:border-[#D97706] hover:text-[#D97706] transition-all cursor-pointer group"
+                            aria-label="Sentuh untuk memilih foto profil"
+                          >
+                            <Camera className="h-8 w-8 text-amber-600/70 group-hover:scale-110 transition-transform" aria-hidden="true" />
                           </div>
                         )}
                         {fotoProfil && (
                           <button
                             type="button"
                             onClick={handleRemoveFoto}
-                            className="absolute -top-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white shadow-xs hover:bg-red-700 transition-colors cursor-pointer"
+                            className="absolute -top-1.5 -right-1.5 flex h-7 w-7 items-center justify-center rounded-full bg-red-600 text-white shadow-sm hover:bg-red-700 transition-colors cursor-pointer"
                             aria-label="Hapus foto profil"
                             title="Hapus foto profil"
                           >
-                            <X className="h-3.5 w-3.5" />
+                            <X className="h-4 w-4" />
                           </button>
                         )}
                       </div>
 
-                      <div className="flex-1 space-y-1.5 text-center sm:text-left">
+                      <div className="flex-1 space-y-2 text-center sm:text-left">
                         <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                          <label htmlFor="foto-profil-input" className="text-sm font-bold text-[#0C2340] cursor-pointer">
+                          <label htmlFor="foto-profil-input" className="text-base font-bold text-[#0C2340] cursor-pointer">
                             Foto Profil Akun
                           </label>
-                          <span className="text-xs px-2 py-0.5 rounded-full bg-slate-200/80 text-slate-700 font-medium">
+                          <span className="text-xs px-2.5 py-0.5 rounded-full bg-amber-100/80 text-[#92400E] font-semibold">
                             Opsional
                           </span>
                         </div>
-                        <p className="text-xs sm:text-sm text-[#475569] leading-relaxed">
-                          Foto ini digunakan pada kartu anggota digital dan ruang akun IKA UMS. Format JPG, PNG, atau WebP (maks. 3 MB).
+                        <p className="text-xs sm:text-sm text-[#475569] leading-relaxed max-w-lg">
+                          Foto ini digunakan pada kartu anggota digital dan direktori alumni. Sentuh tombol di bawah untuk mengambil dari galeri atau kamera HP (maks. 3 MB).
                         </p>
 
                         <div className="pt-1 flex flex-wrap items-center justify-center sm:justify-start gap-2.5">
@@ -464,31 +478,31 @@ export default function GabungPage() {
                           <button
                             type="button"
                             onClick={() => fileInputRef.current?.click()}
-                            className="inline-flex min-h-[44px] items-center gap-1.5 px-3.5 py-2 rounded-lg bg-white border border-slate-300 hover:border-[#0C2340] hover:bg-slate-50 text-xs sm:text-sm font-semibold text-[#0C2340] transition-colors shadow-2xs cursor-pointer"
+                            className="inline-flex min-h-[46px] items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-slate-300 hover:border-[#0C2340] hover:bg-slate-50 text-sm font-semibold text-[#0C2340] transition-colors shadow-2xs cursor-pointer active:scale-[0.98]"
                           >
                             <Upload className="h-4 w-4 text-[#D97706]" />
-                            <span>{fotoProfil ? 'Ganti Foto' : 'Unggah Foto Profil'}</span>
+                            <span>{fotoProfil ? 'Ganti Foto' : 'Pilih Foto dari HP'}</span>
                           </button>
 
                           {fotoProfil && (
                             <button
                               type="button"
                               onClick={handleRemoveFoto}
-                              className="inline-flex min-h-[44px] items-center gap-1 px-3 py-2 text-xs sm:text-sm font-medium text-red-600 hover:text-red-700 transition-colors cursor-pointer"
+                              className="inline-flex min-h-[46px] items-center gap-1 px-3 py-2 text-sm font-medium text-red-600 hover:text-red-700 transition-colors cursor-pointer"
                             >
                               Hapus
                             </button>
                           )}
 
                           {fotoProfilName && (
-                            <span className="text-xs text-slate-500 truncate max-w-[180px]">
-                              {fotoProfilName}
+                            <span className="text-xs text-slate-500 truncate max-w-[190px] self-center">
+                              ✓ {fotoProfilName}
                             </span>
                           )}
                         </div>
 
                         {fotoError && (
-                          <p className="text-xs text-red-600 font-medium pt-0.5">
+                          <p className="text-xs text-red-600 font-medium pt-1">
                             {fotoError}
                           </p>
                         )}
@@ -496,8 +510,9 @@ export default function GabungPage() {
                     </div>
                   </div>
 
-                  <div className="sm:col-span-2">
-                    <label htmlFor="namaLengkap" className="block text-sm font-semibold text-[#0C2340] mb-1.5">
+                  {/* Nama Lengkap */}
+                  <div className="sm:col-span-2 space-y-1.5">
+                    <label htmlFor="namaLengkap" className="block text-sm sm:text-base font-bold text-[#0C2340]">
                       Nama Lengkap dengan Gelar <span className="text-[#92400E]">*</span>
                     </label>
                     <input
@@ -513,153 +528,172 @@ export default function GabungPage() {
                         setFormData({ ...formData, namaLengkap: e.target.value });
                         clearError('namaLengkap');
                       }}
-                      className={`w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-white border text-base text-[#0C2340] focus:outline-hidden focus:ring-2 ${
+                      className={`w-full min-h-[50px] sm:min-h-[52px] px-4 py-3 rounded-xl sm:rounded-2xl bg-slate-50/40 hover:bg-white text-[16px] text-[#0C2340] placeholder:text-slate-400 border transition-all shadow-2xs focus:bg-white focus:outline-hidden focus:ring-4 ${
                         fieldErrors.namaLengkap
                           ? 'border-red-500 focus:ring-red-200'
-                          : 'border-slate-300 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
+                          : 'border-slate-300/80 focus:border-[#0C2340] focus:ring-amber-500/15'
                       }`}
                     />
-                    <p id="hint-nama" className="mt-1.5 text-base text-[#475569] leading-[1.5]">
+                    <p id="hint-nama" className="text-xs sm:text-sm text-[#475569] leading-relaxed">
                       Boleh cantumkan gelar akademik atau profesi sesuai penulisan resmi.
                     </p>
                     {fieldErrors.namaLengkap && (
-                      <p id="err-nama" className="mt-1 text-sm text-red-700 font-medium">
+                      <p id="err-nama" className="text-xs sm:text-sm text-red-700 font-medium pt-0.5">
                         {fieldErrors.namaLengkap}
                       </p>
                     )}
                   </div>
 
-                  <div>
-                    <label htmlFor="angkatan" className="block text-sm font-semibold text-[#0C2340] mb-1.5">
+                  {/* Tahun Angkatan */}
+                  <div className="space-y-1.5">
+                    <label htmlFor="angkatan" className="block text-sm sm:text-base font-bold text-[#0C2340]">
                       Tahun Angkatan Masuk UMS <span className="text-[#92400E]">*</span>
                     </label>
-                    <select
-                      id="angkatan"
-                      required
-                      aria-invalid={fieldErrors.angkatan ? 'true' : undefined}
-                      aria-describedby={fieldErrors.angkatan ? 'err-angkatan' : undefined}
-                      value={formData.angkatan}
-                      onChange={(e) => {
-                        setFormData({ ...formData, angkatan: e.target.value });
-                        clearError('angkatan');
-                      }}
-                      className={`w-full min-h-[44px] px-3.5 py-2.5 rounded-lg bg-white border text-base text-[#0C2340] focus:outline-hidden focus:ring-2 ${
-                        fieldErrors.angkatan
-                          ? 'border-red-500 focus:ring-red-200'
-                          : 'border-slate-300 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
-                      }`}
-                    >
-                      <option value="">Pilih Tahun Angkatan</option>
-                      {ANGKATAN_OPTIONS.map((tahun) => (
-                        <option key={tahun} value={tahun}>
-                          Angkatan {tahun}
-                        </option>
-                      ))}
-                    </select>
+                    <div className="relative">
+                      <select
+                        id="angkatan"
+                        required
+                        aria-invalid={fieldErrors.angkatan ? 'true' : undefined}
+                        aria-describedby={fieldErrors.angkatan ? 'err-angkatan' : undefined}
+                        value={formData.angkatan}
+                        onChange={(e) => {
+                          setFormData({ ...formData, angkatan: e.target.value });
+                          clearError('angkatan');
+                        }}
+                        className={`w-full min-h-[50px] sm:min-h-[52px] appearance-none pl-4 pr-11 py-3 rounded-xl sm:rounded-2xl bg-slate-50/40 hover:bg-white text-[16px] text-[#0C2340] border transition-all shadow-2xs focus:bg-white focus:outline-hidden focus:ring-4 ${
+                          fieldErrors.angkatan
+                            ? 'border-red-500 focus:ring-red-200'
+                            : 'border-slate-300/80 focus:border-[#0C2340] focus:ring-amber-500/15'
+                        }`}
+                      >
+                        <option value="">Pilih Tahun Angkatan</option>
+                        {ANGKATAN_OPTIONS.map((tahun) => (
+                          <option key={tahun} value={tahun}>
+                            Angkatan {tahun}
+                          </option>
+                        ))}
+                      </select>
+                      <ChevronDown className="w-5 h-5 text-slate-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    </div>
                     {fieldErrors.angkatan && (
-                      <p id="err-angkatan" className="mt-1.5 text-sm text-red-700 font-medium">
+                      <p id="err-angkatan" className="text-xs sm:text-sm text-red-700 font-medium pt-0.5">
                         {fieldErrors.angkatan}
                       </p>
                     )}
                   </div>
 
-                  <div>
-                    <label htmlFor="prodi" className="block text-sm font-semibold text-[#0C2340] mb-1.5">
+                  {/* Program Studi */}
+                  <div className="space-y-1.5">
+                    <label htmlFor="prodi" className="block text-sm sm:text-base font-bold text-[#0C2340]">
                       Program Studi di UMS <span className="text-[#92400E]">*</span>
                     </label>
-                    <select
-                      id="prodi"
-                      required
-                      aria-invalid={fieldErrors.prodi ? 'true' : undefined}
-                      aria-describedby={fieldErrors.prodi ? 'err-prodi' : undefined}
-                      value={formData.prodi}
-                      onChange={(e) => {
-                        setFormData({ ...formData, prodi: e.target.value });
-                        clearError('prodi');
-                      }}
-                      className={`w-full min-h-[44px] px-3.5 py-2.5 rounded-lg bg-white border text-base text-[#0C2340] focus:outline-hidden focus:ring-2 ${
-                        fieldErrors.prodi
-                          ? 'border-red-500 focus:ring-red-200'
-                          : 'border-slate-300 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
-                      }`}
-                    >
-                      <option value="">Pilih Program Studi</option>
-                      {FAKULTAS_PRODI_UMS.map((group) => (
-                        <optgroup key={group.fakultas} label={group.fakultas}>
-                          {group.prodi.map((item) => (
-                            <option key={item} value={item}>
-                              {item}
-                            </option>
-                          ))}
-                        </optgroup>
-                      ))}
-                    </select>
+                    <div className="relative">
+                      <select
+                        id="prodi"
+                        required
+                        aria-invalid={fieldErrors.prodi ? 'true' : undefined}
+                        aria-describedby={fieldErrors.prodi ? 'err-prodi' : undefined}
+                        value={formData.prodi}
+                        onChange={(e) => {
+                          setFormData({ ...formData, prodi: e.target.value });
+                          clearError('prodi');
+                        }}
+                        className={`w-full min-h-[50px] sm:min-h-[52px] appearance-none pl-4 pr-11 py-3 rounded-xl sm:rounded-2xl bg-slate-50/40 hover:bg-white text-[16px] text-[#0C2340] border transition-all shadow-2xs focus:bg-white focus:outline-hidden focus:ring-4 ${
+                          fieldErrors.prodi
+                            ? 'border-red-500 focus:ring-red-200'
+                            : 'border-slate-300/80 focus:border-[#0C2340] focus:ring-amber-500/15'
+                        }`}
+                      >
+                        <option value="">Pilih Program Studi</option>
+                        {FAKULTAS_PRODI_UMS.map((group) => (
+                          <optgroup key={group.fakultas} label={group.fakultas}>
+                            {group.prodi.map((item) => (
+                              <option key={item} value={item}>
+                                {item}
+                              </option>
+                            ))}
+                          </optgroup>
+                        ))}
+                      </select>
+                      <ChevronDown className="w-5 h-5 text-slate-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    </div>
                     {fieldErrors.prodi && (
-                      <p id="err-prodi" className="mt-1.5 text-sm text-red-700 font-medium">
+                      <p id="err-prodi" className="text-xs sm:text-sm text-red-700 font-medium pt-0.5">
                         {fieldErrors.prodi}
                       </p>
                     )}
                   </div>
 
-                  <div>
-                    <label htmlFor="wilayah" className="block text-sm font-semibold text-[#0C2340] mb-1.5">
+                  {/* Wilayah Domisili */}
+                  <div className="space-y-1.5">
+                    <label htmlFor="wilayah" className="block text-sm sm:text-base font-bold text-[#0C2340]">
                       Wilayah Domisili Jabodetabek <span className="text-[#92400E]">*</span>
                     </label>
-                    <select
-                      id="wilayah"
-                      required
-                      aria-invalid={fieldErrors.wilayah ? 'true' : undefined}
-                      value={formData.wilayah}
-                      onChange={(e) => {
-                        setFormData({ ...formData, wilayah: e.target.value });
-                        clearError('wilayah');
-                      }}
-                      className="w-full min-h-[44px] px-3.5 py-2.5 rounded-lg bg-white border border-slate-300 focus:border-[#0C2340] focus:outline-hidden focus:ring-2 focus:ring-[#0C2340]/10 text-base text-[#0C2340]"
-                    >
-                      {WILAYAH_JABODETABEK.map((reg) => (
-                        <option key={reg.id} value={reg.nama}>
-                          {reg.nama}
-                        </option>
-                      ))}
-                    </select>
+                    <div className="relative">
+                      <select
+                        id="wilayah"
+                        required
+                        aria-invalid={fieldErrors.wilayah ? 'true' : undefined}
+                        value={formData.wilayah}
+                        onChange={(e) => {
+                          setFormData({ ...formData, wilayah: e.target.value });
+                          clearError('wilayah');
+                        }}
+                        className="w-full min-h-[50px] sm:min-h-[52px] appearance-none pl-4 pr-11 py-3 rounded-xl sm:rounded-2xl bg-slate-50/40 hover:bg-white text-[16px] text-[#0C2340] border border-slate-300/80 transition-all shadow-2xs focus:bg-white focus:border-[#0C2340] focus:outline-hidden focus:ring-4 focus:ring-amber-500/15"
+                      >
+                        {WILAYAH_JABODETABEK.map((reg) => (
+                          <option key={reg.id} value={reg.nama}>
+                            {reg.nama}
+                          </option>
+                        ))}
+                      </select>
+                      <ChevronDown className="w-5 h-5 text-slate-400 absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    </div>
                   </div>
 
-                  <div>
-                    <label htmlFor="whatsapp" className="block text-sm font-semibold text-[#0C2340] mb-1.5">
+                  {/* Nomor WhatsApp */}
+                  <div className="space-y-1.5">
+                    <label htmlFor="whatsapp" className="block text-sm sm:text-base font-bold text-[#0C2340]">
                       Nomor WhatsApp Aktif <span className="text-[#92400E]">*</span>
                     </label>
-                    <input
-                      id="whatsapp"
-                      type="tel"
-                      inputMode="tel"
-                      autoComplete="tel"
-                      required
-                      aria-invalid={fieldErrors.whatsapp ? 'true' : undefined}
-                      aria-describedby={fieldErrors.whatsapp ? 'hint-wa err-wa' : 'hint-wa'}
-                      placeholder="Contoh: 081234567890 atau +62812..."
-                      value={formData.whatsapp}
-                      onChange={(e) => {
-                        setFormData({ ...formData, whatsapp: e.target.value });
-                        clearError('whatsapp');
-                      }}
-                      className={`w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-white border text-base text-[#0C2340] focus:outline-hidden focus:ring-2 ${
-                        fieldErrors.whatsapp
-                          ? 'border-red-500 focus:ring-red-200'
-                          : 'border-slate-300 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
-                      }`}
-                    />
-                    <p id="hint-wa" className="mt-1.5 text-base text-[#475569] leading-[1.5]">
+                    <div className="relative flex items-center">
+                      <span className="inline-flex items-center gap-1.5 px-3.5 min-h-[50px] sm:min-h-[52px] bg-slate-100 border border-r-0 border-slate-300/80 rounded-l-xl sm:rounded-l-2xl text-sm sm:text-base font-bold text-[#0C2340] select-none shrink-0">
+                        🇮🇩 +62
+                      </span>
+                      <input
+                        id="whatsapp"
+                        type="tel"
+                        inputMode="tel"
+                        autoComplete="tel"
+                        required
+                        aria-invalid={fieldErrors.whatsapp ? 'true' : undefined}
+                        aria-describedby={fieldErrors.whatsapp ? 'hint-wa err-wa' : 'hint-wa'}
+                        placeholder="812-3456-7890"
+                        value={formData.whatsapp}
+                        onChange={(e) => {
+                          setFormData({ ...formData, whatsapp: e.target.value });
+                          clearError('whatsapp');
+                        }}
+                        className={`w-full min-h-[50px] sm:min-h-[52px] px-4 py-3 rounded-r-xl sm:rounded-r-2xl rounded-l-none bg-slate-50/40 hover:bg-white text-[16px] text-[#0C2340] placeholder:text-slate-400 border transition-all shadow-2xs focus:bg-white focus:outline-hidden focus:ring-4 ${
+                          fieldErrors.whatsapp
+                            ? 'border-red-500 focus:ring-red-200'
+                            : 'border-slate-300/80 focus:border-[#0C2340] focus:ring-amber-500/15'
+                        }`}
+                      />
+                    </div>
+                    <p id="hint-wa" className="text-xs sm:text-sm text-[#475569] leading-relaxed">
                       Hanya untuk verifikasi dan undangan kopdar wilayah. Tidak tampil ke publik.
                     </p>
                     {fieldErrors.whatsapp && (
-                      <p id="err-wa" className="mt-1 text-sm text-red-700 font-medium">
+                      <p id="err-wa" className="text-xs sm:text-sm text-red-700 font-medium pt-0.5">
                         {fieldErrors.whatsapp}
                       </p>
                     )}
                   </div>
 
-                  <div className="sm:col-span-2">
-                    <label htmlFor="email" className="block text-sm font-semibold text-[#0C2340] mb-1.5">
+                  {/* Email */}
+                  <div className="sm:col-span-2 space-y-1.5">
+                    <label htmlFor="email" className="block text-sm sm:text-base font-bold text-[#0C2340]">
                       Alamat Email <span className="text-sm font-normal text-[#475569]">(Opsional)</span>
                     </label>
                     <input
@@ -675,17 +709,17 @@ export default function GabungPage() {
                         setFormData({ ...formData, email: e.target.value });
                         clearError('email');
                       }}
-                      className={`w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-white border text-base text-[#0C2340] focus:outline-hidden focus:ring-2 ${
+                      className={`w-full min-h-[50px] sm:min-h-[52px] px-4 py-3 rounded-xl sm:rounded-2xl bg-slate-50/40 hover:bg-white text-[16px] text-[#0C2340] placeholder:text-slate-400 border transition-all shadow-2xs focus:bg-white focus:outline-hidden focus:ring-4 ${
                         fieldErrors.email
                           ? 'border-red-500 focus:ring-red-200'
-                          : 'border-slate-300 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
+                          : 'border-slate-300/80 focus:border-[#0C2340] focus:ring-amber-500/15'
                       }`}
                     />
-                    <p id="hint-email" className="mt-1.5 text-base text-[#475569] leading-[1.5]">
+                    <p id="hint-email" className="text-xs sm:text-sm text-[#475569] leading-relaxed">
                       Disiapkan jika nanti ingin masuk akun lewat tautan email.
                     </p>
                     {fieldErrors.email && (
-                      <p id="err-email" className="mt-1 text-sm text-red-700 font-medium">
+                      <p id="err-email" className="text-xs sm:text-sm text-red-700 font-medium pt-0.5">
                         {fieldErrors.email}
                       </p>
                     )}
@@ -694,51 +728,63 @@ export default function GabungPage() {
               </fieldset>
 
               {/* Langkah 2 (Opsional & Dapat Dilewati) */}
-              <div className="border-t border-slate-200 pt-5">
+              <div className="border-t border-slate-200/90 pt-6">
                 <button
                   type="button"
                   onClick={() => setShowOptional((v) => !v)}
                   aria-expanded={showOptional}
-                  className="w-full min-h-[44px] flex items-center justify-between text-left text-base font-bold text-[#0C2340] hover:text-[#92400E] transition-colors cursor-pointer"
+                  className="w-full min-h-[50px] p-4 rounded-2xl border border-slate-200 bg-slate-50/70 hover:bg-slate-100/70 flex items-center justify-between text-left text-sm sm:text-base font-bold text-[#0C2340] transition-colors cursor-pointer"
                 >
-                  <span>Pekerjaan &amp; Kesediaan Mentoring (Opsional, bisa diisi nanti)</span>
+                  <div className="flex items-center gap-2">
+                    <span>Pekerjaan &amp; Kesediaan Mentoring</span>
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-slate-200 text-slate-600 font-medium">
+                      Opsional
+                    </span>
+                  </div>
                   <ChevronDown
-                    className={`w-4 h-4 shrink-0 transition-transform ${showOptional ? 'rotate-180' : ''}`}
+                    className={`w-5 h-5 shrink-0 text-slate-500 transition-transform ${showOptional ? 'rotate-180' : ''}`}
                   />
                 </button>
 
                 {showOptional && (
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-4">
-                    <div>
-                      <label htmlFor="pekerjaan" className="block text-sm font-semibold text-[#0C2340] mb-1.5">
+                    <div className="space-y-1.5">
+                      <label htmlFor="pekerjaan" className="block text-sm sm:text-base font-bold text-[#0C2340]">
                         Profesi / Bidang Kerja
                       </label>
                       <input
                         id="pekerjaan"
                         type="text"
                         autoComplete="organization-title"
-                        placeholder="Misalnya: Analis Keuangan, Wirausaha, Guru"
+                        placeholder="Contoh: Software Engineer, Wirausaha, Dokter"
                         value={formData.pekerjaan}
                         onChange={(e) => setFormData({ ...formData, pekerjaan: e.target.value })}
-                        className="w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-white border border-slate-300 focus:border-[#0C2340] focus:outline-hidden text-base text-[#0C2340]"
+                        className="w-full min-h-[50px] sm:min-h-[52px] px-4 py-3 rounded-xl sm:rounded-2xl bg-slate-50/40 hover:bg-white text-[16px] text-[#0C2340] placeholder:text-slate-400 border border-slate-300/80 transition-all shadow-2xs focus:bg-white focus:border-[#0C2340] focus:outline-hidden focus:ring-4 focus:ring-amber-500/15"
                       />
                     </div>
-                    <div>
-                      <label htmlFor="perusahaan" className="block text-sm font-semibold text-[#0C2340] mb-1.5">
-                        Instansi / Usaha
+                    <div className="space-y-1.5">
+                      <label htmlFor="perusahaan" className="block text-sm sm:text-base font-bold text-[#0C2340]">
+                        Instansi / Tempat Usaha
                       </label>
                       <input
                         id="perusahaan"
                         type="text"
                         autoComplete="organization"
-                        placeholder="Nama perusahaan atau usaha sendiri"
+                        placeholder="Nama kantor atau brand usaha sendiri"
                         value={formData.perusahaan}
                         onChange={(e) => setFormData({ ...formData, perusahaan: e.target.value })}
-                        className="w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-white border border-slate-300 focus:border-[#0C2340] focus:outline-hidden text-base text-[#0C2340]"
+                        className="w-full min-h-[50px] sm:min-h-[52px] px-4 py-3 rounded-xl sm:rounded-2xl bg-slate-50/40 hover:bg-white text-[16px] text-[#0C2340] placeholder:text-slate-400 border border-slate-300/80 transition-all shadow-2xs focus:bg-white focus:border-[#0C2340] focus:outline-hidden focus:ring-4 focus:ring-amber-500/15"
                       />
                     </div>
-                    <div className="sm:col-span-2 space-y-2">
-                      <label htmlFor="siapMentoring" className="flex items-start gap-3 min-h-[44px] py-2 cursor-pointer text-base text-[#334155] leading-[1.5]">
+                    <div className="sm:col-span-2 space-y-3 pt-1">
+                      <label
+                        htmlFor="siapMentoring"
+                        className={`flex items-start gap-3.5 p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer ${
+                          formData.siapMentoring
+                            ? 'bg-amber-50/70 border-amber-300 ring-2 ring-amber-400/20 shadow-2xs'
+                            : 'bg-white border-slate-200/90 hover:border-slate-300'
+                        }`}
+                      >
                         <input
                           id="siapMentoring"
                           type="checkbox"
@@ -752,18 +798,23 @@ export default function GabungPage() {
                             });
                             if (!checked) clearError('mentorContactConsent');
                           }}
-                          className="mt-1.5 w-4 h-4 rounded border-slate-300 accent-[#0C2340]"
+                          className="mt-1 w-5 h-5 rounded-md border-slate-300 text-[#0C2340] accent-[#0C2340] shrink-0"
                         />
-                        <span>
-                          Saya bersedia menjadi mentor sukarela (ulas CV, persiapan wawancara, atau diskusi bidang kerja) untuk sesama alumni UMS.
-                        </span>
+                        <div className="space-y-0.5 text-sm sm:text-base leading-relaxed">
+                          <span className="font-bold text-[#0C2340] block">
+                            Bersedia Menjadi Mentor Alumni Sukarela
+                          </span>
+                          <span className="text-[#475569] block text-xs sm:text-sm">
+                            Berbagi pengalaman kerja, ulas CV, persiapan wawancara, atau diskusi profesi untuk sesama lulusan UMS.
+                          </span>
+                        </div>
                       </label>
 
                       {formData.siapMentoring && (
-                        <div className="ml-0 sm:ml-7 bg-slate-100 border border-slate-200 rounded-xl p-3.5">
+                        <div className="bg-amber-50/60 border border-amber-200 rounded-2xl p-4 sm:p-5 space-y-1">
                           <label
                             htmlFor="mentorContactConsent"
-                            className="flex items-start gap-3 min-h-[44px] py-1 cursor-pointer text-base text-[#0C2340] leading-[1.5]"
+                            className="flex items-start gap-3 cursor-pointer text-sm sm:text-base text-[#0C2340] leading-relaxed"
                           >
                             <input
                               id="mentorContactConsent"
@@ -780,7 +831,7 @@ export default function GabungPage() {
                                 });
                                 clearError('mentorContactConsent');
                               }}
-                              className="mt-1.5 w-4 h-4 rounded border-slate-300 accent-[#0C2340]"
+                              className="mt-1 w-5 h-5 rounded-md border-slate-300 text-[#0C2340] accent-[#0C2340] shrink-0"
                             />
                             <span>
                               Saya mengizinkan pengurus meneruskan nomor WhatsApp atau email saya kepada pemohon mentoring terverifikasi saat dijadwalkan.{' '}
@@ -788,7 +839,7 @@ export default function GabungPage() {
                             </span>
                           </label>
                           {fieldErrors.mentorContactConsent && (
-                            <p id="err-mentor-contact" className="mt-1 pl-7 text-sm text-red-700 font-medium">
+                            <p id="err-mentor-contact" className="pl-8 text-xs sm:text-sm text-red-700 font-medium pt-1">
                               {fieldErrors.mentorContactConsent}
                             </p>
                           )}
@@ -799,13 +850,20 @@ export default function GabungPage() {
                 )}
               </div>
 
-              {/* Persetujuan Terpisah */}
-              <div className="bg-slate-100 border border-slate-200 rounded-xl p-4 sm:p-5 space-y-3">
-                <span className="block text-sm font-bold uppercase tracking-wider text-[#0C2340]">
-                  Izin Penggunaan Data
+              {/* Izin Penggunaan Data & Persetujuan - Cozy Card */}
+              <div className="bg-slate-50/90 border border-slate-200/90 rounded-2xl p-4 sm:p-6 space-y-4">
+                <span className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-[#92400E]">
+                  Izin Penggunaan Data &amp; Privasi
                 </span>
 
-                <label htmlFor="agreeConsent" className="flex items-start gap-3 min-h-[44px] py-1.5 cursor-pointer text-base text-[#0C2340] font-medium leading-[1.5]">
+                <label
+                  htmlFor="agreeConsent"
+                  className={`flex items-start gap-3.5 p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer ${
+                    formData.agreeConsent
+                      ? 'bg-white border-[#0C2340]/30 shadow-2xs'
+                      : 'bg-white/80 border-slate-200 hover:border-slate-300'
+                  }`}
+                >
                   <input
                     id="agreeConsent"
                     type="checkbox"
@@ -816,29 +874,33 @@ export default function GabungPage() {
                       setFormData({ ...formData, agreeConsent: e.target.checked });
                       clearError('agreeConsent');
                     }}
-                    className="mt-1.5 w-4 h-4 rounded border-slate-300 accent-[#0C2340] shrink-0"
+                    className="mt-1 w-5 h-5 rounded-md border-slate-300 text-[#0C2340] accent-[#0C2340] shrink-0"
                   />
-                  <span>
-                    Saya menyetujui Kebijakan Privasi dan Ketentuan Komunitas agar data ini dicatat pengurus untuk verifikasi alumni dan kabar kopdar.{' '}
-                    <span className="text-[#92400E]">*</span>
-                  </span>
+                  <div className="space-y-1 text-sm sm:text-base leading-relaxed">
+                    <span className="font-semibold text-[#0C2340] block">
+                      Persetujuan Pemrosesan Data &amp; Privasi <span className="text-[#92400E]">*</span>
+                    </span>
+                    <span className="text-xs sm:text-sm text-[#475569] block">
+                      Saya menyetujui Kebijakan Privasi dan Ketentuan Komunitas agar data ini dicatat pengurus untuk verifikasi alumni dan kabar kopdar.
+                    </span>
+                  </div>
                 </label>
 
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pl-7">
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pl-2">
                   <Link
                     href="/privasi"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 min-h-[44px] px-1 text-sm sm:text-base font-semibold text-[#0C2340] underline decoration-[#92400E] underline-offset-4 hover:text-[#92400E]"
+                    className="inline-flex items-center gap-1 min-h-[44px] px-1 text-xs sm:text-sm font-semibold text-[#0C2340] underline decoration-[#92400E] underline-offset-4 hover:text-[#92400E]"
                   >
-                    <span>Kebijakan Privasi</span>
+                    <span>Baca Kebijakan Privasi</span>
                     <ExternalLink className="w-3.5 h-3.5" />
                   </Link>
                   <Link
                     href="/syarat"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 min-h-[44px] px-1 text-sm sm:text-base font-semibold text-[#0C2340] underline decoration-[#92400E] underline-offset-4 hover:text-[#92400E]"
+                    className="inline-flex items-center gap-1 min-h-[44px] px-1 text-xs sm:text-sm font-semibold text-[#0C2340] underline decoration-[#92400E] underline-offset-4 hover:text-[#92400E]"
                   >
                     <span>Ketentuan Komunitas</span>
                     <ExternalLink className="w-3.5 h-3.5" />
@@ -846,46 +908,58 @@ export default function GabungPage() {
                 </div>
 
                 {fieldErrors.agreeConsent && (
-                  <p id="err-consent" className="text-sm text-red-700 font-medium pl-7">
+                  <p id="err-consent" className="text-xs sm:text-sm text-red-700 font-medium pl-2">
                     {fieldErrors.agreeConsent}
                   </p>
                 )}
 
-                <div className="pt-2 border-t border-slate-200">
-                  <label htmlFor="tampilDiDirektori" className="flex items-start gap-3 min-h-[44px] py-1.5 cursor-pointer text-base text-[#475569] leading-[1.5]">
+                <div className="pt-3 border-t border-slate-200">
+                  <label
+                    htmlFor="tampilDiDirektori"
+                    className={`flex items-start gap-3.5 p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer ${
+                      formData.tampilDiDirektori
+                        ? 'bg-white border-[#0C2340]/30 shadow-2xs'
+                        : 'bg-white/80 border-slate-200 hover:border-slate-300'
+                    }`}
+                  >
                     <input
                       id="tampilDiDirektori"
                       type="checkbox"
                       checked={formData.tampilDiDirektori}
                       onChange={(e) => setFormData({ ...formData, tampilDiDirektori: e.target.checked })}
-                      className="mt-1.5 w-4 h-4 rounded border-slate-300 accent-[#0C2340] shrink-0"
+                      className="mt-1 w-5 h-5 rounded-md border-slate-300 text-[#0C2340] accent-[#0C2340] shrink-0"
                     />
-                    <span>
-                      Saya mengizinkan nama, prodi, angkatan, dan wilayah domisili saya tampil di Daftar Anggota khusus anggota terdaftar.{' '}
-                      <strong className="font-semibold text-[#0C2340]">(Opsional: bawaan Tidak tampil. WhatsApp dan email tidak pernah ditampilkan.)</strong>
-                    </span>
+                    <div className="space-y-0.5 text-xs sm:text-sm leading-relaxed text-[#475569]">
+                      <span className="font-semibold text-[#0C2340] block">
+                        Tampilkan Profil di Daftar Anggota
+                      </span>
+                      <span>
+                        Hanya nama, prodi, angkatan, dan wilayah yang tampil bagi anggota yang sudah masuk. Nomor WhatsApp dan email tidak pernah dipublikasikan.
+                      </span>
+                    </div>
                   </label>
                 </div>
               </div>
 
-              <div className="pt-2 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <span className="text-sm sm:text-base text-[#475569] leading-[1.5]">
-                  Pemeriksaan data dilakukan {COMMUNITY_PLACEHOLDERS.verificationSla}.
+              {/* Submit CTA Bottom */}
+              <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <span className="text-xs sm:text-sm text-[#475569] leading-relaxed">
+                  Pemeriksaan pendaftaran dilakukan dalam {COMMUNITY_PLACEHOLDERS.verificationSla}.
                 </span>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 min-h-[48px] px-6 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] active:scale-[0.99] disabled:opacity-60 text-white text-base font-semibold transition-all duration-150 cursor-pointer shrink-0"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 min-h-[52px] px-8 py-3.5 rounded-xl sm:rounded-2xl bg-[#0C2340] hover:bg-[#16325C] active:scale-[0.98] disabled:opacity-60 text-white text-base font-bold transition-all duration-150 cursor-pointer shadow-md shrink-0"
                 >
                   {isSubmitting ? (
                     <>
-                      <Loader2 className="w-4 h-4 animate-spin text-[#F59E0B]" />
+                      <Loader2 className="w-5 h-5 animate-spin text-[#F59E0B]" />
                       <span>Mengirim pendaftaran...</span>
                     </>
                   ) : (
                     <>
-                      <span>Daftar jadi anggota</span>
-                      <ArrowRight className="w-4 h-4 text-[#F59E0B]" />
+                      <span>Daftar Jadi Anggota</span>
+                      <ArrowRight className="w-5 h-5 text-[#F59E0B]" />
                     </>
                   )}
                 </button>

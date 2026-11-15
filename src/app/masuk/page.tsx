@@ -148,14 +148,14 @@ export default function MasukPage() {
       <Navbar />
 
       <main className="flex-grow flex items-center justify-center px-4 py-12 sm:py-16">
-        <div className="surface-card rounded-2xl p-6 sm:p-8 max-w-md w-full space-y-6 relative z-[1]">
+        <div className="surface-card rounded-3xl p-6 sm:p-9 max-w-md w-full space-y-6 relative z-[1] shadow-sm border border-slate-200/80">
           <div className="text-center space-y-2">
             <Image
               src="/images/logo-emblem.png"
               alt="Logo IKA UMS"
-              width={48}
-              height={48}
-              className="w-12 h-12 mx-auto object-contain mb-2"
+              width={52}
+              height={52}
+              className="w-13 h-13 mx-auto object-contain mb-2"
             />
             {IS_DEMO_MODE && (
               <span className="inline-block px-2.5 py-0.5 rounded-full bg-amber-100 text-[#92400E] text-xs font-semibold">
@@ -165,7 +165,7 @@ export default function MasukPage() {
             <h1 className="text-[clamp(1.5rem,1.25rem+1vw,1.875rem)] font-bold text-[#0C2340]">
               {method === 'admin' ? 'Masuk Pengurus' : 'Masuk Anggota'}
             </h1>
-            <p className="text-base text-[#475569] leading-[1.6]">
+            <p className="text-sm sm:text-base text-[#475569] leading-relaxed">
               {method === 'admin'
                 ? 'Panel internal verifikasi pendaftaran & koordinasi jadwal kopdar wilayah.'
                 : 'Akses portal Profil Saya dan Direktori Anggota terverifikasi.'}
@@ -173,7 +173,7 @@ export default function MasukPage() {
           </div>
 
           {activeSession ? (
-            <div className="bg-slate-50 border border-emerald-300 rounded-xl p-5 space-y-4">
+            <div className="bg-slate-50 border border-emerald-300 rounded-2xl p-5 space-y-4">
               <div className="flex items-center gap-3 text-emerald-800">
                 <CheckCircle2 className="w-5 h-5 shrink-0 text-emerald-600" />
                 <div>
@@ -188,7 +188,7 @@ export default function MasukPage() {
                 {activeSession.role === 'admin' ? (
                   <Link
                     href="/admin"
-                    className="flex items-center justify-center gap-2 w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-[#0C2340] text-white text-sm font-semibold hover:bg-[#08182E] transition-colors"
+                    className="flex items-center justify-center gap-2 w-full min-h-[48px] px-4 py-2.5 rounded-xl bg-[#0C2340] text-white text-sm font-bold hover:bg-[#08182E] transition-colors"
                   >
                     Buka Panel Pengurus (/admin)
                     <ArrowRight className="w-4 h-4" />
@@ -196,7 +196,7 @@ export default function MasukPage() {
                 ) : (
                   <Link
                     href="/app"
-                    className="flex items-center justify-center gap-2 w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-[#0C2340] text-white text-sm font-semibold hover:bg-[#08182E] transition-colors"
+                    className="flex items-center justify-center gap-2 w-full min-h-[48px] px-4 py-2.5 rounded-xl bg-[#0C2340] text-white text-sm font-bold hover:bg-[#08182E] transition-colors"
                   >
                     Buka Profil Saya (/app)
                     <ArrowRight className="w-4 h-4" />
@@ -205,7 +205,7 @@ export default function MasukPage() {
 
                 <Link
                   href="/direktori"
-                  className="flex items-center justify-center gap-2 w-full min-h-[44px] px-4 py-2 rounded-lg border border-slate-300 bg-white text-[#0C2340] text-sm font-semibold hover:bg-slate-100 transition-colors"
+                  className="flex items-center justify-center gap-2 w-full min-h-[46px] px-4 py-2 rounded-xl border border-slate-300 bg-white text-[#0C2340] text-sm font-semibold hover:bg-slate-100 transition-colors"
                 >
                   Buka Daftar Anggota (/direktori)
                 </Link>
@@ -214,7 +214,7 @@ export default function MasukPage() {
                   type="button"
                   onClick={handleLogout}
                   disabled={isLoading}
-                  className="flex items-center justify-center gap-2 w-full min-h-[44px] px-4 py-2 rounded-lg text-red-700 hover:bg-red-50 text-sm font-semibold transition-colors cursor-pointer"
+                  className="flex items-center justify-center gap-2 w-full min-h-[44px] px-4 py-2 rounded-xl text-red-700 hover:bg-red-50 text-sm font-semibold transition-colors cursor-pointer"
                 >
                   <LogOut className="w-4 h-4" />
                   Keluar dari Sesi
@@ -222,10 +222,10 @@ export default function MasukPage() {
               </div>
             </div>
           ) : !sent ? (
-            <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5" noValidate>
               {/* Pilihan Metode Masuk (3 Tab) */}
               <div
-                className="grid grid-cols-3 gap-1.5 p-1 bg-slate-100 rounded-xl"
+                className="grid grid-cols-3 gap-1.5 p-1.5 bg-slate-100 rounded-2xl"
                 role="group"
                 aria-label="Pilih metode masuk"
               >
@@ -236,7 +236,7 @@ export default function MasukPage() {
                     setIdentifier('');
                     setError('');
                   }}
-                  className={`min-h-[44px] rounded-lg text-xs sm:text-sm font-semibold transition-colors cursor-pointer ${
+                  className={`min-h-[46px] rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                     method === 'whatsapp'
                       ? 'bg-[#0C2340] text-white shadow-xs'
                       : 'text-[#0C2340] hover:bg-white/70'
@@ -251,7 +251,7 @@ export default function MasukPage() {
                     setIdentifier('');
                     setError('');
                   }}
-                  className={`min-h-[44px] rounded-lg text-xs sm:text-sm font-semibold transition-colors cursor-pointer ${
+                  className={`min-h-[46px] rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer ${
                     method === 'email'
                       ? 'bg-[#0C2340] text-white shadow-xs'
                       : 'text-[#0C2340] hover:bg-white/70'
@@ -267,7 +267,7 @@ export default function MasukPage() {
                     setPasskey('');
                     setError('');
                   }}
-                  className={`min-h-[44px] rounded-lg text-xs sm:text-sm font-semibold transition-colors cursor-pointer flex items-center justify-center gap-1 ${
+                  className={`min-h-[46px] rounded-xl text-xs sm:text-sm font-bold transition-all cursor-pointer flex items-center justify-center gap-1 ${
                     method === 'admin'
                       ? 'bg-[#0C2340] text-white shadow-xs'
                       : 'text-[#92400E] hover:bg-white/70'
@@ -281,7 +281,7 @@ export default function MasukPage() {
               {error && (
                 <div
                   role="alert"
-                  className="p-3.5 rounded-lg bg-red-50 border border-red-200 text-red-800 text-sm flex items-center gap-2"
+                  className="p-3.5 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm flex items-center gap-2"
                 >
                   <AlertCircle className="w-4 h-4 shrink-0 text-red-600" />
                   <span>{error}</span>
@@ -290,10 +290,10 @@ export default function MasukPage() {
 
               {method === 'admin' ? (
                 <>
-                  <div>
+                  <div className="space-y-1.5">
                     <label
                       htmlFor="adminIdentifier"
-                      className="block text-sm font-semibold text-[#0C2340] mb-1.5"
+                      className="block text-sm sm:text-base font-bold text-[#0C2340]"
                     >
                       Nama / Jabatan Pengurus
                     </label>
@@ -306,14 +306,14 @@ export default function MasukPage() {
                         setIdentifier(e.target.value);
                         if (error) setError('');
                       }}
-                      className="w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-white border border-slate-300 text-base text-[#0C2340] focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10"
+                      className="w-full min-h-[50px] sm:min-h-[52px] px-4 py-3 rounded-xl sm:rounded-2xl bg-slate-50/40 hover:bg-white border border-slate-300/80 text-[16px] text-[#0C2340] focus:bg-white focus:border-[#0C2340] focus:outline-hidden focus:ring-4 focus:ring-amber-500/15 transition-all shadow-2xs"
                     />
                   </div>
 
-                  <div>
+                  <div className="space-y-1.5">
                     <label
                       htmlFor="adminPasskey"
-                      className="block text-sm font-semibold text-[#0C2340] mb-1.5 flex items-center gap-1.5"
+                      className="block text-sm sm:text-base font-bold text-[#0C2340] flex items-center gap-1.5"
                     >
                       <KeyRound className="w-3.5 h-3.5 text-[#92400E]" />
                       Kode Akses Pengurus (PIN/Kata Sandi)
@@ -328,18 +328,18 @@ export default function MasukPage() {
                         setPasskey(e.target.value);
                         if (error) setError('');
                       }}
-                      className="w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-white border border-slate-300 text-base text-[#0C2340] focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10"
+                      className="w-full min-h-[50px] sm:min-h-[52px] px-4 py-3 rounded-xl sm:rounded-2xl bg-slate-50/40 hover:bg-white border border-slate-300/80 text-[16px] text-[#0C2340] focus:bg-white focus:border-[#0C2340] focus:outline-hidden focus:ring-4 focus:ring-amber-500/15 transition-all shadow-2xs"
                     />
-                    <p className="text-xs text-[#475569] mt-1.5">
+                    <p className="text-xs text-[#475569]">
                       Diberikan khusus untuk koordinator wilayah &amp; pengurus terdaftar.
                     </p>
                   </div>
                 </>
               ) : (
-                <div>
+                <div className="space-y-1.5">
                   <label
                     htmlFor="loginIdentifier"
-                    className="block text-sm font-semibold text-[#0C2340] mb-1.5"
+                    className="block text-sm sm:text-base font-bold text-[#0C2340]"
                   >
                     {method === 'whatsapp' ? 'Nomor WhatsApp Terdaftar' : 'Alamat Email Terdaftar'}
                   </label>
@@ -350,16 +350,16 @@ export default function MasukPage() {
                     autoComplete={method === 'whatsapp' ? 'tel' : 'email'}
                     required
                     aria-invalid={Boolean(error)}
-                    placeholder={method === 'whatsapp' ? '081234567890' : 'nama@email.com'}
+                    placeholder={method === 'whatsapp' ? 'Contoh: 081234567890' : 'nama@email.com'}
                     value={identifier}
                     onChange={(e) => {
                       setIdentifier(e.target.value);
                       if (error) setError('');
                     }}
-                    className={`w-full min-h-[44px] px-4 py-2.5 rounded-lg bg-white border text-base text-[#0C2340] focus:outline-hidden focus:ring-2 ${
+                    className={`w-full min-h-[50px] sm:min-h-[52px] px-4 py-3 rounded-xl sm:rounded-2xl bg-slate-50/40 hover:bg-white text-[16px] text-[#0C2340] border transition-all shadow-2xs focus:bg-white focus:outline-hidden focus:ring-4 ${
                       error
                         ? 'border-red-500 focus:ring-red-200'
-                        : 'border-slate-300 focus:border-[#0C2340] focus:ring-[#0C2340]/10'
+                        : 'border-slate-300/80 focus:border-[#0C2340] focus:ring-amber-500/15'
                     }`}
                   />
                 </div>
@@ -368,11 +368,11 @@ export default function MasukPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full min-h-[48px] inline-flex items-center justify-center gap-2 px-5 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] active:scale-[0.99] text-white text-base font-semibold transition-all duration-150 cursor-pointer disabled:opacity-60"
+                className="w-full min-h-[52px] inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl sm:rounded-2xl bg-[#0C2340] hover:bg-[#16325C] active:scale-[0.98] text-white text-base font-bold transition-all shadow-md cursor-pointer disabled:opacity-60"
               >
                 {isLoading ? (
                   <>
-                    <Loader2 className="w-4 h-4 animate-spin text-[#F59E0B]" />
+                    <Loader2 className="w-5 h-5 animate-spin text-[#F59E0B]" />
                     <span>Memverifikasi...</span>
                   </>
                 ) : method === 'admin' ? (
