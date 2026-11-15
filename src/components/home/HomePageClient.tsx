@@ -107,8 +107,17 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
 
       <main className="flex-grow space-y-16 sm:space-y-20 lg:space-y-24">
         {/* 1. HERO */}
-        <section className="bg-white overflow-hidden pt-6 pb-4 sm:pt-10 sm:pb-8 lg:pt-14 lg:pb-12">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="relative isolate overflow-hidden bg-white pt-6 pb-4 sm:pt-10 sm:pb-8 lg:pt-14 lg:pb-12">
+          <Image
+            src="/images/ums-campus-silhouette.png"
+            alt=""
+            aria-hidden="true"
+            width={2200}
+            height={760}
+            sizes="100vw"
+            className="pointer-events-none absolute -bottom-4 left-1/2 z-0 w-[min(1300px,118vw)] max-w-none -translate-x-1/2 opacity-[0.045] sm:-bottom-12 sm:opacity-[0.055]"
+          />
+          <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-8">
               <div className="space-y-4 sm:space-y-6 lg:col-span-6 z-10">
                 <div className="flex items-center gap-2">

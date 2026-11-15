@@ -1,6 +1,7 @@
 import fs from 'fs/promises';
 import path from 'path';
 import { getSupabaseServerClient, isSupabaseConfigured } from './supabase';
+import { normalizeIndonesianWhatsApp } from '@/data/ums-prodi';
 
 export interface PendaftarRecord {
   id: string;
@@ -125,6 +126,22 @@ export async function findApprovedPendaftarByEmail(
       (pendaftar) =>
         pendaftar.status === 'disetujui' &&
         pendaftar.email?.trim().toLowerCase() === normalizedEmail
+    ) ?? null
+  );
+}
+
+export async function findApprovedPendaftarByWhatsApp(
+  whatsapp: string
+): Promise<PendaftarRecord | null> {
+  const normalizedWa = normalizeIndonesianWhatsApp(whatsapp);
+  if (!normalizedWa) return null;
+
+  const list = await getAllPendaftar();
+  return (
+    list.find(
+      (pendaftar) =>
+        pendaftar.status === 'disetujui' &&
+        normalizeIndonesianWhatsApp(pendaftar.whatsapp) === normalizedWa
     ) ?? null
   );
 }

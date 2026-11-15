@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Navbar, Footer } from '@/components/Navigation';
 import {
@@ -31,6 +32,7 @@ import {
   Loader2,
   LayoutTemplate,
   Pencil,
+  MessageCircle,
 } from 'lucide-react';
 import type { AgendaItem, PengurusData, KomunitasSettings, LandingContent } from '@/lib/cms-store';
 import { type LokerItem, DEFAULT_LOKERS } from '@/data/loker';
@@ -259,7 +261,11 @@ export default function AdminDashboardClient() {
         setPendaftarList((prev) =>
           prev.map((item) => (item.id === id ? { ...item, status } : item))
         );
-        showToast(`Status alumni berhasil diubah menjadi: ${status}.`);
+        if (status === 'disetujui') {
+          showToast('Status disetujui! Klik tombol "Kirim Info WA" untuk mengirim pesan ke alumni.');
+        } else {
+          showToast(`Status alumni berhasil diubah menjadi: ${status}.`);
+        }
       } else {
         showToast('Gagal memperbarui status pendaftar.');
       }
@@ -662,63 +668,59 @@ export default function AdminDashboardClient() {
     <div className="min-h-screen bg-slate-50 text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
       <Navbar />
 
-      <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 w-full space-y-8">
-        {/* Navigasi Breadcrumb & Status */}
-        <div className="flex flex-wrap items-center justify-between gap-4 pb-2 border-b border-slate-200">
-          <nav aria-label="Breadcrumb" className="text-sm text-[#475569] flex items-center gap-2">
-            <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
-              Beranda
-            </Link>
-            <span aria-hidden="true">/</span>
-            <span className="text-[#0C2340] font-semibold">Pusat Kelola Data Organisasi</span>
-          </nav>
-
-          <div className="flex items-center gap-2.5">
-            <a
-              href="/api/pendaftaran?format=csv"
-              download
-              className="inline-flex items-center gap-1.5 min-h-[40px] px-3.5 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 text-[#0C2340] text-xs sm:text-sm font-semibold transition-colors"
-            >
-              <Download className="w-3.5 h-3.5" />
-              Unduh CSV
-            </a>
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="inline-flex items-center gap-1.5 min-h-[40px] px-3.5 py-1.5 rounded-lg text-red-700 hover:bg-red-50 text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
-            >
-              <LogOut className="w-3.5 h-3.5" />
-              Keluar Sesi
-            </button>
-          </div>
-        </div>
-
-        {/* Header Dashboard */}
-        <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div className="space-y-1.5">
-            <div className="inline-flex items-center gap-2 text-xs font-bold text-[#92400E] uppercase tracking-wider">
-              <ShieldCheck className="w-4 h-4 text-[#92400E]" />
-              <span>Sekretariat &amp; Koordinasi Wilayah</span>
-              {isLoading && (
-                <span className="inline-flex items-center gap-1 text-[#475569] font-normal normal-case">
-                  <Loader2 className="w-3.5 h-3.5 animate-spin text-[#92400E]" />
-                  <span>Memperbarui data...</span>
-                </span>
-              )}
+      <main className="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-9 w-full space-y-6 sm:space-y-8">
+        <section className="overflow-hidden rounded-2xl bg-[#0C2340] text-white shadow-[0_18px_45px_-30px_rgba(12,35,64,0.8)]" aria-labelledby="admin-dashboard-title">
+          <div className="relative px-5 py-6 sm:px-8 sm:py-8">
+            <Image
+              src="/images/ums-campus-silhouette.png"
+              alt=""
+              aria-hidden="true"
+              width={2200}
+              height={760}
+              sizes="(max-width: 1280px) 100vw, 1280px"
+              className="pointer-events-none absolute -bottom-24 right-[-15%] w-[780px] max-w-none opacity-[0.1] sm:right-[-5%] sm:opacity-[0.13]"
+            />
+            <div aria-hidden="true" className="absolute -right-20 -top-24 h-64 w-64 rounded-full border border-white/10 bg-white/[0.03]" />
+            <div aria-hidden="true" className="absolute right-20 top-10 h-20 w-20 rounded-full border border-[#F59E0B]/25" />
+            <div className="relative flex flex-wrap items-center justify-between gap-x-4 gap-y-2 border-b border-white/15 pb-4 text-xs sm:text-sm">
+              <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-slate-300">
+                <Link href="/" className="inline-flex min-h-[44px] items-center font-medium transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+                  Beranda
+                </Link>
+                <span aria-hidden="true" className="text-slate-500">/</span>
+                <span className="font-semibold text-white">Pusat Kelola Data</span>
+              </nav>
+              <div className="flex items-center gap-1 sm:gap-2">
+                <a href="/api/pendaftaran?format=csv" download className="inline-flex min-h-[44px] items-center gap-1.5 rounded-lg px-2.5 font-semibold text-slate-200 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+                  <Download className="h-3.5 w-3.5" /> Unduh CSV
+                </a>
+                <button type="button" onClick={handleLogout} className="inline-flex min-h-[44px] items-center gap-1.5 rounded-lg px-2.5 font-semibold text-rose-200 transition-colors hover:bg-rose-400/15 hover:text-rose-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white cursor-pointer">
+                  <LogOut className="h-3.5 w-3.5" /> Keluar
+                </button>
+              </div>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#0C2340]">
-              Pusat Data IKA UMS Jabodetabek
-            </h1>
-            <p className="text-sm sm:text-base text-[#475569] max-w-2xl leading-[1.6]">
-              Kelola verifikasi alumni baru, jadwal kopdar, info lowongan kerja, struktur 9 korwil, serta pengaturan kontak resmi organisasi.
-            </p>
-          </div>
 
-          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+            <header className="relative grid gap-6 pt-7 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+              <div className="max-w-2xl">
+                <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-[#F59E0B]/35 bg-[#F59E0B]/10 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[#FCD34D]">
+                  <ShieldCheck className="h-3.5 w-3.5" /> Sekretariat &amp; Koordinasi Wilayah
+                </div>
+                <h1 id="admin-dashboard-title" className="text-3xl font-extrabold tracking-tight sm:text-4xl">Pusat Data IKA UMS Jabodetabek</h1>
+                <p className="mt-3 max-w-xl text-sm leading-6 text-slate-300 sm:text-base">
+                  Pantau pekerjaan organisasi, tangani alumni baru, dan kelola layanan untuk seluruh jaringan Jabodetabek.
+                </p>
+                {isLoading && (
+                  <span className="mt-4 inline-flex items-center gap-2 text-xs font-medium text-slate-300">
+                    <Loader2 className="h-3.5 w-3.5 animate-spin text-[#FCD34D]" /> Memperbarui data...
+                  </span>
+                )}
+              </div>
+
+              <div className="grid gap-2 sm:grid-cols-3 lg:flex lg:flex-wrap lg:justify-end">
             <button
               type="button"
               onClick={() => setManualAlumniOpen(true)}
-              className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 rounded-lg bg-[#0C2340] hover:bg-[#08182E] text-white text-sm font-semibold transition-colors cursor-pointer shadow-xs"
+              className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg bg-white px-4 py-2 text-sm font-bold text-[#0C2340] shadow-sm transition-colors hover:bg-slate-100 cursor-pointer"
             >
               <UserPlus className="w-4 h-4" />
               + Tambah Alumni
@@ -726,7 +728,7 @@ export default function AdminDashboardClient() {
             <button
               type="button"
               onClick={() => openAgendaCreate()}
-              className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 rounded-lg bg-[#92400E] hover:bg-[#78350F] text-white text-sm font-semibold transition-colors cursor-pointer shadow-xs"
+              className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/20 cursor-pointer"
             >
               <Calendar className="w-4 h-4" />
               + Jadwal Kopdar
@@ -734,51 +736,29 @@ export default function AdminDashboardClient() {
             <button
               type="button"
               onClick={() => openLokerCreate()}
-              className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 rounded-lg bg-[#047857] hover:bg-[#065F46] text-white text-sm font-semibold transition-colors cursor-pointer shadow-xs"
+              className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-white/20 cursor-pointer"
             >
               <Briefcase className="w-4 h-4" />
               + Info Loker
             </button>
+              </div>
+            </header>
           </div>
-        </header>
+        </section>
 
         {/* Kartu Statistik Cepat */}
-        <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4" aria-label="Ringkasan data">
-          <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs">
-            <span className="block text-xs font-semibold text-[#475569] uppercase tracking-wider">Menunggu Verifikasi</span>
-            <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-2xl sm:text-3xl font-extrabold text-[#0C2340]">{countMenunggu}</span>
-              <span className="text-xs text-[#92400E] font-medium">alumni baru</span>
+        <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1.45fr_repeat(4,minmax(0,1fr))]" aria-label="Ringkasan data">
+          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 sm:p-5">
+            <div className="flex items-start justify-between gap-3">
+              <div><p className="text-xs font-bold uppercase tracking-wider text-amber-900">Prioritas hari ini</p><p className="mt-1 text-sm text-amber-800">Alumni menunggu verifikasi</p></div>
+              <span className="grid h-9 min-w-9 place-items-center rounded-full bg-amber-500 px-2 text-sm font-extrabold text-white">{countMenunggu}</span>
             </div>
+            <button type="button" onClick={() => setActiveTab('pendaftar')} className="mt-4 inline-flex min-h-[44px] items-center rounded-lg bg-[#0C2340] px-3 text-xs font-bold text-white transition-colors hover:bg-[#08182E] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] cursor-pointer">Tinjau pendaftar</button>
           </div>
-          <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs">
-            <span className="block text-xs font-semibold text-[#475569] uppercase tracking-wider">Total Anggota Masuk</span>
-            <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-2xl sm:text-3xl font-extrabold text-[#0C2340]">{pendaftarList.length}</span>
-              <span className="text-xs text-emerald-700 font-medium">({countDisetujui} terverifikasi)</span>
-            </div>
-          </div>
-          <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs">
-            <span className="block text-xs font-semibold text-[#475569] uppercase tracking-wider">Jadwal Kopdar Aktif</span>
-            <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-2xl sm:text-3xl font-extrabold text-[#0C2340]">{agendaList.length}</span>
-              <span className="text-xs text-[#475569]">agenda wilayah</span>
-            </div>
-          </div>
-          <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs">
-            <span className="block text-xs font-semibold text-[#475569] uppercase tracking-wider">Info Loker Aktif</span>
-            <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-2xl sm:text-3xl font-extrabold text-[#047857]">{lokerList.length}</span>
-              <span className="text-xs text-[#475569]">lowongan terbuka</span>
-            </div>
-          </div>
-          <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 shadow-xs col-span-2 md:col-span-1">
-            <span className="block text-xs font-semibold text-[#475569] uppercase tracking-wider">Cakupan Wilayah</span>
-            <div className="flex items-baseline gap-2 mt-1">
-              <span className="text-2xl sm:text-3xl font-extrabold text-[#0C2340]">{WILAYAH_JABODETABEK.length}</span>
-              <span className="text-xs text-[#475569]">Kota &amp; Kabupaten</span>
-            </div>
-          </div>
+          <div className="rounded-2xl border border-slate-200 bg-white p-4"><p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Anggota</p><p className="mt-2 text-2xl font-extrabold text-[#0C2340]">{pendaftarList.length}</p><p className="mt-1 text-xs font-medium text-emerald-700">{countDisetujui} terverifikasi</p></div>
+          <div className="rounded-2xl border border-slate-200 bg-white p-4"><p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Kopdar aktif</p><p className="mt-2 text-2xl font-extrabold text-[#0C2340]">{agendaList.length}</p><p className="mt-1 text-xs text-slate-500">agenda wilayah</p></div>
+          <div className="rounded-2xl border border-slate-200 bg-white p-4"><p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Lowongan aktif</p><p className="mt-2 text-2xl font-extrabold text-emerald-700">{lokerList.length}</p><p className="mt-1 text-xs text-slate-500">peluang terbuka</p></div>
+          <div className="rounded-2xl border border-slate-200 bg-white p-4"><p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Cakupan</p><p className="mt-2 text-2xl font-extrabold text-[#0C2340]">{WILAYAH_JABODETABEK.length}</p><p className="mt-1 text-xs text-slate-500">kota &amp; kabupaten</p></div>
         </section>
 
         {/* Toast Notifikasi */}
@@ -802,14 +782,17 @@ export default function AdminDashboardClient() {
         )}
 
         {/* Tab Navigasi Pengelolaan */}
-        <div className="border-b border-slate-200 flex overflow-x-auto gap-2 sm:gap-4 no-scrollbar">
+        <div role="tablist" aria-label="Modul pengelolaan organisasi" className="rounded-2xl border border-slate-200 bg-white p-1.5 shadow-xs flex overflow-x-auto gap-1 no-scrollbar">
           <button
             type="button"
+            role="tab"
+            aria-selected={activeTab === 'pendaftar'}
+            aria-controls="admin-panel-pendaftar"
             onClick={() => setActiveTab('pendaftar')}
-            className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+            className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] ${
               activeTab === 'pendaftar'
-                ? 'border-[#0C2340] text-[#0C2340]'
-                : 'border-transparent text-[#475569] hover:text-[#0C2340]'
+                ? 'border-[#0C2340] bg-[#0C2340] text-white rounded-xl'
+                : 'border-transparent text-[#475569] hover:text-[#0C2340] hover:bg-slate-50 rounded-xl'
             }`}
           >
             <Users className="w-4 h-4" />
@@ -821,11 +804,14 @@ export default function AdminDashboardClient() {
 
           <button
             type="button"
+            role="tab"
+            aria-selected={activeTab === 'agenda'}
+            aria-controls="admin-panel-agenda"
             onClick={() => setActiveTab('agenda')}
-            className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+            className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] ${
               activeTab === 'agenda'
-                ? 'border-[#0C2340] text-[#0C2340]'
-                : 'border-transparent text-[#475569] hover:text-[#0C2340]'
+                ? 'border-[#0C2340] bg-[#0C2340] text-white rounded-xl'
+                : 'border-transparent text-[#475569] hover:text-[#0C2340] hover:bg-slate-50 rounded-xl'
             }`}
           >
             <Calendar className="w-4 h-4" />
@@ -837,11 +823,14 @@ export default function AdminDashboardClient() {
 
           <button
             type="button"
+            role="tab"
+            aria-selected={activeTab === 'loker'}
+            aria-controls="admin-panel-loker"
             onClick={() => setActiveTab('loker')}
-            className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+            className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] ${
               activeTab === 'loker'
-                ? 'border-[#0C2340] text-[#0C2340]'
-                : 'border-transparent text-[#475569] hover:text-[#0C2340]'
+                ? 'border-[#0C2340] bg-[#0C2340] text-white rounded-xl'
+                : 'border-transparent text-[#475569] hover:text-[#0C2340] hover:bg-slate-50 rounded-xl'
             }`}
           >
             <Briefcase className="w-4 h-4" />
@@ -853,11 +842,14 @@ export default function AdminDashboardClient() {
 
           <button
             type="button"
+            role="tab"
+            aria-selected={activeTab === 'pengurus'}
+            aria-controls="admin-panel-pengurus"
             onClick={() => setActiveTab('pengurus')}
-            className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+            className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] ${
               activeTab === 'pengurus'
-                ? 'border-[#0C2340] text-[#0C2340]'
-                : 'border-transparent text-[#475569] hover:text-[#0C2340]'
+                ? 'border-[#0C2340] bg-[#0C2340] text-white rounded-xl'
+                : 'border-transparent text-[#475569] hover:text-[#0C2340] hover:bg-slate-50 rounded-xl'
             }`}
           >
             <ShieldCheck className="w-4 h-4" />
@@ -866,11 +858,14 @@ export default function AdminDashboardClient() {
 
           <button
             type="button"
+            role="tab"
+            aria-selected={activeTab === 'landing'}
+            aria-controls="admin-panel-landing"
             onClick={() => setActiveTab('landing')}
-            className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+            className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] ${
               activeTab === 'landing'
-                ? 'border-[#0C2340] text-[#0C2340]'
-                : 'border-transparent text-[#475569] hover:text-[#0C2340]'
+                ? 'border-[#0C2340] bg-[#0C2340] text-white rounded-xl'
+                : 'border-transparent text-[#475569] hover:text-[#0C2340] hover:bg-slate-50 rounded-xl'
             }`}
           >
             <LayoutTemplate className="w-4 h-4" />
@@ -879,11 +874,14 @@ export default function AdminDashboardClient() {
 
           <button
             type="button"
+            role="tab"
+            aria-selected={activeTab === 'settings'}
+            aria-controls="admin-panel-settings"
             onClick={() => setActiveTab('settings')}
-            className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 ${
+            className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] ${
               activeTab === 'settings'
-                ? 'border-[#0C2340] text-[#0C2340]'
-                : 'border-transparent text-[#475569] hover:text-[#0C2340]'
+                ? 'border-[#0C2340] bg-[#0C2340] text-white rounded-xl'
+                : 'border-transparent text-[#475569] hover:text-[#0C2340] hover:bg-slate-50 rounded-xl'
             }`}
           >
             <Settings className="w-4 h-4" />
@@ -895,7 +893,7 @@ export default function AdminDashboardClient() {
         {/* TAB 1: PENDAFTARAN & ANGGOTA                                              */}
         {/* ========================================================================= */}
         {activeTab === 'pendaftar' && (
-          <div className="space-y-6">
+          <section id="admin-panel-pendaftar" role="tabpanel" aria-label="Pendaftaran dan anggota" className="space-y-6">
             {/* Filter Bar & Search */}
             <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center shadow-xs">
               <div className="relative flex-1">
@@ -1021,6 +1019,20 @@ export default function AdminDashboardClient() {
 
                     {/* Aksi Verifikasi */}
                     <div className="flex items-center gap-2 shrink-0 pt-2 lg:pt-0 border-t lg:border-t-0 border-slate-200">
+                      {item.status === 'disetujui' && (
+                        <a
+                          href={`https://wa.me/${item.whatsapp.replace(/\D/g, '')}?text=${encodeURIComponent(
+                            `Assalamu'alaikum Wr. Wb. / Salam hangat Mas/Mbak ${item.namaLengkap},\n\nPendaftaran keanggotaan IKA UMS Anda telah diverifikasi & DISETUJUI oleh pengurus! 🎉\n\nSilakan masuk ke portal Ruang Anggota di:\n${typeof window !== 'undefined' ? window.location.origin : ''}/masuk\n\n(Cukup masukkan nomor WhatsApp Anda: ${item.whatsapp} pada tab WhatsApp).\n\nSelamat bergabung di jejaring alumni UMS Jabodetabek! Salam hangat, Pengurus IKA UMS.`
+                          )}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="min-h-[40px] px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs sm:text-sm font-semibold transition-colors flex items-center gap-1.5 shadow-2xs"
+                          title="Kirim notifikasi penerimaan ke WhatsApp alumni"
+                        >
+                          <MessageCircle className="w-3.5 h-3.5 text-emerald-100" />
+                          <span>Kirim Info WA</span>
+                        </a>
+                      )}
                       {item.status !== 'disetujui' && (
                         <button
                           type="button"
@@ -1053,14 +1065,14 @@ export default function AdminDashboardClient() {
                 ))}
               </div>
             )}
-          </div>
+          </section>
         )}
 
         {/* ========================================================================= */}
         {/* TAB 2: JADWAL KOPDAR & AGENDA                                             */}
         {/* ========================================================================= */}
         {activeTab === 'agenda' && (
-          <div className="space-y-6">
+          <section id="admin-panel-agenda" role="tabpanel" aria-label="Jadwal kopdar dan agenda" className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <h2 className="text-xl font-bold text-[#0C2340]">Daftar Jadwal Kopdar &amp; Temu Alumni</h2>
@@ -1152,14 +1164,14 @@ export default function AdminDashboardClient() {
                 ))}
               </div>
             )}
-          </div>
+          </section>
         )}
 
         {/* ========================================================================= */}
         {/* TAB 3: INFO LOWONGAN KERJA & PELUANG ALUMNI                               */}
         {/* ========================================================================= */}
         {activeTab === 'loker' && (
-          <div className="space-y-6">
+          <section id="admin-panel-loker" role="tabpanel" aria-label="Info lowongan kerja" className="space-y-6">
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
                 <h2 className="text-xl font-bold text-[#0C2340]">Daftar Lowongan Kerja &amp; Peluang Bisnis</h2>
@@ -1300,14 +1312,14 @@ export default function AdminDashboardClient() {
                 ))}
               </div>
             )}
-          </div>
+          </section>
         )}
 
         {/* ========================================================================= */}
         {/* TAB 4: PENGURUS & 9 KORWIL                                                */}
         {/* ========================================================================= */}
         {activeTab === 'pengurus' && pengurusData && (
-          <form onSubmit={handleSavePengurus} className="space-y-8">
+          <form id="admin-panel-pengurus" role="tabpanel" aria-label="Pengurus dan korwil" onSubmit={handleSavePengurus} className="space-y-8">
             {/* 1. Pengurus Harian */}
             <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs">
               <div className="space-y-1 border-b border-slate-200 pb-4">
@@ -1557,7 +1569,7 @@ export default function AdminDashboardClient() {
         {/* TAB 4: KONTAK & PENGATURAN KOMUNITAS                                      */}
         {/* ========================================================================= */}
         {activeTab === 'landing' && landingData && (
-          <form onSubmit={handleSaveLanding} className="space-y-6">
+          <form id="admin-panel-landing" role="tabpanel" aria-label="Konten beranda" onSubmit={handleSaveLanding} className="space-y-6">
             <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-5 shadow-xs">
               <div className="space-y-1 border-b border-slate-200 pb-4">
                 <h2 className="text-lg sm:text-xl font-bold text-[#0C2340]">Hero Beranda</h2>
@@ -1944,7 +1956,7 @@ export default function AdminDashboardClient() {
         )}
 
         {activeTab === 'settings' && settingsData && (
-          <form onSubmit={handleSaveSettings} className="space-y-6">
+          <form id="admin-panel-settings" role="tabpanel" aria-label="Kontak dan komunitas" onSubmit={handleSaveSettings} className="space-y-6">
             <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-8 space-y-6 shadow-xs">
               <div className="space-y-1 border-b border-slate-200 pb-4">
                 <h2 className="text-lg sm:text-xl font-bold text-[#0C2340]">

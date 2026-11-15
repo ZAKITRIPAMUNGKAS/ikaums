@@ -216,6 +216,36 @@ test('Dashboard admin memuat tab kelola pendaftar, kopdar, dan pengurus', async 
   }
 });
 
+test('Dashboard admin memakai struktur control room yang aksesibel', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const source = await readFile(
+    new URL('../src/app/admin/AdminDashboardClient.tsx', import.meta.url),
+    'utf8'
+  );
+
+  for (const expectedContent of [
+    'Prioritas hari ini',
+    'Tinjau pendaftar',
+    'role="tablist"',
+    'role="tab"',
+    'aria-selected={activeTab ===',
+  ]) {
+    assert.ok(source.includes(expectedContent), `Struktur control room belum tersedia: ${expectedContent}`);
+  }
+});
+
+test('Siluet kampus UMS dipakai sebagai ornamen pada hero publik dan dashboard', async () => {
+  const { readFile, access } = await import('node:fs/promises');
+  const [homeSource, adminSource] = await Promise.all([
+    readFile(new URL('../src/components/home/HomePageClient.tsx', import.meta.url), 'utf8'),
+    readFile(new URL('../src/app/admin/AdminDashboardClient.tsx', import.meta.url), 'utf8'),
+  ]);
+
+  await access(new URL('../public/images/ums-campus-silhouette.png', import.meta.url));
+  assert.ok(homeSource.includes('/images/ums-campus-silhouette.png'));
+  assert.ok(adminSource.includes('/images/ums-campus-silhouette.png'));
+});
+
 // 6. Kontrak fitur Info Lowongan Kerja & Peluang Karier (/peluang & cms-store)
 test('Portal Peluang memuat papan info loker, filter, dan modal publikasi loker', async () => {
   const { readFile } = await import('node:fs/promises');
@@ -294,6 +324,35 @@ test('Hardening autentikasi tidak memakai rahasia atau PIN fallback', async () =
   assert.ok(cmsRoute.includes("session?.role !== 'admin'"));
   assert.ok(!cmsRoute.includes("session?.role === 'admin' || IS_DEMO_MODE"));
   assert.ok(!registrationRoute.includes("session?.role === 'admin' || IS_DEMO_MODE"));
+});
+
+test('CSP hanya mengizinkan unsafe-eval saat Next.js berjalan dalam development', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const typescript = await import('typescript');
+  const source = await readFile(new URL('../next.config.ts', import.meta.url), 'utf8');
+  const compiled = typescript.transpileModule(source, {
+    compilerOptions: { module: typescript.ModuleKind.CommonJS, target: typescript.ScriptTarget.ES2022 },
+  }).outputText;
+
+  const loadConfig = (nodeEnv) => {
+    const moduleObj = { exports: {} };
+    new Function('exports', 'module', 'process', compiled)(moduleObj.exports, moduleObj, {
+      env: { NODE_ENV: nodeEnv },
+    });
+    return moduleObj.exports.default;
+  };
+
+  const developmentHeaders = await loadConfig('development').headers();
+  const productionHeaders = await loadConfig('production').headers();
+  const developmentCsp = developmentHeaders[0].headers.find(
+    (header) => header.key === 'Content-Security-Policy'
+  )?.value;
+  const productionCsp = productionHeaders[0].headers.find(
+    (header) => header.key === 'Content-Security-Policy'
+  )?.value;
+
+  assert.match(developmentCsp, /script-src[^;]*'unsafe-eval'/);
+  assert.doesNotMatch(productionCsp, /'unsafe-eval'/);
 });
 
 test('Magic link hanya dapat dipakai anggota yang sudah disetujui', async () => {

@@ -27,7 +27,7 @@ interface ActiveSession {
 
 export default function MasukPage() {
   const router = useRouter();
-  const [method, setMethod] = useState<'whatsapp' | 'email' | 'admin'>('email');
+  const [method, setMethod] = useState<'whatsapp' | 'email' | 'admin'>('whatsapp');
   const [identifier, setIdentifier] = useState('');
   const [passkey, setPasskey] = useState('');
   const [error, setError] = useState('');
@@ -75,6 +75,11 @@ export default function MasukPage() {
         });
         setSent(true);
         router.refresh();
+        if (role === 'member') {
+          router.push('/app');
+        } else if (role === 'admin') {
+          router.push('/admin');
+        }
       } else {
         setError(data.error || 'Gagal masuk.');
       }
@@ -142,10 +147,6 @@ export default function MasukPage() {
     }
 
     if (method === 'whatsapp') {
-      if (!IS_DEMO_MODE) {
-        setError('Masuk anggota menggunakan tautan email. Gunakan tab Email.');
-        return;
-      }
       const validWa = normalizeIndonesianWhatsApp(raw);
       if (!validWa) {
         setError(
@@ -154,19 +155,23 @@ export default function MasukPage() {
         return;
       }
       setIdentifier(validWa);
-    } else {
+      setError('');
+      await handleLoginRole('member', validWa);
+      return;
+    }
+
+    if (method === 'email') {
       if (!isValidEmail(raw)) {
         setError('Masukkan alamat email yang benar, misalnya nama@domain.com.');
         return;
       }
-    }
-
-    setError('');
-
-    if (IS_DEMO_MODE) {
-      await handleLoginRole('member', raw);
-    } else {
-      await requestMagicLink(raw);
+      setError('');
+      if (IS_DEMO_MODE) {
+        await handleLoginRole('member', raw);
+      } else {
+        await requestMagicLink(raw);
+      }
+      return;
     }
   };
 
@@ -389,6 +394,11 @@ export default function MasukPage() {
                         : 'border-slate-300/80 focus:border-[#0C2340] focus:ring-amber-500/15'
                     }`}
                   />
+                  {method === 'whatsapp' && (
+                    <p className="text-xs text-[#475569] mt-1">
+                      Gunakan nomor WhatsApp yang telah didaftarkan dan disetujui pengurus.
+                    </p>
+                  )}
                 </div>
               )}
 
@@ -410,7 +420,7 @@ export default function MasukPage() {
                   </>
                 ) : method === 'whatsapp' ? (
                   <>
-                    <span>Minta kode masuk WhatsApp</span>
+                    <span>Masuk dengan WhatsApp</span>
                     <ArrowRight className="w-4 h-4 text-[#F59E0B]" />
                   </>
                 ) : (

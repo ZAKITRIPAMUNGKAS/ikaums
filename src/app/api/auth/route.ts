@@ -6,6 +6,8 @@ import {
   type SessionRole,
 } from '@/lib/server-auth';
 import { IS_DEMO_MODE } from '@/lib/config';
+import { normalizeIndonesianWhatsApp } from '@/data/ums-prodi';
+import { findApprovedPendaftarByWhatsApp } from '@/lib/pendaftaran-store';
 
 const LOGIN_WINDOW_MS = 15 * 60 * 1000;
 const LOGIN_ATTEMPT_LIMIT = 5;
@@ -72,11 +74,37 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Identitas masuk tidak valid.' }, { status: 400 });
       }
 
-      if (role === 'member' && !IS_DEMO_MODE) {
-        return NextResponse.json(
-          { error: 'Masuk anggota belum tersedia. Gunakan undangan atau OTP resmi saat layanan diaktifkan.' },
-          { status: 403 }
-        );
+      let sessionSub = identifier;
+      let memberName: string | undefined = undefined;
+
+      // Verifikasi login anggota (berbasis WhatsApp yang sudah disetujui)
+      if (role === 'member') {
+        const isDemoBypass = IS_DEMO_MODE && body.isDemoClick === true;
+
+        if (!isDemoBypass) {
+          const validWa = normalizeIndonesianWhatsApp(identifier);
+          if (!validWa) {
+            return NextResponse.json(
+              { error: 'Masukkan nomor WhatsApp yang valid (misalnya 081234567890 atau +6281234567890).' },
+              { status: 400 }
+            );
+          }
+
+          const approvedMember = await findApprovedPendaftarByWhatsApp(validWa);
+          if (!approvedMember) {
+            recordFailedLogin(attemptKey);
+            return NextResponse.json(
+              {
+                error:
+                  'Nomor WhatsApp belum terdaftar atau masih menunggu persetujuan pengurus wilayah.',
+              },
+              { status: 403 }
+            );
+          }
+
+          sessionSub = approvedMember.id;
+          memberName = approvedMember.namaLengkap;
+        }
       }
 
       // Verifikasi Kode Akses / PIN Pengurus untuk peran Admin
@@ -108,7 +136,7 @@ export async function POST(request: NextRequest) {
       }
 
       const token = await signSessionToken({
-        sub: identifier,
+        sub: sessionSub,
         role,
       });
 
@@ -124,7 +152,8 @@ export async function POST(request: NextRequest) {
       const response = NextResponse.json({
         success: true,
         role,
-        sub: identifier,
+        sub: sessionSub,
+        nama: memberName,
         isDemo: IS_DEMO_MODE,
       });
 
