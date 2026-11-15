@@ -1,193 +1,75 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion, AnimatePresence, useReducedMotion } from 'motion/react';
 import { Navbar, Footer } from '@/components/Navigation';
 import { PatternSection } from '@/components/PatternSection';
-import { AnimatedTabs } from '@/components/ui/animated-tabs';
-import { getKegiatanList } from '@/data/simulasi';
-import { IS_DEMO_MODE, COMMUNITY_PLACEHOLDERS, DEMO_BADGE_LABEL } from '@/lib/config';
-import { Calendar, MapPin, CheckCircle2, Clock, Building2 } from 'lucide-react';
+import type { AgendaItem, BeritaItem } from '@/lib/cms-store';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from '@/components/ui/dialog';
+import { Calendar, MapPin, ArrowRight, Camera, Sparkles, Building2 } from 'lucide-react';
 
-const STORAGE_KEY_RSVP = 'ikaums_persisted_rsvp';
+const FALLBACK_BERITAS: BeritaItem[] = [
+  {
+    id: 'berita-kopdar-perdana-2026',
+    judul: 'Kopdar Perdana IKA UMS Jabodetabek Sukses Digelar di Jakarta',
+    slug: 'kopdar-perdana-ika-ums-jabodetabek-2026',
+    kategori: 'Kopdar & Temu Alumni',
+    tanggal: '15 Februari 2026',
+    wilayah: 'Jakarta Pusat',
+    ringkasan:
+      'Silaturahmi tatap muka perdana alumni Universitas Muhammadiyah Surakarta di Jabodetabek berlangsung hangat, mempererat kebersamaan lintas fakultas dan angkatan.',
+    konten:
+      'Alumni Universitas Muhammadiyah Surakarta (UMS) yang berdomisili dan berkarier di wilayah Jakarta, Bogor, Depok, Tangerang, dan Bekasi sukses menyelenggarakan pertemuan tatap muka (Kopdar) perdana.\n\nKegiatan ini dihadiri oleh puluhan alumni lintas fakultas mulai dari Teknik, Ekonomi, Hukum, Farmasi, FKIP, Psikologi, Agama Islam, Geografi, hingga FKI dari angkatan senior hingga lulusan muda.\n\nDalam temu perdana ini, para alumni bersepakat memperkuat simpul komunikasi di 9 wilayah Jabodetabek, menyusun program pendampingan karier bagi lulusan baru, serta memperkuat sinergi profesional sesama alumni di perantauan.',
+    fotoUrl: '/images/hero-kumpul-bolo-pisah.jpg',
+    captionFoto: 'Kebersamaan alumni UMS lintas angkatan saat gelaran kopdar perdana di Jakarta.',
+    penulis: 'Humas IKA UMS Jabodetabek',
+    published: true,
+    createdAt: '2026-02-15T10:00:00.000Z',
+  },
+];
 
 export default function KegiatanPage() {
-  const [activeCategory, setActiveCategory] = useState('Semua');
-  const [visibleCount, setVisibleCount] = useState(2);
-  const [rsvpDone, setRsvpDone] = useState<Record<string, boolean>>({});
-  const shouldReduceMotion = useReducedMotion();
-
-  const kegiatanList = useMemo(() => getKegiatanList(), []);
-
-  const categories = [
-    { id: 'Semua', label: 'Semua Kopdar' },
-    { id: 'Kopdar Wilayah', label: 'Kopdar Wilayah' },
-    { id: 'Mentoring Alumni', label: 'Mentoring Alumni' },
-    { id: 'Info Kerja & Usaha', label: 'Info Kerja & Usaha' },
-  ];
+  const [activeMainTab, setActiveMainTab] = useState<'dokumentasi' | 'jadwal'>('dokumentasi');
+  const [beritas, setBeritas] = useState<BeritaItem[]>(FALLBACK_BERITAS);
+  const [agendas, setAgendas] = useState<AgendaItem[]>([]);
+  const [selectedBerita, setSelectedBerita] = useState<BeritaItem | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!IS_DEMO_MODE) return;
-    const timer = setTimeout(() => {
+    let isSubscribed = true;
+    const fetchContent = async () => {
       try {
-        const saved = localStorage.getItem(STORAGE_KEY_RSVP);
-        if (saved) setRsvpDone(JSON.parse(saved));
+        const res = await fetch('/api/admin/content');
+        if (res.ok) {
+          const data = await res.json();
+          if (isSubscribed) {
+            if (Array.isArray(data.beritas) && data.beritas.length > 0) {
+              setBeritas(data.beritas);
+            }
+            if (Array.isArray(data.agendas)) {
+              setAgendas(data.agendas);
+            }
+          }
+        }
       } catch {
-        // abaikan error penyimpanan lokal
+        // Fallback default
+      } finally {
+        if (isSubscribed) setIsLoading(false);
       }
-    }, 0);
-    return () => clearTimeout(timer);
+    };
+
+    void fetchContent();
+    return () => {
+      isSubscribed = false;
+    };
   }, []);
-
-  const toggleRsvp = (id: string, e?: React.MouseEvent) => {
-    if (e) e.stopPropagation();
-    setRsvpDone((prev) => {
-      const updated = { ...prev, [id]: !prev[id] };
-      try {
-        localStorage.setItem(STORAGE_KEY_RSVP, JSON.stringify(updated));
-      } catch {
-        // abaikan error penyimpanan lokal
-      }
-      return updated;
-    });
-  };
-
-  if (!IS_DEMO_MODE || kegiatanList.length === 0) {
-    return (
-      <div className="min-h-screen bg-slate-50 text-[#0C2340] flex flex-col font-sans">
-        <Navbar />
-
-        <main className="flex-grow w-full">
-          <PatternSection
-            as="section"
-            variant="contour"
-            tone="tint"
-            fade="top-right"
-            patternOpacity={0.075}
-            patternSize="180px"
-            className="border-b border-slate-200"
-            contentClassName="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 sm:pt-8 sm:pb-10"
-          >
-            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-[#475569] mb-4">
-              <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
-                Beranda
-              </Link>
-              <span aria-hidden="true">/</span>
-              <span className="text-[#0C2340] font-semibold">Jadwal Kopdar</span>
-            </nav>
-
-            <header className="space-y-3">
-              <span className="inline-block text-sm font-semibold text-[#92400E]">
-                IKA UMS Jabodetabek · Agenda Wilayah
-              </span>
-              <h1 className="text-[clamp(1.75rem,1.3rem+1.8vw,2.5rem)] font-extrabold tracking-[-0.02em] text-[#0C2340] leading-[1.15]">
-                Jadwal Kopdar IKA UMS Jabodetabek
-              </h1>
-              <p className="text-base text-[#475569] leading-[1.6] max-w-[44ch] sm:max-w-2xl">
-                Tanggal dan tempat temu perdana di sembilan wilayah belum dikunci karena pengurus sedang
-                menghimpun usulan hari luang serta domisili pendaftar awal.
-              </p>
-            </header>
-          </PatternSection>
-
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 w-full relative z-[1] space-y-8">
-            {/* Kartu Status Utama */}
-            <section className="surface-card rounded-2xl p-6 sm:p-8 space-y-6">
-              <div className="space-y-2">
-                <span className="inline-block text-xs font-bold uppercase tracking-wider text-[#92400E]">
-                  Tahap Prapeluncuran
-                </span>
-                <h2 className="text-xl sm:text-2xl font-bold text-[#0C2340]">
-                  Alur Penyusunan Kopdar Perdana Jabodetabek
-                </h2>
-                <p className="text-base text-[#475569] leading-[1.6]">
-                  Pertemuan wilayah disusun berdasarkan sebaran domisili nyata agar titik kumpul mudah dijangkau dari stasiun KRL, MRT, atau tol utama. Berikut alur penetapan yang sedang berjalan:
-                </p>
-              </div>
-
-              {/* 4 Langkah Alur */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-                <div className="p-4 rounded-xl bg-white border border-slate-200 space-y-1.5">
-                  <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#0C2340] text-white text-xs font-bold">1</span>
-                  <h3 className="font-bold text-base text-[#0C2340]">Pendataan Domisili</h3>
-                  <p className="text-sm text-[#475569] leading-relaxed">
-                    Alumni mengisi nama, prodi, nomor WhatsApp, dan domisili kota/kabupaten.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-xl bg-white border border-slate-200 space-y-1.5">
-                  <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#92400E] text-white text-xs font-bold">2</span>
-                  <h3 className="font-bold text-base text-[#0C2340]">Musyawarah Titik Kumpul</h3>
-                  <p className="text-sm text-[#475569] leading-relaxed">
-                    Koordinator 9 wilayah memilih lokasi temu yang nyaman dan dekat transportasi publik.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-xl bg-white border border-slate-200 space-y-1.5">
-                  <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#0C2340]/70 text-white text-xs font-bold">3</span>
-                  <h3 className="font-bold text-base text-[#0C2340]">Kabar via WhatsApp</h3>
-                  <p className="text-sm text-[#475569] leading-relaxed">
-                    Undangan resmi dan detail jam pertemuan dikirimkan langsung ke WhatsApp pendaftar.
-                  </p>
-                </div>
-
-                <div className="p-4 rounded-xl bg-white border border-slate-200 space-y-1.5">
-                  <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-emerald-700 text-white text-xs font-bold">4</span>
-                  <h3 className="font-bold text-base text-[#0C2340]">Kopdar Pertama</h3>
-                  <p className="text-sm text-[#475569] leading-relaxed">
-                    Silaturahmi santai, perkenalan lintas jurusan, dan pembentukan koordinator wilayah.
-                  </p>
-                </div>
-              </div>
-
-              {/* Status Tempat & Waktu */}
-              <dl className="divide-y divide-[#0C2340]/10 border-y border-slate-200 text-base">
-                <div className="py-3.5 flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4">
-                  <dt className="sm:w-44 text-sm font-semibold text-[#475569] shrink-0">
-                    Waktu Pertemuan
-                  </dt>
-                  <dd className="font-medium text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.firstKopdarDate}</dd>
-                </div>
-                <div className="py-3.5 flex flex-col sm:flex-row sm:items-baseline gap-1 sm:gap-4">
-                  <dt className="sm:w-44 text-sm font-semibold text-[#475569] shrink-0">
-                    Titik Lokasi
-                  </dt>
-                  <dd className="font-medium text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.firstKopdarLocation}</dd>
-                </div>
-              </dl>
-
-              <div className="flex flex-wrap items-center gap-3 pt-1">
-                <Link
-                  href="/#kopdar"
-                  className="inline-flex items-center justify-center min-h-[48px] px-5 py-3 rounded-lg bg-[#0C2340] hover:bg-[#08182E] active:scale-[0.99] text-white text-base font-semibold transition-all duration-150"
-                >
-                  Usulkan hari &amp; wilayah kopdar
-                </Link>
-                <Link
-                  href="/gabung"
-                  className="inline-flex items-center justify-center min-h-[48px] px-5 py-3 rounded-lg bg-white border border-slate-300 hover:border-slate-400 active:scale-[0.99] text-[#0C2340] text-base font-semibold transition-all duration-150"
-                >
-                  Daftar jadi anggota
-                </Link>
-              </div>
-            </section>
-          </div>
-        </main>
-
-        <Footer />
-      </div>
-    );
-  }
-
-  const filteredKegiatan = kegiatanList.filter((k) => {
-    if (activeCategory === 'Semua') return true;
-    return k.jenis.toLowerCase() === activeCategory.toLowerCase();
-  });
-
-  const featuredEvent = kegiatanList[0];
-  const isFeaturedRsvp = rsvpDone[featuredEvent.id];
 
   return (
     <div className="min-h-screen bg-slate-50 text-[#0C2340] flex flex-col font-sans">
@@ -204,183 +86,290 @@ export default function KegiatanPage() {
           className="border-b border-slate-200"
           contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 md:pt-8 md:pb-10"
         >
-          <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-2 text-sm text-[#475569] mb-4">
-            <div className="flex items-center gap-2">
-              <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
-                Beranda
-              </Link>
-              <span aria-hidden="true">/</span>
-              <span className="text-[#0C2340] font-semibold">Jadwal Kopdar</span>
-            </div>
-            <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-[#92400E] font-semibold">
-              {DEMO_BADGE_LABEL}
-            </span>
+          <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-[#475569] mb-4">
+            <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
+              Beranda
+            </Link>
+            <span aria-hidden="true">/</span>
+            <span className="text-[#0C2340] font-semibold">Kegiatan &amp; Dokumentasi</span>
           </nav>
 
-          <div>
-            <span className="inline-block text-sm font-semibold text-[#92400E] mb-1.5">
-              Jadwal Pertemuan ({DEMO_BADGE_LABEL})
-            </span>
-            <h1 className="text-[clamp(1.75rem,1.3rem+1.8vw,2.5rem)] font-extrabold tracking-[-0.02em] text-[#0C2340]">
-              Jadwal Kopdar Alumni Jabodetabek
+          <header className="space-y-3">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 text-[#92400E] text-xs font-bold uppercase tracking-wider">
+              <Sparkles className="w-3.5 h-3.5" />
+              Kopdar &amp; Silaturahmi Alumni
+            </div>
+            <h1 className="text-[clamp(1.75rem,1.3rem+1.8vw,2.5rem)] font-extrabold tracking-[-0.02em] text-[#0C2340] leading-[1.15]">
+              Dokumentasi &amp; Agenda Kegiatan
             </h1>
-            <p className="text-base text-[#475569] mt-2 max-w-[44ch] sm:max-w-2xl leading-[1.6]">
-              Saring jadwal pertemuan wilayah dan sesi berbagi kerja di bawah ini. Konfirmasi hadir membantu koordinator memperkirakan tempat.
+            <p className="text-base text-[#475569] leading-[1.6] max-w-2xl">
+              Kopdar perdana alumni UMS di Jabodetabek telah resmi terlaksana. Simak dokumentasi liputan kegiatan dan pantau jadwal pertemuan berikutnya di sembilan wilayah.
             </p>
+          </header>
+
+          {/* Tab Utama: Dokumentasi vs Jadwal Mendatang */}
+          <div className="flex items-center gap-2 pt-6">
+            <button
+              type="button"
+              onClick={() => setActiveMainTab('dokumentasi')}
+              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all cursor-pointer ${
+                activeMainTab === 'dokumentasi'
+                  ? 'bg-[#0C2340] text-white shadow-xs'
+                  : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
+              }`}
+            >
+              <Camera className="w-4 h-4" />
+              <span>Dokumentasi Kegiatan</span>
+              <span className={`px-2 py-0.5 rounded-full text-xs ${activeMainTab === 'dokumentasi' ? 'bg-amber-400 text-[#0C2340]' : 'bg-slate-100 text-slate-600'}`}>
+                {beritas.length}
+              </span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setActiveMainTab('jadwal')}
+              className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-bold transition-all cursor-pointer ${
+                activeMainTab === 'jadwal'
+                  ? 'bg-[#0C2340] text-white shadow-xs'
+                  : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
+              }`}
+            >
+              <Calendar className="w-4 h-4" />
+              <span>Jadwal Mendatang</span>
+              <span className={`px-2 py-0.5 rounded-full text-xs ${activeMainTab === 'jadwal' ? 'bg-amber-400 text-[#0C2340]' : 'bg-slate-100 text-slate-600'}`}>
+                {agendas.length}
+              </span>
+            </button>
           </div>
         </PatternSection>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 w-full relative z-[1]">
-          {/* Highlight Acara */}
-          <section className="mb-12">
-            <div className="surface-card rounded-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12">
-            <div className="lg:col-span-7 relative min-h-[260px] lg:min-h-[380px] bg-[#0C2340] overflow-hidden">
-              <Image
-                src={featuredEvent.gambar || '/images/hero-kumpul-bolo-pisah.jpg'}
-                alt={featuredEvent.judul}
-                fill
-                sizes="(max-width: 1024px) 100vw, 58vw"
-                className="object-cover"
-              />
-            </div>
-
-            <div className="lg:col-span-5 p-6 sm:p-8 flex flex-col justify-between bg-white space-y-5">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between gap-2">
-                  <span className="bg-[#FEF3C7] text-[#92400E] text-xs font-semibold px-3 py-1 rounded">
-                    {featuredEvent.jenis}
-                  </span>
-                  <span className="text-xs text-[#475569] flex items-center gap-1 font-medium">
-                    <Clock className="w-3.5 h-3.5 text-[#0C2340]" />
-                    {featuredEvent.jamWIB}
-                  </span>
-                </div>
-
-                <h2 className="text-2xl font-extrabold text-[#0C2340] leading-snug">
-                  {featuredEvent.judul}
-                </h2>
-
-                <div className="space-y-2 text-xs text-[#475569]">
-                  <div className="flex items-center gap-2">
-                    <Calendar className="w-4 h-4 text-[#92400E] shrink-0" />
-                    <span className="font-semibold text-[#0C2340]">{featuredEvent.tanggalWIB}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-[#92400E] shrink-0" />
-                    <span>{featuredEvent.lokasi || featuredEvent.lokasiSpesifik} · {featuredEvent.wilayah}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Building2 className="w-4 h-4 text-[#475569] shrink-0" />
-                    <span>Koordinator: {featuredEvent.penanggungJawab || featuredEvent.penyelenggara || 'Pengurus Wilayah'}</span>
-                  </div>
-                </div>
-
-                <p className="text-base text-[#475569] leading-[1.6]">{featuredEvent.deskripsi}</p>
+          {isLoading ? (
+            <div className="surface-card rounded-2xl p-12 text-center text-slate-500">
+              <div className="animate-pulse space-y-3">
+                <div className="h-6 w-48 bg-slate-200 rounded mx-auto" />
+                <div className="h-4 w-64 bg-slate-100 rounded mx-auto" />
               </div>
-
-              <button
-                type="button"
-                onClick={(e) => toggleRsvp(featuredEvent.id, e)}
-                className={`w-full min-h-[48px] py-3 rounded-lg text-base font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer ${
-                  isFeaturedRsvp
-                    ? 'bg-emerald-700 text-white hover:bg-emerald-800'
-                    : 'bg-[#0C2340] text-white hover:bg-[#08182E]'
-                }`}
-              >
-                {isFeaturedRsvp ? (
-                  <>
-                    <CheckCircle2 className="w-4 h-4" />
-                    <span>Tercatat ikut (Simulasi)</span>
-                  </>
-                ) : (
-                  <span>Daftar ikut ({DEMO_BADGE_LABEL})</span>
-                )}
-              </button>
             </div>
-          </div>
-        </section>
+          ) : activeMainTab === 'dokumentasi' ? (
+            /* TAB DOKUMENTASI KEGIATAN */
+            <div className="space-y-8">
+              {beritas.length === 0 ? (
+                <div className="surface-card rounded-2xl p-10 text-center space-y-3">
+                  <Camera className="w-10 h-10 text-slate-400 mx-auto" />
+                  <h2 className="text-xl font-bold text-[#0C2340]">Belum Ada Dokumentasi Kegiatan</h2>
+                  <p className="text-sm text-slate-600 max-w-md mx-auto">
+                    Dokumentasi kopdar dan kegiatan alumni yang diunggah pengurus akan muncul di sini.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {beritas.map((item) => (
+                    <article
+                      key={item.id}
+                      className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-2xs hover:shadow-xs hover:border-slate-300 transition-all flex flex-col justify-between"
+                    >
+                      <div>
+                        <div className="aspect-[16/10] relative bg-slate-100 overflow-hidden">
+                          <Image
+                            src={item.fotoUrl || '/images/hero-kumpul-bolo-pisah.jpg'}
+                            alt={item.judul}
+                            fill
+                            sizes="(max-width: 768px) 100vw, 33vw"
+                            className="object-cover"
+                          />
+                          <div className="absolute top-3 left-3">
+                            <span className="inline-block rounded-md bg-white/95 backdrop-blur-xs px-2.5 py-0.5 text-xs font-bold text-[#0C2340] shadow-2xs">
+                              {item.kategori}
+                            </span>
+                          </div>
+                        </div>
 
-        <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <AnimatedTabs
-            tabs={categories}
-            activeTab={activeCategory}
-            onChange={(tab) => {
-              setActiveCategory(tab);
-              setVisibleCount(2);
-            }}
-            layoutId="kegiatanCategoryTabs"
-          />
-          <span className="text-sm text-[#475569]">
-            Menampilkan <strong>{Math.min(visibleCount, filteredKegiatan.length)}</strong> dari{' '}
-            <strong>{filteredKegiatan.length}</strong> contoh jadwal
-          </span>
-        </div>
-
-        <div className="max-w-3xl space-y-4">
-          <AnimatePresence mode="popLayout">
-            {filteredKegiatan.slice(0, visibleCount).map((item) => {
-              const isRsvped = rsvpDone[item.id];
-              return (
-                <motion.article
-                  key={item.id}
-                  layout={!shouldReduceMotion}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="bg-white border border-slate-200 rounded-xl overflow-hidden flex flex-col sm:flex-row shadow-2xs"
-                >
-                  <div className="aspect-[16/10] sm:aspect-auto sm:w-52 shrink-0 bg-slate-100 relative overflow-hidden">
-                    <Image
-                      src={item.gambar || '/images/hero-kumpul-bolo-pisah.jpg'}
-                      alt={item.judul}
-                      fill
-                      loading="lazy"
-                      sizes="(max-width: 640px) 100vw, 208px"
-                      className="object-cover"
-                    />
-                  </div>
-                  <div className="p-5 flex-1 flex flex-col justify-between gap-4">
-                    <div className="space-y-1.5">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="inline-block bg-slate-100 text-[#0C2340] text-xs font-semibold px-2.5 py-0.5 rounded">
-                          {item.jenis}
-                        </span>
-                        <span className="text-sm text-[#475569]">{item.tanggalWIB} · {item.wilayah}</span>
+                        <div className="p-5 space-y-2.5">
+                          <div className="flex items-center gap-2 text-xs text-slate-500">
+                            <Calendar className="w-3.5 h-3.5 text-amber-600" />
+                            <span>{item.tanggal}</span>
+                            {item.wilayah && (
+                              <>
+                                <span>•</span>
+                                <span>{item.wilayah}</span>
+                              </>
+                            )}
+                          </div>
+                          <h3 className="text-base sm:text-lg font-bold text-[#0C2340] leading-snug line-clamp-2">
+                            {item.judul}
+                          </h3>
+                          <p className="text-xs sm:text-sm text-slate-600 line-clamp-3 leading-relaxed">
+                            {item.ringkasan}
+                          </p>
+                        </div>
                       </div>
-                      <h3 className="text-lg font-bold text-[#0C2340] leading-snug">{item.judul}</h3>
-                      <p className="text-base text-[#475569] leading-[1.55]">{item.deskripsi}</p>
-                    </div>
-                    <div>
-                      <button
-                        type="button"
-                        onClick={(e) => toggleRsvp(item.id, e)}
-                        className={`w-full sm:w-auto min-h-[44px] px-5 py-2.5 rounded-lg text-sm font-semibold transition-colors cursor-pointer ${
-                          isRsvped
-                            ? 'bg-emerald-50 text-emerald-800 border border-emerald-200'
-                            : 'bg-slate-100 text-[#0C2340] hover:bg-[#0C2340] hover:text-white'
-                        }`}
-                      >
-                        {isRsvped ? 'Tercatat ikut' : 'Daftar ikut'}
-                      </button>
-                    </div>
-                  </div>
-                </motion.article>
-              );
-            })}
-          </AnimatePresence>
 
-          {filteredKegiatan.length > visibleCount && (
-            <div className="pt-2">
-              <button
-                type="button"
-                onClick={() => setVisibleCount((prev) => prev + 3)}
-                className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 text-[#0C2340] text-base font-semibold transition-colors cursor-pointer"
-              >
-                Tampilkan jadwal lainnya ({filteredKegiatan.length - visibleCount} lagi)
-              </button>
+                      <div className="px-5 pb-5 pt-2 flex items-center justify-between border-t border-slate-100 text-xs">
+                        <span className="text-slate-500 font-medium">
+                          {item.penulis || 'Humas IKA UMS'}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedBerita(item)}
+                          className="inline-flex items-center gap-1 font-bold text-[#0C2340] hover:text-amber-600 transition-colors cursor-pointer py-1"
+                        >
+                          <span>Lihat liputan</span>
+                          <ArrowRight className="w-3.5 h-3.5" />
+                        </button>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            /* TAB JADWAL MENDATANG */
+            <div className="space-y-6">
+              {agendas.length === 0 ? (
+                <div className="surface-card rounded-2xl p-10 text-center space-y-4">
+                  <Calendar className="w-10 h-10 text-slate-400 mx-auto" />
+                  <h2 className="text-xl font-bold text-[#0C2340]">Belum Ada Jadwal Pertemuan Baru</h2>
+                  <p className="text-sm text-slate-600 max-w-md mx-auto">
+                    Kopdar perdana telah berhasil terlaksana. Jadwal kopdar berkala berikutnya sedang disusun oleh koordinator 9 wilayah Jabodetabek.
+                  </p>
+                  <div className="pt-2">
+                    <Link
+                      href="/gabung"
+                      className="inline-flex min-h-[44px] items-center gap-2 px-5 py-2.5 rounded-xl bg-[#0C2340] hover:bg-[#16325C] text-white text-sm font-semibold transition-colors"
+                    >
+                      Daftar Jadi Anggota untuk Dikabari
+                      <ArrowRight className="w-4 h-4 text-[#F59E0B]" />
+                    </Link>
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {agendas.map((agenda) => (
+                    <article
+                      key={agenda.id}
+                      className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 shadow-2xs space-y-4 flex flex-col justify-between"
+                    >
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="bg-amber-100 text-amber-900 text-xs font-bold px-2.5 py-0.5 rounded">
+                            {agenda.jenis}
+                          </span>
+                          <span className="text-xs text-slate-500">
+                            Kapasitas: {agenda.kapasitas} orang
+                          </span>
+                        </div>
+                        <h3 className="text-lg font-bold text-[#0C2340] leading-snug">
+                          {agenda.judul}
+                        </h3>
+                        <div className="space-y-1.5 text-xs text-slate-600">
+                          <div className="flex items-center gap-2">
+                            <Calendar className="w-4 h-4 text-amber-600 shrink-0" />
+                            <span>{agenda.tanggalWIB} {agenda.jamWIB ? `· ${agenda.jamWIB}` : ''}</span>
+                          </div>
+                          <div className="flex items-start gap-2">
+                            <MapPin className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                            <span>{agenda.lokasi} ({agenda.wilayah})</span>
+                          </div>
+                          {agenda.penanggungJawab && (
+                            <div className="flex items-center gap-2">
+                              <Building2 className="w-4 h-4 text-slate-400 shrink-0" />
+                              <span>Koordinator: {agenda.penanggungJawab}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="pt-3 border-t border-slate-100 flex items-center justify-between">
+                        <Link
+                          href="/gabung"
+                          className="inline-flex min-h-[40px] items-center gap-1.5 px-4 py-2 rounded-lg bg-[#0C2340] text-white text-xs font-semibold hover:bg-[#16325C]"
+                        >
+                          Daftar Ikut Temu
+                          <ArrowRight className="w-3.5 h-3.5 text-amber-400" />
+                        </Link>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              )}
             </div>
           )}
-        </div>
+
+          {/* Reader Modal Dialog */}
+          <Dialog open={!!selectedBerita} onOpenChange={(open) => !open && setSelectedBerita(null)}>
+            {selectedBerita && (
+              <DialogContent className="bg-white border border-slate-200 rounded-2xl max-w-3xl max-h-[90vh] overflow-y-auto p-6 sm:p-8">
+                <DialogHeader className="space-y-2 border-b border-slate-200 pb-4">
+                  <div className="flex flex-wrap items-center gap-2 text-xs">
+                    <span className="rounded-md bg-amber-100 text-amber-900 font-bold px-2.5 py-0.5">
+                      {selectedBerita.kategori}
+                    </span>
+                    {selectedBerita.wilayah && (
+                      <span className="text-slate-600 flex items-center gap-1">
+                        <MapPin className="w-3.5 h-3.5 text-amber-600" />
+                        {selectedBerita.wilayah}
+                      </span>
+                    )}
+                    <span className="text-slate-400">•</span>
+                    <span className="text-slate-600 flex items-center gap-1">
+                      <Calendar className="w-3.5 h-3.5 text-slate-400" />
+                      {selectedBerita.tanggal}
+                    </span>
+                  </div>
+
+                  <DialogTitle className="text-xl sm:text-2xl font-extrabold text-[#0C2340] leading-snug">
+                    {selectedBerita.judul}
+                  </DialogTitle>
+
+                  <DialogDescription className="text-xs text-slate-500">
+                    Oleh: {selectedBerita.penulis || 'Pengurus IKA UMS Jabodetabek'}
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="space-y-5 pt-3">
+                  {selectedBerita.fotoUrl && (
+                    <div className="rounded-xl overflow-hidden border border-slate-200 bg-slate-900 aspect-[16/9] relative">
+                      <Image
+                        src={selectedBerita.fotoUrl}
+                        alt={selectedBerita.judul}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 800px"
+                        className="object-cover"
+                      />
+                      {selectedBerita.captionFoto && (
+                        <div className="absolute bottom-0 inset-x-0 bg-black/70 backdrop-blur-xs p-2.5 text-xs text-white/95">
+                          {selectedBerita.captionFoto}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  <div className="rounded-xl bg-amber-50/70 border border-amber-200/80 p-4 text-sm font-medium text-slate-800 leading-relaxed">
+                    {selectedBerita.ringkasan}
+                  </div>
+
+                  <div className="space-y-4 text-sm sm:text-base text-slate-700 leading-relaxed whitespace-pre-line">
+                    {selectedBerita.konten || selectedBerita.ringkasan}
+                  </div>
+
+                  <div className="pt-4 border-t border-slate-200 flex items-center justify-between text-xs text-slate-500">
+                    <span className="inline-flex items-center gap-1.5">
+                      <Camera className="w-4 h-4 text-amber-600" />
+                      Dokumentasi Resmi IKA UMS Jabodetabek
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedBerita(null)}
+                      className="px-4 py-2 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 font-semibold cursor-pointer"
+                    >
+                      Tutup
+                    </button>
+                  </div>
+                </div>
+              </DialogContent>
+            )}
+          </Dialog>
         </div>
       </main>
 

@@ -21,8 +21,16 @@ async function Beranda() {
   const publishedBeritas = (beritas || []).filter((b) => b.published !== false);
 
   const cerita: HomeCeritaItem[] =
-    agendas.length > 0
-      ? agendas.slice(0, 3).map((agenda, index) => ({
+    publishedBeritas.length > 0
+      ? publishedBeritas.slice(0, 3).map((berita, index) => ({
+          id: berita.id,
+          judul: berita.judul,
+          kategori: berita.kategori,
+          tanggal: berita.tanggal,
+          gambar: berita.fotoUrl || CERITA_IMAGES[index % CERITA_IMAGES.length],
+          href: '/cerita',
+        }))
+      : agendas.slice(0, 3).map((agenda, index) => ({
           id: agenda.id,
           judul: agenda.judul,
           kategori: agenda.jenis,
@@ -31,14 +39,6 @@ async function Beranda() {
             : agenda.tanggalWIB,
           gambar: CERITA_IMAGES[index % CERITA_IMAGES.length],
           href: '/kegiatan',
-        }))
-      : publishedBeritas.slice(0, 3).map((berita, index) => ({
-          id: berita.id,
-          judul: berita.judul,
-          kategori: berita.kategori,
-          tanggal: berita.tanggal,
-          gambar: berita.fotoUrl || CERITA_IMAGES[index % CERITA_IMAGES.length],
-          href: '/cerita',
         }));
 
   return <HomePageClient landing={landing} cerita={cerita} stats={stats} />;

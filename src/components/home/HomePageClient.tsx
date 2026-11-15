@@ -6,7 +6,6 @@ import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { motion, useReducedMotion } from 'motion/react';
 import { Navbar, Footer } from '@/components/Navigation';
-import { KopdarInterestForm } from '@/components/home/KopdarInterestForm';
 import { MobileKopdarCta } from '@/components/home/MobileKopdarCta';
 import { RegisterModal } from '@/components/home/RegisterModal';
 import MapLoadingSkeleton from '@/components/peta/MapLoadingSkeleton';
@@ -584,25 +583,31 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
 
               <div className="lg:col-span-5 p-5 sm:p-8 space-y-3 sm:space-y-4">
                 <span className="inline-block text-xs sm:text-sm font-bold uppercase tracking-wider text-[#B45309]">
-                  {landing.kopdarEyebrow}
+                  Kopdar &amp; Silaturahmi Alumni
                 </span>
                 <h2
                   id="banner-kopdar-heading"
                   className="text-xl sm:text-3xl font-extrabold tracking-tight text-[#0C2340]"
                 >
-                  {landing.kopdarTitle}
+                  Kopdar Perdana Sukses Terlaksana
                 </h2>
                 <p className="text-xs sm:text-base leading-relaxed text-slate-600">
-                  {landing.kopdarDescription}
+                  Pertemuan tatap muka perdana alumni Universitas Muhammadiyah Surakarta di Jabodetabek kini telah resmi terlaksana. Simak dokumentasi liputan keseruan acara dan daftarkan dirimu agar selalu terhubung di kotamu.
                 </p>
-                <div className="pt-1 sm:pt-2">
+                <div className="flex flex-wrap items-center gap-3 pt-1 sm:pt-2">
+                  <Link
+                    href="/cerita"
+                    className="inline-flex min-h-[44px] sm:min-h-[46px] items-center justify-center gap-2 rounded-xl bg-[#0C2340] px-5 sm:px-6 py-2.5 text-xs sm:text-base font-semibold text-white transition-all hover:bg-[#08182E] shadow-xs cursor-pointer active:scale-[0.99]"
+                  >
+                    <span>Lihat Dokumentasi Kegiatan</span>
+                    <ArrowRight className="h-4 w-4 text-[#F59E0B]" aria-hidden="true" />
+                  </Link>
                   <button
                     type="button"
                     onClick={() => handleOpenRegister(selectedWilayah)}
-                    className="inline-flex min-h-[44px] sm:min-h-[46px] items-center justify-center gap-2 rounded-xl bg-[#0C2340] px-5 sm:px-6 py-2.5 text-xs sm:text-base font-semibold text-white transition-all hover:bg-[#08182E] shadow-xs cursor-pointer active:scale-[0.99]"
+                    className="inline-flex min-h-[44px] sm:min-h-[46px] items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-4 sm:px-5 py-2.5 text-xs sm:text-base font-semibold text-slate-800 transition-colors hover:bg-slate-50 shadow-2xs cursor-pointer active:scale-[0.99]"
                   >
                     <span>Daftar Jadi Anggota</span>
-                    <ArrowRight className="h-4 w-4 text-[#F59E0B]" aria-hidden="true" />
                   </button>
                 </div>
               </div>
@@ -618,22 +623,6 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
                   />
                 </div>
               </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: shouldReduceMotion ? 0 : 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-50px' }}
-            transition={{ duration: 0.6, delay: 0.15, ease: easeOutCustom }}
-            id="form-kopdar-container"
-            className="transition-all duration-300 block"
-          >
-            <div className="border-t border-slate-200 pt-6 max-w-3xl mx-auto">
-              <KopdarInterestForm
-                wilayah={selectedWilayah}
-                onWilayahChange={setSelectedWilayah}
-              />
             </div>
           </motion.div>
         </section>
@@ -654,10 +643,10 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
               {landing.ceritaTitle}
             </h2>
             <Link
-              href="/kegiatan"
+              href="/cerita"
               className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#0C2340] hover:text-[#C07A28] transition-colors"
             >
-              <span>Lihat semua kegiatan</span>
+              <span>Lihat semua dokumentasi</span>
               <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
             </Link>
           </motion.div>

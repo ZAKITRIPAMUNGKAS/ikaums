@@ -73,10 +73,10 @@ export default function PetaContextualPanel({ region, count = 0 }: PetaContextua
             <div className="bg-slate-50 border border-slate-200 rounded-lg p-3.5">
               <div className="text-sm font-bold text-[#0C2340] mb-1 flex items-center gap-1.5">
                 <Calendar className="w-4 h-4 text-[#0C2340]" />
-                <span>Rencana Kopdar Pertama</span>
+                <span>Kegiatan &amp; Kopdar Wilayah</span>
               </div>
               <p className="text-base text-[#475569] leading-[1.6]">
-                Belum dijadwalkan. Gunakan tombol daftar di bawah agar koordinator wilayah {region.shortName} dapat menghubungi kamu saat agenda pertama disepakati.
+                Kopdar perdana telah terlaksana. Informasi jadwal silaturahmi berkala di wilayah {region.shortName} dikabarkan melalui koordinator wilayah dan grup resmi alumni.
               </p>
             </div>
           </div>
