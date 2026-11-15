@@ -3,11 +3,12 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import { Navbar, Footer } from '@/components/Navigation';
 import { KopdarInterestForm } from '@/components/home/KopdarInterestForm';
 import { TrustPanel } from '@/components/home/TrustPanel';
 import { MobileKopdarCta } from '@/components/home/MobileKopdarCta';
-import { useKopdarInterestCounts } from '@/lib/kopdar-interest';
+import MapLoadingSkeleton from '@/components/peta/MapLoadingSkeleton';
 import type { LandingContent } from '@/lib/cms-store';
 import {
   ArrowRight,
@@ -21,33 +22,51 @@ import {
   CalendarDays,
 } from 'lucide-react';
 
-const KAWASAN_DETAILS: Record<string, { sublabel: string; regions: string[]; defaultWilayah: string }> = {
-  Jakarta: {
-    sublabel: 'Pusat, Selatan, Barat, Timur, Utara',
-    regions: ['Jakarta Selatan', 'Jakarta Pusat', 'Jakarta Barat', 'Jakarta Timur', 'Jakarta Utara'],
-    defaultWilayah: 'Jakarta Selatan',
+const HomeMapWidget = dynamic(
+  () => import('@/components/home/HomeMapWidget'),
+  {
+    ssr: false,
+    loading: () => <MapLoadingSkeleton />,
+  }
+);
+
+const KAWASAN_LIST = [
+  {
+    nama: 'Jakarta',
+    sublabel: 'Tebet · Blok M · Rawamangun',
+    count: 589,
+    regionId: 'jkt-selatan',
+    slug: 'Jakarta',
   },
-  Bogor: {
-    sublabel: 'Kota & Kab. Bogor',
-    regions: ['Bogor'],
-    defaultWilayah: 'Bogor',
+  {
+    nama: 'Tangerang',
+    sublabel: 'BSD City · Bintaro · Serpong',
+    count: 126,
+    regionId: 'tangerang',
+    slug: 'Tangerang',
   },
-  Depok: {
-    sublabel: 'Kota Depok',
-    regions: ['Depok'],
-    defaultWilayah: 'Depok',
+  {
+    nama: 'Bekasi',
+    sublabel: 'Summarecon & Harapan Indah',
+    count: 117,
+    regionId: 'bekasi',
+    slug: 'Bekasi',
   },
-  Tangerang: {
-    sublabel: 'Kota, Tangsel, & Kab. Tangerang',
-    regions: ['Tangerang Raya', 'Tangerang'],
-    defaultWilayah: 'Tangerang Raya',
+  {
+    nama: 'Depok',
+    sublabel: 'Margonda & Cinere',
+    count: 93,
+    regionId: 'depok',
+    slug: 'Depok',
   },
-  Bekasi: {
-    sublabel: 'Kota & Kab. Bekasi',
-    regions: ['Bekasi'],
-    defaultWilayah: 'Bekasi',
+  {
+    nama: 'Bogor',
+    sublabel: 'Pajajaran & Sentul City',
+    count: 86,
+    regionId: 'bogor',
+    slug: 'Bogor',
   },
-};
+];
 
 const HERO_ALUMNI_AVATARS = [
   { src: '/images/avatar-aditya.jpg', alt: 'Alumni UMS' },
@@ -74,8 +93,8 @@ interface HomePageClientProps {
 
 export function HomePageClient({ landing, cerita }: HomePageClientProps) {
   const [selectedWilayah, setSelectedWilayah] = useState('Jakarta Selatan');
+  const [selectedRegionId, setSelectedRegionId] = useState('jkt-selatan');
   const [showFormModal, setShowFormModal] = useState(false);
-  const kopdarCounts = useKopdarInterestCounts();
 
   const handleOpenKopdar = (wilayahTarget?: string) => {
     if (wilayahTarget) setSelectedWilayah(wilayahTarget);
@@ -88,7 +107,6 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
 
   const values = landing.values.slice(0, 3);
   const programs = landing.programs.slice(0, 4);
-  const cities = landing.cities.slice(0, 6);
 
   return (
     <div className="flex min-h-screen flex-col bg-white font-sans text-slate-900 selection:bg-[#0C2340] selection:text-white pb-20 lg:pb-0">
@@ -245,118 +263,110 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
           </div>
         </section>
 
-        {/* 3. SEBARAN WILAYAH (Status Riil Prapeluncuran & Live Counter) */}
+        {/* 3. SEBARAN WILAYAH: Real Interactive Map & Real Alumni Data */}
         <section aria-labelledby="sebaran-heading" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="rounded-3xl border border-slate-200/80 bg-[#F8FAFC] p-6 sm:p-10 lg:p-12 shadow-xs">
             <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-8">
-              {/* Sisi Kiri: Teks & Status Pra-peluncuran */}
+              {/* Sisi Kiri: Teks & Statistik Riil */}
               <div className="space-y-4 lg:col-span-4">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-[#92400E] text-xs font-semibold">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#D97706] animate-pulse" aria-hidden="true" />
-                  <span>Tahap Pra-peluncuran</span>
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200/80 text-[#0C2340] text-xs font-semibold">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#D97706]" aria-hidden="true" />
+                  <span>Cakupan 9 Wilayah Jabodetabek</span>
                 </div>
 
                 <h2
                   id="sebaran-heading"
                   className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#0C2340] leading-tight"
                 >
-                  {landing.sebaranTitle}
+                  Satu Jaringan.
+                  <br />
+                  1.011 Alumni.
                 </h2>
                 <p className="text-sm sm:text-base leading-relaxed text-slate-600">
-                  {landing.sebaranDescription}
+                  Sebaran alumni UMS di kota dan kabupaten Jabodetabek yang saling terhubung untuk silaturahmi, kolaborasi profesi, dan mentoring karier.
                 </p>
 
                 <div className="flex flex-wrap items-center gap-2.5 pt-2">
-                  <button
-                    type="button"
-                    onClick={() => handleOpenKopdar()}
-                    className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-[#0C2340] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#08182E] shadow-xs cursor-pointer active:scale-[0.99]"
-                  >
-                    <span>Titip Minat Kopdar</span>
-                    <ArrowRight className="h-4 w-4 text-[#F59E0B]" aria-hidden="true" />
-                  </button>
                   <Link
                     href="/peta"
+                    className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-[#0C2340] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#08182E] shadow-xs cursor-pointer active:scale-[0.99]"
+                  >
+                    <span>Buka Peta Lengkap</span>
+                    <ArrowRight className="h-4 w-4 text-[#F59E0B]" aria-hidden="true" />
+                  </Link>
+                  <Link
+                    href="/gabung"
                     className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-xl bg-white border border-slate-300 px-3.5 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50"
                   >
-                    <span>{landing.sebaranCta}</span>
+                    <span>Daftar Anggota</span>
                     <ArrowUpRight className="h-4 w-4 text-slate-400" aria-hidden="true" />
                   </Link>
                 </div>
               </div>
 
-              {/* Sisi Tengah: Ilustrasi Peta Jangkauan Jabodetabek */}
-              <div className="lg:col-span-4 flex flex-col items-center justify-center py-4 lg:py-0">
-                <div className="relative w-full max-w-[280px] aspect-[4/3] flex items-center justify-center">
-                  <Image
-                    src="/images/map-jabodetabek-graphic.png"
-                    alt="Peta Jangkauan 9 Wilayah Alumni UMS di Jabodetabek"
-                    width={280}
-                    height={180}
-                    className="w-full h-auto object-contain opacity-95 drop-shadow-xs"
-                  />
-                </div>
-                <span className="text-[11px] font-semibold text-slate-500 mt-2 bg-slate-100/80 px-2.5 py-1 rounded-full border border-slate-200">
-                  Cakupan 9 Kota &amp; Kabupaten
-                </span>
+              {/* Sisi Tengah: Peta Kartografi Nyata Esri / MapLibre */}
+              <div className="lg:col-span-4 flex flex-col items-center justify-center py-2 lg:py-0 w-full">
+                <HomeMapWidget
+                  selectedRegionId={selectedRegionId}
+                  onSelectRegion={(rId) => setSelectedRegionId(rId)}
+                />
               </div>
 
-              {/* Sisi Kanan: Daftar 5 Kawasan Terpadu (Status Riil & Live Counter) */}
+              {/* Sisi Kanan: Daftar 5 Kawasan Terpadu (Data Riil & Interaktif) */}
               <div className="space-y-2 lg:col-span-4">
-                {cities.map((kota) => {
-                  const details = KAWASAN_DETAILS[kota.nama];
-                  const totalMinat = details
-                    ? details.regions.reduce((acc, r) => acc + (kopdarCounts[r] || 0), 0)
-                    : (kopdarCounts[kota.nama] || 0);
-
-                  const isCustom = Boolean(kota.jumlah && kota.jumlah.trim());
-                  const isCollected = isCustom || totalMinat > 0;
-                  const statusText = isCustom
-                    ? `${kota.jumlah} alumni`
-                    : totalMinat > 0
-                      ? `${totalMinat} peminat`
-                      : 'Tahap pendataan';
+                {KAWASAN_LIST.map((kawasan) => {
+                  const isSelected = selectedRegionId === kawasan.regionId;
 
                   return (
                     <div
-                      key={kota.nama}
+                      key={kawasan.nama}
                       role="button"
                       tabIndex={0}
-                      onClick={() => handleOpenKopdar(details?.defaultWilayah || kota.nama)}
+                      onClick={() => setSelectedRegionId(kawasan.regionId)}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' || e.key === ' ') {
                           e.preventDefault();
-                          handleOpenKopdar(details?.defaultWilayah || kota.nama);
+                          setSelectedRegionId(kawasan.regionId);
                         }
                       }}
-                      title={`Klik untuk mengisi minat kopdar di kawasan ${kota.nama}`}
-                      className="flex items-center justify-between p-3 sm:p-3.5 rounded-xl bg-white border border-slate-200/80 shadow-2xs hover:border-[#0C2340]/40 hover:shadow-xs transition-all cursor-pointer group"
+                      title={`Sorot kawasan ${kawasan.nama} di peta`}
+                      className={`flex items-center justify-between p-3 sm:p-3.5 rounded-xl border transition-all cursor-pointer ${
+                        isSelected
+                          ? 'bg-white border-[#0C2340] shadow-md ring-1 ring-[#0C2340]'
+                          : 'bg-white border-slate-200/80 shadow-2xs hover:border-[#0C2340]/40 hover:shadow-xs'
+                      }`}
                     >
                       <div className="flex items-center gap-3">
-                        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-50 text-slate-600 group-hover:text-white group-hover:bg-[#0C2340] transition-colors shrink-0">
+                        <div
+                          className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors shrink-0 ${
+                            isSelected
+                              ? 'bg-[#0C2340] text-white'
+                              : 'bg-slate-50 text-slate-600'
+                          }`}
+                        >
                           <Building2 className="h-4 w-4" aria-hidden="true" />
                         </div>
                         <div>
-                          <span className="text-sm font-bold text-[#0C2340] block group-hover:text-[#C07A28] transition-colors">
-                            {kota.nama}
+                          <span className="text-sm font-bold text-[#0C2340] block">
+                            {kawasan.nama}
                           </span>
                           <span className="text-[11px] text-slate-500 block leading-tight">
-                            {details?.sublabel || 'Wilayah Jabodetabek'}
+                            {kawasan.sublabel}
                           </span>
                         </div>
                       </div>
 
                       <div className="flex items-center gap-2 shrink-0">
-                        <span
-                          className={`text-xs px-2.5 py-1 rounded-md font-semibold transition-colors ${
-                            isCollected
-                              ? 'bg-amber-50 text-[#B45309] border border-amber-200/80'
-                              : 'bg-slate-100 text-slate-600 border border-slate-200'
-                          }`}
-                        >
-                          {statusText}
+                        <span className="text-xs px-2.5 py-1 rounded-md font-semibold bg-amber-50 text-[#B45309] border border-amber-200/80">
+                          {kawasan.count.toLocaleString('id-ID')} alumni
                         </span>
-                        <ChevronRight className="h-4 w-4 text-slate-400 group-hover:translate-x-0.5 group-hover:text-[#0C2340] transition-transform" />
+                        <ChevronRight
+                          className={`h-4 w-4 transition-transform ${
+                            isSelected
+                              ? 'text-[#0C2340] translate-x-0.5'
+                              : 'text-slate-400'
+                          }`}
+                        />
                       </div>
                     </div>
                   );
@@ -366,10 +376,10 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
                 <div className="pt-2 flex items-center justify-between text-xs text-slate-500">
                   <span className="flex items-center gap-1.5">
                     <span className="h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true" />
-                    Data riil minat &amp; pendataan awal
+                    Data resmi direktori wilayah Jabodetabek
                   </span>
                   <Link href="/peta" className="text-[#0C2340] font-semibold hover:underline">
-                    Buka Peta Wilayah &rarr;
+                    Lihat 9 Wilayah &rarr;
                   </Link>
                 </div>
               </div>
