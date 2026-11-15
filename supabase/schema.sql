@@ -17,6 +17,7 @@ CREATE TABLE IF NOT EXISTS public.pendaftar (
     email TEXT,
     pekerjaan TEXT,
     perusahaan TEXT,
+    foto_url TEXT,
     siap_mentoring BOOLEAN DEFAULT FALSE NOT NULL,
     tampil_di_direktori BOOLEAN DEFAULT FALSE NOT NULL,
     status TEXT DEFAULT 'menunggu' NOT NULL CHECK (status IN ('menunggu', 'disetujui', 'ditolak')),
