@@ -233,22 +233,25 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
 
         {/* 2. STRIP 3 NILAI UTAMA */}
         <section aria-label="Keunggulan Komunitas" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-4 lg:gap-6">
             {values.map((item, index) => {
               const Icon = [Users, Briefcase, Calendar][index] ?? Users;
+              const isFirst = index === 0;
               return (
                 <div
                   key={`${item.judul}-${index}`}
-                  className="flex items-start gap-4 p-5 rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:shadow-xs transition-shadow"
+                  className={`flex ${
+                    isFirst ? 'col-span-2 md:col-span-1' : 'col-span-1'
+                  } items-start gap-3 sm:gap-4 p-3.5 sm:p-5 rounded-xl sm:rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:shadow-xs transition-shadow`}
                 >
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-[#C07A28] border border-amber-200/60">
-                    <Icon className="h-6 w-6" aria-hidden="true" />
+                  <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-[#C07A28] border border-amber-200/60">
+                    <Icon className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden="true" />
                   </div>
                   <div className="space-y-1">
-                    <h3 className="text-base sm:text-lg font-bold text-[#0C2340]">
+                    <h3 className="text-xs sm:text-base lg:text-lg font-bold text-[#0C2340] leading-snug">
                       {item.judul}
                     </h3>
-                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
+                    <p className="text-[11px] sm:text-xs lg:text-sm text-slate-600 leading-snug sm:leading-relaxed line-clamp-2 sm:line-clamp-none">
                       {item.isi}
                     </p>
                   </div>
@@ -308,9 +311,10 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
               </div>
 
               {/* Sisi Kanan: Daftar 5 Kawasan Terpadu (Data Riil & Interaktif) */}
-              <div className="space-y-2 lg:col-span-4">
-                {KAWASAN_LIST.map((kawasan) => {
+              <div className="grid grid-cols-2 gap-2 sm:gap-2.5 lg:flex lg:flex-col lg:space-y-2 lg:col-span-4">
+                {KAWASAN_LIST.map((kawasan, idx) => {
                   const isSelected = selectedKawasan === kawasan.nama;
+                  const isJakarta = idx === 0;
 
                   return (
                     <div
@@ -325,44 +329,47 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
                         }
                       }}
                       title={`Sorot kawasan ${kawasan.nama} di peta`}
-                      className={`flex items-center justify-between p-3 sm:p-3.5 rounded-xl border transition-all cursor-pointer ${
+                      className={`${
+                        isJakarta ? 'col-span-2 lg:col-span-1' : 'col-span-1'
+                      } flex items-center justify-between p-2.5 sm:p-3.5 rounded-xl border transition-all cursor-pointer ${
                         isSelected
                           ? 'bg-white border-[#0C2340] shadow-md ring-1.5 ring-[#0C2340]'
                           : 'bg-white border-slate-200/80 shadow-2xs hover:border-[#0C2340]/40 hover:shadow-xs'
                       }`}
                     >
-                      <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2 sm:gap-3 min-w-0">
                         <div
-                          className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors shrink-0 ${
+                          className={`flex h-7 w-7 sm:h-9 sm:w-9 items-center justify-center rounded-lg transition-colors shrink-0 ${
                             isSelected
                               ? 'bg-[#0C2340] text-white'
                               : 'bg-slate-50 text-slate-600'
                           }`}
                         >
-                          <Building2 className="h-4 w-4" aria-hidden="true" />
+                          <Building2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" aria-hidden="true" />
                         </div>
-                        <div>
-                          <span className="text-sm font-bold text-[#0C2340] block">
+                        <div className="min-w-0 truncate">
+                          <span className="text-xs sm:text-sm font-bold text-[#0C2340] block truncate">
                             {kawasan.nama}
                           </span>
-                          <span className="text-[11px] text-slate-500 block leading-tight">
+                          <span className="hidden sm:block text-[11px] text-slate-500 leading-tight truncate">
                             {kawasan.sublabel}
                           </span>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-2 shrink-0">
+                      <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
                         <span
-                          className={`text-xs px-2.5 py-1 rounded-md font-semibold transition-colors ${
+                          className={`text-[10px] sm:text-xs px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md font-semibold transition-colors ${
                             isSelected
                               ? 'bg-[#0C2340] text-white'
                               : 'bg-amber-50 text-[#B45309] border border-amber-200/80'
                           }`}
                         >
-                          {kawasan.count.toLocaleString('id-ID')} alumni
+                          {kawasan.count.toLocaleString('id-ID')}
+                          <span className="hidden xs:inline"> alumni</span>
                         </span>
                         <ChevronRight
-                          className={`h-4 w-4 transition-transform ${
+                          className={`hidden sm:block h-4 w-4 transition-transform ${
                             isSelected
                               ? 'text-[#0C2340] translate-x-0.5'
                               : 'text-slate-400'
@@ -374,10 +381,10 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
                 })}
 
                 {/* Transparansi Data */}
-                <div className="pt-2 flex items-center justify-between text-xs text-slate-500">
+                <div className="col-span-2 pt-1.5 sm:pt-2 flex items-center justify-between text-[11px] sm:text-xs text-slate-500">
                   <span className="flex items-center gap-1.5">
                     <span className="h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true" />
-                    Data resmi direktori wilayah Jabodetabek
+                    Data resmi direktori wilayah
                   </span>
                   <Link href="/peta" className="text-[#0C2340] font-semibold hover:underline">
                     Lihat 9 Wilayah &rarr;
@@ -389,9 +396,9 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
         </section>
 
         {/* 4. PROGRAM */}
-        <section aria-labelledby="program-heading" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div className="space-y-2 max-w-xl">
+        <section aria-labelledby="program-heading" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6 sm:space-y-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-3 sm:gap-4">
+            <div className="space-y-1.5 sm:space-y-2 max-w-xl">
               <div className="flex items-center gap-2">
                 <span className="w-6 h-[2px] bg-[#C07A28] rounded-full" aria-hidden="true" />
                 <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#B45309]">
@@ -400,7 +407,7 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
               </div>
               <h2
                 id="program-heading"
-                className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#0C2340]"
+                className="text-xl sm:text-3xl font-extrabold tracking-tight text-[#0C2340]"
               >
                 {landing.programTitle}
               </h2>
@@ -410,7 +417,7 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 lg:gap-5">
             {programs.map((item, index) => {
               const Icon = PROGRAM_ICONS[index] ?? Calendar;
               const isDark = index === 0;
@@ -419,27 +426,27 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
                 <Link
                   key={`${item.judul}-${index}`}
                   href={item.href || '#kopdar-section'}
-                  className={`group relative flex flex-col justify-between rounded-2xl p-6 transition-all duration-200 min-h-[220px] ${
+                  className={`group relative flex flex-col justify-between rounded-xl sm:rounded-2xl p-3.5 sm:p-6 transition-all duration-200 min-h-[145px] sm:min-h-[220px] ${
                     isDark
                       ? 'bg-[#0C2340] text-white shadow-md'
                       : 'bg-white border border-slate-200/90 text-slate-900 shadow-2xs hover:shadow-xs hover:border-slate-300'
                   }`}
                 >
-                  <div className="space-y-4">
+                  <div className="space-y-2.5 sm:space-y-4">
                     <div
-                      className={`flex h-11 w-11 items-center justify-center rounded-xl ${
+                      className={`flex h-8 w-8 sm:h-11 sm:w-11 items-center justify-center rounded-lg sm:rounded-xl ${
                         isDark
                           ? 'bg-white/10 text-white'
                           : 'bg-amber-50 text-[#C07A28] border border-amber-200/60'
                       }`}
                     >
-                      <Icon className="h-5 w-5" aria-hidden="true" />
+                      <Icon className="h-4 w-4 sm:h-5 sm:w-5" aria-hidden="true" />
                     </div>
 
-                    <div className="space-y-1.5">
-                      <h3 className="text-base sm:text-lg font-bold leading-snug">{item.judul}</h3>
+                    <div className="space-y-1 sm:space-y-1.5">
+                      <h3 className="text-xs sm:text-base lg:text-lg font-bold leading-snug line-clamp-2">{item.judul}</h3>
                       <p
-                        className={`text-xs sm:text-sm leading-relaxed ${
+                        className={`text-[11px] sm:text-xs lg:text-sm leading-snug sm:leading-relaxed line-clamp-2 ${
                           isDark ? 'text-slate-300' : 'text-slate-600'
                         }`}
                       >
@@ -448,13 +455,13 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
                     </div>
                   </div>
 
-                  <div className="flex justify-end pt-4">
+                  <div className="flex justify-end pt-2 sm:pt-4">
                     <div
-                      className={`flex h-8 w-8 items-center justify-center rounded-full transition-transform group-hover:translate-x-1 ${
+                      className={`flex h-6 w-6 sm:h-8 sm:w-8 items-center justify-center rounded-full transition-transform group-hover:translate-x-1 ${
                         isDark ? 'bg-white/15 text-white' : 'bg-slate-100 text-slate-700'
                       }`}
                     >
-                      <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+                      <ArrowRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" aria-hidden="true" />
                     </div>
                   </div>
                 </Link>
@@ -467,11 +474,11 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
         <section
           id="kopdar-section"
           aria-labelledby="banner-kopdar-heading"
-          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24 space-y-8"
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 scroll-mt-24 space-y-6 sm:space-y-8"
         >
           <div className="rounded-3xl border border-slate-200/80 bg-white shadow-xs overflow-hidden">
-            <div className="grid grid-cols-1 items-center lg:grid-cols-12 gap-6 lg:gap-8">
-              <div className="lg:col-span-5 h-64 sm:h-72 lg:h-full min-h-[260px] relative overflow-hidden bg-slate-100">
+            <div className="grid grid-cols-1 items-center lg:grid-cols-12 gap-0 lg:gap-8">
+              <div className="lg:col-span-5 h-48 sm:h-72 lg:h-full min-h-[200px] sm:min-h-[260px] relative overflow-hidden bg-slate-100">
                 <Image
                   src="/images/event-kopdar.jpg"
                   alt="Pertemuan alumni Universitas Muhammadiyah Surakarta di Jabodetabek"
@@ -481,24 +488,24 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
                 />
               </div>
 
-              <div className="lg:col-span-5 p-6 sm:p-8 space-y-4">
+              <div className="lg:col-span-5 p-5 sm:p-8 space-y-3 sm:space-y-4">
                 <span className="inline-block text-xs sm:text-sm font-bold uppercase tracking-wider text-[#B45309]">
                   {landing.kopdarEyebrow}
                 </span>
                 <h2
                   id="banner-kopdar-heading"
-                  className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#0C2340]"
+                  className="text-xl sm:text-3xl font-extrabold tracking-tight text-[#0C2340]"
                 >
                   {landing.kopdarTitle}
                 </h2>
-                <p className="text-sm sm:text-base leading-relaxed text-slate-600">
+                <p className="text-xs sm:text-base leading-relaxed text-slate-600">
                   {landing.kopdarDescription}
                 </p>
-                <div className="pt-2">
+                <div className="pt-1 sm:pt-2">
                   <button
                     type="button"
                     onClick={() => setShowFormModal(!showFormModal)}
-                    className="inline-flex min-h-[46px] items-center justify-center gap-2 rounded-xl bg-[#0C2340] px-6 py-2.5 text-sm sm:text-base font-semibold text-white transition-all hover:bg-[#08182E] shadow-xs cursor-pointer active:scale-[0.99]"
+                    className="inline-flex min-h-[44px] sm:min-h-[46px] items-center justify-center gap-2 rounded-xl bg-[#0C2340] px-5 sm:px-6 py-2.5 text-xs sm:text-base font-semibold text-white transition-all hover:bg-[#08182E] shadow-xs cursor-pointer active:scale-[0.99]"
                   >
                     <span>{showFormModal ? 'Tutup formulir minat' : landing.kopdarCta}</span>
                     <ArrowRight className="h-4 w-4 text-[#F59E0B]" aria-hidden="true" />

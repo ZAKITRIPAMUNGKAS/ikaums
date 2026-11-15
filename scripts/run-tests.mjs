@@ -260,3 +260,20 @@ test('CMS Store menyediakan struktur LokerItem dan 6 loker alumni awal', async (
     assert.ok(sourceLoker.includes(expectedLoker), `Konten data loker hilang: ${expectedLoker}`);
   }
 });
+
+test('Footer memakai navigasi dua kolom dan CTA ringkas di layar seluler', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const source = await readFile(
+    new URL('../src/components/Navigation.tsx', import.meta.url),
+    'utf8'
+  );
+
+  assert.ok(
+    source.includes('grid grid-cols-2 gap-6 md:contents'),
+    'Navigasi footer seluler harus disusun dalam dua kolom'
+  );
+  assert.ok(
+    source.includes('hidden sm:block'),
+    'Deskripsi CTA footer harus disederhanakan di layar seluler'
+  );
+});

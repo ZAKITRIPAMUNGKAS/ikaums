@@ -338,7 +338,7 @@ export default function HomeMapWidget({
   };
 
   return (
-    <div className="relative w-full h-[320px] sm:h-[360px] lg:h-[390px] rounded-2xl overflow-hidden bg-[#F8FAFC]">
+    <div className="relative w-full h-[250px] sm:h-[340px] lg:h-[390px] rounded-2xl overflow-hidden bg-[#F8FAFC]">
       <div ref={mapContainerRef} className="w-full h-full" />
 
       {/* Kontrol Zoom Minimalis & Seamless */}

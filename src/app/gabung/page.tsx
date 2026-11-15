@@ -349,7 +349,7 @@ export default function GabungPage() {
                       Beranda
                     </Link>
                     <span aria-hidden="true">/</span>
-                    <span className="text-[#0C2340] font-medium">Daftar Jadi Anggota</span>
+                    <span className="text-[#0C2340] font-medium">Daftar</span>
                   </div>
                   {IS_DEMO_MODE && (
                     <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-[#92400E] text-xs font-semibold">
@@ -358,13 +358,12 @@ export default function GabungPage() {
                   )}
                 </nav>
 
-                <header className="space-y-2.5">
-                  <h1 className="text-[clamp(1.75rem,1.3rem+1.8vw,2.375rem)] font-bold tracking-[-0.02em] text-[#0C2340] leading-[1.15]">
-                    Daftar Jadi Anggota IKA UMS Jabodetabek
+                <header className="space-y-1.5 sm:space-y-2">
+                  <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#0C2340] leading-tight">
+                    Daftar Anggota
                   </h1>
-                  <p className="text-base text-[#475569] leading-[1.6] max-w-[44ch] sm:max-w-2xl">
-                    Isi 5 data dasar di bawah agar pengurus bisa mencocokkan latar kuliahmu di UMS dan
-                    mengabari jadwal kopdar wilayahmu lewat WhatsApp. Gratis dan tanpa kata sandi.
+                  <p className="text-sm sm:text-base text-[#475569] leading-relaxed max-w-xl">
+                    Pendataan awal alumni UMS di Jabodetabek untuk silaturahmi &amp; info kopdar.
                   </p>
                 </header>
               </div>
@@ -403,19 +402,19 @@ export default function GabungPage() {
               {/* Langkah 1: Data Inti */}
               <fieldset className="space-y-6">
                 <legend className="text-base sm:text-lg font-bold text-[#0C2340] pb-2.5 border-b border-slate-200 w-full flex items-center justify-between">
-                  <span>Data Dasar Alumni (Wajib)</span>
+                  <span>Data Anggota</span>
                   <span className="text-xs font-semibold text-[#92400E] bg-amber-50 border border-amber-200/80 px-2.5 py-1 rounded-full">
-                    Langkah 1
+                    Wajib
                   </span>
                 </legend>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
                   {/* Unggah Foto Profil Akun - Cozy Card */}
-                  <div className="sm:col-span-2 rounded-2xl border border-amber-200/70 bg-gradient-to-br from-amber-50/40 via-white to-slate-50/80 p-4 sm:p-6 shadow-2xs">
+                  <div className="sm:col-span-2 rounded-2xl border border-amber-200/70 bg-gradient-to-br from-amber-50/40 via-white to-slate-50/80 p-4 sm:p-5 shadow-2xs">
                     <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-5">
                       <div className="relative shrink-0">
                         {fotoProfil ? (
-                          <div className="relative h-22 w-22 sm:h-24 sm:w-24 overflow-hidden rounded-full ring-4 ring-amber-100 border-2 border-[#D97706] shadow-sm">
+                          <div className="relative h-20 w-20 sm:h-22 sm:w-22 overflow-hidden rounded-full ring-4 ring-amber-100 border-2 border-[#D97706] shadow-sm">
                             <Image
                               src={fotoProfil}
                               alt="Pratinjau foto profil alumni"
@@ -434,39 +433,39 @@ export default function GabungPage() {
                                 fileInputRef.current?.click();
                               }
                             }}
-                            className="flex h-22 w-22 sm:h-24 sm:w-24 items-center justify-center rounded-full ring-4 ring-slate-100 border-2 border-dashed border-amber-300/80 bg-white text-slate-400 hover:border-[#D97706] hover:text-[#D97706] transition-all cursor-pointer group"
+                            className="flex h-20 w-20 sm:h-22 sm:w-22 items-center justify-center rounded-full ring-4 ring-slate-100 border-2 border-dashed border-amber-300/80 bg-white text-slate-400 hover:border-[#D97706] hover:text-[#D97706] transition-all cursor-pointer group"
                             aria-label="Sentuh untuk memilih foto profil"
                           >
-                            <Camera className="h-8 w-8 text-amber-600/70 group-hover:scale-110 transition-transform" aria-hidden="true" />
+                            <Camera className="h-7 w-7 sm:h-8 sm:w-8 text-amber-600/70 group-hover:scale-110 transition-transform" aria-hidden="true" />
                           </div>
                         )}
                         {fotoProfil && (
                           <button
                             type="button"
                             onClick={handleRemoveFoto}
-                            className="absolute -top-1.5 -right-1.5 flex h-7 w-7 items-center justify-center rounded-full bg-red-600 text-white shadow-sm hover:bg-red-700 transition-colors cursor-pointer"
+                            className="absolute -top-1 -right-1 flex h-6 w-6 items-center justify-center rounded-full bg-red-600 text-white shadow-sm hover:bg-red-700 transition-colors cursor-pointer"
                             aria-label="Hapus foto profil"
                             title="Hapus foto profil"
                           >
-                            <X className="h-4 w-4" />
+                            <X className="h-3.5 w-3.5" />
                           </button>
                         )}
                       </div>
 
-                      <div className="flex-1 space-y-2 text-center sm:text-left">
+                      <div className="flex-1 space-y-1.5 text-center sm:text-left">
                         <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
-                          <label htmlFor="foto-profil-input" className="text-base font-bold text-[#0C2340] cursor-pointer">
-                            Foto Profil Akun
+                          <label htmlFor="foto-profil-input" className="text-sm sm:text-base font-bold text-[#0C2340] cursor-pointer">
+                            Foto Profil
                           </label>
-                          <span className="text-xs px-2.5 py-0.5 rounded-full bg-amber-100/80 text-[#92400E] font-semibold">
+                          <span className="text-[11px] px-2 py-0.5 rounded-full bg-amber-100/80 text-[#92400E] font-semibold">
                             Opsional
                           </span>
                         </div>
-                        <p className="text-xs sm:text-sm text-[#475569] leading-relaxed max-w-lg">
-                          Foto ini digunakan pada kartu anggota digital dan direktori alumni. Sentuh tombol di bawah untuk mengambil dari galeri atau kamera HP (maks. 3 MB).
+                        <p className="text-xs sm:text-sm text-[#475569] leading-relaxed">
+                          Untuk kartu anggota digital &amp; direktori (JPG, PNG, WebP maks. 3 MB).
                         </p>
 
-                        <div className="pt-1 flex flex-wrap items-center justify-center sm:justify-start gap-2.5">
+                        <div className="pt-1 flex flex-wrap items-center justify-center sm:justify-start gap-2">
                           <input
                             ref={fileInputRef}
                             id="foto-profil-input"
@@ -478,9 +477,9 @@ export default function GabungPage() {
                           <button
                             type="button"
                             onClick={() => fileInputRef.current?.click()}
-                            className="inline-flex min-h-[46px] items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-slate-300 hover:border-[#0C2340] hover:bg-slate-50 text-sm font-semibold text-[#0C2340] transition-colors shadow-2xs cursor-pointer active:scale-[0.98]"
+                            className="inline-flex min-h-[44px] items-center gap-2 px-3.5 py-2 rounded-xl bg-white border border-slate-300 hover:border-[#0C2340] hover:bg-slate-50 text-xs sm:text-sm font-semibold text-[#0C2340] transition-colors shadow-2xs cursor-pointer active:scale-[0.98]"
                           >
-                            <Upload className="h-4 w-4 text-[#D97706]" />
+                            <Upload className="h-3.5 w-3.5 text-[#D97706]" />
                             <span>{fotoProfil ? 'Ganti Foto' : 'Pilih Foto dari HP'}</span>
                           </button>
 
@@ -488,21 +487,21 @@ export default function GabungPage() {
                             <button
                               type="button"
                               onClick={handleRemoveFoto}
-                              className="inline-flex min-h-[46px] items-center gap-1 px-3 py-2 text-sm font-medium text-red-600 hover:text-red-700 transition-colors cursor-pointer"
+                              className="inline-flex min-h-[44px] items-center gap-1 px-3 py-2 text-xs sm:text-sm font-medium text-red-600 hover:text-red-700 transition-colors cursor-pointer"
                             >
                               Hapus
                             </button>
                           )}
 
                           {fotoProfilName && (
-                            <span className="text-xs text-slate-500 truncate max-w-[190px] self-center">
+                            <span className="text-xs text-slate-500 truncate max-w-[170px] self-center">
                               ✓ {fotoProfilName}
                             </span>
                           )}
                         </div>
 
                         {fotoError && (
-                          <p className="text-xs text-red-600 font-medium pt-1">
+                          <p className="text-xs text-red-600 font-medium pt-0.5">
                             {fotoError}
                           </p>
                         )}
@@ -513,7 +512,7 @@ export default function GabungPage() {
                   {/* Nama Lengkap */}
                   <div className="sm:col-span-2 space-y-1.5">
                     <label htmlFor="namaLengkap" className="block text-sm sm:text-base font-bold text-[#0C2340]">
-                      Nama Lengkap dengan Gelar <span className="text-[#92400E]">*</span>
+                      Nama Lengkap <span className="text-[#92400E]">*</span>
                     </label>
                     <input
                       id="namaLengkap"
@@ -534,8 +533,8 @@ export default function GabungPage() {
                           : 'border-slate-300/80 focus:border-[#0C2340] focus:ring-amber-500/15'
                       }`}
                     />
-                    <p id="hint-nama" className="text-xs sm:text-sm text-[#475569] leading-relaxed">
-                      Boleh cantumkan gelar akademik atau profesi sesuai penulisan resmi.
+                    <p id="hint-nama" className="text-xs text-[#475569]">
+                      Sertakan gelar akademik atau profesi bila ada.
                     </p>
                     {fieldErrors.namaLengkap && (
                       <p id="err-nama" className="text-xs sm:text-sm text-red-700 font-medium pt-0.5">
@@ -681,8 +680,8 @@ export default function GabungPage() {
                         }`}
                       />
                     </div>
-                    <p id="hint-wa" className="text-xs sm:text-sm text-[#475569] leading-relaxed">
-                      Hanya untuk verifikasi dan undangan kopdar wilayah. Tidak tampil ke publik.
+                    <p id="hint-wa" className="text-xs text-[#475569]">
+                      Untuk verifikasi &amp; info kopdar (tidak tampil ke publik).
                     </p>
                     {fieldErrors.whatsapp && (
                       <p id="err-wa" className="text-xs sm:text-sm text-red-700 font-medium pt-0.5">
@@ -715,8 +714,8 @@ export default function GabungPage() {
                           : 'border-slate-300/80 focus:border-[#0C2340] focus:ring-amber-500/15'
                       }`}
                     />
-                    <p id="hint-email" className="text-xs sm:text-sm text-[#475569] leading-relaxed">
-                      Disiapkan jika nanti ingin masuk akun lewat tautan email.
+                    <p id="hint-email" className="text-xs text-[#475569]">
+                      Untuk opsi masuk akun tanpa kata sandi.
                     </p>
                     {fieldErrors.email && (
                       <p id="err-email" className="text-xs sm:text-sm text-red-700 font-medium pt-0.5">
@@ -728,16 +727,16 @@ export default function GabungPage() {
               </fieldset>
 
               {/* Langkah 2 (Opsional & Dapat Dilewati) */}
-              <div className="border-t border-slate-200/90 pt-6">
+              <div className="border-t border-slate-200/90 pt-5">
                 <button
                   type="button"
                   onClick={() => setShowOptional((v) => !v)}
                   aria-expanded={showOptional}
-                  className="w-full min-h-[50px] p-4 rounded-2xl border border-slate-200 bg-slate-50/70 hover:bg-slate-100/70 flex items-center justify-between text-left text-sm sm:text-base font-bold text-[#0C2340] transition-colors cursor-pointer"
+                  className="w-full min-h-[48px] p-3.5 sm:p-4 rounded-xl sm:rounded-2xl border border-slate-200 bg-slate-50/70 hover:bg-slate-100/70 flex items-center justify-between text-left text-sm sm:text-base font-bold text-[#0C2340] transition-colors cursor-pointer"
                 >
                   <div className="flex items-center gap-2">
-                    <span>Pekerjaan &amp; Kesediaan Mentoring</span>
-                    <span className="text-xs px-2 py-0.5 rounded-full bg-slate-200 text-slate-600 font-medium">
+                    <span>Pekerjaan &amp; Mentoring</span>
+                    <span className="text-[11px] px-2 py-0.5 rounded-full bg-slate-200 text-slate-600 font-medium">
                       Opsional
                     </span>
                   </div>
@@ -802,10 +801,10 @@ export default function GabungPage() {
                         />
                         <div className="space-y-0.5 text-sm sm:text-base leading-relaxed">
                           <span className="font-bold text-[#0C2340] block">
-                            Bersedia Menjadi Mentor Alumni Sukarela
+                            Bersedia Menjadi Mentor Alumni
                           </span>
                           <span className="text-[#475569] block text-xs sm:text-sm">
-                            Berbagi pengalaman kerja, ulas CV, persiapan wawancara, atau diskusi profesi untuk sesama lulusan UMS.
+                            Berbagi pengalaman karier &amp; diskusi profesi dengan sesama alumni UMS.
                           </span>
                         </div>
                       </label>
@@ -814,7 +813,7 @@ export default function GabungPage() {
                         <div className="bg-amber-50/60 border border-amber-200 rounded-2xl p-4 sm:p-5 space-y-1">
                           <label
                             htmlFor="mentorContactConsent"
-                            className="flex items-start gap-3 cursor-pointer text-sm sm:text-base text-[#0C2340] leading-relaxed"
+                            className="flex items-start gap-3 cursor-pointer text-xs sm:text-sm text-[#0C2340] leading-relaxed"
                           >
                             <input
                               id="mentorContactConsent"
@@ -831,10 +830,10 @@ export default function GabungPage() {
                                 });
                                 clearError('mentorContactConsent');
                               }}
-                              className="mt-1 w-5 h-5 rounded-md border-slate-300 text-[#0C2340] accent-[#0C2340] shrink-0"
+                              className="mt-0.5 w-4.5 h-4.5 rounded-md border-slate-300 text-[#0C2340] accent-[#0C2340] shrink-0"
                             />
                             <span>
-                              Saya mengizinkan pengurus meneruskan nomor WhatsApp atau email saya kepada pemohon mentoring terverifikasi saat dijadwalkan.{' '}
+                              Izinkan pengurus menghubungkan kontak dengan pemohon mentoring terverifikasi.{' '}
                               <span className="text-[#92400E] font-semibold">*</span>
                             </span>
                           </label>
@@ -851,14 +850,14 @@ export default function GabungPage() {
               </div>
 
               {/* Izin Penggunaan Data & Persetujuan - Cozy Card */}
-              <div className="bg-slate-50/90 border border-slate-200/90 rounded-2xl p-4 sm:p-6 space-y-4">
-                <span className="block text-xs sm:text-sm font-bold uppercase tracking-wider text-[#92400E]">
-                  Izin Penggunaan Data &amp; Privasi
+              <div className="bg-slate-50/90 border border-slate-200/90 rounded-xl sm:rounded-2xl p-4 sm:p-5 space-y-3.5">
+                <span className="block text-xs font-bold uppercase tracking-wider text-[#92400E]">
+                  Persetujuan Privasi
                 </span>
 
                 <label
                   htmlFor="agreeConsent"
-                  className={`flex items-start gap-3.5 p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer ${
+                  className={`flex items-start gap-3 p-3 sm:p-3.5 rounded-xl border transition-all cursor-pointer ${
                     formData.agreeConsent
                       ? 'bg-white border-[#0C2340]/30 shadow-2xs'
                       : 'bg-white/80 border-slate-200 hover:border-slate-300'
@@ -874,49 +873,50 @@ export default function GabungPage() {
                       setFormData({ ...formData, agreeConsent: e.target.checked });
                       clearError('agreeConsent');
                     }}
-                    className="mt-1 w-5 h-5 rounded-md border-slate-300 text-[#0C2340] accent-[#0C2340] shrink-0"
+                    className="mt-0.5 w-4.5 h-4.5 rounded-md border-slate-300 text-[#0C2340] accent-[#0C2340] shrink-0"
                   />
-                  <div className="space-y-1 text-sm sm:text-base leading-relaxed">
-                    <span className="font-semibold text-[#0C2340] block">
-                      Persetujuan Pemrosesan Data &amp; Privasi <span className="text-[#92400E]">*</span>
+                  <div className="space-y-0.5 text-xs sm:text-sm leading-relaxed">
+                    <span className="font-bold text-[#0C2340] block">
+                      Persetujuan Privasi &amp; Verifikasi <span className="text-[#92400E]">*</span>
                     </span>
-                    <span className="text-xs sm:text-sm text-[#475569] block">
-                      Saya menyetujui Kebijakan Privasi dan Ketentuan Komunitas agar data ini dicatat pengurus untuk verifikasi alumni dan kabar kopdar.
+                    <span className="text-[#475569] block">
+                      Saya menyetujui Kebijakan Privasi &amp; Ketentuan Komunitas IKA UMS untuk verifikasi data alumni.
                     </span>
                   </div>
                 </label>
 
-                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 pl-2">
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 pl-1">
                   <Link
                     href="/privasi"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 min-h-[44px] px-1 text-xs sm:text-sm font-semibold text-[#0C2340] underline decoration-[#92400E] underline-offset-4 hover:text-[#92400E]"
+                    className="inline-flex items-center gap-1 min-h-[40px] text-xs font-semibold text-[#0C2340] hover:text-[#92400E] underline underline-offset-2"
                   >
-                    <span>Baca Kebijakan Privasi</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
+                    <span>Kebijakan Privasi</span>
+                    <ExternalLink className="w-3 h-3" />
                   </Link>
+                  <span className="text-slate-300" aria-hidden="true">·</span>
                   <Link
                     href="/syarat"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 min-h-[44px] px-1 text-xs sm:text-sm font-semibold text-[#0C2340] underline decoration-[#92400E] underline-offset-4 hover:text-[#92400E]"
+                    className="inline-flex items-center gap-1 min-h-[40px] text-xs font-semibold text-[#0C2340] hover:text-[#92400E] underline underline-offset-2"
                   >
                     <span>Ketentuan Komunitas</span>
-                    <ExternalLink className="w-3.5 h-3.5" />
+                    <ExternalLink className="w-3 h-3" />
                   </Link>
                 </div>
 
                 {fieldErrors.agreeConsent && (
-                  <p id="err-consent" className="text-xs sm:text-sm text-red-700 font-medium pl-2">
+                  <p id="err-consent" className="text-xs text-red-700 font-medium pl-1">
                     {fieldErrors.agreeConsent}
                   </p>
                 )}
 
-                <div className="pt-3 border-t border-slate-200">
+                <div className="pt-2.5 border-t border-slate-200">
                   <label
                     htmlFor="tampilDiDirektori"
-                    className={`flex items-start gap-3.5 p-3.5 sm:p-4 rounded-xl border transition-all cursor-pointer ${
+                    className={`flex items-start gap-3 p-3 sm:p-3.5 rounded-xl border transition-all cursor-pointer ${
                       formData.tampilDiDirektori
                         ? 'bg-white border-[#0C2340]/30 shadow-2xs'
                         : 'bg-white/80 border-slate-200 hover:border-slate-300'
@@ -927,14 +927,14 @@ export default function GabungPage() {
                       type="checkbox"
                       checked={formData.tampilDiDirektori}
                       onChange={(e) => setFormData({ ...formData, tampilDiDirektori: e.target.checked })}
-                      className="mt-1 w-5 h-5 rounded-md border-slate-300 text-[#0C2340] accent-[#0C2340] shrink-0"
+                      className="mt-0.5 w-4.5 h-4.5 rounded-md border-slate-300 text-[#0C2340] accent-[#0C2340] shrink-0"
                     />
                     <div className="space-y-0.5 text-xs sm:text-sm leading-relaxed text-[#475569]">
-                      <span className="font-semibold text-[#0C2340] block">
-                        Tampilkan Profil di Daftar Anggota
+                      <span className="font-bold text-[#0C2340] block">
+                        Tampilkan Profil di Direktori
                       </span>
                       <span>
-                        Hanya nama, prodi, angkatan, dan wilayah yang tampil bagi anggota yang sudah masuk. Nomor WhatsApp dan email tidak pernah dipublikasikan.
+                        WhatsApp &amp; email dirahasiakan; hanya nama, prodi, angkatan &amp; kota yang terlihat sesama anggota.
                       </span>
                     </div>
                   </label>
@@ -942,9 +942,9 @@ export default function GabungPage() {
               </div>
 
               {/* Submit CTA Bottom */}
-              <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <span className="text-xs sm:text-sm text-[#475569] leading-relaxed">
-                  Pemeriksaan pendaftaran dilakukan dalam {COMMUNITY_PLACEHOLDERS.verificationSla}.
+              <div className="pt-4 border-t border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                <span className="text-xs text-[#475569]">
+                  Verifikasi cepat {COMMUNITY_PLACEHOLDERS.verificationSla}.
                 </span>
                 <button
                   type="submit"

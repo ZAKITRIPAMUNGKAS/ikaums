@@ -467,10 +467,10 @@ export function Navbar() {
 export function Footer() {
   return (
     <footer className="bg-[#0C2340] text-white font-sans border-t border-slate-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-16">
+        <div className="grid grid-cols-1 gap-7 md:grid-cols-12 md:gap-10">
           {/* Kolom 1: Brand & Medsos */}
-          <div className="md:col-span-4 space-y-4">
+          <div className="md:col-span-4 space-y-3 sm:space-y-4">
             <Link
               href="/"
               className="inline-flex items-center min-h-[44px] focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F59E0B] rounded-md"
@@ -480,7 +480,7 @@ export function Footer() {
                 alt="Logo Ikatan Alumni UMS"
                 width={165}
                 height={64}
-                className="h-12 sm:h-14 w-auto object-contain"
+                className="h-10 sm:h-14 w-auto object-contain"
               />
             </Link>
             <p className="text-sm sm:text-base text-slate-300 leading-relaxed max-w-sm">
@@ -489,7 +489,7 @@ export function Footer() {
             </p>
 
             {/* Social Icons */}
-            <div className="flex items-center gap-3 pt-2 text-slate-300">
+            <div className="flex items-center gap-3 pt-1 sm:pt-2 text-slate-300">
               <a
                 href="https://instagram.com"
                 target="_blank"
@@ -520,6 +520,7 @@ export function Footer() {
             </div>
           </div>
 
+          <div className="grid grid-cols-2 gap-6 md:contents">
           {/* Kolom 2: Jelajahi */}
           <div className="md:col-span-2 space-y-3">
             <h2 className="text-xs font-bold text-slate-200 uppercase tracking-wider">
@@ -578,16 +579,18 @@ export function Footer() {
             </ul>
           </div>
 
+          </div>
+
           {/* Kolom 4: Mari Terhubung (Card Panel) */}
           <div className="md:col-span-4">
-            <div className="rounded-2xl border border-white/10 bg-[#112F55] p-5 sm:p-6 space-y-3 shadow-md">
+            <div className="rounded-2xl border border-white/10 bg-[#112F55] p-4 sm:p-6 space-y-2 sm:space-y-3 shadow-md">
               <h3 className="text-base sm:text-lg font-bold text-white">
                 Mari Terhubung
               </h3>
-              <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
+              <p className="hidden sm:block text-xs sm:text-sm text-slate-300 leading-relaxed">
                 Jadilah bagian dari jaringan alumni UMS di Jabodetabek.
               </p>
-              <div className="pt-1">
+              <div className="pt-1 sm:pt-1">
                 <Link
                   href="/gabung"
                   className="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-xl bg-[#E59838] hover:bg-[#D97706] text-[#0C2340] text-sm font-bold transition-all shadow-xs"
@@ -601,7 +604,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-10 sm:mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 text-xs sm:text-sm text-slate-400">
+        <div className="mt-7 sm:mt-12 pt-5 sm:pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-3 text-xs sm:text-sm text-slate-400">
           <span>
             &copy; 2026 IKA UMS Wilayah Jabodetabek. Universitas Muhammadiyah Surakarta.
           </span>
