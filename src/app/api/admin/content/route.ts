@@ -19,8 +19,11 @@ export async function GET() {
 
   if (session?.role !== 'admin') {
     return NextResponse.json({
-      lokers: data.lokers,
+      lokers: data.lokers || [],
       beritas: (data.beritas || []).filter((b) => b.published),
+      agendas: data.agendas || [],
+      pengurus: data.pengurus,
+      settings: data.settings,
     });
   }
 

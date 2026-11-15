@@ -10,11 +10,55 @@ import {
 } from '@/lib/server-auth';
 import { IS_DEMO_MODE } from '@/lib/config';
 import { normalizeIndonesianWhatsApp } from '@/data/ums-prodi';
-import { findApprovedPendaftarByWhatsApp } from '@/lib/pendaftaran-store';
+import {
+  findApprovedPendaftarByWhatsApp,
+  findApprovedPendaftarByEmail,
+  findPendaftarById,
+  updatePendaftarProfile,
+  type PendaftarRecord,
+} from '@/lib/pendaftaran-store';
 
 const LOGIN_WINDOW_MS = 15 * 60 * 1000;
 const LOGIN_ATTEMPT_LIMIT = 5;
 const loginAttempts = new Map<string, { count: number; resetAt: number }>();
+
+export function pendaftarToUserProfile(pendaftar: PendaftarRecord) {
+  const angkatanStr = String(pendaftar.angkatan);
+  const hash = Math.abs(
+    (pendaftar.namaLengkap.length * 37 + (pendaftar.angkatan || 0) * 13) % 900 + 100
+  );
+  return {
+    idAnggota: `UMS-JBD-${angkatanStr.slice(-2)}${hash}`,
+    nama: pendaftar.namaLengkap,
+    prodi: pendaftar.prodi,
+    angkatan: pendaftar.angkatan,
+    wilayah: pendaftar.wilayah,
+    whatsapp: pendaftar.whatsapp,
+    email: pendaftar.email || undefined,
+    pekerjaan: pendaftar.pekerjaan || undefined,
+    perusahaan: pendaftar.perusahaan || undefined,
+    fotoUrl: pendaftar.fotoUrl || undefined,
+    tampilDiDirektori: pendaftar.tampilDiDirektori ?? true,
+    siapMentoring: pendaftar.siapMentoring ?? false,
+  };
+}
+
+export function getDemoMemberProfile() {
+  return {
+    idAnggota: 'UMS-JBD-11234',
+    nama: 'Zaki Maulana',
+    prodi: 'Teknik Informatika',
+    angkatan: 2011,
+    wilayah: 'Jakarta Selatan',
+    pekerjaan: 'Engineering Manager',
+    perusahaan: 'Tech Co',
+    whatsapp: '+6281234567890',
+    email: 'zaki@alumni.ums.ac.id',
+    fotoUrl: undefined as string | undefined,
+    siapMentoring: true,
+    tampilDiDirektori: true,
+  };
+}
 
 function getLoginAttemptKey(request: NextRequest): string {
   return request.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 'unknown';
@@ -46,12 +90,34 @@ export async function GET() {
     return NextResponse.json({
       authenticated: false,
       session: null,
+      profile: null,
     });
+  }
+
+  let profile: ReturnType<typeof pendaftarToUserProfile> | null = null;
+  if (session.role === 'member') {
+    let pendaftar = await findPendaftarById(session.sub);
+    if (
+      !pendaftar &&
+      (session.sub.startsWith('+62') || session.sub.startsWith('08') || session.sub.startsWith('62'))
+    ) {
+      pendaftar = await findApprovedPendaftarByWhatsApp(session.sub);
+    }
+    if (!pendaftar && session.sub.includes('@')) {
+      pendaftar = await findApprovedPendaftarByEmail(session.sub);
+    }
+
+    if (pendaftar) {
+      profile = pendaftarToUserProfile(pendaftar);
+    } else if (IS_DEMO_MODE) {
+      profile = getDemoMemberProfile();
+    }
   }
 
   const response = NextResponse.json({
     authenticated: true,
     session,
+    profile,
   });
 
   // Perpanjang sesi otomatis jika masa aktif tersisa kurang dari separuh (sliding session)

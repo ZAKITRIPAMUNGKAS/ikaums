@@ -148,6 +148,34 @@ export async function findApprovedPendaftarByWhatsApp(
 }
 
 /**
+ * Mencari satu data pendaftar berdasarkan ID uniknya.
+ */
+export async function findPendaftarById(id: string): Promise<PendaftarRecord | null> {
+  const cleanId = String(id || '').trim();
+  if (!cleanId) return null;
+
+  const supabase = getSupabaseServerClient();
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('pendaftar')
+        .select('*')
+        .eq('id', cleanId)
+        .maybeSingle();
+
+      if (!error && data) {
+        return mapRowToRecord(data as SupabasePendaftarRow);
+      }
+    } catch {
+      // Fallback ke penyimpanan lokal jika koneksi Supabase terputus
+    }
+  }
+
+  const list = await getAllPendaftar();
+  return list.find((p) => p.id === cleanId) ?? null;
+}
+
+/**
  * Menyimpan data pendaftaran baru ke Supabase
  * dengan fallback ke penyimpanan berkas lokal.
  */
@@ -282,6 +310,79 @@ export async function updatePendaftarStatus(
     return true;
   } catch {
     return false;
+  }
+}
+
+/**
+ * Memperbarui data profil alumni terdaftar (nama, prodi, domisili, pekerjaan, foto, privasi).
+ */
+export async function updatePendaftarProfile(
+  id: string,
+  updates: Partial<Omit<PendaftarRecord, 'id' | 'status' | 'createdAt'>>
+): Promise<PendaftarRecord | null> {
+  const cleanId = String(id || '').trim();
+  if (!cleanId) return null;
+
+  const supabase = getSupabaseServerClient();
+  if (supabase) {
+    try {
+      const rowUpdates: Record<string, unknown> = {};
+      if (updates.namaLengkap !== undefined) rowUpdates.nama_lengkap = updates.namaLengkap;
+      if (updates.angkatan !== undefined) rowUpdates.angkatan = updates.angkatan;
+      if (updates.prodi !== undefined) rowUpdates.prodi = updates.prodi;
+      if (updates.wilayah !== undefined) rowUpdates.wilayah = updates.wilayah;
+      if (updates.whatsapp !== undefined) rowUpdates.whatsapp = updates.whatsapp;
+      if (updates.email !== undefined) rowUpdates.email = updates.email || null;
+      if (updates.pekerjaan !== undefined) rowUpdates.pekerjaan = updates.pekerjaan || null;
+      if (updates.perusahaan !== undefined) rowUpdates.perusahaan = updates.perusahaan || null;
+      if (updates.fotoUrl !== undefined) rowUpdates.foto_url = updates.fotoUrl || null;
+      if (updates.siapMentoring !== undefined) rowUpdates.siap_mentoring = updates.siapMentoring;
+      if (updates.tampilDiDirektori !== undefined) {
+        rowUpdates.tampil_di_direktori = updates.tampilDiDirektori;
+      }
+
+      const { data, error } = await supabase
+        .from('pendaftar')
+        .update(rowUpdates)
+        .eq('id', cleanId)
+        .select()
+        .single();
+
+      if (!error && data) {
+        const record = mapRowToRecord(data as SupabasePendaftarRow);
+        const localList = await getLocalPendaftar();
+        const idx = localList.findIndex((p) => p.id === cleanId);
+        if (idx !== -1) {
+          localList[idx] = record;
+        } else {
+          localList.unshift(record);
+        }
+        await saveLocalPendaftar(localList);
+        return record;
+      }
+    } catch {
+      // Fallback ke penyimpanan lokal jika koneksi Supabase terputus
+    }
+  }
+
+  try {
+    const list = await getLocalPendaftar();
+    const idx = list.findIndex((p) => p.id === cleanId);
+    if (idx === -1) return null;
+
+    const current = list[idx];
+    const updatedRecord: PendaftarRecord = {
+      ...current,
+      ...updates,
+      id: current.id,
+      status: current.status,
+      createdAt: current.createdAt,
+    };
+    list[idx] = updatedRecord;
+    await saveLocalPendaftar(list);
+    return updatedRecord;
+  } catch {
+    return null;
   }
 }
 

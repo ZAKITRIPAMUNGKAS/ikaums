@@ -20,6 +20,7 @@ import {
   isValidEmail,
 } from '@/data/ums-prodi';
 import { DEMO_BADGE_LABEL } from '@/lib/config';
+import type { AgendaItem } from '@/lib/cms-store';
 import {
   ArrowRight,
   Bell,
@@ -76,9 +77,50 @@ const activityItems = [
   },
 ];
 
-export default function MemberProfileClient() {
+interface MemberProfileClientProps {
+  initialAgendas?: AgendaItem[];
+}
+
+function parseDateBadge(dateStr?: string): { month: string; day: string } {
+  if (!dateStr) return { month: 'TEMU', day: '--' };
+  const dayMatch = dateStr.match(/\b([0-3]?[0-9])\b/);
+  const day = dayMatch ? dayMatch[1].padStart(2, '0') : '--';
+
+  const monthsMap: Record<string, string> = {
+    jan: 'JAN',
+    feb: 'FEB',
+    mar: 'MAR',
+    apr: 'APR',
+    mei: 'MEI',
+    may: 'MEI',
+    jun: 'JUN',
+    jul: 'JUL',
+    agu: 'AGU',
+    aug: 'AGU',
+    sep: 'SEP',
+    okt: 'OKT',
+    oct: 'OKT',
+    nov: 'NOV',
+    des: 'DES',
+    dec: 'DES',
+  };
+  const lower = dateStr.toLowerCase();
+  let month = 'KPD';
+  for (const [key, val] of Object.entries(monthsMap)) {
+    if (lower.includes(key)) {
+      month = val;
+      break;
+    }
+  }
+  return { month, day };
+}
+
+export default function MemberProfileClient({
+  initialAgendas = [],
+}: MemberProfileClientProps = {}) {
   const router = useRouter();
   const [userProfile, setUserProfile] = useState<UserProfileData | null>(null);
+  const [agendas, setAgendas] = useState<AgendaItem[]>(initialAgendas);
   const [tampilDiDirektori, setTampilDiDirektori] = useState(true);
   const [terbukaMentoring, setTerbukaMentoring] = useState(false);
   const [savedNotice, setSavedNotice] = useState<string | null>(null);
@@ -129,6 +171,22 @@ export default function MemberProfileClient() {
     }, 4000);
     return () => clearTimeout(timeout);
   }, [savedNotice]);
+
+  // Sync agendas from CMS API
+  useEffect(() => {
+    let isSubscribed = true;
+    fetch('/api/admin/content')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (isSubscribed && data && Array.isArray(data.agendas)) {
+          setAgendas(data.agendas);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      isSubscribed = false;
+    };
+  }, []);
 
   const displayName = userProfile?.nama || 'Zaki Maulana';
   const firstName = displayName.split(' ')[0] || 'Alumni';
@@ -553,36 +611,64 @@ export default function MemberProfileClient() {
                         Agenda terdekat
                       </p>
                       <h2 id="agenda-terdekat-title" className="text-lg font-bold text-[#0C2340]">
-                        Kopdar Jabodetabek
+                        {agendas.length > 0 ? (agendas[0].jenis || 'Kopdar Wilayah') : 'Kopdar Jabodetabek'}
                       </h2>
                     </div>
                   </div>
-                  <span className="rounded-full bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700">
-                    Buka
-                  </span>
+                  {agendas.length > 0 ? (
+                    <span className="rounded-full bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700">
+                      Buka
+                    </span>
+                  ) : (
+                    <span className="rounded-full bg-slate-100 border border-slate-200 px-2.5 py-0.5 text-[11px] font-bold text-slate-600">
+                      Segera Hadir
+                    </span>
+                  )}
                 </div>
 
-                {/* Event Detail Box */}
-                <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-3">
-                  <div className="flex items-start gap-3.5">
-                    <div className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl bg-[#F59E0B] text-[#0C2340] font-bold shadow-xs">
-                      <span className="text-[10px] leading-none">NOV</span>
-                      <span className="mt-0.5 text-lg font-extrabold leading-none">28</span>
+                {/* Event Detail Box / Empty State */}
+                {agendas.length > 0 ? (
+                  (() => {
+                    const agenda = agendas[0];
+                    const { month, day } = parseDateBadge(agenda.tanggalWIB);
+                    return (
+                      <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50 p-4 space-y-3">
+                        <div className="flex items-start gap-3.5">
+                          <div className="flex h-12 w-12 shrink-0 flex-col items-center justify-center rounded-xl bg-[#F59E0B] text-[#0C2340] font-bold shadow-xs">
+                            <span className="text-[10px] leading-none uppercase">{month}</span>
+                            <span className="mt-0.5 text-lg font-extrabold leading-none">{day}</span>
+                          </div>
+                          <div className="min-w-0">
+                            <h3 className="font-bold text-sm text-[#0C2340] leading-snug">
+                              {agenda.judul}
+                            </h3>
+                            <p className="mt-1 text-xs text-[#475569] leading-relaxed">
+                              {agenda.tanggalWIB} {agenda.jamWIB ? `· ${agenda.jamWIB}` : ''} {agenda.wilayah ? `· ${agenda.wilayah}` : ''}
+                            </p>
+                          </div>
+                        </div>
+
+                        <p className="text-xs text-slate-600 leading-relaxed border-t border-slate-200 pt-3">
+                          Lokasi: {agenda.lokasi}.
+                          {agenda.kapasitas ? ` Kapasitas: ${agenda.kapasitas} orang.` : ''}
+                          {agenda.penanggungJawab ? ` Koordinator: ${agenda.penanggungJawab}.` : ''}
+                        </p>
+                      </div>
+                    );
+                  })()
+                ) : (
+                  <div className="mt-5 rounded-xl border border-dashed border-slate-200 bg-slate-50/70 p-5 text-center flex flex-col items-center justify-center">
+                    <div className="h-10 w-10 rounded-full bg-amber-50 text-amber-700 flex items-center justify-center mb-2.5">
+                      <CalendarDays className="h-5 w-5" aria-hidden="true" />
                     </div>
-                    <div className="min-w-0">
-                      <h3 className="font-bold text-sm text-[#0C2340] leading-snug">
-                        Temu Akbar &amp; Sarasehan Alumni UMS
-                      </h3>
-                      <p className="mt-1 text-xs text-[#475569] leading-relaxed">
-                        Sabtu, 10.00 WIB · Jakarta Selatan
-                      </p>
-                    </div>
+                    <h3 className="font-bold text-sm text-[#0C2340]">
+                      Belum Ada Jadwal Kopdar Baru
+                    </h3>
+                    <p className="mt-1.5 text-xs text-slate-500 max-w-xs leading-relaxed">
+                      Kopdar perdana telah terlaksana. Jadwal pertemuan berikutnya sedang disusun oleh koordinator wilayah.
+                    </p>
                   </div>
-
-                  <p className="text-xs text-slate-600 leading-relaxed border-t border-slate-200 pt-3">
-                    Lokasi: Aula Pertemuan Cilandak, TB Simatupang. Buka untuk seluruh alumni UMS di wilayah Jabodetabek.
-                  </p>
-                </div>
+                )}
               </div>
 
               <div className="mt-5 pt-4 border-t border-slate-200 flex items-center justify-between">
@@ -590,16 +676,25 @@ export default function MemberProfileClient() {
                   href="/kegiatan"
                   className="inline-flex min-h-[40px] items-center gap-1.5 text-xs sm:text-sm font-bold text-[#0C2340] hover:text-[#92400E] transition-colors"
                 >
-                  <span>Lihat detail agenda</span>
+                  <span>{agendas.length > 0 ? 'Lihat detail agenda' : 'Lihat liputan kegiatan'}</span>
                   <ChevronRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
 
-                <Link
-                  href="/kegiatan"
-                  className="inline-flex min-h-[36px] items-center justify-center rounded-lg bg-[#0C2340] hover:bg-[#16325C] px-3.5 py-1.5 text-xs font-semibold text-white transition-colors"
-                >
-                  Konfirmasi Kehadiran
-                </Link>
+                {agendas.length > 0 ? (
+                  <Link
+                    href="/kegiatan"
+                    className="inline-flex min-h-[36px] items-center justify-center rounded-lg bg-[#0C2340] hover:bg-[#16325C] px-3.5 py-1.5 text-xs font-semibold text-white transition-colors"
+                  >
+                    Konfirmasi Kehadiran
+                  </Link>
+                ) : (
+                  <Link
+                    href="/kegiatan"
+                    className="inline-flex min-h-[36px] items-center justify-center rounded-lg border border-slate-300 hover:bg-slate-100 px-3.5 py-1.5 text-xs font-semibold text-slate-700 transition-colors"
+                  >
+                    Cek Liputan
+                  </Link>
+                )}
               </div>
             </section>
 
