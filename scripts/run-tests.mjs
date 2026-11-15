@@ -246,6 +246,30 @@ test('Dashboard admin memadatkan aksi cepat pada layar ponsel', async () => {
   assert.ok(source.includes('flex flex-col items-stretch gap-1.5 border-b'));
 });
 
+test('Ringkasan dashboard memakai bento dua kolom pada layar ponsel', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const source = await readFile(
+    new URL('../src/app/admin/AdminDashboardClient.tsx', import.meta.url),
+    'utf8'
+  );
+
+  assert.ok(source.includes('grid grid-cols-2 gap-3 sm:grid-cols-2'));
+  assert.ok(source.includes('col-span-2 rounded-2xl border border-amber-200'));
+  assert.equal((source.match(/min-h-\[132px\]/g) ?? []).length, 4);
+});
+
+test('Filter pendaftar memakai dua kolom seimbang pada layar ponsel', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const source = await readFile(
+    new URL('../src/app/admin/AdminDashboardClient.tsx', import.meta.url),
+    'utf8'
+  );
+
+  assert.ok(source.includes('grid grid-cols-2 w-full gap-2 md:flex md:w-auto'));
+  assert.equal((source.match(/w-full min-w-0/g) ?? []).length >= 2, true);
+  assert.ok(source.includes('rounded-2xl p-6 sm:p-10 text-center'));
+});
+
 test('Siluet kampus UMS dipakai sebagai ornamen pada hero publik dan dashboard', async () => {
   const { readFile, access } = await import('node:fs/promises');
   const [homeSource, adminSource] = await Promise.all([
