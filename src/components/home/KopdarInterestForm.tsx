@@ -195,7 +195,7 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
       <div
         role="status"
         aria-live="polite"
-        className="rounded-xl border border-slate-200 bg-white p-6 text-center shadow-xs sm:p-8"
+        className="flex h-full flex-col justify-center rounded-xl border border-slate-200 bg-white p-6 text-center shadow-xs sm:p-8"
       >
         <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-emerald-200 bg-emerald-50 text-emerald-700">
           <CheckCircle2 className="h-6 w-6" aria-hidden="true" />
@@ -238,7 +238,7 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
     <form
       onSubmit={handleSubmit}
       noValidate
-      className="relative rounded-xl border border-slate-200 bg-white p-5 shadow-xs sm:p-7"
+      className="relative flex h-full flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-xs sm:p-7"
     >
       {/* Honeypot: tidak terlihat, tidak terbaca screen reader, tidak bisa di-tab */}
       <div aria-hidden="true" className="sr-only">
@@ -306,7 +306,7 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
       )}
 
       {step === 1 && (
-        <div className="mt-4 space-y-2">
+        <div className="mt-4 flex-1 space-y-2">
           <label htmlFor="kopdar-wilayah" className="block text-sm sm:text-base font-semibold text-slate-900">
             Wilayah domisili <span className="text-[#B45309]">*</span>
           </label>
@@ -342,7 +342,7 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
 
       {step === 2 && (
         <fieldset
-          className="mt-4"
+          className="mt-4 flex-1"
           aria-describedby={errors.waktu ? 'err-kopdar-waktu' : undefined}
         >
           <legend className="text-sm sm:text-base font-semibold text-slate-900">
@@ -383,7 +383,7 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
       )}
 
       {step === 3 && (
-        <div className="mt-4 space-y-4">
+        <div className="mt-4 flex-1 space-y-4">
           <div className="space-y-1.5">
             <label htmlFor="kopdar-nama" className="block text-sm sm:text-base font-semibold text-slate-900">
               Nama lengkap <span className="text-[#B45309]">*</span>
@@ -455,7 +455,7 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
         </div>
       )}
 
-      <div className="mt-5 flex flex-col gap-3 sm:flex-row-reverse sm:items-center">
+      <div className="mt-auto flex flex-col gap-3 border-t border-slate-100 pt-5 sm:flex-row-reverse sm:items-center">
         {step < 3 ? (
           <button
             type="button"
@@ -487,7 +487,7 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
         )}
       </div>
 
-      <p className="mt-4 flex items-start gap-2 text-xs sm:text-sm leading-[1.6] text-slate-500 pt-2 border-t border-slate-100">
+      <p className="mt-4 flex items-start gap-2 text-xs sm:text-sm leading-[1.6] text-slate-500">
         <ShieldCheck className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" aria-hidden="true" />
         Nomor WhatsApp dan email tidak pernah dipublikasikan di halaman publik.
       </p>

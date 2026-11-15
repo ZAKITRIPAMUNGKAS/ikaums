@@ -186,7 +186,7 @@ export default function CeritaPage() {
               <div>
                 <div className="aspect-[16/10] relative bg-slate-100 overflow-hidden">
                   <Image
-                    src={cerita.gambar || '/images/alumni-gathering-4.jpg'}
+                    src={cerita.gambar || '/images/hero-kumpul-bolo-pisah.jpg'}
                     alt={cerita.judul}
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"

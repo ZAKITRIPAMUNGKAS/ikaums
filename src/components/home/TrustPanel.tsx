@@ -5,7 +5,7 @@ import { COMMUNITY_PLACEHOLDERS } from '@/lib/config';
 const PENGURUS_ROLES = [
   {
     peran: 'Ketua Wilayah',
-    tugas: 'Koordinasi lintas 9 kota/kabupaten & perwakilan organisasi',
+    tugas: 'Koordinasi lintas 9 kota & perwakilan organisasi',
     icon: Users,
   },
   {
@@ -20,14 +20,14 @@ const PENGURUS_ROLES = [
   },
   {
     peran: 'Koordinator Karier & Usaha',
-    tugas: 'Pengelolaan mentoring CV, portofolio, & jejaring loker alumni',
+    tugas: 'Mentoring CV, portofolio, & jejaring loker alumni',
     icon: Briefcase,
   },
 ];
 
 export function TrustPanel() {
   return (
-    <div className="rounded-xl border border-slate-200 bg-white p-5 sm:p-6 shadow-xs space-y-5">
+    <div className="flex h-full flex-col gap-5 rounded-xl border border-slate-200 bg-white p-5 shadow-xs sm:p-6">
       {/* Header Panel */}
       <div className="flex items-start gap-3">
         <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-[#0C2340] text-white">
@@ -49,28 +49,19 @@ export function TrustPanel() {
         <span className="text-xs font-bold uppercase tracking-wider text-slate-500 block">
           4 Peran Inti Koordinasi
         </span>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
           {PENGURUS_ROLES.map((item) => {
             const Icon = item.icon;
             return (
               <div
                 key={item.peran}
-                className="rounded-lg border border-slate-200 bg-slate-50/70 p-3 flex flex-col justify-between transition-colors hover:bg-slate-50"
+                className="flex h-full flex-col gap-1.5 rounded-lg border border-slate-200 bg-slate-50/70 p-3.5 transition-colors hover:bg-slate-50"
               >
-                <div>
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="flex items-center gap-1.5 text-xs sm:text-sm font-bold text-slate-900">
-                      <Icon className="h-3.5 w-3.5 text-[#0C2340] shrink-0" aria-hidden="true" />
-                      {item.peran}
-                    </span>
-                    <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-slate-100 border border-slate-200 text-slate-600">
-                      Formatur
-                    </span>
-                  </div>
-                  <p className="mt-1.5 text-xs text-slate-600 leading-relaxed">
-                    {item.tugas}
-                  </p>
+                <div className="flex items-start gap-2">
+                  <Icon className="mt-0.5 h-4 w-4 shrink-0 text-[#0C2340]" aria-hidden="true" />
+                  <p className="text-sm font-bold leading-snug text-slate-900">{item.peran}</p>
                 </div>
+                <p className="text-xs leading-[1.6] text-slate-600">{item.tugas}</p>
               </div>
             );
           })}
@@ -78,24 +69,22 @@ export function TrustPanel() {
       </div>
 
       {/* Status Hubungan Resmi dengan Kampus & PP IKA UMS */}
-      <div className="rounded-lg border border-amber-200 bg-amber-50/70 p-4 space-y-1.5">
+      <div className="space-y-1.5 rounded-lg border border-amber-200 bg-amber-50/70 p-4">
         <div className="flex items-center gap-2">
           <span className="h-2 w-2 rounded-full bg-[#D97706]" aria-hidden="true" />
-          <p className="text-xs sm:text-sm font-bold text-slate-900">
-            Koordinasi Resmi PP IKA UMS Pusat
-          </p>
+          <p className="text-sm font-bold text-slate-900">Koordinasi Resmi PP IKA UMS Pusat</p>
         </div>
-        <p className="text-xs sm:text-sm leading-[1.6] text-slate-700">
-          Inisiatif ini disiapkan sebagai simpul daerah resmi alumni Universitas Muhammadiyah Surakarta di Jabodetabek.
-          Penomoran SK dan pengukuhan kepengurusan diselaraskan dengan agenda musyawarah wilayah.
+        <p className="text-xs leading-[1.6] text-slate-700">
+          Disiapkan sebagai simpul daerah resmi alumni UMS di Jabodetabek. Penomoran SK dan pengukuhan
+          kepengurusan mengikuti agenda musyawarah wilayah.
         </p>
-        <p className="text-[11px] text-[#B45309] font-medium pt-0.5">
+        <p className="pt-0.5 text-[11px] font-medium text-[#B45309]">
           Status: {COMMUNITY_PLACEHOLDERS.ppIkaUmsStatus}
         </p>
       </div>
 
       {/* Tautan Navigasi */}
-      <div className="flex flex-wrap items-center justify-between gap-3 pt-1 border-t border-slate-100">
+      <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4">
         <Link
           href="/kepengurusan"
           className="inline-flex min-h-[44px] items-center gap-1.5 text-xs sm:text-sm font-semibold text-[#0C2340] underline decoration-[#D97706] underline-offset-4 hover:text-[#D97706] transition-colors"

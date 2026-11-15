@@ -189,8 +189,8 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
 
                   <div className="relative z-10 w-full overflow-hidden rounded-[24px] sm:rounded-[34px] border border-white/80 bg-slate-100 shadow-lg aspect-[16/11]">
                     <Image
-                      src="/images/alumni-gathering-4.jpg"
-                      alt="Silaturahmi alumni Universitas Muhammadiyah Surakarta di Jabodetabek"
+                      src="/images/hero-kumpul-bolo-pisah.jpg"
+                      alt="Foto bersama keluarga besar alumni Universitas Muhammadiyah Surakarta di Jabodetabek"
                       width={1200}
                       height={825}
                       priority
@@ -524,7 +524,7 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
             id="form-kopdar-container"
             className={`transition-all duration-300 ${showFormModal ? 'block' : 'hidden'}`}
           >
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pt-4 border-t border-slate-200">
+            <div className="grid grid-cols-1 items-start gap-8 border-t border-slate-200 pt-6 lg:grid-cols-12">
               <div className="lg:col-span-5">
                 <TrustPanel />
               </div>

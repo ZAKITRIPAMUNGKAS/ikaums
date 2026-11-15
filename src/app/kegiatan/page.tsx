@@ -331,7 +331,7 @@ export default function KegiatanPage() {
                 >
                   <div className="aspect-[16/10] sm:aspect-auto sm:w-52 shrink-0 bg-slate-100 relative overflow-hidden">
                     <Image
-                      src={item.gambar || '/images/alumni-gathering-4.jpg'}
+                      src={item.gambar || '/images/hero-kumpul-bolo-pisah.jpg'}
                       alt={item.judul}
                       fill
                       loading="lazy"

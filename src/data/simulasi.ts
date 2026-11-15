@@ -381,7 +381,7 @@ export const DATA_CERITA_SIMULASI: CeritaDampak[] = [
     ringkasan: 'Lewat arahan alumni Teknik Sipil di Jakarta Pusat, Amalia menempuh jalur magang hingga memimpin kajian lapangan.',
     kutipan: 'Komunitas alumni membantu lulusan baru tahu alur sertifikasi dan gambaran kerja lapangan yang sebenarnya.',
     dampak: 'Membuka sesi tanya jawab sertifikasi teknik secara berkala untuk lulusan baru UMS.',
-    gambar: '/images/alumni-gathering-4.jpg',
+    gambar: '/images/event-diskusi.jpg',
     kategori: 'Mentoring',
   },
 ];

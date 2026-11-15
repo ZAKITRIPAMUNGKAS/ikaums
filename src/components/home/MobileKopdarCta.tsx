@@ -1,4 +1,4 @@
-'use client';
+﻿'use client';
 
 import { useEffect, useState } from 'react';
 import { ArrowRight } from 'lucide-react';
@@ -8,7 +8,7 @@ export function MobileKopdarCta() {
   const [formVisible, setFormVisible] = useState(false);
 
   useEffect(() => {
-    const formSection = document.getElementById('kopdar');
+    const formSection = document.getElementById('kopdar-section');
     if (!formSection || typeof IntersectionObserver === 'undefined') return;
 
     const observer = new IntersectionObserver(
@@ -31,14 +31,15 @@ export function MobileKopdarCta() {
     >
       <div className="mx-auto max-w-7xl px-4 py-2.5">
         <a
-          href="#kopdar"
+          href="#kopdar-section"
           tabIndex={formVisible ? -1 : 0}
           className="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-lg bg-[#0C2340] px-5 py-3 text-base font-semibold text-white transition-colors hover:bg-[#08182E] active:scale-[0.99]"
         >
-          Kirim minat kopdar
+          Isi minat kopdar
           <ArrowRight className="h-4 w-4 text-[#F59E0B]" aria-hidden="true" />
         </a>
       </div>
     </div>
   );
 }
+
