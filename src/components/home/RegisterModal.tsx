@@ -13,6 +13,7 @@ import {
   GraduationCap,
   MapPin,
   Phone,
+  ExternalLink,
 } from 'lucide-react';
 import {
   WILAYAH_JABODETABEK,
@@ -47,12 +48,11 @@ export function RegisterModal({ isOpen, onClose, defaultWilayah }: RegisterModal
   const [normalizedWa, setNormalizedWa] = useState('');
   const [formattedNameSuggestion, setFormattedNameSuggestion] = useState<string | null>(null);
 
-  // Sync defaultWilayah saat prop berubah
-  useEffect(() => {
-    if (defaultWilayah) {
-      setFormData((prev) => ({ ...prev, wilayah: defaultWilayah }));
-    }
-  }, [defaultWilayah]);
+  const [prevDefaultWilayah, setPrevDefaultWilayah] = useState(defaultWilayah);
+  if (defaultWilayah && defaultWilayah !== prevDefaultWilayah) {
+    setPrevDefaultWilayah(defaultWilayah);
+    setFormData((prev) => ({ ...prev, wilayah: defaultWilayah }));
+  }
 
   // Lock body scroll saat modal aktif
   useEffect(() => {
@@ -280,8 +280,15 @@ export function RegisterModal({ isOpen, onClose, defaultWilayah }: RegisterModal
               </Link>
               <button
                 type="button"
-                onClick={onClose}
+                onClick={handleResetForm}
                 className="w-full inline-flex items-center justify-center min-h-[40px] px-4 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-medium transition-colors cursor-pointer"
+              >
+                Daftarkan Alumni Lain
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="w-full inline-flex items-center justify-center min-h-[40px] px-4 py-2 rounded-xl text-slate-500 hover:text-slate-800 text-xs sm:text-sm font-medium transition-colors cursor-pointer"
               >
                 Tutup Jendela
               </button>
