@@ -22,7 +22,6 @@ import {
 import { IS_DEMO_MODE, COMMUNITY_PLACEHOLDERS, DEMO_BADGE_LABEL } from '@/lib/config';
 import { AlumniProfile } from '@/types';
 import {
-  DEFAULT_LOKERS,
   type LokerItem,
 } from '@/data/loker';
 import {
@@ -87,7 +86,7 @@ export default function PeluangPage() {
   const [bookingDone, setBookingDone] = useState(false);
 
   // 2. Info Loker State
-  const [lokerList, setLokerList] = useState<LokerItem[]>(DEFAULT_LOKERS);
+  const [lokerList, setLokerList] = useState<LokerItem[]>([]);
   const [lokerSearch, setLokerSearch] = useState('');
   const [filterWilayah, setFilterWilayah] = useState('semua');
   const [filterIndustri, setFilterIndustri] = useState('semua');
@@ -141,11 +140,11 @@ export default function PeluangPage() {
         const res = await fetch('/api/admin/content');
         if (!res.ok) return;
         const data = await res.json();
-        if (isSubscribed && data && Array.isArray(data.lokers) && data.lokers.length > 0) {
+        if (isSubscribed && data && Array.isArray(data.lokers)) {
           setLokerList(data.lokers);
         }
       } catch {
-        // Fallback tetap menggunakan DEFAULT_LOKERS
+        // Fallback default kosong
       }
     };
     void fetchLokers();

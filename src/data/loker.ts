@@ -16,7 +16,7 @@ export interface LokerItem {
   createdAt: string;
 }
 
-export const DEFAULT_LOKERS: LokerItem[] = [
+export const SAMPLE_LOKERS: LokerItem[] = [
   {
     id: 'loker-it-1',
     posisi: 'Frontend Developer (React / Next.js)',
@@ -151,3 +151,5 @@ export const DEFAULT_LOKERS: LokerItem[] = [
     createdAt: new Date().toISOString(),
   },
 ];
+
+export const DEFAULT_LOKERS: LokerItem[] = [];

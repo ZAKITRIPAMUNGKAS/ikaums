@@ -208,20 +208,7 @@ const DEFAULT_SETTINGS: KomunitasSettings = {
   heroPhotoCaption: COMMUNITY_PLACEHOLDERS.heroPhotoCaption,
 };
 
-const DEFAULT_AGENDAS: AgendaItem[] = [
-  {
-    id: 'kopdar-perdana-1',
-    judul: 'Kopdar Alumni UMS Jabodetabek Pertama',
-    jenis: 'Kopdar Wilayah',
-    tanggalWIB: 'Sabtu, 28 Nov 2026',
-    jamWIB: '09.00 - 13.00 WIB',
-    wilayah: 'Jakarta Selatan',
-    lokasi: 'Aula Pertemuan TB Simatupang, Jakarta Selatan',
-    kapasitas: 80,
-    penanggungJawab: 'Panitia Kopdar Wilayah',
-    createdAt: new Date().toISOString(),
-  },
-];
+const DEFAULT_AGENDAS: AgendaItem[] = [];
 
 const DATA_DIR = path.join(process.cwd(), '.data');
 const CMS_FILE = path.join(DATA_DIR, 'cms.json');

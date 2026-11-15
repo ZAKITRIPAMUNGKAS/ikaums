@@ -35,7 +35,7 @@ import {
   MessageCircle,
 } from 'lucide-react';
 import type { AgendaItem, PengurusData, KomunitasSettings, LandingContent } from '@/lib/cms-store';
-import { type LokerItem, DEFAULT_LOKERS } from '@/data/loker';
+import { type LokerItem } from '@/data/loker';
 
 interface PendaftarItem {
   id: string;
@@ -101,7 +101,7 @@ export default function AdminDashboardClient() {
   const [agendaList, setAgendaList] = useState<AgendaItem[]>([]);
 
   // 3. Data Loker / Peluang Karier
-  const [lokerList, setLokerList] = useState<LokerItem[]>(DEFAULT_LOKERS);
+  const [lokerList, setLokerList] = useState<LokerItem[]>([]);
   const [lokerSearch, setLokerSearch] = useState<string>('');
   const [lokerWilayahFilter, setLokerWilayahFilter] = useState<string>('semua');
 
@@ -184,7 +184,7 @@ export default function AdminDashboardClient() {
         if (Array.isArray(dataContent.agendas)) {
           setAgendaList(dataContent.agendas);
         }
-        if (Array.isArray(dataContent.lokers) && dataContent.lokers.length > 0) {
+        if (Array.isArray(dataContent.lokers)) {
           setLokerList(dataContent.lokers);
         }
         if (dataContent.pengurus) {
@@ -224,7 +224,7 @@ export default function AdminDashboardClient() {
           if (Array.isArray(dataContent.agendas)) {
             setAgendaList(dataContent.agendas);
           }
-          if (Array.isArray(dataContent.lokers) && dataContent.lokers.length > 0) {
+          if (Array.isArray(dataContent.lokers)) {
             setLokerList(dataContent.lokers);
           }
           if (dataContent.pengurus) {
@@ -747,18 +747,18 @@ export default function AdminDashboardClient() {
         </section>
 
         {/* Kartu Statistik Cepat */}
-        <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-[1.45fr_repeat(4,minmax(0,1fr))]" aria-label="Ringkasan data">
-          <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 sm:p-5">
+        <section className="grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-[1.45fr_repeat(4,minmax(0,1fr))]" aria-label="Ringkasan data">
+          <div className="col-span-2 rounded-2xl border border-amber-200 bg-amber-50 p-4 sm:p-5">
             <div className="flex items-start justify-between gap-3">
               <div><p className="text-xs font-bold uppercase tracking-wider text-amber-900">Prioritas hari ini</p><p className="mt-1 text-sm text-amber-800">Alumni menunggu verifikasi</p></div>
               <span className="grid h-9 min-w-9 place-items-center rounded-full bg-amber-500 px-2 text-sm font-extrabold text-white">{countMenunggu}</span>
             </div>
             <button type="button" onClick={() => setActiveTab('pendaftar')} className="mt-4 inline-flex min-h-[44px] items-center rounded-lg bg-[#0C2340] px-3 text-xs font-bold text-white transition-colors hover:bg-[#08182E] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] cursor-pointer">Tinjau pendaftar</button>
           </div>
-          <div className="rounded-2xl border border-slate-200 bg-white p-4"><p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Anggota</p><p className="mt-2 text-2xl font-extrabold text-[#0C2340]">{pendaftarList.length}</p><p className="mt-1 text-xs font-medium text-emerald-700">{countDisetujui} terverifikasi</p></div>
-          <div className="rounded-2xl border border-slate-200 bg-white p-4"><p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Kopdar aktif</p><p className="mt-2 text-2xl font-extrabold text-[#0C2340]">{agendaList.length}</p><p className="mt-1 text-xs text-slate-500">agenda wilayah</p></div>
-          <div className="rounded-2xl border border-slate-200 bg-white p-4"><p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Lowongan aktif</p><p className="mt-2 text-2xl font-extrabold text-emerald-700">{lokerList.length}</p><p className="mt-1 text-xs text-slate-500">peluang terbuka</p></div>
-          <div className="rounded-2xl border border-slate-200 bg-white p-4"><p className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Cakupan</p><p className="mt-2 text-2xl font-extrabold text-[#0C2340]">{WILAYAH_JABODETABEK.length}</p><p className="mt-1 text-xs text-slate-500">kota &amp; kabupaten</p></div>
+          <div className="min-h-[132px] rounded-2xl border border-slate-200 bg-white p-3.5 sm:p-4"><p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">Anggota</p><p className="mt-2 text-2xl font-extrabold text-[#0C2340]">{pendaftarList.length}</p><p className="mt-1 text-xs font-medium text-emerald-700">{countDisetujui} terverifikasi</p></div>
+          <div className="min-h-[132px] rounded-2xl border border-slate-200 bg-white p-3.5 sm:p-4"><p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">Kopdar aktif</p><p className="mt-2 text-2xl font-extrabold text-[#0C2340]">{agendaList.length}</p><p className="mt-1 text-xs text-slate-500">agenda wilayah</p></div>
+          <div className="min-h-[132px] rounded-2xl border border-slate-200 bg-white p-3.5 sm:p-4"><p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">Lowongan aktif</p><p className="mt-2 text-2xl font-extrabold text-emerald-700">{lokerList.length}</p><p className="mt-1 text-xs text-slate-500">peluang terbuka</p></div>
+          <div className="min-h-[132px] rounded-2xl border border-slate-200 bg-white p-3.5 sm:p-4"><p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500">Cakupan</p><p className="mt-2 text-2xl font-extrabold text-[#0C2340]">{WILAYAH_JABODETABEK.length}</p><p className="mt-1 text-xs text-slate-500">kota &amp; kabupaten</p></div>
         </section>
 
         {/* Toast Notifikasi */}
@@ -895,7 +895,7 @@ export default function AdminDashboardClient() {
         {activeTab === 'pendaftar' && (
           <section id="admin-panel-pendaftar" role="tabpanel" aria-label="Pendaftaran dan anggota" className="space-y-6">
             {/* Filter Bar & Search */}
-            <div className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 flex flex-col md:flex-row gap-4 justify-between items-stretch md:items-center shadow-xs">
+            <div className="bg-white border border-slate-200 rounded-xl p-3.5 sm:p-5 flex flex-col md:flex-row gap-3 sm:gap-4 justify-between items-stretch md:items-center shadow-xs">
               <div className="relative flex-1">
                 <Search className="w-4 h-4 text-[#475569] absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
@@ -907,11 +907,11 @@ export default function AdminDashboardClient() {
                 />
               </div>
 
-              <div className="flex flex-wrap items-center gap-2.5">
+              <div className="grid grid-cols-2 w-full gap-2 md:flex md:w-auto md:items-center md:gap-2.5">
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value as 'semua' | 'menunggu' | 'disetujui' | 'ditolak')}
-                  className="min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:ring-2 focus:ring-[#0C2340]/15 cursor-pointer font-medium"
+                  className="w-full min-w-0 min-h-[42px] px-2.5 sm:px-3 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:ring-2 focus:ring-[#0C2340]/15 cursor-pointer font-medium"
                 >
                   <option value="semua">Semua Status</option>
                   <option value="menunggu">Menunggu Verifikasi ({countMenunggu})</option>
@@ -922,7 +922,7 @@ export default function AdminDashboardClient() {
                 <select
                   value={wilayahFilter}
                   onChange={(e) => setWilayahFilter(e.target.value)}
-                  className="min-h-[42px] px-3 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:ring-2 focus:ring-[#0C2340]/15 cursor-pointer font-medium"
+                  className="w-full min-w-0 min-h-[42px] px-2.5 sm:px-3 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:ring-2 focus:ring-[#0C2340]/15 cursor-pointer font-medium"
                 >
                   <option value="semua">Semua 9 Wilayah</option>
                   {WILAYAH_JABODETABEK.map((w) => (
@@ -936,10 +936,10 @@ export default function AdminDashboardClient() {
 
             {/* Daftar Pendaftar */}
             {filteredPendaftar.length === 0 ? (
-              <div className="bg-white border border-slate-200 rounded-2xl p-10 text-center space-y-3">
-                <Users className="w-10 h-10 text-[#475569]/60 mx-auto" />
-                <h3 className="text-lg font-bold text-[#0C2340]">Tidak Ada Data Pendaftar</h3>
-                <p className="text-sm text-[#475569] max-w-md mx-auto">
+              <div className="bg-white border border-slate-200 rounded-2xl p-6 sm:p-10 text-center space-y-3">
+                <Users className="w-9 h-9 sm:w-10 sm:h-10 text-[#475569]/60 mx-auto" />
+                <h3 className="text-base sm:text-lg font-bold text-[#0C2340]">Tidak Ada Data Pendaftar</h3>
+                <p className="text-sm leading-5 text-[#475569] max-w-md mx-auto">
                   Belum ada alumni yang cocok dengan filter yang dipilih. Anda dapat menambahkan alumni secara manual melalui tombol di bawah.
                 </p>
                 <button

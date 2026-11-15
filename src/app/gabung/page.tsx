@@ -135,6 +135,13 @@ export default function GabungPage() {
   };
 
   useEffect(() => {
+    // Bersihkan submission cache lama agar alumni tidak terblokir di peramban ini
+    try {
+      localStorage.removeItem(SUBMISSIONS_KEY);
+    } catch {
+      // Abaikan bila peramban membatasi akses localStorage
+    }
+
     const params = new URLSearchParams(window.location.search);
     const mentorParam = params.get('mentor');
     const wilayahParam = params.get('wilayah');
@@ -248,31 +255,6 @@ export default function GabungPage() {
         setTimeout(() => document.getElementById(firstTarget)?.focus(), 0);
       }
       return;
-    }
-
-    // Duplicate guard pada perangkat yang sama
-    try {
-      const existingRaw = localStorage.getItem(SUBMISSIONS_KEY);
-      const existing: StoredSubmission[] = existingRaw ? JSON.parse(existingRaw) : [];
-      const dupWa = existing.some((item) => item.whatsapp === validWa);
-      const dupEmail = cleanEmail ? existing.some((item) => item.email === cleanEmail) : false;
-
-      if (dupWa) {
-        setFieldErrors({
-          whatsapp:
-            'Nomor WhatsApp ini sudah tercatat mendaftar dari peramban ini. Jika ingin mengubah data, hubungi pengurus.',
-        });
-        return;
-      }
-      if (dupEmail) {
-        setFieldErrors({
-          email:
-            'Alamat email ini sudah tercatat mendaftar dari peramban ini. Gunakan menu Masuk atau hubungi pengurus.',
-        });
-        return;
-      }
-    } catch {
-      // Abaikan error penyimpanan lokal jika diblokir browser
     }
 
     submittingRef.current = true;
