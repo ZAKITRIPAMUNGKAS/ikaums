@@ -27,7 +27,7 @@ interface ActiveSession {
 
 export default function MasukPage() {
   const router = useRouter();
-  const [method, setMethod] = useState<'whatsapp' | 'email' | 'admin'>('whatsapp');
+  const [method, setMethod] = useState<'whatsapp' | 'email' | 'admin'>('email');
   const [identifier, setIdentifier] = useState('');
   const [passkey, setPasskey] = useState('');
   const [error, setError] = useState('');
@@ -105,6 +105,29 @@ export default function MasukPage() {
     }
   };
 
+  const requestMagicLink = async (email: string) => {
+    setIsLoading(true);
+    setError('');
+    try {
+      const response = await fetch('/api/auth/magic-link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      const data = await response.json();
+      if (!response.ok) {
+        setError(data.error || 'Tautan masuk belum dapat dikirim.');
+        return;
+      }
+      setIdentifier(email);
+      setSent(true);
+    } catch {
+      setError('Terjadi kendala jaringan saat mengirim tautan masuk.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const raw = identifier.trim();
@@ -119,6 +142,10 @@ export default function MasukPage() {
     }
 
     if (method === 'whatsapp') {
+      if (!IS_DEMO_MODE) {
+        setError('Masuk anggota menggunakan tautan email. Gunakan tab Email.');
+        return;
+      }
       const validWa = normalizeIndonesianWhatsApp(raw);
       if (!validWa) {
         setError(
@@ -139,7 +166,7 @@ export default function MasukPage() {
     if (IS_DEMO_MODE) {
       await handleLoginRole('member', raw);
     } else {
-      setSent(true);
+      await requestMagicLink(raw);
     }
   };
 
@@ -439,10 +466,10 @@ export default function MasukPage() {
             <div className="bg-white border border-emerald-200 rounded-xl p-5 text-center space-y-3">
               <CheckCircle2 className="w-8 h-8 text-emerald-700 mx-auto" />
               <h2 className="text-lg font-bold text-[#0C2340]">
-                Masuk Berhasil
+                Cek email kamu
               </h2>
               <p className="text-base text-[#475569] leading-[1.6]">
-                Sesi akun berhasil diaktifkan untuk{' '}
+                Jika alamat email tersebut terdaftar dan sudah disetujui, tautan masuk telah dikirim untuk{' '}
                 <strong>
                   {identifier || (method === 'admin' ? 'Pengurus Wilayah' : 'Alumni UMS')}
                 </strong>

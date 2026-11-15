@@ -17,8 +17,6 @@ import {
   Briefcase,
   Calendar,
   Rocket,
-  Building2,
-  ChevronRight,
   CalendarDays,
 } from 'lucide-react';
 
@@ -112,68 +110,68 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
         <section className="bg-white overflow-hidden pt-6 pb-4 sm:pt-10 sm:pb-8 lg:pt-14 lg:pb-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-12 lg:gap-8">
-              <div className="space-y-6 lg:col-span-6 z-10">
-                <div className="flex items-center gap-2.5">
-                  <span className="w-8 h-[2.5px] bg-[#C07A28] rounded-full" aria-hidden="true" />
-                  <span className="text-xs sm:text-sm font-bold uppercase tracking-wider text-[#B45309]">
+              <div className="space-y-4 sm:space-y-6 lg:col-span-6 z-10">
+                <div className="flex items-center gap-2">
+                  <span className="w-6 h-[2px] bg-[#C07A28] rounded-full" aria-hidden="true" />
+                  <span className="text-[11px] sm:text-xs font-bold uppercase tracking-wider text-[#B45309]">
                     {landing.heroEyebrow}
                   </span>
                 </div>
 
-                <h1 className="text-[clamp(2.25rem,1.75rem+2.6vw,3.75rem)] font-extrabold leading-[1.12] tracking-[-0.03em] text-[#0C2340]">
+                <h1 className="text-2xl sm:text-4xl lg:text-5xl font-extrabold leading-[1.18] sm:leading-[1.12] tracking-[-0.02em] text-[#0C2340]">
                   {landing.heroTitle}{' '}
                   <span className="text-[#C07A28]">{landing.heroHighlight}</span>
                 </h1>
 
-                <p className="max-w-[46ch] text-base sm:text-lg leading-[1.65] text-slate-600 sm:max-w-xl">
+                <p className="text-sm sm:text-base lg:text-lg leading-relaxed text-slate-600 max-w-xl">
                   {landing.heroSubtitle}
                 </p>
 
-                <div className="flex flex-wrap items-center gap-3 pt-2">
+                <div className="grid grid-cols-2 gap-2.5 sm:flex sm:flex-wrap sm:items-center sm:gap-3 pt-1 sm:pt-2">
                   <button
                     type="button"
                     onClick={() => handleOpenKopdar()}
-                    className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl bg-[#0C2340] px-6 py-3 text-sm sm:text-base font-semibold text-white transition-all hover:bg-[#08182E] shadow-sm active:scale-[0.99] cursor-pointer"
+                    className="inline-flex min-h-[44px] sm:min-h-[48px] items-center justify-center gap-1.5 sm:gap-2 rounded-xl bg-[#0C2340] px-4 sm:px-6 py-2.5 sm:py-3 text-xs sm:text-base font-semibold text-white transition-all hover:bg-[#08182E] shadow-sm active:scale-[0.99] cursor-pointer"
                   >
-                    {landing.heroPrimaryCta}
-                    <ArrowRight className="h-4 w-4 text-[#F59E0B]" aria-hidden="true" />
+                    <span>{landing.heroPrimaryCta}</span>
+                    <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-[#F59E0B]" aria-hidden="true" />
                   </button>
                   <Link
                     href="/direktori"
-                    className="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm sm:text-base font-semibold text-slate-800 transition-colors hover:border-slate-400 hover:bg-slate-50 shadow-2xs"
+                    className="inline-flex min-h-[44px] sm:min-h-[48px] items-center justify-center gap-1.5 sm:gap-2 rounded-xl border border-slate-300 bg-white px-3.5 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-base font-semibold text-slate-800 transition-colors hover:border-slate-400 hover:bg-slate-50 shadow-2xs"
                   >
-                    {landing.heroSecondaryCta}
-                    <ArrowUpRight className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                    <span>{landing.heroSecondaryCta}</span>
+                    <ArrowUpRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-slate-500" aria-hidden="true" />
                   </Link>
                 </div>
 
                 {/* Social Proof: Lingkaran Profil Alumni + Counter */}
-                <div className="flex items-center gap-3.5 pt-2">
-                  <div className="flex items-center -space-x-2.5 overflow-hidden">
+                <div className="flex items-center gap-3 pt-1">
+                  <div className="flex items-center -space-x-2 overflow-hidden shrink-0">
                     {HERO_ALUMNI_AVATARS.map((avatar, idx) => (
                       <div
                         key={idx}
-                        className="relative inline-block h-8 w-8 sm:h-9 sm:w-9 rounded-full ring-2 ring-white overflow-hidden shadow-2xs shrink-0"
+                        className="relative inline-block h-7 w-7 sm:h-8 sm:w-8 rounded-full ring-2 ring-white overflow-hidden shadow-2xs shrink-0"
                       >
                         <Image
                           src={avatar.src}
                           alt={avatar.alt}
                           fill
-                          sizes="36px"
+                          sizes="32px"
                           className="object-cover"
                         />
                       </div>
                     ))}
-                    <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-[#0C2340] text-white text-[11px] sm:text-xs font-bold ring-2 ring-white shadow-2xs shrink-0">
+                    <div className="flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full bg-[#0C2340] text-white text-[10px] sm:text-[11px] font-bold ring-2 ring-white shadow-2xs shrink-0">
                       +500
                     </div>
                   </div>
 
-                  <div className="text-xs sm:text-sm leading-tight">
+                  <div className="text-xs leading-tight">
                     <p className="font-bold text-[#0C2340]">
                       +500 alumni terhubung
                     </p>
-                    <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5">
+                    <p className="text-[10px] sm:text-[11px] text-slate-500 mt-0.5">
                       di Jakarta, Bogor, Depok, Tangerang &amp; Bekasi
                     </p>
                   </div>
@@ -184,10 +182,10 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
                 <div className="relative w-full max-w-[560px] lg:max-w-none">
                   <div
                     aria-hidden="true"
-                    className="absolute -top-3 -right-3 sm:-top-5 sm:-right-5 bottom-3 left-4 sm:left-8 bg-[#F6EFE4] rounded-tr-[52px] rounded-bl-[36px] rounded-tl-[20px] rounded-br-[60px] pointer-events-none"
+                    className="hidden sm:block absolute -top-3 -right-3 sm:-top-5 sm:-right-5 bottom-3 left-4 sm:left-8 bg-[#F6EFE4] rounded-tr-[52px] rounded-bl-[36px] rounded-tl-[20px] rounded-br-[60px] pointer-events-none"
                   />
 
-                  <div className="relative z-10 w-full overflow-hidden rounded-[24px] sm:rounded-[34px] border border-white/80 bg-slate-100 shadow-lg aspect-[16/11]">
+                  <div className="relative z-10 w-full overflow-hidden rounded-2xl sm:rounded-[34px] border border-white/80 bg-slate-100 shadow-md sm:shadow-lg aspect-[16/11]">
                     <Image
                       src="/images/hero-kumpul-bolo-pisah.jpg"
                       alt="Foto bersama keluarga besar alumni Universitas Muhammadiyah Surakarta di Jabodetabek"
@@ -205,17 +203,17 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
                     />
                   </div>
 
-                  <div className="relative sm:absolute sm:-bottom-5 sm:right-4 lg:-bottom-6 lg:-right-4 z-20 mt-3 sm:mt-0 max-w-full sm:max-w-md rounded-2xl bg-[#0C2340] p-4 sm:p-5 text-white shadow-xl border border-white/10 flex items-center justify-between gap-4">
-                    <div className="border-l-2 border-[#D97706] pl-3.5 space-y-0.5">
-                      <p className="text-sm sm:text-base font-bold text-white tracking-tight">
+                  <div className="relative sm:absolute sm:-bottom-5 sm:right-4 lg:-bottom-6 lg:-right-4 z-20 mt-2 sm:mt-0 max-w-full sm:max-w-md rounded-xl sm:rounded-2xl bg-[#0C2340] p-3 sm:p-5 text-white shadow-lg border border-white/10 flex items-center justify-between gap-3 sm:gap-4">
+                    <div className="border-l-2 border-[#D97706] pl-3 space-y-0.5">
+                      <p className="text-xs sm:text-base font-bold text-white tracking-tight">
                         {landing.heroBadgeTitle}
                       </p>
-                      <p className="text-xs sm:text-sm text-slate-300">
+                      <p className="text-[11px] sm:text-xs text-slate-300">
                         {landing.heroBadgeSubtitle}
                       </p>
                     </div>
 
-                    <div className="relative h-11 w-24 sm:w-28 shrink-0 overflow-hidden opacity-90">
+                    <div className="relative h-9 w-20 sm:h-11 sm:w-28 shrink-0 overflow-hidden opacity-90">
                       <Image
                         src="/images/campus-blueprint-transparent.png"
                         alt="Siluet Arsitektur Kampus UMS"
@@ -231,27 +229,24 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
           </div>
         </section>
 
-        {/* 2. STRIP 3 NILAI UTAMA */}
+        {/* 2. STRIP 3 NILAI UTAMA - Simple Bento */}
         <section aria-label="Keunggulan Komunitas" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5 sm:gap-4 lg:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-4 lg:gap-5">
             {values.map((item, index) => {
               const Icon = [Users, Briefcase, Calendar][index] ?? Users;
-              const isFirst = index === 0;
               return (
                 <div
                   key={`${item.judul}-${index}`}
-                  className={`flex ${
-                    isFirst ? 'col-span-2 md:col-span-1' : 'col-span-1'
-                  } items-start gap-3 sm:gap-4 p-3.5 sm:p-5 rounded-xl sm:rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:shadow-xs transition-shadow`}
+                  className="flex items-center gap-3.5 p-3.5 sm:p-4 rounded-xl sm:rounded-2xl bg-white border border-slate-200/80 shadow-2xs hover:border-slate-300 transition-all"
                 >
-                  <div className="flex h-10 w-10 sm:h-12 sm:w-12 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-[#C07A28] border border-amber-200/60">
-                    <Icon className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden="true" />
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-50 text-[#C07A28] border border-amber-200/60">
+                    <Icon className="h-5 w-5" aria-hidden="true" />
                   </div>
-                  <div className="space-y-1">
-                    <h3 className="text-xs sm:text-base lg:text-lg font-bold text-[#0C2340] leading-snug">
+                  <div className="space-y-0.5 min-w-0">
+                    <h3 className="text-sm font-bold text-[#0C2340] truncate">
                       {item.judul}
                     </h3>
-                    <p className="text-[11px] sm:text-xs lg:text-sm text-slate-600 leading-snug sm:leading-relaxed line-clamp-2 sm:line-clamp-none">
+                    <p className="text-xs text-slate-500 leading-snug line-clamp-1 sm:line-clamp-2">
                       {item.isi}
                     </p>
                   </div>
@@ -261,136 +256,90 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
           </div>
         </section>
 
-        {/* 3. SEBARAN WILAYAH: Real Interactive Map & Real Alumni Data */}
+        {/* 3. SEBARAN WILAYAH: Simple Integrated Bento Map */}
         <section aria-labelledby="sebaran-heading" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="rounded-3xl border border-slate-200/80 bg-[#F8FAFC] p-6 sm:p-10 lg:p-12 shadow-xs">
-            <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-12 lg:gap-8">
-              {/* Sisi Kiri: Teks & Statistik Riil */}
-              <div className="space-y-4 lg:col-span-4">
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 border border-blue-200/80 text-[#0C2340] text-xs font-semibold">
+          <div className="rounded-2xl sm:rounded-3xl border border-slate-200/80 bg-[#F8FAFC] p-4 sm:p-8 lg:p-10 shadow-xs space-y-4">
+            {/* Header Bento */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200/70">
+              <div className="space-y-1">
+                <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-50 border border-blue-200/80 text-[#0C2340] text-[11px] sm:text-xs font-semibold">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#D97706]" aria-hidden="true" />
                   <span>Cakupan 9 Wilayah Jabodetabek</span>
                 </div>
-
                 <h2
                   id="sebaran-heading"
-                  className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#0C2340] leading-tight"
+                  className="text-lg sm:text-2xl font-extrabold tracking-tight text-[#0C2340]"
                 >
-                  Satu Jaringan.
-                  <br />
-                  1.011 Alumni.
+                  Satu Jaringan. 1.011 Alumni.
                 </h2>
-                <p className="text-sm sm:text-base leading-relaxed text-slate-600">
-                  Sebaran alumni UMS di kota dan kabupaten Jabodetabek yang saling terhubung untuk silaturahmi, kolaborasi profesi, dan mentoring karier.
-                </p>
-
-                <div className="flex flex-wrap items-center gap-2.5 pt-2">
-                  <Link
-                    href="/peta"
-                    className="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-xl bg-[#0C2340] px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-[#08182E] shadow-xs cursor-pointer active:scale-[0.99]"
-                  >
-                    <span>Buka Peta Lengkap</span>
-                    <ArrowRight className="h-4 w-4 text-[#F59E0B]" aria-hidden="true" />
-                  </Link>
-                  <Link
-                    href="/gabung"
-                    className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-xl bg-white border border-slate-300 px-3.5 py-2.5 text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50"
-                  >
-                    <span>Daftar Anggota</span>
-                    <ArrowUpRight className="h-4 w-4 text-slate-400" aria-hidden="true" />
-                  </Link>
-                </div>
               </div>
 
-              {/* Sisi Tengah: Peta Kartografi Nyata & Seamless */}
-              <div className="lg:col-span-4 flex flex-col items-center justify-center py-2 lg:py-0 w-full">
-                <HomeMapWidget
-                  selectedKawasan={selectedKawasan}
-                  onSelectKawasan={(k) => setSelectedKawasan(k)}
-                />
+              <div className="flex items-center gap-2">
+                <Link
+                  href="/peta"
+                  className="inline-flex min-h-[38px] sm:min-h-[42px] items-center gap-1.5 rounded-xl bg-[#0C2340] px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-white transition-colors hover:bg-[#08182E] shadow-2xs cursor-pointer"
+                >
+                  <span>Buka Peta Lengkap</span>
+                  <ArrowRight className="h-3.5 w-3.5 text-[#F59E0B]" aria-hidden="true" />
+                </Link>
+                <Link
+                  href="/gabung"
+                  className="inline-flex min-h-[38px] sm:min-h-[42px] items-center gap-1 rounded-xl bg-white border border-slate-300 px-3 sm:px-3.5 py-2 text-xs sm:text-sm font-semibold text-slate-700 transition-colors hover:bg-slate-50"
+                >
+                  <span>Daftar</span>
+                  <ArrowUpRight className="h-3.5 w-3.5 text-slate-400" aria-hidden="true" />
+                </Link>
               </div>
+            </div>
 
-              {/* Sisi Kanan: Daftar 5 Kawasan Terpadu (Data Riil & Interaktif) */}
-              <div className="grid grid-cols-2 gap-2 sm:gap-2.5 lg:flex lg:flex-col lg:space-y-2 lg:col-span-4">
-                {KAWASAN_LIST.map((kawasan, idx) => {
-                  const isSelected = selectedKawasan === kawasan.nama;
-                  const isJakarta = idx === 0;
-
-                  return (
-                    <div
-                      key={kawasan.nama}
-                      role="button"
-                      tabIndex={0}
-                      onClick={() => setSelectedKawasan(kawasan.nama)}
-                      onKeyDown={(e) => {
-                        if (e.key === 'Enter' || e.key === ' ') {
-                          e.preventDefault();
-                          setSelectedKawasan(kawasan.nama);
-                        }
-                      }}
-                      title={`Sorot kawasan ${kawasan.nama} di peta`}
-                      className={`${
-                        isJakarta ? 'col-span-2 lg:col-span-1' : 'col-span-1'
-                      } flex items-center justify-between p-2.5 sm:p-3.5 rounded-xl border transition-all cursor-pointer ${
+            {/* Filter Pills Interaktif (Simple Bento Chips) */}
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 pt-1">
+              {KAWASAN_LIST.map((kawasan) => {
+                const isSelected = selectedKawasan === kawasan.nama;
+                return (
+                  <button
+                    key={kawasan.nama}
+                    type="button"
+                    onClick={() => setSelectedKawasan(kawasan.nama)}
+                    title={`Lihat sebaran di ${kawasan.nama}`}
+                    className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                      isSelected
+                        ? 'bg-[#0C2340] text-white shadow-xs ring-2 ring-[#0C2340]/20'
+                        : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300'
+                    }`}
+                  >
+                    <span>{kawasan.nama}</span>
+                    <span
+                      className={`text-[10px] px-1.5 py-0.5 rounded-md font-bold ${
                         isSelected
-                          ? 'bg-white border-[#0C2340] shadow-md ring-1.5 ring-[#0C2340]'
-                          : 'bg-white border-slate-200/80 shadow-2xs hover:border-[#0C2340]/40 hover:shadow-xs'
+                          ? 'bg-[#D97706] text-white'
+                          : 'bg-amber-50 text-[#B45309] border border-amber-200/60'
                       }`}
                     >
-                      <div className="flex items-center gap-2 sm:gap-3 min-w-0">
-                        <div
-                          className={`flex h-7 w-7 sm:h-9 sm:w-9 items-center justify-center rounded-lg transition-colors shrink-0 ${
-                            isSelected
-                              ? 'bg-[#0C2340] text-white'
-                              : 'bg-slate-50 text-slate-600'
-                          }`}
-                        >
-                          <Building2 className="h-3.5 w-3.5 sm:h-4 sm:w-4" aria-hidden="true" />
-                        </div>
-                        <div className="min-w-0 truncate">
-                          <span className="text-xs sm:text-sm font-bold text-[#0C2340] block truncate">
-                            {kawasan.nama}
-                          </span>
-                          <span className="hidden sm:block text-[11px] text-slate-500 leading-tight truncate">
-                            {kawasan.sublabel}
-                          </span>
-                        </div>
-                      </div>
+                      {kawasan.count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
 
-                      <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
-                        <span
-                          className={`text-[10px] sm:text-xs px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md font-semibold transition-colors ${
-                            isSelected
-                              ? 'bg-[#0C2340] text-white'
-                              : 'bg-amber-50 text-[#B45309] border border-amber-200/80'
-                          }`}
-                        >
-                          {kawasan.count.toLocaleString('id-ID')}
-                          <span className="hidden xs:inline"> alumni</span>
-                        </span>
-                        <ChevronRight
-                          className={`hidden sm:block h-4 w-4 transition-transform ${
-                            isSelected
-                              ? 'text-[#0C2340] translate-x-0.5'
-                              : 'text-slate-400'
-                          }`}
-                        />
-                      </div>
-                    </div>
-                  );
-                })}
+            {/* Peta Kartografi Nyata & Seamless */}
+            <div className="w-full rounded-2xl overflow-hidden border border-slate-200/90 bg-white">
+              <HomeMapWidget
+                selectedKawasan={selectedKawasan}
+                onSelectKawasan={(k) => setSelectedKawasan(k)}
+              />
+            </div>
 
-                {/* Transparansi Data */}
-                <div className="col-span-2 pt-1.5 sm:pt-2 flex items-center justify-between text-[11px] sm:text-xs text-slate-500">
-                  <span className="flex items-center gap-1.5">
-                    <span className="h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true" />
-                    Data resmi direktori wilayah
-                  </span>
-                  <Link href="/peta" className="text-[#0C2340] font-semibold hover:underline">
-                    Lihat 9 Wilayah &rarr;
-                  </Link>
-                </div>
-              </div>
+            {/* Transparansi Data */}
+            <div className="pt-1 flex items-center justify-between text-[11px] sm:text-xs text-slate-500">
+              <span className="flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true" />
+                Data direktori resmi alumni UMS di 5 kawasan
+              </span>
+              <span className="text-[#0C2340] font-medium hidden sm:inline">
+                Pilih wilayah untuk menyorot peta
+              </span>
             </div>
           </div>
         </section>

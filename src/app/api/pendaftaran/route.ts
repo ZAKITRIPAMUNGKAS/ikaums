@@ -8,11 +8,11 @@ import {
 } from '@/lib/pendaftaran-store';
 import { getServerSession } from '@/lib/server-auth';
 import { normalizeIndonesianWhatsApp, isValidEmail } from '@/data/ums-prodi';
-import { IS_DEMO_MODE } from '@/lib/config';
+import { inviteMemberByEmail } from '@/lib/supabase';
 
 export async function GET(request: NextRequest) {
   const session = await getServerSession();
-  const isAdmin = session?.role === 'admin' || IS_DEMO_MODE;
+  const isAdmin = session?.role === 'admin';
 
   const { searchParams } = new URL(request.url);
   const format = searchParams.get('format');
@@ -150,7 +150,7 @@ export async function POST(request: NextRequest) {
 
 export async function PATCH(request: NextRequest) {
   const session = await getServerSession();
-  const isAdmin = session?.role === 'admin' || IS_DEMO_MODE;
+  const isAdmin = session?.role === 'admin';
   if (!isAdmin) {
     return NextResponse.json({ error: 'Akses ditolak' }, { status: 403 });
   }
@@ -162,12 +162,45 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: 'Data tidak lengkap atau status tidak valid' }, { status: 400 });
     }
 
+    const current = (await getAllPendaftar()).find((pendaftar) => pendaftar.id === id);
+    if (!current) {
+      return NextResponse.json({ error: 'Catatan tidak ditemukan' }, { status: 404 });
+    }
+
+    if (status === 'disetujui' && !current.email) {
+      return NextResponse.json(
+        { error: 'Email wajib tersedia sebelum anggota dapat disetujui untuk akses magic link.' },
+        { status: 422 }
+      );
+    }
+
     const success = await updatePendaftarStatus(id, status);
     if (!success) {
       return NextResponse.json({ error: 'Catatan tidak ditemukan' }, { status: 404 });
     }
 
-    return NextResponse.json({ success: true, message: `Status berhasil diubah menjadi ${status}` });
+    let invitationMessage = '';
+    if (status === 'disetujui' && current.status !== 'disetujui' && current.email) {
+      const appUrl = process.env.APP_URL;
+      const redirectTo = appUrl?.startsWith('https://')
+        ? new URL('/auth/confirm', appUrl).toString()
+        : process.env.NODE_ENV !== 'production'
+          ? new URL('/auth/confirm', request.nextUrl.origin).toString()
+          : null;
+
+      if (!redirectTo) {
+        invitationMessage = ' Status disimpan, tetapi APP_URL production belum dikonfigurasi untuk mengirim undangan.';
+      } else {
+        const invitation = await inviteMemberByEmail(current.email, redirectTo);
+        if (invitation.sent) {
+          invitationMessage = ' Undangan akses email telah dikirim.';
+        } else if (invitation.reason) {
+          invitationMessage = ` Status disimpan, tetapi undangan belum terkirim: ${invitation.reason}`;
+        }
+      }
+    }
+
+    return NextResponse.json({ success: true, message: `Status berhasil diubah menjadi ${status}.${invitationMessage}` });
   } catch {
     return NextResponse.json({ error: 'Gagal memperbarui status' }, { status: 500 });
   }
@@ -175,7 +208,7 @@ export async function PATCH(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
   const session = await getServerSession();
-  const isAdmin = session?.role === 'admin' || IS_DEMO_MODE;
+  const isAdmin = session?.role === 'admin';
   if (!isAdmin) {
     return NextResponse.json({ error: 'Akses ditolak' }, { status: 403 });
   }

@@ -12,13 +12,12 @@ export interface ServerSession {
 
 const textEncoder = new TextEncoder();
 
-export function getSessionSecret(): string {
+export function getSessionSecret(): string | null {
   const secret = process.env.AUTH_SESSION_SECRET;
   if (secret && secret.length >= 16) {
     return secret;
   }
-  // Fallback bawaan agar autentikasi sesi selalu berfungsi tanpa harus bergantung konfigurasi manual awal
-  return 'ikaums_default_production_session_signing_secret_2026_secure';
+  return null;
 }
 
 function base64UrlToBytes(input: string): Uint8Array<ArrayBuffer> {

@@ -2,6 +2,7 @@
 // Daftar isian detail untuk pengelola sebelum peluncuran penuh dicatat di TODO-DATA.md.
 
 export const IS_DEMO_MODE =
+  process.env.NODE_ENV !== 'production' &&
   process.env.NEXT_PUBLIC_DEMO_MODE === 'true';
 
 export const COMMUNITY_PLACEHOLDERS = {

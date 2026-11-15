@@ -12,6 +12,7 @@ import {
   isValidEmail,
 } from '@/data/ums-prodi';
 import { COMMUNITY_PLACEHOLDERS, IS_DEMO_MODE, DEMO_BADGE_LABEL } from '@/lib/config';
+import { formatIndonesianName } from '@/lib/name-format';
 import {
   CheckCircle2,
   AlertCircle,
@@ -23,6 +24,7 @@ import {
   Camera,
   Upload,
   X,
+  Sparkles,
 } from 'lucide-react';
 
 const SUBMISSIONS_KEY = 'ikaums_prelaunch_submissions';
@@ -68,6 +70,7 @@ export default function GabungPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [normalizedWa, setNormalizedWa] = useState('');
+  const [nameSuggestion, setNameSuggestion] = useState<string | null>(null);
   const submittingRef = useRef(false);
 
   // Upload foto profil akun
@@ -75,6 +78,18 @@ export default function GabungPage() {
   const [fotoProfilName, setFotoProfilName] = useState<string | null>(null);
   const [fotoError, setFotoError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const suggestNameFormat = () => {
+    const formatted = formatIndonesianName(formData.namaLengkap);
+    setNameSuggestion(formatted && formatted !== formData.namaLengkap.trim() ? formatted : null);
+  };
+
+  const applyNameSuggestion = () => {
+    if (!nameSuggestion) return;
+    setFormData({ ...formData, namaLengkap: nameSuggestion });
+    setNameSuggestion(null);
+    clearError('namaLengkap');
+  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -525,8 +540,10 @@ export default function GabungPage() {
                       value={formData.namaLengkap}
                       onChange={(e) => {
                         setFormData({ ...formData, namaLengkap: e.target.value });
+                        setNameSuggestion(null);
                         clearError('namaLengkap');
                       }}
+                      onBlur={suggestNameFormat}
                       className={`w-full min-h-[50px] sm:min-h-[52px] px-4 py-3 rounded-xl sm:rounded-2xl bg-slate-50/40 hover:bg-white text-[16px] text-[#0C2340] placeholder:text-slate-400 border transition-all shadow-2xs focus:bg-white focus:outline-hidden focus:ring-4 ${
                         fieldErrors.namaLengkap
                           ? 'border-red-500 focus:ring-red-200'
@@ -534,8 +551,19 @@ export default function GabungPage() {
                       }`}
                     />
                     <p id="hint-nama" className="text-xs text-[#475569]">
-                      Sertakan gelar akademik atau profesi bila ada.
+                      Sertakan gelar akademik atau profesi bila ada. Kami dapat membantu merapikan formatnya.
                     </p>
+                    {nameSuggestion && (
+                      <div role="status" className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5 text-sm text-[#713F12]">
+                        <span className="inline-flex items-center gap-2 min-w-0">
+                          <Sparkles className="h-4 w-4 shrink-0 text-[#92400E]" aria-hidden="true" />
+                          <span className="break-words">Saran format: <strong>{nameSuggestion}</strong></span>
+                        </span>
+                        <button type="button" onClick={applyNameSuggestion} className="min-h-[36px] shrink-0 rounded-lg bg-white px-3 py-1.5 text-xs font-bold text-[#0C2340] ring-1 ring-[#0C2340]/15 transition-colors hover:bg-[#FDFCF7] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340]">
+                          Gunakan
+                        </button>
+                      </div>
+                    )}
                     {fieldErrors.namaLengkap && (
                       <p id="err-nama" className="text-xs sm:text-sm text-red-700 font-medium pt-0.5">
                         {fieldErrors.namaLengkap}

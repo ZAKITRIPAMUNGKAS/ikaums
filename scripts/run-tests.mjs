@@ -277,3 +277,60 @@ test('Footer memakai navigasi dua kolom dan CTA ringkas di layar seluler', async
     'Deskripsi CTA footer harus disederhanakan di layar seluler'
   );
 });
+
+test('Hardening autentikasi tidak memakai rahasia atau PIN fallback', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const [authLibrary, authRoute, config, cmsRoute, registrationRoute] = await Promise.all([
+    readFile(new URL('../src/lib/server-auth.ts', import.meta.url), 'utf8'),
+    readFile(new URL('../src/app/api/auth/route.ts', import.meta.url), 'utf8'),
+    readFile(new URL('../src/lib/config.ts', import.meta.url), 'utf8'),
+    readFile(new URL('../src/app/api/admin/content/route.ts', import.meta.url), 'utf8'),
+    readFile(new URL('../src/app/api/pendaftaran/route.ts', import.meta.url), 'utf8'),
+  ]);
+
+  assert.ok(!authLibrary.includes('ikaums_default_production_session_signing_secret'));
+  assert.ok(!authRoute.includes("|| 'ikaums2026'"));
+  assert.ok(config.includes("process.env.NODE_ENV !== 'production'"));
+  assert.ok(cmsRoute.includes("session?.role !== 'admin'"));
+  assert.ok(!cmsRoute.includes("session?.role === 'admin' || IS_DEMO_MODE"));
+  assert.ok(!registrationRoute.includes("session?.role === 'admin' || IS_DEMO_MODE"));
+});
+
+test('Magic link hanya dapat dipakai anggota yang sudah disetujui', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const [magicRoute, confirmRoute, loginPage, registrationRoute] = await Promise.all([
+    readFile(new URL('../src/app/api/auth/magic-link/route.ts', import.meta.url), 'utf8'),
+    readFile(new URL('../src/app/auth/confirm/route.ts', import.meta.url), 'utf8'),
+    readFile(new URL('../src/app/masuk/page.tsx', import.meta.url), 'utf8'),
+    readFile(new URL('../src/app/api/pendaftaran/route.ts', import.meta.url), 'utf8'),
+  ]);
+
+  assert.ok(magicRoute.includes('findApprovedPendaftarByEmail'));
+  assert.ok(magicRoute.includes('shouldCreateUser: false'));
+  assert.ok(confirmRoute.includes('verifyOtp'));
+  assert.ok(confirmRoute.includes('findApprovedPendaftarByEmail'));
+  assert.ok(loginPage.includes("'/api/auth/magic-link'"));
+  assert.ok(registrationRoute.includes('inviteMemberByEmail'));
+});
+
+test('Asisten nama merapikan kapitalisasi dan gelar tanpa mengubah ejaan', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const typescript = await import('typescript');
+  const source = await readFile(
+    new URL('../src/lib/name-format.ts', import.meta.url),
+    'utf8'
+  );
+  const compiled = typescript.transpileModule(source, {
+    compilerOptions: { module: typescript.ModuleKind.CommonJS, target: typescript.ScriptTarget.ES2022 },
+  }).outputText;
+  const moduleObj = { exports: {} };
+  new Function('exports', 'module', compiled)(moduleObj.exports, moduleObj);
+  const { formatIndonesianName } = moduleObj.exports;
+
+  assert.equal(
+    formatIndonesianName('  ir.  bagus  prasetyo , s.t , m.t '),
+    'Ir. Bagus Prasetyo, S.T., M.T.'
+  );
+  assert.equal(formatIndonesianName('maria de la cruz, s.psi.'), 'Maria de la Cruz, S.Psi.');
+  assert.equal(formatIndonesianName('ANDI M. YUSUF'), 'Andi M. Yusuf');
+});

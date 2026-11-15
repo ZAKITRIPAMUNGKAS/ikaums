@@ -113,6 +113,22 @@ export async function getAllPendaftar(): Promise<PendaftarRecord[]> {
   return getLocalPendaftar();
 }
 
+export async function findApprovedPendaftarByEmail(
+  email: string
+): Promise<PendaftarRecord | null> {
+  const normalizedEmail = email.trim().toLowerCase();
+  if (!normalizedEmail) return null;
+
+  const list = await getAllPendaftar();
+  return (
+    list.find(
+      (pendaftar) =>
+        pendaftar.status === 'disetujui' &&
+        pendaftar.email?.trim().toLowerCase() === normalizedEmail
+    ) ?? null
+  );
+}
+
 /**
  * Menyimpan data pendaftaran baru ke Supabase
  * dengan fallback ke penyimpanan berkas lokal.

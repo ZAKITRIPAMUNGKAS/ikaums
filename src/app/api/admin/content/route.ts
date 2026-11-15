@@ -10,18 +10,22 @@ import {
   saveLandingContent,
 } from '@/lib/cms-store';
 import { getServerSession } from '@/lib/server-auth';
-import { IS_DEMO_MODE } from '@/lib/config';
 
 export async function GET() {
+  const session = await getServerSession();
   const data = await getCmsData();
+
+  if (session?.role !== 'admin') {
+    return NextResponse.json({ lokers: data.lokers });
+  }
+
   return NextResponse.json(data);
 }
 
 export async function POST(request: NextRequest) {
   const session = await getServerSession();
-  const isAdmin = session?.role === 'admin' || IS_DEMO_MODE;
 
-  if (!isAdmin) {
+  if (session?.role !== 'admin') {
     return NextResponse.json({ error: 'Akses ditolak. Sesi pengurus diperlukan.' }, { status: 403 });
   }
 
