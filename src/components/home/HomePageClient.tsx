@@ -12,7 +12,6 @@ import type { LandingContent } from '@/lib/cms-store';
 import {
   ArrowRight,
   ArrowUpRight,
-  MapPin,
   Users,
   Briefcase,
   Calendar,
@@ -49,6 +48,13 @@ const KAWASAN_DETAILS: Record<string, { sublabel: string; regions: string[]; def
     defaultWilayah: 'Bekasi',
   },
 };
+
+const HERO_ALUMNI_AVATARS = [
+  { src: '/images/avatar-aditya.jpg', alt: 'Alumni UMS' },
+  { src: '/images/avatar-amalia.jpg', alt: 'Alumni UMS' },
+  { src: '/images/avatar-dian.jpg', alt: 'Alumni UMS' },
+  { src: '/images/avatar-nurul.jpg', alt: 'Alumni UMS' },
+];
 
 const PROGRAM_ICONS = [Calendar, Briefcase, Rocket, Users];
 
@@ -128,14 +134,36 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
                   </Link>
                 </div>
 
-                <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 text-xs sm:text-sm text-slate-500 pt-3">
-                  <MapPin className="h-4 w-4 text-slate-400 shrink-0" aria-hidden="true" />
-                  {cities.map((kota, index) => (
-                    <span key={kota.nama} className="flex items-center gap-2 sm:gap-2.5">
-                      {index > 0 && <span className="text-slate-300">·</span>}
-                      <span className="hover:text-slate-700 transition-colors">{kota.nama}</span>
-                    </span>
-                  ))}
+                {/* Social Proof: Lingkaran Profil Alumni + Counter */}
+                <div className="flex items-center gap-3.5 pt-2">
+                  <div className="flex items-center -space-x-2.5 overflow-hidden">
+                    {HERO_ALUMNI_AVATARS.map((avatar, idx) => (
+                      <div
+                        key={idx}
+                        className="relative inline-block h-8 w-8 sm:h-9 sm:w-9 rounded-full ring-2 ring-white overflow-hidden shadow-2xs shrink-0"
+                      >
+                        <Image
+                          src={avatar.src}
+                          alt={avatar.alt}
+                          fill
+                          sizes="36px"
+                          className="object-cover"
+                        />
+                      </div>
+                    ))}
+                    <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-[#0C2340] text-white text-[11px] sm:text-xs font-bold ring-2 ring-white shadow-2xs shrink-0">
+                      +500
+                    </div>
+                  </div>
+
+                  <div className="text-xs sm:text-sm leading-tight">
+                    <p className="font-bold text-[#0C2340]">
+                      +500 alumni terhubung
+                    </p>
+                    <p className="text-[11px] sm:text-xs text-slate-500 mt-0.5">
+                      di Jakarta, Bogor, Depok, Tangerang &amp; Bekasi
+                    </p>
+                  </div>
                 </div>
               </div>
 
