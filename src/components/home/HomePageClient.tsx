@@ -603,7 +603,7 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
       <div className="mt-16 sm:mt-24">
         <Footer />
       </div>
-      <MobileKopdarCta />
+      <MobileKopdarCta onOpenForm={() => handleOpenKopdar()} />
     </div>
   );
 }

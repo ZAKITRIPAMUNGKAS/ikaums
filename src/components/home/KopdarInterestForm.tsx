@@ -183,7 +183,7 @@ export function KopdarInterestForm({ wilayah, onWilayahChange }: KopdarInterestF
     setSuccessWa(validWa!);
     setShareUrl(
       `https://wa.me/?text=${encodeURIComponent(
-        `Aku sudah kirim minat kopdar IKA UMS Jabodetabek wilayah ${wilayah}. Yuk isi juga di ${window.location.origin}/#kopdar`
+        `Aku sudah kirim minat kopdar IKA UMS Jabodetabek wilayah ${wilayah}. Yuk isi juga di ${window.location.origin}/#kopdar-section`
       )}`
     );
     submittingRef.current = false;
