@@ -17,6 +17,7 @@ export const KAWASAN_REGION_IDS: Record<string, string[]> = {
   Bekasi: ['bekasi'],
   Depok: ['depok'],
   Bogor: ['bogor'],
+  Karawang: ['karawang'],
 };
 
 export const KAWASAN_MARKERS = [
@@ -63,6 +64,15 @@ export const KAWASAN_MARKERS = [
     bounds: [
       [106.40, -6.79],
       [107.15, -6.39],
+    ] as [[number, number], [number, number]],
+  },
+  {
+    nama: 'Karawang',
+    count: 0,
+    lngLat: [107.300, -6.300] as [number, number],
+    bounds: [
+      [107.08, -6.59],
+      [107.64, -5.94],
     ] as [[number, number], [number, number]],
   },
 ];

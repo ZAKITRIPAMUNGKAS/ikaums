@@ -60,6 +60,12 @@ const KAWASAN_LIST = [
     count: 0,
     slug: 'Bogor',
   },
+  {
+    nama: 'Karawang',
+    sublabel: 'Galuh Mas & KIIC Industri',
+    count: 0,
+    slug: 'Karawang',
+  },
 ];
 
 function getInitials(name: string): string {
@@ -382,7 +388,7 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
               <div className="space-y-1">
                 <div className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-50 border border-blue-200/80 text-[#0C2340] text-[11px] sm:text-xs font-semibold">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#D97706]" aria-hidden="true" />
-                  <span>Cakupan 9 Wilayah Jabodetabek</span>
+                  <span>Cakupan Wilayah Jabodetabek &amp; Karawang</span>
                 </div>
                 <h2
                   id="sebaran-heading"
@@ -457,7 +463,7 @@ export function HomePageClient({ landing, cerita, stats }: HomePageClientProps) 
             <div className="pt-1 flex items-center justify-between text-[11px] sm:text-xs text-slate-500">
               <span className="flex items-center gap-1.5">
                 <span className="h-2 w-2 rounded-full bg-emerald-500" aria-hidden="true" />
-                Data direktori resmi alumni UMS di 5 kawasan
+                Data direktori resmi alumni UMS di 6 kawasan
               </span>
               <span className="text-[#0C2340] font-medium hidden sm:inline">
                 Pilih wilayah untuk menyorot peta

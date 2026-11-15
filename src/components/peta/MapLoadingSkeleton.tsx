@@ -10,7 +10,7 @@ export default function MapLoadingSkeleton() {
         <Loader2 className="w-6 h-6 animate-spin text-[#92400E]" />
       </div>
       <div className="text-sm font-bold text-[#0C2340]">
-        Memuat Peta Kartografi 9 Wilayah Jabodetabek
+        Memuat Peta Kartografi Wilayah Jabodetabek &amp; Karawang
       </div>
       <p className="text-xs text-[#475569] mt-1 max-w-sm">
         Batas administrasi resmi BPS &middot; geoBoundaries (CC BY 3.0 IGO). Sambil menunggu, Anda dapat memilih wilayah pada tombol di atas.

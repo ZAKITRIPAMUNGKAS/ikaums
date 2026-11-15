@@ -70,6 +70,13 @@ export const WILAYAH_JABODETABEK: WilayahMaster[] = [
     provinsi: 'Jawa Barat',
     cakupan: 'Kota Bogor & Kab. Bogor',
   },
+  {
+    id: 'karawang',
+    nama: 'Karawang',
+    shortName: 'Karawang',
+    provinsi: 'Jawa Barat',
+    cakupan: 'Kabupaten Karawang',
+  },
 ];
 
 export const FAKULTAS_PRODI_UMS: { fakultas: string; prodi: string[] }[] = [

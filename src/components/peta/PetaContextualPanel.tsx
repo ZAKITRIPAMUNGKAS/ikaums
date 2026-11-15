@@ -30,6 +30,7 @@ const REGION_PROVINCE: Record<string, string> = {
   'bekasi': 'Jawa Barat · Kota & Kabupaten Bekasi',
   'depok': 'Jawa Barat · Kota Depok',
   'bogor': 'Jawa Barat · Kota & Kabupaten Bogor',
+  'karawang': 'Jawa Barat · Kabupaten Karawang',
 };
 
 export default function PetaContextualPanel({ region, count = 0 }: PetaContextualPanelProps) {

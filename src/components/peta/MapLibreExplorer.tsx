@@ -337,7 +337,7 @@ export default function MapLibreExplorer({
 
       <div className="absolute bottom-3 left-3 sm:bottom-3.5 sm:left-3.5 z-10 bg-white/95 backdrop-blur-xs border border-slate-200 rounded-lg p-2.5 sm:p-3 shadow-sm max-w-[250px]">
         <span className="block text-xs font-semibold text-[#0C2340] leading-snug">
-          Cakupan 9 Wilayah Jabodetabek
+          Cakupan Wilayah Jabodetabek &amp; Karawang
         </span>
         <span className="block text-xs text-[#475569] mt-1 leading-snug">
           Angka pada pin menunjukkan alumni terverifikasi di tiap wilayah.

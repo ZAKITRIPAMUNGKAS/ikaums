@@ -18,7 +18,9 @@ export type WilayahJabodetabek =
   | 'Tangerang'
   | 'Bekasi'
   | 'Depok'
-  | 'Bogor';
+  | 'Bogor'
+  | 'Karawang'
+  | 'Kabupaten Karawang';
 
 export interface WilayahStatistik {
   id: string;

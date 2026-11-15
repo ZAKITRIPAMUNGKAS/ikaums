@@ -23,6 +23,7 @@ export const INITIAL_COMMUNITY_STATS: CommunityStats = {
     Bekasi: 0,
     Depok: 0,
     Bogor: 0,
+    Karawang: 0,
   },
   regionCounts: {
     'jkt-selatan': 0,
@@ -34,6 +35,7 @@ export const INITIAL_COMMUNITY_STATS: CommunityStats = {
     bekasi: 0,
     depok: 0,
     bogor: 0,
+    karawang: 0,
   },
   recentAlumni: [],
 };
@@ -58,6 +60,7 @@ export function calculateCommunityStatsFromPendaftar(
       Bekasi: 0,
       Depok: 0,
       Bogor: 0,
+      Karawang: 0,
     },
     regionCounts: {
       'jkt-selatan': 0,
@@ -69,6 +72,7 @@ export function calculateCommunityStatsFromPendaftar(
       bekasi: 0,
       depok: 0,
       bogor: 0,
+      karawang: 0,
     },
     recentAlumni: [],
   };
@@ -118,6 +122,9 @@ export function calculateCommunityStatsFromPendaftar(
     } else if (w.includes('bogor')) {
       regionId = 'bogor';
       kawasan = 'Bogor';
+    } else if (w.includes('karawang')) {
+      regionId = 'karawang';
+      kawasan = 'Karawang';
     } else {
       regionId = 'jkt-selatan';
       kawasan = 'Jakarta';

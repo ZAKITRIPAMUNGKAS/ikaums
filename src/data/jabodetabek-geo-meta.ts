@@ -15,11 +15,11 @@ export interface RegionMetadata {
 
 export const JABODETABEK_BOUNDS: [[number, number], [number, number]] = [
   [106.33939, -6.78852],
-  [107.29662, -5.91815]
+  [107.64358, -5.91815]
 ];
 
 export const JABODETABEK_CENTER: [number, number] = [
-  106.81800,
+  106.99148,
   -6.35333
 ];
 
@@ -282,6 +282,35 @@ export const REGIONS_METADATA: RegionMetadata[] = [
       [
         107.22711180000005,
         -6.30234059999998
+      ]
+    ]
+  },
+  {
+    "regionId": "karawang",
+    "regionName": "Karawang",
+    "shortName": "Karawang",
+    "count": 65,
+    "mentorCount": 12,
+    "activePercent": "32%",
+    "industri": [
+      "Manufaktur Otomotif",
+      "Industri Presisi & Logistik",
+      "Agrobisnis"
+    ],
+    "agenda": "Jadwal kopdar wilayah disusun setelah anggota awal terdata",
+    "titikKumpul": "Kawasan Galuh Mas & KIIC",
+    "center": [
+      107.36398,
+      -6.26542
+    ],
+    "bounds": [
+      [
+        107.08438130000008,
+        -6.590748899999937
+      ],
+      [
+        107.64357770000004,
+        -5.940092199999981
       ]
     ]
   }

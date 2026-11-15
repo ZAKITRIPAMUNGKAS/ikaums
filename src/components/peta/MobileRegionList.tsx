@@ -21,7 +21,7 @@ export default function MobileRegionList({
       <div className="flex items-center justify-between mb-3 pb-2 border-b border-slate-200">
         <h2 className="text-sm font-bold text-[#0C2340] flex items-center gap-1.5">
           <MapPin className="w-4 h-4 text-[#92400E]" />
-          Daftar 9 Wilayah Jabodetabek
+          Daftar Wilayah Jabodetabek &amp; Karawang
         </h2>
       </div>
 

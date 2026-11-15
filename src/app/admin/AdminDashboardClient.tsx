@@ -922,65 +922,13 @@ export default function AdminDashboardClient() {
     return true;
   });
 
-  const tabItems = [
-    {
-      id: 'pendaftar' as const,
-      label: 'Pendaftar & Anggota',
-      icon: Users,
-      badgeText: countMenunggu > 0 ? `${countMenunggu} baru` : `${pendaftarList.length}`,
-      badgeColor:
-        countMenunggu > 0
-          ? 'bg-amber-100 text-amber-900 border border-amber-300 font-bold'
-          : 'bg-slate-100 text-[#0C2340]',
-    },
-    {
-      id: 'agenda' as const,
-      label: 'Jadwal Kopdar',
-      icon: Calendar,
-      badgeText: String(agendaList.length),
-      badgeColor: 'bg-slate-100 text-[#0C2340]',
-    },
-    {
-      id: 'loker' as const,
-      label: 'Lowongan Kerja',
-      icon: Briefcase,
-      badgeText: String(lokerList.length),
-      badgeColor: 'bg-emerald-100 text-emerald-800 font-bold',
-    },
-    {
-      id: 'berita' as const,
-      label: 'Dokumentasi & Berita',
-      icon: Camera,
-      badgeText: String(beritaList.length),
-      badgeColor: 'bg-amber-100 text-amber-900 font-bold',
-    },
-    {
-      id: 'pengurus' as const,
-      label: 'Pengurus & Korwil',
-      icon: ShieldCheck,
-      badgeText: '9 Korwil',
-      badgeColor: 'bg-slate-100 text-slate-700',
-    },
-    {
-      id: 'landing' as const,
-      label: 'Konten Beranda',
-      icon: LayoutTemplate,
-    },
-    {
-      id: 'settings' as const,
-      label: 'Kontak & Komunitas',
-      icon: Settings,
-    },
-  ];
-
   return (
     <div className="min-h-screen bg-slate-50 text-[#0C2340] flex flex-col font-sans selection:bg-[#0C2340] selection:text-white">
       <Navbar />
 
-      <main className="flex-grow max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-5 sm:py-8 w-full space-y-6">
-        {/* Header / Hero Dashboard */}
-        <section className="overflow-hidden rounded-2xl bg-[#0C2340] text-white shadow-xl relative" aria-labelledby="admin-dashboard-title">
-          <div className="relative px-5 py-5 sm:px-7 sm:py-6">
+      <main className="flex-grow max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-9 w-full space-y-5 sm:space-y-8">
+        <section className="overflow-hidden rounded-xl sm:rounded-2xl bg-[#0C2340] text-white shadow-[0_18px_45px_-30px_rgba(12,35,64,0.8)]" aria-labelledby="admin-dashboard-title">
+          <div className="relative px-5 py-5 sm:px-8 sm:py-8">
             <Image
               src="/images/ums-campus-silhouette.png"
               alt=""
@@ -992,260 +940,168 @@ export default function AdminDashboardClient() {
             />
             <div aria-hidden="true" className="absolute -right-20 -top-24 h-64 w-64 rounded-full border border-white/10 bg-white/[0.03]" />
             <div aria-hidden="true" className="absolute right-20 top-10 h-20 w-20 rounded-full border border-[#F59E0B]/25" />
-
-            {/* Top Bar: Breadcrumb + Quick Tools */}
-            <div className="relative flex flex-col items-stretch gap-2 border-b border-white/15 pb-3 text-xs sm:flex-row sm:items-center sm:justify-between sm:text-sm">
+            <div className="relative flex flex-col items-stretch gap-1.5 border-b border-white/15 pb-3 text-xs sm:flex-row sm:items-center sm:justify-between sm:gap-x-4 sm:gap-y-2 sm:pb-4 sm:text-sm">
               <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-slate-300">
-                <Link href="/" className="inline-flex min-h-[36px] items-center font-medium transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+                <Link href="/" className="inline-flex min-h-[44px] items-center font-medium transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
                   Beranda
                 </Link>
                 <span aria-hidden="true" className="text-slate-500">/</span>
-                <span className="font-semibold text-white">Pusat Data Pengurus</span>
+                <span className="font-semibold text-white">Pusat Kelola Data</span>
               </nav>
-              <div className="flex items-center gap-2">
-                <a
-                  href="/api/pendaftaran?format=csv"
-                  download
-                  className="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg border border-white/15 bg-white/5 px-3 py-1 text-xs font-semibold text-slate-200 transition-colors hover:bg-white/15 hover:text-white"
-                  title="Unduh data seluruh anggota dalam format CSV"
-                >
-                  <Download className="h-3.5 w-3.5 text-amber-300" />
-                  <span>Unduh CSV</span>
+              <div className="flex items-center gap-1 border-t border-white/10 pt-1.5 sm:border-0 sm:pt-0 sm:gap-2">
+                <a href="/api/pendaftaran?format=csv" download className="inline-flex min-h-[44px] items-center gap-1.5 rounded-lg px-2.5 font-semibold text-slate-200 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white">
+                  <Download className="h-3.5 w-3.5" /> Unduh CSV
                 </a>
-                <button
-                  type="button"
-                  onClick={handleLogout}
-                  className="inline-flex min-h-[36px] items-center gap-1.5 rounded-lg border border-rose-400/20 bg-rose-500/10 px-3 py-1 text-xs font-semibold text-rose-200 transition-colors hover:bg-rose-500/20 hover:text-rose-100 cursor-pointer"
-                >
-                  <LogOut className="h-3.5 w-3.5" />
-                  <span>Keluar</span>
+                <button type="button" onClick={handleLogout} className="inline-flex min-h-[44px] items-center gap-1.5 rounded-lg px-2.5 font-semibold text-rose-200 transition-colors hover:bg-rose-400/15 hover:text-rose-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white cursor-pointer">
+                  <LogOut className="h-3.5 w-3.5" /> Keluar
                 </button>
               </div>
             </div>
 
-            {/* Main Header Content & Quick Actions */}
-            <header className="relative grid gap-5 pt-4 sm:pt-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center">
-              <div className="max-w-2xl space-y-1.5">
-                <div className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/35 bg-amber-400/10 px-3 py-0.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-amber-300">
-                  <ShieldCheck className="h-3.5 w-3.5 text-amber-400" />
-                  <span>Sesi Pengurus · Sekretariat Jabodetabek</span>
+            <header className="relative grid gap-4 pt-5 sm:gap-6 sm:pt-7 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
+              <div className="max-w-2xl">
+                <div className="mb-2.5 inline-flex items-center gap-2 rounded-full border border-[#F59E0B]/35 bg-[#F59E0B]/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.12em] text-[#FCD34D] sm:mb-3 sm:text-[11px] sm:tracking-[0.14em]">
+                  <ShieldCheck className="h-3.5 w-3.5" /> Sekretariat &amp; Koordinasi Wilayah
                 </div>
-                <h1 id="admin-dashboard-title" className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white leading-tight">
-                  Pusat Kelola Data IKA UMS
-                </h1>
-                <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-xl">
-                  Pantau verifikasi anggota baru, jadwal kopdar wilayah, info lowongan kerja, liputan kegiatan, dan kepengurusan 9 korwil.
+                <h1 id="admin-dashboard-title" className="text-[28px] font-extrabold leading-[1.1] tracking-tight sm:text-4xl">Pusat Data IKA UMS Jabodetabek</h1>
+                <p className="mt-2.5 max-w-xl text-sm leading-[1.45] text-slate-300 sm:mt-3 sm:text-base sm:leading-6">
+                  Pantau pekerjaan organisasi, tangani alumni baru, dan kelola layanan untuk seluruh jaringan Jabodetabek.
                 </p>
                 {isLoading && (
-                  <span className="inline-flex items-center gap-2 text-xs font-medium text-amber-300 pt-1">
-                    <Loader2 className="h-3.5 w-3.5 animate-spin" /> Memperbarui data real-time...
+                  <span className="mt-4 inline-flex items-center gap-2 text-xs font-medium text-slate-300">
+                    <Loader2 className="h-3.5 w-3.5 animate-spin text-[#FCD34D]" /> Memperbarui data...
                   </span>
                 )}
               </div>
 
-              {/* 4 Action Buttons Cohesively Styled */}
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-2 lg:flex lg:flex-wrap lg:items-center lg:justify-end">
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:flex lg:flex-wrap lg:justify-end">
                 <button
                   type="button"
                   onClick={() => setManualAlumniOpen(true)}
-                  className="inline-flex min-h-[42px] items-center justify-center gap-2 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 px-4 py-2 text-xs sm:text-sm font-bold shadow-sm transition-all cursor-pointer"
+                  className="col-span-2 sm:col-span-1 inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg bg-white px-4 py-2 text-xs font-bold text-[#0C2340] shadow-sm transition-colors hover:bg-slate-100 sm:text-sm cursor-pointer"
                 >
-                  <UserPlus className="w-4 h-4 text-slate-950" />
-                  <span>+ Tambah Alumni</span>
+                  <UserPlus className="w-4 h-4" />
+                  + Tambah Alumni
                 </button>
                 <button
                   type="button"
                   onClick={() => openAgendaCreate()}
-                  className="inline-flex min-h-[42px] items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 text-white px-3.5 py-2 text-xs sm:text-sm font-semibold backdrop-blur-xs transition-all cursor-pointer"
+                  className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-2 py-2 text-xs font-semibold text-white transition-colors hover:bg-white/20 sm:px-4 sm:text-sm cursor-pointer"
                 >
-                  <Calendar className="w-4 h-4 text-amber-300" />
-                  <span>+ Jadwal Kopdar</span>
+                  <Calendar className="w-4 h-4" />
+                  + Jadwal Kopdar
                 </button>
                 <button
                   type="button"
                   onClick={() => openLokerCreate()}
-                  className="inline-flex min-h-[42px] items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 text-white px-3.5 py-2 text-xs sm:text-sm font-semibold backdrop-blur-xs transition-all cursor-pointer"
+                  className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg border border-white/25 bg-white/10 px-2 py-2 text-xs font-semibold text-white transition-colors hover:bg-white/20 sm:px-4 sm:text-sm cursor-pointer"
                 >
-                  <Briefcase className="w-4 h-4 text-emerald-300" />
-                  <span>+ Info Loker</span>
+                  <Briefcase className="w-4 h-4" />
+                  + Info Loker
                 </button>
                 <button
                   type="button"
                   onClick={() => openBeritaCreate()}
-                  className="inline-flex min-h-[42px] items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/10 hover:bg-white/20 text-white px-3.5 py-2 text-xs sm:text-sm font-semibold backdrop-blur-xs transition-all cursor-pointer"
+                  className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-lg border border-amber-400/40 bg-amber-400/20 px-2.5 py-2 text-xs font-bold text-[#FCD34D] transition-colors hover:bg-amber-400/30 sm:px-4 sm:text-sm cursor-pointer"
                 >
-                  <Camera className="w-4 h-4 text-sky-300" />
-                  <span>+ Dokumentasi</span>
+                  <Camera className="w-4 h-4" />
+                  + Dokumentasi / Berita
                 </button>
               </div>
             </header>
           </div>
         </section>
 
-        {/* 5 Kartu Statistik Ringkasan (Responsive Grid: 5 Kolom Desktop, Bebas Gantung!) */}
-        <section className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4" aria-label="Ringkasan data pengurus">
-          {/* Card 1: Prioritas Verifikasi */}
-          <div
-            role="button"
-            tabIndex={0}
-            onClick={() => { setActiveTab('pendaftar'); setStatusFilter('menunggu'); }}
-            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { setActiveTab('pendaftar'); setStatusFilter('menunggu'); } }}
-            className={`col-span-2 sm:col-span-1 lg:col-span-1 rounded-2xl border p-4 sm:p-4.5 flex flex-col justify-between transition-all cursor-pointer group shadow-2xs hover:shadow-md ${
-              countMenunggu > 0
-                ? 'border-amber-300 bg-linear-to-br from-amber-50 to-amber-100/70 hover:border-amber-400'
-                : 'border-slate-200 bg-white hover:border-[#0C2340]/30 hover:bg-slate-50/70'
-            }`}
-          >
-            <div className="flex items-center justify-between gap-2">
-              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-amber-900">
-                <Clock className="w-3.5 h-3.5 text-amber-600" />
-                Prioritas Verifikasi
-              </span>
-              {countMenunggu > 0 ? (
-                <span className="relative flex h-2.5 w-2.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500" />
-                </span>
-              ) : (
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-              )}
-            </div>
-            <div className="mt-3">
-              <p className={`text-2xl sm:text-3xl font-extrabold ${countMenunggu > 0 ? 'text-amber-950' : 'text-[#0C2340]'}`}>
+        {/* Kartu Statistik Cepat - 5 Kolom Desktop (Bebas Gantung dengan lg:col-span-1 pada Card 1) */}
+        <section className="grid grid-cols-2 gap-3 sm:grid-cols-2 lg:grid-cols-[1.45fr_repeat(4,minmax(0,1fr))]" aria-label="Ringkasan data">
+          <div className="col-span-2 rounded-2xl border border-amber-200 bg-amber-50 p-4 sm:p-5 lg:col-span-1 flex flex-col justify-between shadow-2xs hover:border-amber-300 transition-all">
+            <div className="flex items-start justify-between gap-3">
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wider text-amber-900 flex items-center gap-1.5">
+                  <Clock className="w-3.5 h-3.5 text-amber-600" />
+                  Prioritas hari ini
+                </p>
+                <p className="mt-1 text-sm text-amber-800">Alumni menunggu verifikasi</p>
+              </div>
+              <span className="grid h-9 min-w-9 place-items-center rounded-full bg-amber-500 px-2 text-sm font-extrabold text-white">
                 {countMenunggu}
-              </p>
-              <p className={`mt-0.5 text-xs font-medium ${countMenunggu > 0 ? 'text-amber-800' : 'text-slate-500'}`}>
-                {countMenunggu > 0 ? 'alumni menunggu tinjauan' : 'semua pendaftar terverifikasi'}
-              </p>
+              </span>
             </div>
-            <div className="mt-3.5 pt-2 border-t border-amber-200/60 flex items-center justify-between text-xs font-bold text-amber-900 group-hover:text-amber-950">
-              <span>{countMenunggu > 0 ? 'Tinjau Sekarang' : 'Lihat Pendaftar'}</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-            </div>
+            <button
+              type="button"
+              onClick={() => { setActiveTab('pendaftar'); setStatusFilter('menunggu'); }}
+              className="mt-4 inline-flex min-h-[44px] items-center justify-center rounded-lg bg-[#0C2340] px-3 text-xs font-bold text-white transition-colors hover:bg-[#08182E] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] cursor-pointer"
+            >
+              Tinjau pendaftar
+            </button>
           </div>
 
-          {/* Card 2: Total Anggota */}
           <div
             role="button"
             tabIndex={0}
             onClick={() => { setActiveTab('pendaftar'); setStatusFilter('semua'); }}
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { setActiveTab('pendaftar'); setStatusFilter('semua'); } }}
-            className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-4.5 flex flex-col justify-between transition-all cursor-pointer group shadow-2xs hover:border-[#0C2340]/30 hover:shadow-md"
+            className="min-h-[132px] rounded-2xl border border-slate-200 bg-white p-3.5 sm:p-4 hover:border-[#0C2340]/30 hover:shadow-xs transition-all cursor-pointer flex flex-col justify-between"
           >
-            <div className="flex items-center justify-between gap-2">
-              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <div>
+              <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
                 <Users className="w-3.5 h-3.5 text-sky-600" />
-                Total Anggota
-              </span>
-              <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                Aktif
-              </span>
-            </div>
-            <div className="mt-3">
-              <p className="text-2xl sm:text-3xl font-extrabold text-[#0C2340]">
-                {pendaftarList.length}
+                Anggota
               </p>
-              <p className="mt-0.5 text-xs font-medium text-emerald-700">
-                {countDisetujui} terverifikasi
-              </p>
+              <p className="mt-2 text-2xl font-extrabold text-[#0C2340]">{pendaftarList.length}</p>
             </div>
-            <div className="mt-3.5 pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-[#0C2340] group-hover:text-amber-600">
-              <span>Kelola Anggota</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-            </div>
+            <p className="mt-1 text-xs font-medium text-emerald-700">{countDisetujui} terverifikasi</p>
           </div>
 
-          {/* Card 3: Kopdar Aktif */}
           <div
             role="button"
             tabIndex={0}
             onClick={() => setActiveTab('agenda')}
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setActiveTab('agenda'); }}
-            className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-4.5 flex flex-col justify-between transition-all cursor-pointer group shadow-2xs hover:border-[#0C2340]/30 hover:shadow-md"
+            className="min-h-[132px] rounded-2xl border border-slate-200 bg-white p-3.5 sm:p-4 hover:border-[#0C2340]/30 hover:shadow-xs transition-all cursor-pointer flex flex-col justify-between"
           >
-            <div className="flex items-center justify-between gap-2">
-              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <div>
+              <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
                 <Calendar className="w-3.5 h-3.5 text-amber-600" />
-                Kopdar Aktif
-              </span>
-              <span className="text-[11px] font-semibold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-full">
-                Wilayah
-              </span>
-            </div>
-            <div className="mt-3">
-              <p className="text-2xl sm:text-3xl font-extrabold text-[#0C2340]">
-                {agendaList.length}
+                Kopdar aktif
               </p>
-              <p className="mt-0.5 text-xs font-medium text-slate-500">
-                agenda temu alumni
-              </p>
+              <p className="mt-2 text-2xl font-extrabold text-[#0C2340]">{agendaList.length}</p>
             </div>
-            <div className="mt-3.5 pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-[#0C2340] group-hover:text-amber-600">
-              <span>Kelola Jadwal</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-            </div>
+            <p className="mt-1 text-xs text-slate-500">agenda wilayah</p>
           </div>
 
-          {/* Card 4: Lowongan Kerja */}
           <div
             role="button"
             tabIndex={0}
             onClick={() => setActiveTab('loker')}
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setActiveTab('loker'); }}
-            className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-4.5 flex flex-col justify-between transition-all cursor-pointer group shadow-2xs hover:border-[#0C2340]/30 hover:shadow-md"
+            className="min-h-[132px] rounded-2xl border border-slate-200 bg-white p-3.5 sm:p-4 hover:border-[#0C2340]/30 hover:shadow-xs transition-all cursor-pointer flex flex-col justify-between"
           >
-            <div className="flex items-center justify-between gap-2">
-              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <div>
+              <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
                 <Briefcase className="w-3.5 h-3.5 text-emerald-600" />
-                Lowongan Kerja
-              </span>
-              <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
-                Peluang
-              </span>
-            </div>
-            <div className="mt-3">
-              <p className="text-2xl sm:text-3xl font-extrabold text-emerald-700">
-                {lokerList.length}
+                Lowongan aktif
               </p>
-              <p className="mt-0.5 text-xs font-medium text-slate-500">
-                peluang karier aktif
-              </p>
+              <p className="mt-2 text-2xl font-extrabold text-emerald-700">{lokerList.length}</p>
             </div>
-            <div className="mt-3.5 pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-[#0C2340] group-hover:text-amber-600">
-              <span>Kelola Loker</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-            </div>
+            <p className="mt-1 text-xs text-slate-500">peluang terbuka</p>
           </div>
 
-          {/* Card 5: Cakupan Korwil */}
           <div
             role="button"
             tabIndex={0}
             onClick={() => setActiveTab('pengurus')}
             onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') setActiveTab('pengurus'); }}
-            className="rounded-2xl border border-slate-200 bg-white p-4 sm:p-4.5 flex flex-col justify-between transition-all cursor-pointer group shadow-2xs hover:border-[#0C2340]/30 hover:shadow-md"
+            className="min-h-[132px] rounded-2xl border border-slate-200 bg-white p-3.5 sm:p-4 hover:border-[#0C2340]/30 hover:shadow-xs transition-all cursor-pointer flex flex-col justify-between"
           >
-            <div className="flex items-center justify-between gap-2">
-              <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+            <div>
+              <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-slate-500 flex items-center gap-1">
                 <MapPin className="w-3.5 h-3.5 text-indigo-600" />
-                Cakupan Korwil
-              </span>
-              <span className="text-[11px] font-semibold text-indigo-700 bg-indigo-50 px-2 py-0.5 rounded-full border border-indigo-200">
-                Jabodetabek
-              </span>
-            </div>
-            <div className="mt-3">
-              <p className="text-2xl sm:text-3xl font-extrabold text-[#0C2340]">
-                {WILAYAH_JABODETABEK.length}
+                Cakupan
               </p>
-              <p className="mt-0.5 text-xs font-medium text-slate-500">
-                9 kota &amp; kabupaten
-              </p>
+              <p className="mt-2 text-2xl font-extrabold text-[#0C2340]">{WILAYAH_JABODETABEK.length}</p>
             </div>
-            <div className="mt-3.5 pt-2 border-t border-slate-100 flex items-center justify-between text-xs font-semibold text-[#0C2340] group-hover:text-amber-600">
-              <span>Struktur Korwil</span>
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-            </div>
+            <p className="mt-1 text-xs text-slate-500">kota &amp; kabupaten</p>
           </div>
         </section>
 
@@ -1289,39 +1145,129 @@ export default function AdminDashboardClient() {
             aria-label="Modul pengelolaan organisasi"
             className="rounded-2xl border border-slate-200 bg-white p-1.5 shadow-2xs flex overflow-x-auto gap-1.5 scroll-smooth no-scrollbar"
           >
-            {tabItems.map((tab) => {
-              const isActive = activeTab === tab.id;
-              const Icon = tab.icon;
-              return (
-                <button
-                  key={tab.id}
-                  type="button"
-                  role="tab"
-                  aria-selected={isActive}
-                  aria-controls={`admin-panel-${tab.id}`}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`min-h-[44px] px-3.5 sm:px-4 py-2 text-xs sm:text-sm font-semibold rounded-xl transition-all whitespace-nowrap cursor-pointer flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] shrink-0 ${
-                    isActive
-                      ? 'bg-[#0C2340] text-white shadow-xs'
-                      : 'text-slate-600 hover:text-[#0C2340] hover:bg-slate-100'
-                  }`}
-                >
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-amber-300' : 'text-slate-500'}`} />
-                  <span>{tab.label}</span>
-                  {tab.badgeText && (
-                    <span
-                      className={`px-2 py-0.5 rounded-full text-[11px] leading-tight transition-colors ${
-                        isActive
-                          ? 'bg-white/20 text-white font-bold'
-                          : tab.badgeColor
-                      }`}
-                    >
-                      {tab.badgeText}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === 'pendaftar'}
+              aria-controls="admin-panel-pendaftar"
+              onClick={() => setActiveTab('pendaftar')}
+              className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] ${
+                activeTab === 'pendaftar'
+                  ? 'border-[#0C2340] bg-[#0C2340] text-white rounded-xl'
+                  : 'border-transparent text-[#475569] hover:text-[#0C2340] hover:bg-slate-50 rounded-xl'
+              }`}
+            >
+              <Users className="w-4 h-4" />
+              <span>Pendaftaran &amp; Anggota</span>
+              <span className="px-2 py-0.5 rounded-full text-xs bg-slate-100 text-[#0C2340]">
+                {pendaftarList.length}
+              </span>
+            </button>
+
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === 'agenda'}
+              aria-controls="admin-panel-agenda"
+              onClick={() => setActiveTab('agenda')}
+              className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] ${
+                activeTab === 'agenda'
+                  ? 'border-[#0C2340] bg-[#0C2340] text-white rounded-xl'
+                  : 'border-transparent text-[#475569] hover:text-[#0C2340] hover:bg-slate-50 rounded-xl'
+              }`}
+            >
+              <Calendar className="w-4 h-4" />
+              <span>Jadwal Kopdar &amp; Agenda</span>
+              <span className="px-2 py-0.5 rounded-full text-xs bg-slate-100 text-[#0C2340]">
+                {agendaList.length}
+              </span>
+            </button>
+
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === 'loker'}
+              aria-controls="admin-panel-loker"
+              onClick={() => setActiveTab('loker')}
+              className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] ${
+                activeTab === 'loker'
+                  ? 'border-[#0C2340] bg-[#0C2340] text-white rounded-xl'
+                  : 'border-transparent text-[#475569] hover:text-[#0C2340] hover:bg-slate-50 rounded-xl'
+              }`}
+            >
+              <Briefcase className="w-4 h-4" />
+              <span>Info Lowongan Kerja</span>
+              <span className="px-2 py-0.5 rounded-full text-xs bg-emerald-100 text-emerald-800 font-bold">
+                {lokerList.length}
+              </span>
+            </button>
+
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === 'berita'}
+              aria-controls="admin-panel-berita"
+              onClick={() => setActiveTab('berita')}
+              className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] ${
+                activeTab === 'berita'
+                  ? 'border-[#0C2340] bg-[#0C2340] text-white rounded-xl'
+                  : 'border-transparent text-[#475569] hover:text-[#0C2340] hover:bg-slate-50 rounded-xl'
+              }`}
+            >
+              <Camera className="w-4 h-4" />
+              <span>Dokumentasi &amp; Berita</span>
+              <span className="px-2 py-0.5 rounded-full text-xs bg-amber-100 text-amber-900 font-bold">
+                {beritaList.length}
+              </span>
+            </button>
+
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === 'pengurus'}
+              aria-controls="admin-panel-pengurus"
+              onClick={() => setActiveTab('pengurus')}
+              className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] ${
+                activeTab === 'pengurus'
+                  ? 'border-[#0C2340] bg-[#0C2340] text-white rounded-xl'
+                  : 'border-transparent text-[#475569] hover:text-[#0C2340] hover:bg-slate-50 rounded-xl'
+              }`}
+            >
+              <ShieldCheck className="w-4 h-4" />
+              <span>Pengurus &amp; 9 Korwil</span>
+            </button>
+
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === 'landing'}
+              aria-controls="admin-panel-landing"
+              onClick={() => setActiveTab('landing')}
+              className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] ${
+                activeTab === 'landing'
+                  ? 'border-[#0C2340] bg-[#0C2340] text-white rounded-xl'
+                  : 'border-transparent text-[#475569] hover:text-[#0C2340] hover:bg-slate-50 rounded-xl'
+              }`}
+            >
+              <LayoutTemplate className="w-4 h-4" />
+              <span>Konten Beranda</span>
+            </button>
+
+            <button
+              type="button"
+              role="tab"
+              aria-selected={activeTab === 'settings'}
+              aria-controls="admin-panel-settings"
+              onClick={() => setActiveTab('settings')}
+              className={`min-h-[46px] px-4 py-2.5 text-sm sm:text-base font-semibold border-b-2 transition-colors whitespace-nowrap cursor-pointer flex items-center gap-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340] ${
+                activeTab === 'settings'
+                  ? 'border-[#0C2340] bg-[#0C2340] text-white rounded-xl'
+                  : 'border-transparent text-[#475569] hover:text-[#0C2340] hover:bg-slate-50 rounded-xl'
+              }`}
+            >
+              <Settings className="w-4 h-4" />
+              <span>Kontak &amp; Komunitas</span>
+            </button>
           </div>
 
           {canScrollRight && (
@@ -1386,11 +1332,11 @@ export default function AdminDashboardClient() {
                   )}
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center sm:gap-2.5">
+                <div className="grid grid-cols-2 w-full gap-2 md:flex md:w-auto md:items-center md:gap-2.5">
                   <select
                     value={statusFilter}
                     onChange={(e) => setStatusFilter(e.target.value as 'semua' | 'menunggu' | 'disetujui' | 'ditolak')}
-                    className="w-full sm:w-auto min-h-[42px] px-3 py-2 text-xs sm:text-sm rounded-xl bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/15 focus:outline-hidden cursor-pointer font-medium"
+                    className="w-full min-w-0 min-h-[42px] px-3 py-2 text-xs sm:text-sm rounded-xl bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/15 focus:outline-hidden cursor-pointer font-medium"
                   >
                     <option value="semua">Semua Status ({pendaftarList.length})</option>
                     <option value="menunggu">Menunggu Verifikasi ({countMenunggu})</option>
@@ -1401,9 +1347,9 @@ export default function AdminDashboardClient() {
                   <select
                     value={wilayahFilter}
                     onChange={(e) => setWilayahFilter(e.target.value)}
-                    className="w-full sm:w-auto min-h-[42px] px-3 py-2 text-xs sm:text-sm rounded-xl bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/15 focus:outline-hidden cursor-pointer font-medium"
+                    className="w-full min-w-0 min-h-[42px] px-3 py-2 text-xs sm:text-sm rounded-xl bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/15 focus:outline-hidden cursor-pointer font-medium"
                   >
-                    <option value="semua">Semua 9 Wilayah</option>
+                    <option value="semua">Semua Wilayah</option>
                     {WILAYAH_JABODETABEK.map((w) => (
                       <option key={w.id} value={w.nama}>
                         {w.nama}
@@ -1684,7 +1630,7 @@ export default function AdminDashboardClient() {
                   className="inline-flex min-h-[42px] items-center justify-center gap-2 rounded-xl bg-[#0C2340] hover:bg-[#08182E] text-white px-4 py-2 text-xs sm:text-sm font-bold shadow-xs transition-colors cursor-pointer self-start sm:self-auto"
                 >
                   <Plus className="w-4 h-4 text-emerald-300" />
-                  <span>+ Terbitkan Lowongan Baru</span>
+                  <span>+ Tambah Info Loker</span>
                 </button>
               </div>
 

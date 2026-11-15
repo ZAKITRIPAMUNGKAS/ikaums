@@ -213,6 +213,11 @@ const DEFAULT_PENGURUS: PengurusData = {
       whatsapp: '',
       titikKumpul: 'Pajajaran & Sentul',
     },
+    'Karawang': {
+      nama: 'Dalam penetapan',
+      whatsapp: '',
+      titikKumpul: 'Galuh Mas & KIIC',
+    },
   },
 };
 

@@ -327,13 +327,13 @@ export default function KepengurusanPage() {
           </div>
         </section>
 
-        {/* Section 3: Koordinator 9 Wilayah Jabodetabek */}
+        {/* Section 3: Koordinator Wilayah Jabodetabek & Karawang */}
         <section className="py-14" aria-labelledby="heading-korwil">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
             <div className="space-y-2 max-w-2xl">
               <div className="flex flex-wrap items-center gap-2">
                 <h2 id="heading-korwil" className="text-2xl font-bold tracking-tight text-[#0C2340]">
-                  Koordinator 9 Wilayah Jabodetabek
+                  Koordinator Wilayah (Korwil)
                 </h2>
                 {IS_DEMO_MODE && (
                   <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-[#92400E] text-xs font-semibold">

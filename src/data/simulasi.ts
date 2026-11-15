@@ -7,11 +7,11 @@ export const DATASET_DISCLOSURE = {
   privacyProtocol: 'Persetujuan eksplisit sebelum tampil di Daftar Anggota',
 };
 
-// Konsisten dengan penjumlahan 9 wilayah contoh: 184+126+121+118+117+94+93+86+72 = 1011
+// Konsisten dengan penjumlahan 10 wilayah contoh: 184+126+121+118+117+94+93+86+72+65 = 1076
 export const STATS_JABODETABEK = {
-  totalAlumni: 1011,
-  totalWilayah: 9,
-  totalMentor: 210,
+  totalAlumni: 1076,
+  totalWilayah: 10,
+  totalMentor: 222,
 };
 
 export const DATA_WILAYAH_SIMULASI: WilayahStatistik[] = [
@@ -122,6 +122,18 @@ export const DATA_WILAYAH_SIMULASI: WilayahStatistik[] = [
     titikKumpul: 'Kelapa Gading & Pluit',
     koordinator: '[Contoh] Arif Wicaksono (Teknik Industri ’13)',
     kontakWa: '[Contoh] Grup WA Wilayah Jakut',
+  },
+  {
+    id: 'karawang',
+    nama: 'Karawang',
+    provinsi: 'Jawa Barat',
+    jumlahAlumni: 65,
+    keteranganAman: '65 contoh catatan wilayah',
+    agendaTerdekat: 'Jadwal kopdar wilayah disusun setelah anggota awal terdata',
+    isDataTerbatas: false,
+    titikKumpul: 'Kawasan Galuh Mas & KIIC',
+    koordinator: '[Contoh] Hendra Setiawan (Teknik Mesin ’16)',
+    kontakWa: '[Contoh] Grup WA Wilayah Karawang',
   },
 ];
 

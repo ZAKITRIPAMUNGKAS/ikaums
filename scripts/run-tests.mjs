@@ -540,3 +540,51 @@ test('Masa aktif sesi (session life) bertahan lama dan mendukung perpanjangan ot
   assert.ok(sourceRoute.includes('isSessionExpiringSoon'));
   assert.ok(sourceRoute.includes('getSessionMaxAgeSeconds'));
 });
+
+// 7. Kontrak Halaman Direktori Anggota (/direktori)
+test('Halaman direktori diproteksi ServerProtectedRoute dan tidak terkunci ganda di DirektoriClient', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const [sourcePage, sourceClient] = await Promise.all([
+    readFile(new URL('../src/app/direktori/page.tsx', import.meta.url), 'utf8'),
+    readFile(new URL('../src/app/direktori/DirektoriClient.tsx', import.meta.url), 'utf8'),
+  ]);
+
+  // ServerProtectedRoute di page.tsx memvalidasi sesi member / admin di sisi server
+  assert.ok(sourcePage.includes('ServerProtectedRoute'));
+  assert.ok(sourcePage.includes('variant="direktori"'));
+  assert.ok(sourcePage.includes('requiredRole="member"'));
+
+  // DirektoriClient tidak boleh memiliki dead-lock return yang memblokir user login saat !IS_DEMO_MODE
+  assert.ok(!sourceClient.includes('if (!IS_DEMO_MODE) {'));
+  assert.ok(!sourceClient.includes('if (!IS_DEMO_MODE) return;'));
+
+  // DirektoriClient memanggil endpoint data alumni dan menyediakan loading state
+  assert.ok(sourceClient.includes("fetch('/api/alumni')"));
+  assert.ok(sourceClient.includes('isLoading'));
+});
+
+// 8. Integrasi Wilayah Karawang (Master, Peta, dan GeoJSON)
+test('Wilayah Karawang terdaftar dalam data master, metadata peta, dan GeoJSON', async () => {
+  const { readFile } = await import('node:fs/promises');
+  const [sourceProdi, sourceMeta, sourceGeoJson] = await Promise.all([
+    readFile(new URL('../src/data/ums-prodi.ts', import.meta.url), 'utf8'),
+    readFile(new URL('../src/data/jabodetabek-geo-meta.ts', import.meta.url), 'utf8'),
+    readFile(new URL('../src/data/jabodetabek-geojson.json', import.meta.url), 'utf8'),
+  ]);
+
+  // Master wilayah memuat Karawang
+  assert.ok(sourceProdi.includes("id: 'karawang'"));
+  assert.ok(sourceProdi.includes("nama: 'Karawang'"));
+  assert.ok(sourceProdi.includes("cakupan: 'Kabupaten Karawang'"));
+
+  // Metadata peta memuat Karawang
+  assert.ok(sourceMeta.includes('"regionId": "karawang"'));
+  assert.ok(sourceMeta.includes('"regionName": "Karawang"'));
+
+  // GeoJSON memuat feature Karawang dengan batas resmi BPS / geoBoundaries
+  const geojson = JSON.parse(sourceGeoJson);
+  const karawangFeature = geojson.features.find((f) => f.properties?.regionId === 'karawang');
+  assert.ok(karawangFeature, 'Feature Karawang harus tersedia di jabodetabek-geojson.json');
+  assert.equal(karawangFeature.properties.regionName, 'Karawang');
+  assert.equal(karawangFeature.geometry.type, 'Polygon');
+});
