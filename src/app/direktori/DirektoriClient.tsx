@@ -24,6 +24,11 @@ import {
   CheckCircle2,
   MessageSquare,
   ArrowRight,
+  Briefcase,
+  Sparkles,
+  Users,
+  X,
+  RotateCcw,
 } from 'lucide-react';
 
 const STORAGE_KEY_CONNECTIONS = 'ikaums_persisted_connections';
@@ -37,7 +42,7 @@ export default function DirektoriPage() {
   const [connectionRequested, setConnectionRequested] = useState<Record<string, boolean>>({});
   const [messagesSent, setMessagesSent] = useState<Record<string, boolean>>({});
   const [activeProfileTab, setActiveProfileTab] = useState('tentang');
-  const [visibleCount, setVisibleCount] = useState(4);
+  const [visibleCount, setVisibleCount] = useState(6);
   const shouldReduceMotion = useReducedMotion();
 
   const [alumniList, setAlumniList] = useState<AlumniProfile[]>(() => getAlumniList());
@@ -164,6 +169,7 @@ export default function DirektoriPage() {
       <Navbar />
 
       <main className="flex-grow w-full">
+        {/* Hero Section Header */}
         <PatternSection
           as="section"
           variant="dots"
@@ -171,238 +177,312 @@ export default function DirektoriPage() {
           fade="right-focus"
           patternOpacity={0.055}
           patternSize="24px"
-          className="border-b border-slate-200"
-          contentClassName="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-8 md:pt-8 md:pb-10"
+          className="border-b border-slate-200/80 bg-linear-to-b from-white via-slate-50/60 to-slate-50"
+          contentClassName="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 sm:pt-10 md:pt-12 pb-8 sm:pb-10 md:pb-12"
         >
+          {/* Breadcrumb Navigation */}
           <nav aria-label="Breadcrumb" className="flex items-center justify-between gap-2 text-xs text-[#475569] mb-4">
             <div className="flex items-center gap-2">
               <Link href="/" className="hover:text-[#0C2340] transition-colors inline-flex items-center min-h-[44px]">
                 Beranda
               </Link>
-              <span aria-hidden="true">/</span>
+              <span aria-hidden="true" className="text-slate-400">/</span>
               <span className="text-[#0C2340] font-semibold">Daftar Anggota</span>
             </div>
-            {IS_DEMO_MODE && (
-              <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-[#92400E] font-semibold">
-                {DEMO_BADGE_LABEL}
-              </span>
-            )}
+            <div className="flex items-center gap-2">
+              <Link
+                href="/peta"
+                className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-[#0C2340] hover:text-[#92400E] transition-colors"
+              >
+                <MapPin className="w-3.5 h-3.5 text-[#92400E]" />
+                <span>Peta Sebaran</span>
+              </Link>
+              {IS_DEMO_MODE && (
+                <span className="px-2.5 py-0.5 rounded-full bg-amber-100 text-[#92400E] font-semibold">
+                  {DEMO_BADGE_LABEL}
+                </span>
+              )}
+            </div>
           </nav>
 
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-4">
-            <div>
-              <span className="inline-block text-sm font-semibold text-[#92400E] mb-1.5">
-                Jaringan Alumni Jabodetabek{IS_DEMO_MODE ? ` (${DEMO_BADGE_LABEL})` : ''}
-              </span>
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-5">
+            <div className="space-y-2">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-[#92400E] text-xs font-semibold">
+                <Users className="w-3.5 h-3.5" />
+                <span>Direktori Resmi Alumni Jabodetabek &amp; Karawang</span>
+              </div>
               <h1 className="text-[clamp(1.75rem,1.3rem+1.8vw,2.5rem)] font-extrabold tracking-[-0.02em] text-[#0C2340]">
                 Daftar Anggota IKA UMS
               </h1>
-              <p className="text-base text-[#475569] mt-2 max-w-[48ch] sm:max-w-2xl leading-[1.6]">
-                Cari teman satu jurusan, rekan sewilayah domisili, atau senior yang bersedia berbagi pengalaman kerja.
+              <p className="text-sm sm:text-base text-[#475569] max-w-2xl leading-relaxed">
+                Cari rekan satu jurusan, teman sewilayah domisili, atau senior yang bersedia berbagi pengalaman kerja dan peluang karier.
               </p>
             </div>
 
-            <Link
-              href="/peta"
-              className="inline-flex items-center justify-center min-h-[44px] text-sm sm:text-base font-semibold text-[#0C2340] hover:text-[#92400E] border border-slate-300 bg-white px-4 py-2.5 rounded-lg self-start lg:self-auto transition-colors shrink-0"
-            >
-              Lihat Sebaran Wilayah
-            </Link>
+            <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+              <Link
+                href="/peta"
+                className="inline-flex items-center justify-center gap-2 min-h-[44px] text-xs sm:text-sm font-semibold text-[#0C2340] hover:text-[#08182E] border border-slate-300 bg-white hover:bg-slate-50 px-4 py-2.5 rounded-xl transition-all shadow-2xs"
+              >
+                <MapPin className="w-4 h-4 text-[#92400E]" />
+                <span>Lihat Sebaran Wilayah</span>
+              </Link>
+            </div>
           </div>
         </PatternSection>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 w-full relative z-[1]">
-        {/* Search & Filter Toolbar */}
-        <div className="surface-card rounded-xl p-4 sm:p-5 mb-8 space-y-4">
-          <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3">
-            <div className="relative flex-1">
-              <Search className="w-4 h-4 text-[#475569] absolute left-3.5 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                aria-label="Cari nama, program studi, profesi, atau bidang industri"
-                placeholder="Cari nama, program studi, profesi, atau bidang industri..."
-                value={searchTerm}
-                onChange={(e) => {
-                  setSearchTerm(e.target.value);
-                  setVisibleCount(4);
-                }}
-                className="w-full min-h-[44px] pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-lg text-base text-[#0C2340] placeholder:text-[#64748B] focus:outline-none focus:border-[#0C2340]"
-              />
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:flex md:flex-wrap items-center gap-2.5 sm:gap-3">
-              <select
-                value={selectedRegion}
-                onChange={(e) => {
-                  setSelectedRegion(e.target.value);
-                  setVisibleCount(4);
-                }}
-                aria-label="Filter wilayah Jabodetabek"
-                className="w-full md:w-auto min-h-[44px] bg-white border border-slate-200 text-base text-[#0C2340] font-medium px-3.5 py-2.5 rounded-lg focus:outline-none focus:border-[#0C2340]"
-              >
-                {regions.map((reg) => (
-                  <option key={reg} value={reg}>{reg}</option>
-                ))}
-              </select>
-
-              <label className="w-full md:w-auto min-h-[44px] inline-flex items-center justify-center md:justify-start gap-2 px-3.5 py-2.5 rounded-lg border border-slate-200 bg-white text-base font-medium text-[#0C2340] cursor-pointer select-none">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-10 w-full relative z-[1]">
+          {/* Search & Filter Toolbar */}
+          <div className="surface-card rounded-2xl p-4 sm:p-6 mb-8 border border-slate-200 shadow-xs space-y-4">
+            <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3">
+              <div className="relative flex-1">
+                <Search className="w-4 h-4 text-[#64748B] absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
-                  type="checkbox"
-                  checked={mentorOnly}
+                  type="text"
+                  aria-label="Cari nama, program studi, profesi, atau bidang industri"
+                  placeholder="Cari nama, program studi, profesi, instansi, atau industri..."
+                  value={searchTerm}
                   onChange={(e) => {
-                    setMentorOnly(e.target.checked);
-                    setVisibleCount(4);
+                    setSearchTerm(e.target.value);
+                    setVisibleCount(6);
                   }}
-                  className="rounded text-[#0C2340] focus:ring-[#0C2340]"
+                  className="w-full min-h-[46px] pl-10 pr-10 py-2.5 bg-white border border-slate-300 rounded-xl text-sm sm:text-base text-[#0C2340] placeholder:text-[#94A3B8] focus:outline-none focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 transition-all"
                 />
-                <span>Siap mentoring</span>
-              </label>
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between text-sm text-[#475569] pt-2 border-t border-[#0C2340]/8">
-            <span>
-              Menampilkan <strong className="text-[#0C2340]">{Math.min(visibleCount, filteredAlumni.length)}</strong> dari{' '}
-              <strong className="text-[#0C2340]">{filteredAlumni.length}</strong> profil
-              {IS_DEMO_MODE ? ` (${DEMO_BADGE_LABEL})` : ''}
-              {selectedRegion !== 'Semua Wilayah' ? ` di ${selectedRegion}` : ''}
-            </span>
-            {(searchTerm || selectedRegion !== 'Semua Wilayah' || mentorOnly) && (
-              <button
-                type="button"
-                onClick={() => {
-                  setSearchTerm('');
-                  setSelectedRegion('Semua Wilayah');
-                  setMentorOnly(false);
-                  setVisibleCount(4);
-                }}
-                className="min-h-[44px] px-2 text-[#0C2340] font-semibold hover:underline cursor-pointer"
-              >
-                Reset filter
-              </button>
-            )}
-          </div>
-        </div>
-
-        {/* Alumni Single-Column List (Progressive Reveal) */}
-        {isLoading ? (
-          <div className="max-w-3xl space-y-3">
-            {[1, 2, 3].map((n) => (
-              <div
-                key={n}
-                className="bg-white border border-slate-200 rounded-xl p-4 sm:p-5 flex items-center justify-between gap-4 animate-pulse"
-              >
-                <div className="flex items-center gap-3.5 flex-1">
-                  <div className="w-12 h-12 rounded-full bg-slate-200 shrink-0" />
-                  <div className="space-y-2 flex-1">
-                    <div className="h-4 bg-slate-200 rounded w-1/3" />
-                    <div className="h-3 bg-slate-200 rounded w-1/2" />
-                  </div>
-                </div>
-                <div className="h-10 bg-slate-200 rounded w-28 shrink-0" />
-              </div>
-            ))}
-          </div>
-        ) : filteredAlumni.length === 0 ? (
-          <div className="bg-white border border-dashed border-slate-300 rounded-xl p-10 text-center space-y-3 max-w-3xl">
-            <p className="text-base font-semibold text-[#0C2340]">
-              {alumniList.length === 0
-                ? 'Belum ada profil anggota lain yang disetujui tampil di direktori.'
-                : 'Belum ada profil yang cocok dengan filter saat ini.'}
-            </p>
-            <p className="text-base text-[#475569]">
-              {alumniList.length === 0
-                ? 'Data alumni akan muncul otomatis di sini begitu pengurus memverifikasi pendaftar baru yang menyetujui opsi tampil di direktori.'
-                : 'Coba pilih wilayah lain atau hapus kata kunci pencarian.'}
-            </p>
-            {alumniList.length > 0 && (
-              <button
-                type="button"
-                onClick={() => {
-                  setSearchTerm('');
-                  setSelectedRegion('Semua Wilayah');
-                  setMentorOnly(false);
-                  setVisibleCount(4);
-                }}
-                className="mt-2 inline-flex items-center min-h-[44px] px-5 py-2.5 rounded-lg bg-[#0C2340] text-white text-base font-semibold cursor-pointer"
-              >
-                Tampilkan Semua Alumni
-              </button>
-            )}
-          </div>
-        ) : (
-          <div className="max-w-3xl space-y-3">
-            <AnimatePresence mode="popLayout">
-              {filteredAlumni.slice(0, visibleCount).map((alumni) => (
-                <motion.article
-                  key={alumni.id}
-                  layout={!shouldReduceMotion}
-                  initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.98 }}
-                  transition={{ duration: 0.2 }}
-                  className="bg-white border border-slate-200 hover:border-[#0C2340]/40 rounded-xl p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs transition-colors"
-                >
-                  <div className="flex items-start gap-3.5 min-w-0">
-                    <div className="w-12 h-12 rounded-full overflow-hidden border border-slate-200 bg-slate-100 shrink-0 relative">
-                      {alumni.avatarUrl ? (
-                        <Image
-                          src={alumni.avatarUrl}
-                          alt={`Foto profil ${alumni.nama}`}
-                          fill
-                          loading="lazy"
-                          sizes="48px"
-                          unoptimized={alumni.avatarUrl.startsWith('data:')}
-                          className="object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-[#0C2340] text-[#F59E0B] font-bold text-sm">
-                          {alumni.avatarInitials}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="space-y-0.5 min-w-0 flex-1">
-                      <h2 className="text-lg font-bold text-[#0C2340] truncate">
-                        {alumni.nama}
-                      </h2>
-                      <p className="text-base text-[#475569] truncate">
-                        {alumni.prodi} · &apos;{String(alumni.angkatan).slice(-2)} · {alumni.wilayah}
-                      </p>
-                      <span className="block text-sm text-[#0C2340] font-medium truncate">
-                        {alumni.industri}
-                      </span>
-                    </div>
-                  </div>
-
+                {searchTerm && (
                   <button
                     type="button"
-                    onClick={() => {
-                      setActiveProfileTab('tentang');
-                      setSelectedAlumni(alumni);
-                    }}
-                    className="w-full sm:w-auto shrink-0 inline-flex items-center justify-center gap-1.5 min-h-[44px] px-4 py-2.5 rounded-lg bg-slate-100 hover:bg-[#0C2340] text-[#0C2340] hover:text-white text-sm font-semibold transition-colors cursor-pointer"
+                    onClick={() => setSearchTerm('')}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-1 cursor-pointer"
+                    aria-label="Hapus kata kunci pencarian"
                   >
-                    <span>Lihat profil</span>
-                    <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+                    <X className="w-4 h-4" />
                   </button>
-                </motion.article>
-              ))}
-            </AnimatePresence>
+                )}
+              </div>
 
-            {filteredAlumni.length > visibleCount && (
-              <div className="pt-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:flex md:flex-wrap items-center gap-2.5 sm:gap-3">
+                <div className="relative min-w-[180px] flex-1 sm:flex-initial">
+                  <select
+                    value={selectedRegion}
+                    onChange={(e) => {
+                      setSelectedRegion(e.target.value);
+                      setVisibleCount(6);
+                    }}
+                    aria-label="Filter wilayah Jabodetabek & Karawang"
+                    className="w-full min-h-[46px] bg-white border border-slate-300 text-sm sm:text-base text-[#0C2340] font-medium px-3.5 py-2.5 rounded-xl focus:outline-none focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 transition-all cursor-pointer"
+                  >
+                    {regions.map((reg) => (
+                      <option key={reg} value={reg}>{reg}</option>
+                    ))}
+                  </select>
+                </div>
+
                 <button
                   type="button"
-                  onClick={() => setVisibleCount((prev) => prev + 4)}
-                  className="w-full sm:w-auto min-h-[44px] px-6 py-2.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 text-[#0C2340] text-base font-semibold transition-colors cursor-pointer"
+                  onClick={() => {
+                    setMentorOnly(!mentorOnly);
+                    setVisibleCount(6);
+                  }}
+                  className={`min-h-[46px] px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all inline-flex items-center justify-center gap-2 border cursor-pointer select-none ${
+                    mentorOnly
+                      ? 'bg-[#0C2340] text-white border-[#0C2340] shadow-xs'
+                      : 'bg-white text-slate-700 border-slate-300 hover:bg-slate-50'
+                  }`}
                 >
-                  Tampilkan profil lainnya ({filteredAlumni.length - visibleCount} lagi)
+                  <Sparkles className={`w-4 h-4 ${mentorOnly ? 'text-[#F59E0B]' : 'text-slate-400'}`} />
+                  <span>Siap Mentoring</span>
                 </button>
               </div>
-            )}
+            </div>
+
+            {/* Filter Status Summary & Reset */}
+            <div className="flex flex-wrap items-center justify-between gap-2 text-xs sm:text-sm text-[#475569] pt-3 border-t border-slate-200">
+              <span className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                <span>
+                  Menampilkan <strong className="text-[#0C2340]">{Math.min(visibleCount, filteredAlumni.length)}</strong> dari{' '}
+                  <strong className="text-[#0C2340]">{filteredAlumni.length}</strong> profil alumni terverifikasi
+                  {selectedRegion !== 'Semua Wilayah' ? ` di ${selectedRegion}` : ''}
+                  {mentorOnly ? ' · siap mentoring' : ''}
+                </span>
+              </span>
+              {(searchTerm || selectedRegion !== 'Semua Wilayah' || mentorOnly) && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchTerm('');
+                    setSelectedRegion('Semua Wilayah');
+                    setMentorOnly(false);
+                    setVisibleCount(6);
+                  }}
+                  className="text-xs font-semibold text-[#92400E] hover:underline cursor-pointer inline-flex items-center gap-1 shrink-0"
+                >
+                  <RotateCcw className="w-3.5 h-3.5" />
+                  Reset filter
+                </button>
+              )}
+            </div>
           </div>
-        )}
+
+          {/* Alumni Grid List (2-Column Responsive Bento Layout) */}
+          {isLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+              {[1, 2, 3, 4].map((n) => (
+                <div
+                  key={n}
+                  className="bg-white border border-slate-200 rounded-2xl p-5 sm:p-6 space-y-4 animate-pulse shadow-2xs"
+                >
+                  <div className="flex items-start gap-4">
+                    <div className="w-14 h-14 rounded-2xl bg-slate-200 shrink-0" />
+                    <div className="space-y-2 flex-1">
+                      <div className="h-4 bg-slate-200 rounded w-1/2" />
+                      <div className="h-3 bg-slate-200 rounded w-1/3" />
+                      <div className="h-5 bg-slate-200 rounded w-20" />
+                    </div>
+                  </div>
+                  <div className="h-12 bg-slate-100 rounded-xl" />
+                  <div className="h-8 bg-slate-200 rounded-xl" />
+                </div>
+              ))}
+            </div>
+          ) : filteredAlumni.length === 0 ? (
+            <div className="bg-white border border-dashed border-slate-300 rounded-2xl p-10 sm:p-14 text-center space-y-3.5 max-w-xl mx-auto shadow-2xs">
+              <div className="w-12 h-12 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center mx-auto text-slate-500">
+                <Users className="w-6 h-6 text-[#92400E]" />
+              </div>
+              <h3 className="text-base sm:text-lg font-bold text-[#0C2340]">
+                {alumniList.length === 0
+                  ? 'Belum ada profil anggota lain yang disetujui tampil di direktori.'
+                  : 'Belum ada profil yang cocok dengan pencarian Anda.'}
+              </h3>
+              <p className="text-xs sm:text-sm text-[#475569] max-w-md mx-auto leading-relaxed">
+                {alumniList.length === 0
+                  ? 'Data alumni akan muncul otomatis di sini begitu pengurus memverifikasi pendaftar baru yang menyetujui opsi tampil di direktori.'
+                  : 'Coba ubah kata kunci pencarian, pilih wilayah lain, atau nonaktifkan filter mentoring.'}
+              </p>
+              {alumniList.length > 0 && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSearchTerm('');
+                    setSelectedRegion('Semua Wilayah');
+                    setMentorOnly(false);
+                    setVisibleCount(6);
+                  }}
+                  className="mt-3 inline-flex items-center min-h-[44px] px-5 py-2.5 rounded-xl bg-[#0C2340] hover:bg-[#08182E] text-white text-xs sm:text-sm font-semibold transition-all shadow-2xs cursor-pointer"
+                >
+                  Tampilkan Semua Alumni
+                </button>
+              )}
+            </div>
+          ) : (
+            <div className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+                <AnimatePresence mode="popLayout">
+                  {filteredAlumni.slice(0, visibleCount).map((alumni) => (
+                    <motion.article
+                      key={alumni.id}
+                      layout={!shouldReduceMotion}
+                      initial={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.98 }}
+                      transition={{ duration: 0.2 }}
+                      className="bg-white border border-slate-200/90 hover:border-[#0C2340]/45 rounded-2xl p-5 sm:p-6 flex flex-col justify-between shadow-2xs hover:shadow-md transition-all duration-200 group"
+                    >
+                      <div>
+                        {/* Header Kartu: Avatar + Nama + Wilayah */}
+                        <div className="flex items-start gap-3.5 sm:gap-4 mb-3.5">
+                          <div className="w-14 h-14 rounded-2xl overflow-hidden border border-slate-200 bg-slate-100 shrink-0 relative shadow-2xs">
+                            {alumni.avatarUrl ? (
+                              <Image
+                                src={alumni.avatarUrl}
+                                alt={`Foto profil ${alumni.nama}`}
+                                fill
+                                loading="lazy"
+                                sizes="56px"
+                                unoptimized={alumni.avatarUrl.startsWith('data:')}
+                                className="object-cover"
+                              />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center bg-[#0C2340] text-[#F59E0B] font-bold text-base">
+                                {alumni.avatarInitials}
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="min-w-0 flex-1 space-y-1">
+                            <div className="flex items-start justify-between gap-2">
+                              <h2 className="text-base sm:text-lg font-bold text-[#0C2340] truncate group-hover:text-[#92400E] transition-colors leading-snug">
+                                {alumni.nama}
+                              </h2>
+                              {alumni.bersediaMentoring && (
+                                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-semibold shrink-0">
+                                  <Sparkles className="w-3 h-3 text-emerald-600" />
+                                  <span>Mentor</span>
+                                </span>
+                              )}
+                            </div>
+
+                            <p className="text-xs sm:text-sm text-slate-500 font-medium truncate">
+                              {alumni.prodi} · &apos;{String(alumni.angkatan).slice(-2)}
+                            </p>
+
+                            <div className="inline-flex items-center gap-1 text-xs text-[#92400E] font-semibold bg-amber-50 border border-amber-200/60 px-2 py-0.5 rounded-md">
+                              <MapPin className="w-3 h-3 shrink-0" />
+                              <span>{alumni.wilayah}</span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Pekerjaan / Instansi */}
+                        <div className="bg-slate-50/80 border border-slate-200/80 rounded-xl p-3 mb-4 space-y-1">
+                          <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
+                            <Briefcase className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                            <span className="truncate">Profesi &amp; Bidang Kerja</span>
+                          </div>
+                          <p className="text-xs sm:text-sm font-semibold text-[#0C2340] line-clamp-2 leading-snug">
+                            {alumni.pekerjaan}
+                            {alumni.perusahaan ? ` di ${alumni.perusahaan}` : ''}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Footer Kartu: Verifikasi & Aksi */}
+                      <div className="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                        <span className="inline-flex items-center gap-1 text-[11px] sm:text-xs text-emerald-700 font-medium">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                          <span>Terverifikasi</span>
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setActiveProfileTab('tentang');
+                            setSelectedAlumni(alumni);
+                          }}
+                          className="inline-flex items-center gap-1.5 min-h-[40px] px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-[#0C2340] text-[#0C2340] hover:text-white text-xs sm:text-sm font-semibold transition-all duration-150 cursor-pointer shadow-2xs group-hover:bg-[#0C2340] group-hover:text-white"
+                        >
+                          <span>Lihat profil</span>
+                          <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                        </button>
+                      </div>
+                    </motion.article>
+                  ))}
+                </AnimatePresence>
+              </div>
+
+              {filteredAlumni.length > visibleCount && (
+                <div className="pt-4 text-center">
+                  <button
+                    type="button"
+                    onClick={() => setVisibleCount((prev) => prev + 6)}
+                    className="w-full sm:w-auto min-h-[44px] px-8 py-2.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-100 text-[#0C2340] text-sm sm:text-base font-semibold transition-all shadow-2xs cursor-pointer"
+                  >
+                    Tampilkan profil lainnya ({filteredAlumni.length - visibleCount} lagi)
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
 
         {/* Profile Detail Modal */}
         <Dialog open={!!selectedAlumni} onOpenChange={(open) => !open && setSelectedAlumni(null)}>
