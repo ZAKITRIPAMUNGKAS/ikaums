@@ -30,6 +30,7 @@ import {
   Briefcase,
   Loader2,
   LayoutTemplate,
+  Pencil,
 } from 'lucide-react';
 import type { AgendaItem, PengurusData, KomunitasSettings, LandingContent } from '@/lib/cms-store';
 import { type LokerItem, DEFAULT_LOKERS } from '@/data/loker';
@@ -54,6 +55,33 @@ const adminFieldClass =
   'w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:outline-hidden';
 
 const adminLabelClass = 'block text-xs font-bold text-[#0C2340] mb-1.5 uppercase';
+
+const BLANK_AGENDA = {
+  judul: '',
+  jenis: 'Kopdar Wilayah',
+  tanggalWIB: '',
+  jamWIB: '09.00 - 12.00 WIB',
+  wilayah: 'Jakarta Selatan',
+  lokasi: '',
+  kapasitas: 50,
+  penanggungJawab: 'Panitia Wilayah',
+};
+
+const BLANK_LOKER = {
+  posisi: '',
+  perusahaan: '',
+  industri: 'Teknologi Informasi & Software',
+  wilayah: 'Jakarta Selatan',
+  tipeKerja: 'Penuh Waktu' as LokerItem['tipeKerja'],
+  sistemKerja: 'Hybrid' as LokerItem['sistemKerja'],
+  gajiPerkiraan: '',
+  alumniRujukan: '',
+  kualifikasi: '',
+  deskripsi: '',
+  kontakLamar: '',
+  linkLamar: '',
+  status: 'Aktif' as LokerItem['status'],
+};
 
 export default function AdminDashboardClient() {
   const router = useRouter();
@@ -88,6 +116,8 @@ export default function AdminDashboardClient() {
   const [manualAlumniOpen, setManualAlumniOpen] = useState(false);
   const [agendaModalOpen, setAgendaModalOpen] = useState(false);
   const [lokerModalOpen, setLokerModalOpen] = useState(false);
+  const [editingAgendaId, setEditingAgendaId] = useState<string | null>(null);
+  const [editingLokerId, setEditingLokerId] = useState<string | null>(null);
 
   // Form State: Tambah Loker Baru
   const [newLoker, setNewLoker] = useState<{
@@ -105,19 +135,7 @@ export default function AdminDashboardClient() {
     linkLamar: string;
     status: LokerItem['status'];
   }>({
-    posisi: '',
-    perusahaan: '',
-    industri: 'Teknologi Informasi & Software',
-    wilayah: 'Jakarta Selatan',
-    tipeKerja: 'Penuh Waktu',
-    sistemKerja: 'Hybrid',
-    gajiPerkiraan: '',
-    alumniRujukan: '',
-    kualifikasi: '',
-    deskripsi: '',
-    kontakLamar: '',
-    linkLamar: '',
-    status: 'Aktif',
+    ...BLANK_LOKER,
   });
 
   // Form State: Tambah Alumni Manual
@@ -136,16 +154,7 @@ export default function AdminDashboardClient() {
   });
 
   // Form State: Tambah Agenda Baru
-  const [newAgenda, setNewAgenda] = useState({
-    judul: '',
-    jenis: 'Kopdar Wilayah',
-    tanggalWIB: '',
-    jamWIB: '09.00 - 12.00 WIB',
-    wilayah: 'Jakarta Selatan',
-    lokasi: '',
-    kapasitas: 50,
-    penanggungJawab: 'Panitia Wilayah',
-  });
+  const [newAgenda, setNewAgenda] = useState({ ...BLANK_AGENDA });
 
   // Notifikasi Toast Helper
   const showToast = (msg: string) => {
@@ -259,6 +268,26 @@ export default function AdminDashboardClient() {
     }
   };
 
+  // Handler: Hapus Data Pendaftar
+  const handleDeletePendaftar = async (id: string, nama: string) => {
+    if (!confirm(`Hapus data pendaftar "${nama}"? Tindakan ini tidak dapat dibatalkan.`)) return;
+    try {
+      const res = await fetch('/api/pendaftaran', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id }),
+      });
+      if (res.ok) {
+        setPendaftarList((prev) => prev.filter((item) => item.id !== id));
+        showToast('Data pendaftar berhasil dihapus.');
+      } else {
+        showToast('Gagal menghapus data pendaftar.');
+      }
+    } catch {
+      showToast('Terjadi kendala jaringan.');
+    }
+  };
+
   // Handler: Simpan Alumni Manual
   const handleSaveManualAlumni = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -304,7 +333,29 @@ export default function AdminDashboardClient() {
     }
   };
 
-  // Handler: Simpan Agenda Baru
+  // Buka modal: tambah / ubah jadwal
+  const openAgendaCreate = () => {
+    setEditingAgendaId(null);
+    setNewAgenda({ ...BLANK_AGENDA });
+    setAgendaModalOpen(true);
+  };
+
+  const openAgendaEdit = (agenda: AgendaItem) => {
+    setEditingAgendaId(agenda.id);
+    setNewAgenda({
+      judul: agenda.judul,
+      jenis: agenda.jenis,
+      tanggalWIB: agenda.tanggalWIB,
+      jamWIB: agenda.jamWIB ?? '',
+      wilayah: agenda.wilayah,
+      lokasi: agenda.lokasi,
+      kapasitas: agenda.kapasitas,
+      penanggungJawab: agenda.penanggungJawab ?? '',
+    });
+    setAgendaModalOpen(true);
+  };
+
+  // Handler: Simpan Agenda Baru / Perubahan Agenda
   const handleSaveAgenda = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newAgenda.judul.trim() || !newAgenda.tanggalWIB.trim() || !newAgenda.lokasi.trim()) {
@@ -318,23 +369,19 @@ export default function AdminDashboardClient() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           type: 'agenda',
-          data: newAgenda,
+          data: { ...newAgenda, id: editingAgendaId || undefined },
         }),
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        showToast('Jadwal kopdar baru berhasil disimpan.');
+        showToast(
+          editingAgendaId
+            ? 'Perubahan jadwal berhasil disimpan.'
+            : 'Jadwal kopdar baru berhasil disimpan.'
+        );
         setAgendaModalOpen(false);
-        setNewAgenda({
-          judul: '',
-          jenis: 'Kopdar Wilayah',
-          tanggalWIB: '',
-          jamWIB: '09.00 - 12.00 WIB',
-          wilayah: 'Jakarta Selatan',
-          lokasi: '',
-          kapasitas: 50,
-          penanggungJawab: 'Panitia Wilayah',
-        });
+        setEditingAgendaId(null);
+        setNewAgenda({ ...BLANK_AGENDA });
         loadData();
       } else {
         showToast(data.error || 'Gagal menyimpan jadwal.');
@@ -367,7 +414,34 @@ export default function AdminDashboardClient() {
     }
   };
 
-  // Handler: Simpan Loker Baru
+  // Buka modal: tambah / ubah lowongan
+  const openLokerCreate = () => {
+    setEditingLokerId(null);
+    setNewLoker({ ...BLANK_LOKER });
+    setLokerModalOpen(true);
+  };
+
+  const openLokerEdit = (loker: LokerItem) => {
+    setEditingLokerId(loker.id);
+    setNewLoker({
+      posisi: loker.posisi,
+      perusahaan: loker.perusahaan,
+      industri: loker.industri,
+      wilayah: loker.wilayah,
+      tipeKerja: loker.tipeKerja,
+      sistemKerja: loker.sistemKerja,
+      gajiPerkiraan: loker.gajiPerkiraan ?? '',
+      alumniRujukan: loker.alumniRujukan ?? '',
+      kualifikasi: (loker.kualifikasi ?? []).join('\n'),
+      deskripsi: loker.deskripsi ?? '',
+      kontakLamar: loker.kontakLamar ?? '',
+      linkLamar: loker.linkLamar ?? '',
+      status: loker.status,
+    });
+    setLokerModalOpen(true);
+  };
+
+  // Handler: Simpan Loker Baru / Perubahan Loker
   const handleSaveLoker = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -378,6 +452,7 @@ export default function AdminDashboardClient() {
 
       const dataToSend = {
         ...newLoker,
+        id: editingLokerId || undefined,
         kualifikasi: kualifikasiArray.length > 0 ? kualifikasiArray : ['Kualifikasi relevan bagi alumni'],
         gajiPerkiraan: newLoker.gajiPerkiraan.trim() || undefined,
         alumniRujukan: newLoker.alumniRujukan.trim() || undefined,
@@ -394,29 +469,15 @@ export default function AdminDashboardClient() {
       });
 
       if (res.ok) {
-        const json = await res.json();
-        if (json.item) {
-          setLokerList((prev) => [json.item, ...prev]);
-        } else {
-          await loadData();
-        }
         setLokerModalOpen(false);
-        setNewLoker({
-          posisi: '',
-          perusahaan: '',
-          industri: 'Teknologi Informasi & Software',
-          wilayah: 'Jakarta Selatan',
-          tipeKerja: 'Penuh Waktu',
-          sistemKerja: 'Hybrid',
-          gajiPerkiraan: '',
-          alumniRujukan: '',
-          kualifikasi: '',
-          deskripsi: '',
-          kontakLamar: '',
-          linkLamar: '',
-          status: 'Aktif',
-        });
-        showToast('Info lowongan kerja berhasil disimpan dan diterbitkan.');
+        setEditingLokerId(null);
+        setNewLoker({ ...BLANK_LOKER });
+        await loadData();
+        showToast(
+          editingLokerId
+            ? 'Perubahan info lowongan kerja berhasil disimpan.'
+            : 'Info lowongan kerja berhasil disimpan dan diterbitkan.'
+        );
       } else {
         showToast('Gagal menerbitkan lowongan kerja.');
       }
@@ -664,7 +725,7 @@ export default function AdminDashboardClient() {
             </button>
             <button
               type="button"
-              onClick={() => setAgendaModalOpen(true)}
+              onClick={() => openAgendaCreate()}
               className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 rounded-lg bg-[#92400E] hover:bg-[#78350F] text-white text-sm font-semibold transition-colors cursor-pointer shadow-xs"
             >
               <Calendar className="w-4 h-4" />
@@ -672,7 +733,7 @@ export default function AdminDashboardClient() {
             </button>
             <button
               type="button"
-              onClick={() => setLokerModalOpen(true)}
+              onClick={() => openLokerCreate()}
               className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 rounded-lg bg-[#047857] hover:bg-[#065F46] text-white text-sm font-semibold transition-colors cursor-pointer shadow-xs"
             >
               <Briefcase className="w-4 h-4" />
@@ -979,6 +1040,14 @@ export default function AdminDashboardClient() {
                           Review Ulang
                         </button>
                       )}
+                      <button
+                        type="button"
+                        onClick={() => handleDeletePendaftar(item.id, item.namaLengkap)}
+                        className="min-h-[40px] w-10 inline-flex items-center justify-center rounded-lg text-red-700 hover:bg-red-50 transition-colors cursor-pointer"
+                        aria-label={`Hapus data ${item.namaLengkap}`}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -1001,7 +1070,7 @@ export default function AdminDashboardClient() {
               </div>
               <button
                 type="button"
-                onClick={() => setAgendaModalOpen(true)}
+                onClick={() => openAgendaCreate()}
                 className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 rounded-lg bg-[#0C2340] hover:bg-[#08182E] text-white text-sm font-semibold transition-colors cursor-pointer shadow-xs self-start sm:self-auto"
               >
                 <Plus className="w-4 h-4" />
@@ -1018,7 +1087,7 @@ export default function AdminDashboardClient() {
                 </p>
                 <button
                   type="button"
-                  onClick={() => setAgendaModalOpen(true)}
+                  onClick={() => openAgendaCreate()}
                   className="inline-flex items-center gap-2 min-h-[44px] px-4 py-2 rounded-lg bg-[#0C2340] text-white text-sm font-semibold hover:bg-[#08182E] transition-colors cursor-pointer"
                 >
                   <Plus className="w-4 h-4" />
@@ -1064,6 +1133,14 @@ export default function AdminDashboardClient() {
                     <div className="flex items-center justify-end gap-2 pt-3 border-t border-slate-200">
                       <button
                         type="button"
+                        onClick={() => openAgendaEdit(agenda)}
+                        className="inline-flex items-center gap-1 min-h-[36px] px-3 py-1 rounded-lg text-[#0C2340] hover:bg-slate-100 text-xs font-semibold transition-colors cursor-pointer"
+                      >
+                        <Pencil className="w-3.5 h-3.5" />
+                        Ubah Jadwal
+                      </button>
+                      <button
+                        type="button"
                         onClick={() => handleDeleteAgenda(agenda.id)}
                         className="inline-flex items-center gap-1 min-h-[36px] px-3 py-1 rounded-lg text-red-700 hover:bg-red-50 text-xs font-semibold transition-colors cursor-pointer"
                       >
@@ -1092,7 +1169,7 @@ export default function AdminDashboardClient() {
               </div>
               <button
                 type="button"
-                onClick={() => setLokerModalOpen(true)}
+                onClick={() => openLokerCreate()}
                 className="inline-flex items-center gap-1.5 min-h-[44px] px-4 py-2 rounded-lg bg-[#0C2340] hover:bg-[#08182E] text-white text-sm font-semibold transition-colors cursor-pointer shadow-xs self-start sm:self-auto"
               >
                 <Plus className="w-4 h-4 text-[#F59E0B]" />
@@ -1140,7 +1217,7 @@ export default function AdminDashboardClient() {
                 </p>
                 <button
                   type="button"
-                  onClick={() => setLokerModalOpen(true)}
+                  onClick={() => openLokerCreate()}
                   className="inline-flex items-center gap-2 min-h-[44px] px-5 py-2.5 rounded-lg bg-[#0C2340] text-white text-sm font-semibold hover:bg-[#08182E] transition-colors cursor-pointer"
                 >
                   <Plus className="w-4 h-4 text-[#F59E0B]" />
@@ -1202,6 +1279,14 @@ export default function AdminDashboardClient() {
                       >
                         Lihat di Halaman Publik →
                       </Link>
+                      <button
+                        type="button"
+                        onClick={() => openLokerEdit(loker)}
+                        className="inline-flex items-center gap-1 min-h-[36px] px-3 py-1 rounded-lg text-[#0C2340] hover:bg-slate-100 text-xs font-semibold transition-colors cursor-pointer"
+                      >
+                        <Pencil className="w-3.5 h-3.5" />
+                        Ubah Loker
+                      </button>
                       <button
                         type="button"
                         onClick={() => handleDeleteLoker(loker.id)}
@@ -2133,7 +2218,7 @@ export default function AdminDashboardClient() {
         <DialogContent className="max-w-lg bg-white border border-slate-200 shadow-xl p-6 sm:p-8 rounded-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader className="space-y-1.5 border-b border-slate-200 pb-3">
             <DialogTitle className="text-xl font-bold text-[#0C2340]">
-              Buat Jadwal Kopdar Baru
+              {editingAgendaId ? 'Ubah Jadwal Kopdar' : 'Buat Jadwal Kopdar Baru'}
             </DialogTitle>
             <DialogDescription className="text-xs text-[#475569]">
               Agenda yang disimpan langsung terbit pada halaman Jadwal Kopdar publik (/kegiatan).
@@ -2275,7 +2360,7 @@ export default function AdminDashboardClient() {
         <DialogContent className="max-w-xl bg-white border border-slate-200 shadow-xl p-6 sm:p-8 rounded-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader className="space-y-1.5 border-b border-slate-200 pb-3">
             <DialogTitle className="text-xl font-bold text-[#0C2340]">
-              Terbitkan Info Lowongan Kerja Baru
+              {editingLokerId ? 'Ubah Info Lowongan Kerja' : 'Terbitkan Info Lowongan Kerja Baru'}
             </DialogTitle>
             <DialogDescription className="text-xs text-[#475569]">
               Lowongan yang disimpan langsung tampil di halaman publik Mentoring &amp; Kerja (/peluang#loker).

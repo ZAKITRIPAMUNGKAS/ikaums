@@ -255,8 +255,13 @@ export async function deletePendaftar(id: string): Promise<boolean> {
 
   if (supabase) {
     try {
-      const { error } = await supabase.from('pendaftar').delete().eq('id', id);
+      const { data, error } = await supabase
+        .from('pendaftar')
+        .delete()
+        .eq('id', id)
+        .select('id');
       if (!error) {
+        if (!data || data.length === 0) return false;
         const localList = await getLocalPendaftar();
         await saveLocalPendaftar(localList.filter((p) => p.id !== id));
         return true;
@@ -268,6 +273,7 @@ export async function deletePendaftar(id: string): Promise<boolean> {
 
   try {
     const list = await getLocalPendaftar();
+    if (!list.some((p) => p.id === id)) return false;
     await saveLocalPendaftar(list.filter((p) => p.id !== id));
     return true;
   } catch {

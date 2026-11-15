@@ -3,6 +3,7 @@ import {
   getAllPendaftar,
   savePendaftar,
   updatePendaftarStatus,
+  deletePendaftar,
   exportPendaftarCsv,
 } from '@/lib/pendaftaran-store';
 import { getServerSession } from '@/lib/server-auth';
@@ -168,5 +169,30 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ success: true, message: `Status berhasil diubah menjadi ${status}` });
   } catch {
     return NextResponse.json({ error: 'Gagal memperbarui status' }, { status: 500 });
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  const session = await getServerSession();
+  const isAdmin = session?.role === 'admin' || IS_DEMO_MODE;
+  if (!isAdmin) {
+    return NextResponse.json({ error: 'Akses ditolak' }, { status: 403 });
+  }
+
+  try {
+    const body = await request.json().catch(() => ({}));
+    const { id } = body;
+    if (!id) {
+      return NextResponse.json({ error: 'ID pendaftar diperlukan' }, { status: 400 });
+    }
+
+    const success = await deletePendaftar(id);
+    if (!success) {
+      return NextResponse.json({ error: 'Catatan tidak ditemukan' }, { status: 404 });
+    }
+
+    return NextResponse.json({ success: true, message: 'Data pendaftar berhasil dihapus.' });
+  } catch {
+    return NextResponse.json({ error: 'Gagal menghapus data pendaftar' }, { status: 500 });
   }
 }
