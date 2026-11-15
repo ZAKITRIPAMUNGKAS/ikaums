@@ -4,37 +4,89 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Map, Marker, setWorkerUrl } from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import jabodetabekGeoJSON from '@/data/jabodetabek-geojson.json';
-import {
-  REGIONS_METADATA,
-  JABODETABEK_BOUNDS,
-  JABODETABEK_CENTER,
-} from '@/data/jabodetabek-geo-meta';
+import { JABODETABEK_BOUNDS, JABODETABEK_CENTER } from '@/data/jabodetabek-geo-meta';
 import { Plus, Minus, RotateCcw } from 'lucide-react';
 
 if (typeof window !== 'undefined') {
   setWorkerUrl('/maplibre-gl-worker.mjs');
 }
 
+export const KAWASAN_REGION_IDS: Record<string, string[]> = {
+  Jakarta: ['jkt-selatan', 'jkt-pusat', 'jkt-barat', 'jkt-timur', 'jkt-utara'],
+  Tangerang: ['tangerang'],
+  Bekasi: ['bekasi'],
+  Depok: ['depok'],
+  Bogor: ['bogor'],
+};
+
+export const KAWASAN_MARKERS = [
+  {
+    nama: 'Jakarta',
+    count: 589,
+    lngLat: [106.827, -6.220] as [number, number],
+    bounds: [
+      [106.68, -6.37],
+      [106.98, -6.08],
+    ] as [[number, number], [number, number]],
+  },
+  {
+    nama: 'Tangerang',
+    count: 126,
+    lngLat: [106.580, -6.220] as [number, number],
+    bounds: [
+      [106.33, -6.45],
+      [106.75, -6.00],
+    ] as [[number, number], [number, number]],
+  },
+  {
+    nama: 'Bekasi',
+    count: 117,
+    lngLat: [107.030, -6.240] as [number, number],
+    bounds: [
+      [106.88, -6.42],
+      [107.30, -5.92],
+    ] as [[number, number], [number, number]],
+  },
+  {
+    nama: 'Depok',
+    count: 93,
+    lngLat: [106.818, -6.402] as [number, number],
+    bounds: [
+      [106.72, -6.46],
+      [106.90, -6.34],
+    ] as [[number, number], [number, number]],
+  },
+  {
+    nama: 'Bogor',
+    count: 86,
+    lngLat: [106.800, -6.595] as [number, number],
+    bounds: [
+      [106.40, -6.79],
+      [107.15, -6.39],
+    ] as [[number, number], [number, number]],
+  },
+];
+
 interface HomeMapWidgetProps {
-  selectedRegionId: string;
-  onSelectRegion: (regionId: string) => void;
+  selectedKawasan: string;
+  onSelectKawasan: (kawasan: string) => void;
 }
 
 export default function HomeMapWidget({
-  selectedRegionId,
-  onSelectRegion,
+  selectedKawasan,
+  onSelectKawasan,
 }: HomeMapWidgetProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<Map | null>(null);
-  const markersRef = useRef<Marker[]>([]);
+  const markersRef = useRef<{ marker: Marker; nama: string }[]>([]);
   const [, setIsMapLoaded] = useState(false);
 
-  const initialSelectedRef = useRef(selectedRegionId);
-  const onSelectRef = useRef(onSelectRegion);
+  const initialKawasanRef = useRef(selectedKawasan);
+  const onSelectRef = useRef(onSelectKawasan);
 
   useEffect(() => {
-    onSelectRef.current = onSelectRegion;
-  }, [onSelectRegion]);
+    onSelectRef.current = onSelectKawasan;
+  }, [onSelectKawasan]);
 
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
@@ -44,65 +96,48 @@ export default function HomeMapWidget({
       [JABODETABEK_BOUNDS[1][0], JABODETABEK_BOUNDS[1][1]],
     ];
 
+    const initialRegionIds = KAWASAN_REGION_IDS[initialKawasanRef.current] || ['jkt-selatan'];
+
     const map = new Map({
       container: mapContainerRef.current,
       style: {
         version: 8,
         glyphs: 'https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf',
         sources: {
-          'esri-canvas': {
-            type: 'raster',
-            tiles: [
-              'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}',
-            ],
-            tileSize: 256,
-            attribution: '© Esri',
-          },
           'jabodetabek-alumni': {
             type: 'geojson',
             data: jabodetabekGeoJSON as unknown as GeoJSON.GeoJSON,
           },
         },
         layers: [
+          // Background menyatu persis dengan kartu (#F8FAFC)
           {
             id: 'background-fill',
             type: 'background',
-            paint: { 'background-color': '#F6F5F0' },
+            paint: { 'background-color': '#F8FAFC' },
           },
-          {
-            id: 'basemap-tiles',
-            type: 'raster',
-            source: 'esri-canvas',
-            paint: { 'raster-opacity': 0.75, 'raster-saturation': -0.1 },
-          },
+          // Poligon dasar wilayah (abu-abu slate lembut)
           {
             id: 'jabodetabek-fill',
             type: 'fill',
             source: 'jabodetabek-alumni',
             paint: {
-              'fill-color': [
-                'interpolate',
-                ['linear'],
-                ['get', 'count'],
-                70,
-                '#CBD8E6',
-                90,
-                '#98B5D3',
-                115,
-                '#4B76A6',
-                180,
-                '#102A54',
-              ],
-              'fill-opacity': 0.85,
+              'fill-color': '#E2E8F0',
+              'fill-opacity': 0.8,
             },
           },
+          // Poligon wilayah aktif yang dipilih (Deep Navy)
           {
             id: 'jabodetabek-selected-fill',
             type: 'fill',
             source: 'jabodetabek-alumni',
-            paint: { 'fill-color': '#0B1D3A', 'fill-opacity': 0.75 },
-            filter: ['==', ['get', 'regionId'], initialSelectedRef.current],
+            paint: {
+              'fill-color': '#0C2340',
+              'fill-opacity': 0.92,
+            },
+            filter: ['match', ['get', 'regionId'], initialRegionIds, true, false],
           },
+          // Garis batas antar wilayah (putih bersih)
           {
             id: 'jabodetabek-borders',
             type: 'line',
@@ -110,15 +145,19 @@ export default function HomeMapWidget({
             paint: {
               'line-color': '#FFFFFF',
               'line-width': 1.5,
-              'line-opacity': 0.9,
+              'line-opacity': 0.95,
             },
           },
+          // Outline emas Surya untuk wilayah terpilih
           {
             id: 'jabodetabek-selected-border',
             type: 'line',
             source: 'jabodetabek-alumni',
-            paint: { 'line-color': '#D97706', 'line-width': 3 },
-            filter: ['==', ['get', 'regionId'], initialSelectedRef.current],
+            paint: {
+              'line-color': '#D97706',
+              'line-width': 2.5,
+            },
+            filter: ['match', ['get', 'regionId'], initialRegionIds, true, false],
           },
         ],
       },
@@ -139,110 +178,150 @@ export default function HomeMapWidget({
 
       map.resize();
       map.fitBounds(bounds, {
-        padding: { top: 25, bottom: 25, left: 20, right: 20 },
-        duration: 600,
+        padding: { top: 20, bottom: 20, left: 15, right: 15 },
+        duration: 500,
       });
 
-      REGIONS_METADATA.forEach((region) => {
+      // Buat 5 Marker Bersih & Terpadu (Tidak tumpang tindih)
+      KAWASAN_MARKERS.forEach((k) => {
         const el = document.createElement('div');
-        el.className = 'felt-region-marker';
-        el.dataset.regionId = region.regionId;
+        el.className = 'felt-kawasan-marker cursor-pointer select-none';
+        el.dataset.kawasan = k.nama;
+
+        const isInitActive = k.nama === initialKawasanRef.current;
 
         const btn = document.createElement('button');
         btn.type = 'button';
-        btn.className = `flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-semibold shadow-xs transition-all duration-200 border cursor-pointer select-none ${
-          region.regionId === initialSelectedRef.current
-            ? 'bg-[#0B1D3A] text-white border-[#D97706] ring-2 ring-[#D97706]/40 font-bold'
-            : 'bg-white/95 text-[#0C1222] border-slate-300 hover:bg-slate-100'
+        btn.className = `flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs transition-all duration-200 border cursor-pointer ${
+          isInitActive
+            ? 'bg-[#0C2340] text-white border-[#D97706] ring-2 ring-[#D97706]/40 shadow-md font-bold scale-105'
+            : 'bg-white/95 text-[#0C2340] border-slate-300 hover:bg-slate-50 hover:border-slate-400 shadow-2xs font-medium'
         }`;
 
-        const countSpan = document.createElement('span');
-        countSpan.className = `text-[11px] font-bold ${
-          region.regionId === initialSelectedRef.current ? 'text-[#F59E0B]' : 'text-[#92400E]'
+        // Titik indikator kecil
+        const dot = document.createElement('span');
+        dot.className = `w-1.5 h-1.5 rounded-full ${
+          isInitActive ? 'bg-[#F59E0B]' : 'bg-[#D97706]'
         }`;
-        countSpan.textContent = String(region.count);
-        btn.appendChild(countSpan);
+        btn.appendChild(dot);
 
-        const labelSpan = document.createElement('span');
-        labelSpan.className = 'text-[11px] tracking-tight';
-        labelSpan.textContent = region.shortName;
-        btn.appendChild(labelSpan);
+        // Label Nama
+        const label = document.createElement('span');
+        label.textContent = k.nama;
+        btn.appendChild(label);
+
+        // Separator
+        const sep = document.createElement('span');
+        sep.className = isInitActive ? 'text-white/40' : 'text-slate-300';
+        sep.textContent = '·';
+        btn.appendChild(sep);
+
+        // Angka Alumni
+        const count = document.createElement('span');
+        count.className = `font-bold ${isInitActive ? 'text-[#F59E0B]' : 'text-[#B45309]'}`;
+        count.textContent = String(k.count);
+        btn.appendChild(count);
 
         btn.addEventListener('click', (e) => {
           e.stopPropagation();
-          onSelectRef.current(region.regionId);
+          onSelectRef.current(k.nama);
         });
 
         el.appendChild(btn);
 
         const marker = new Marker({ element: el })
-          .setLngLat(region.center)
+          .setLngLat(k.lngLat)
           .addTo(map);
 
-        markersRef.current.push(marker);
+        markersRef.current.push({ marker, nama: k.nama });
       });
 
+      // Klik poligon wilayah langsung memilih kawasan
       map.on('click', 'jabodetabek-fill', (e) => {
         if (!e.features || e.features.length === 0) return;
-        const clickedId = e.features[0].properties?.regionId;
-        if (clickedId) {
-          onSelectRef.current(clickedId);
+        const regionId = e.features[0].properties?.regionId;
+        if (!regionId) return;
+
+        // Cari kawasan yang menaungi regionId ini
+        for (const [kawasanNama, rIds] of Object.entries(KAWASAN_REGION_IDS)) {
+          if (rIds.includes(regionId)) {
+            onSelectRef.current(kawasanNama);
+            break;
+          }
         }
       });
     });
 
     return () => {
-      markersRef.current.forEach((m) => m.remove());
+      markersRef.current.forEach((m) => m.marker.remove());
       markersRef.current = [];
       map.remove();
       mapRef.current = null;
     };
   }, []);
 
-  // Update selection highlight & flyTo
+  // Update selection highlight & flyTo bila selectedKawasan berubah
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
 
     try {
+      const regionIds = KAWASAN_REGION_IDS[selectedKawasan] || ['jkt-selatan'];
+
       if (map.getLayer('jabodetabek-selected-fill')) {
-        map.setFilter('jabodetabek-selected-fill', ['==', ['get', 'regionId'], selectedRegionId]);
+        map.setFilter('jabodetabek-selected-fill', [
+          'match',
+          ['get', 'regionId'],
+          regionIds,
+          true,
+          false,
+        ]);
       }
       if (map.getLayer('jabodetabek-selected-border')) {
-        map.setFilter('jabodetabek-selected-border', ['==', ['get', 'regionId'], selectedRegionId]);
+        map.setFilter('jabodetabek-selected-border', [
+          'match',
+          ['get', 'regionId'],
+          regionIds,
+          true,
+          false,
+        ]);
       }
 
-      // Update button styling on markers
-      markersRef.current.forEach((marker) => {
+      // Update styling marker buttons
+      markersRef.current.forEach(({ marker, nama }) => {
         const el = marker.getElement();
-        const rId = el.dataset.regionId;
         const btn = el.querySelector('button');
-        const countSpan = el.querySelector('span:first-child');
+        const countSpan = el.querySelector('span:last-child');
+        const dot = el.querySelector('span:first-child');
         if (!btn) return;
 
-        if (rId === selectedRegionId) {
+        const isActive = nama === selectedKawasan;
+        if (isActive) {
           btn.className =
-            'flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-bold shadow-md transition-all duration-200 border cursor-pointer select-none bg-[#0B1D3A] text-white border-[#D97706] ring-2 ring-[#D97706]/40 scale-105';
-          if (countSpan) countSpan.className = 'text-[11px] font-bold text-[#F59E0B]';
+            'flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs transition-all duration-200 border cursor-pointer bg-[#0C2340] text-white border-[#D97706] ring-2 ring-[#D97706]/40 shadow-md font-bold scale-105';
+          if (countSpan) countSpan.className = 'font-bold text-[#F59E0B]';
+          if (dot) dot.className = 'w-1.5 h-1.5 rounded-full bg-[#F59E0B]';
         } else {
           btn.className =
-            'flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-semibold shadow-xs transition-all duration-200 border cursor-pointer select-none bg-white/95 text-[#0C1222] border-slate-300 hover:bg-slate-100';
-          if (countSpan) countSpan.className = 'text-[11px] font-bold text-[#92400E]';
+            'flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs transition-all duration-200 border cursor-pointer bg-white/95 text-[#0C2340] border-slate-300 hover:bg-slate-50 hover:border-slate-400 shadow-2xs font-medium';
+          if (countSpan) countSpan.className = 'font-bold text-[#B45309]';
+          if (dot) dot.className = 'w-1.5 h-1.5 rounded-full bg-[#D97706]';
         }
       });
 
-      const selectedRegion = REGIONS_METADATA.find((r) => r.regionId === selectedRegionId);
-      if (selectedRegion) {
-        map.fitBounds(selectedRegion.bounds, {
-          padding: { top: 30, bottom: 30, left: 30, right: 30 },
+      // Fit bounds ke kawasan yang dipilih
+      const targetMarker = KAWASAN_MARKERS.find((k) => k.nama === selectedKawasan);
+      if (targetMarker) {
+        map.fitBounds(targetMarker.bounds, {
+          padding: { top: 25, bottom: 25, left: 25, right: 25 },
           maxZoom: 10.5,
-          duration: 500,
+          duration: 600,
         });
       }
     } catch {
       // Abaikan jika map belum siap
     }
-  }, [selectedRegionId]);
+  }, [selectedKawasan]);
 
   const handleZoomIn = () => mapRef.current?.zoomIn();
   const handleZoomOut = () => mapRef.current?.zoomOut();
@@ -254,16 +333,16 @@ export default function HomeMapWidget({
         [JABODETABEK_BOUNDS[0][0], JABODETABEK_BOUNDS[0][1]],
         [JABODETABEK_BOUNDS[1][0], JABODETABEK_BOUNDS[1][1]],
       ],
-      { padding: { top: 25, bottom: 25, left: 20, right: 20 }, duration: 600 }
+      { padding: { top: 20, bottom: 20, left: 15, right: 15 }, duration: 600 }
     );
   };
 
   return (
-    <div className="relative w-full h-[320px] sm:h-[360px] lg:h-[380px] rounded-2xl overflow-hidden border border-slate-200/90 shadow-xs bg-[#F6F5F0]">
+    <div className="relative w-full h-[320px] sm:h-[360px] lg:h-[390px] rounded-2xl overflow-hidden bg-[#F8FAFC]">
       <div ref={mapContainerRef} className="w-full h-full" />
 
-      {/* Navigasi Zoom & Reset */}
-      <div className="absolute top-2.5 right-2.5 z-10 flex flex-col bg-white/95 backdrop-blur-xs rounded-lg shadow-sm border border-slate-200 overflow-hidden">
+      {/* Kontrol Zoom Minimalis & Seamless */}
+      <div className="absolute top-3 right-3 z-10 flex flex-col bg-white/90 backdrop-blur-md rounded-xl shadow-xs border border-slate-200/80 overflow-hidden">
         <button
           type="button"
           onClick={handleZoomIn}
@@ -290,9 +369,9 @@ export default function HomeMapWidget({
         </button>
       </div>
 
-      {/* Label Kredibilitas Geografis Nyata */}
-      <div className="absolute bottom-2 left-2 z-10 bg-white/90 backdrop-blur-xs px-2.5 py-1 rounded-md border border-slate-200/80 text-[10px] text-slate-600 font-medium shadow-2xs">
-        Batas Administrasi BPS · Esri Basemap
+      {/* Label Kredibilitas Geografis Nyata & Seamless */}
+      <div className="absolute bottom-2.5 left-2.5 z-10 bg-white/85 backdrop-blur-xs px-2.5 py-1 rounded-md border border-slate-200/60 text-[10px] text-slate-500 font-medium">
+        Batas Wilayah BPS · Geografis Jabodetabek
       </div>
     </div>
   );

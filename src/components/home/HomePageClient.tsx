@@ -35,35 +35,30 @@ const KAWASAN_LIST = [
     nama: 'Jakarta',
     sublabel: 'Tebet · Blok M · Rawamangun',
     count: 589,
-    regionId: 'jkt-selatan',
     slug: 'Jakarta',
   },
   {
     nama: 'Tangerang',
     sublabel: 'BSD City · Bintaro · Serpong',
     count: 126,
-    regionId: 'tangerang',
     slug: 'Tangerang',
   },
   {
     nama: 'Bekasi',
     sublabel: 'Summarecon & Harapan Indah',
     count: 117,
-    regionId: 'bekasi',
     slug: 'Bekasi',
   },
   {
     nama: 'Depok',
     sublabel: 'Margonda & Cinere',
     count: 93,
-    regionId: 'depok',
     slug: 'Depok',
   },
   {
     nama: 'Bogor',
     sublabel: 'Pajajaran & Sentul City',
     count: 86,
-    regionId: 'bogor',
     slug: 'Bogor',
   },
 ];
@@ -93,7 +88,7 @@ interface HomePageClientProps {
 
 export function HomePageClient({ landing, cerita }: HomePageClientProps) {
   const [selectedWilayah, setSelectedWilayah] = useState('Jakarta Selatan');
-  const [selectedRegionId, setSelectedRegionId] = useState('jkt-selatan');
+  const [selectedKawasan, setSelectedKawasan] = useState('Jakarta');
   const [showFormModal, setShowFormModal] = useState(false);
 
   const handleOpenKopdar = (wilayahTarget?: string) => {
@@ -304,35 +299,35 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
                 </div>
               </div>
 
-              {/* Sisi Tengah: Peta Kartografi Nyata Esri / MapLibre */}
+              {/* Sisi Tengah: Peta Kartografi Nyata & Seamless */}
               <div className="lg:col-span-4 flex flex-col items-center justify-center py-2 lg:py-0 w-full">
                 <HomeMapWidget
-                  selectedRegionId={selectedRegionId}
-                  onSelectRegion={(rId) => setSelectedRegionId(rId)}
+                  selectedKawasan={selectedKawasan}
+                  onSelectKawasan={(k) => setSelectedKawasan(k)}
                 />
               </div>
 
               {/* Sisi Kanan: Daftar 5 Kawasan Terpadu (Data Riil & Interaktif) */}
               <div className="space-y-2 lg:col-span-4">
                 {KAWASAN_LIST.map((kawasan) => {
-                  const isSelected = selectedRegionId === kawasan.regionId;
+                  const isSelected = selectedKawasan === kawasan.nama;
 
                   return (
                     <div
                       key={kawasan.nama}
                       role="button"
                       tabIndex={0}
-                      onClick={() => setSelectedRegionId(kawasan.regionId)}
+                      onClick={() => setSelectedKawasan(kawasan.nama)}
                       onKeyDown={(e) => {
                         if (e.key === 'Enter' || e.key === ' ') {
                           e.preventDefault();
-                          setSelectedRegionId(kawasan.regionId);
+                          setSelectedKawasan(kawasan.nama);
                         }
                       }}
                       title={`Sorot kawasan ${kawasan.nama} di peta`}
                       className={`flex items-center justify-between p-3 sm:p-3.5 rounded-xl border transition-all cursor-pointer ${
                         isSelected
-                          ? 'bg-white border-[#0C2340] shadow-md ring-1 ring-[#0C2340]'
+                          ? 'bg-white border-[#0C2340] shadow-md ring-1.5 ring-[#0C2340]'
                           : 'bg-white border-slate-200/80 shadow-2xs hover:border-[#0C2340]/40 hover:shadow-xs'
                       }`}
                     >
@@ -357,7 +352,13 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
                       </div>
 
                       <div className="flex items-center gap-2 shrink-0">
-                        <span className="text-xs px-2.5 py-1 rounded-md font-semibold bg-amber-50 text-[#B45309] border border-amber-200/80">
+                        <span
+                          className={`text-xs px-2.5 py-1 rounded-md font-semibold transition-colors ${
+                            isSelected
+                              ? 'bg-[#0C2340] text-white'
+                              : 'bg-amber-50 text-[#B45309] border border-amber-200/80'
+                          }`}
+                        >
                           {kawasan.count.toLocaleString('id-ID')} alumni
                         </span>
                         <ChevronRight
