@@ -25,6 +25,9 @@ import {
   Upload,
   X,
   Sparkles,
+  Edit3,
+  Home,
+  Clock,
 } from 'lucide-react';
 
 const SUBMISSIONS_KEY = 'ikaums_prelaunch_submissions';
@@ -1031,59 +1034,97 @@ export default function GabungPage() {
               </p>
             </div>
 
-            <div className="bg-slate-100 border border-slate-200 rounded-xl p-4 sm:p-5 text-left text-base text-[#334155] space-y-2 leading-[1.6]">
-              <p className="font-bold text-[#0C2340]">Apa langkah selanjutnya?</p>
-              <ul className="list-disc pl-5 space-y-1.5 text-[#475569]">
-                <li>
-                  Pengurus wilayah akan memeriksa kesesuaian data alumni {COMMUNITY_PLACEHOLDERS.verificationSla}.
-                </li>
-                <li>
-                  Setelah terdata, kamu akan dihubungi lewat WhatsApp ketika jadwal kopdar pertama di{' '}
-                  <strong className="text-[#0C2340]">{formData.wilayah}</strong> ditetapkan.
-                </li>
-                <li>
-                  Status izin Daftar Anggota kamu:{' '}
-                  <strong className="text-[#0C2340]">
-                    {formData.tampilDiDirektori ? 'Boleh tampil (setelah anggota masuk)' : 'Tidak ditampilkan'}
-                  </strong>.
-                </li>
-                <li>
-                  Jika perlu memperbarui atau menghapus data, hubungi pengurus di{' '}
+            <div className="bg-slate-50/80 border border-slate-200/90 rounded-2xl p-5 sm:p-6 text-left space-y-4 shadow-2xs">
+              <div className="flex items-center gap-2.5 pb-2 border-b border-slate-200/70">
+                <div className="w-7 h-7 rounded-lg bg-[#0C2340]/5 text-[#D97706] flex items-center justify-center">
+                  <Clock className="w-4 h-4" />
+                </div>
+                <p className="font-bold text-[#0C2340] text-base">Apa langkah selanjutnya?</p>
+              </div>
+
+              <div className="space-y-3 text-sm sm:text-base text-[#475569] leading-relaxed">
+                <div className="flex items-start gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-amber-100 text-[#92400E] font-bold text-xs flex items-center justify-center mt-0.5">
+                    1
+                  </span>
+                  <div>
+                    <strong className="text-[#0C2340] font-semibold">Verifikasi Pengurus: </strong>
+                    Data alumni kamu akan divalidasi oleh pengurus wilayah secara bertahap.
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-amber-100 text-[#92400E] font-bold text-xs flex items-center justify-center mt-0.5">
+                    2
+                  </span>
+                  <div>
+                    <strong className="text-[#0C2340] font-semibold">Undangan Kopdar: </strong>
+                    Kamu akan dihubungi via WhatsApp ketika jadwal temu alumni di{' '}
+                    <strong className="text-[#0C2340]">{formData.wilayah}</strong> diagendakan.
+                  </div>
+                </div>
+
+                <div className="flex items-start gap-3">
+                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-amber-100 text-[#92400E] font-bold text-xs flex items-center justify-center mt-0.5">
+                    3
+                  </span>
+                  <div>
+                    <strong className="text-[#0C2340] font-semibold">Izin Direktori: </strong>
+                    Status:{' '}
+                    <span className="font-semibold text-[#0C2340]">
+                      {formData.tampilDiDirektori
+                        ? 'Boleh tampil di direktori (setelah diverifikasi)'
+                        : 'Privat (tidak ditampilkan publik)'}
+                    </span>.
+                  </div>
+                </div>
+
+                <div className="pt-2 border-t border-slate-200/60 text-xs sm:text-sm text-slate-500">
+                  Jika perlu memperbarui atau menghapus data, hubungi sekretariat di{' '}
                   <span className="font-medium text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.contactWhatsapp}</span>.
-                </li>
-              </ul>
+                </div>
+              </div>
             </div>
 
-            <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3">
-              <Link
-                href="/app"
-                className="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 py-2.5 rounded-lg bg-[#D97706] hover:bg-[#B45309] text-white text-sm font-bold transition-colors shadow-2xs"
-              >
-                <span>Buka Ruang Anggota</span>
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <a
-                href={whatsappShareUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 min-h-[44px] px-5 py-2.5 rounded-lg bg-[#0C2340] hover:bg-[#16325C] text-white text-sm font-semibold transition-colors"
-              >
-                <Share2 className="w-4 h-4 text-[#F59E0B]" />
-                Bagikan ke grup WhatsApp alumni
-              </a>
-              <button
-                type="button"
-                onClick={() => setSubmitted(false)}
-                className="inline-flex items-center justify-center min-h-[44px] px-5 py-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-[#0C2340] text-sm font-semibold transition-colors cursor-pointer"
-              >
-                Ubah data formulir
-              </button>
-              <Link
-                href="/"
-                className="inline-flex items-center justify-center min-h-[44px] px-5 py-2.5 rounded-lg border border-slate-200 hover:border-slate-300 text-[#0C2340] text-sm font-semibold transition-colors"
-              >
-                Kembali ke Beranda
-              </Link>
+            <div className="pt-2 space-y-3 w-full">
+              {/* Tombol Aksi Utama (2 Kolom Lebar & Proporsional) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <Link
+                  href="/app"
+                  className="inline-flex items-center justify-center gap-2 min-h-[48px] px-5 py-3 rounded-xl bg-[#D97706] hover:bg-[#B45309] active:scale-[0.99] text-white text-sm sm:text-base font-bold transition-all shadow-sm"
+                >
+                  <span>Buka Ruang Anggota</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+                <a
+                  href={whatsappShareUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 min-h-[48px] px-5 py-3 rounded-xl bg-[#0C2340] hover:bg-[#16325C] active:scale-[0.99] text-white text-sm sm:text-base font-semibold transition-all shadow-sm"
+                >
+                  <Share2 className="w-4 h-4 text-[#F59E0B]" />
+                  <span>Bagikan ke Grup Alumni</span>
+                </a>
+              </div>
+
+              {/* Tombol Aksi Sekunder (Elegan, Tenang, Rapi) */}
+              <div className="flex flex-wrap items-center justify-center gap-2.5 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setSubmitted(false)}
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
+                >
+                  <Edit3 className="w-3.5 h-3.5 text-slate-500" />
+                  <span>Ubah data formulir</span>
+                </button>
+                <Link
+                  href="/"
+                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-semibold transition-colors"
+                >
+                  <Home className="w-3.5 h-3.5 text-slate-500" />
+                  <span>Kembali ke Beranda</span>
+                </Link>
+              </div>
             </div>
           </section>
             </div>
