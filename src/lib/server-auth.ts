@@ -13,7 +13,7 @@ export interface ServerSession {
 const textEncoder = new TextEncoder();
 
 export function getSessionSecret(): string | null {
-  const secret = process.env.AUTH_SESSION_SECRET;
+  const secret = process.env.AUTH_SESSION_SECRET?.replace(/^[\uFEFF\s]+|[\uFEFF\s]+$/g, '');
   if (secret && secret.length >= 16) {
     return secret;
   }

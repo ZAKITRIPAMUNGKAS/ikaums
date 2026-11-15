@@ -1,10 +1,17 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey =
+function cleanEnv(val?: string): string | undefined {
+  if (!val) return undefined;
+  const cleaned = val.replace(/^[\uFEFF\s]+|[\uFEFF\s]+$/g, '');
+  return cleaned.length > 0 ? cleaned : undefined;
+}
+
+const supabaseUrl = cleanEnv(process.env.NEXT_PUBLIC_SUPABASE_URL);
+const supabaseAnonKey = cleanEnv(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
-  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
-const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+);
+const supabaseServiceRoleKey = cleanEnv(process.env.SUPABASE_SERVICE_ROLE_KEY);
 
 /**
  * Memeriksa apakah kredensial Supabase sudah terkonfigurasi dengan URL dan kunci yang valid.

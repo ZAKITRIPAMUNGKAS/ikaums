@@ -28,6 +28,13 @@ import {
   Edit3,
   Home,
   Clock,
+  ShieldCheck,
+  MessageSquare,
+  Eye,
+  EyeOff,
+  GraduationCap,
+  MapPin,
+  Phone,
 } from 'lucide-react';
 
 const SUBMISSIONS_KEY = 'ikaums_prelaunch_submissions';
@@ -981,134 +988,159 @@ export default function GabungPage() {
             </div>
           </>
         ) : (
-          <div className="pattern-surface pattern-dots pattern-tone-light pattern-fade-soft-edges py-10 sm:py-14 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-3xl mx-auto relative z-[1]">
-              <section className="surface-card rounded-2xl p-6 sm:p-10 text-center max-w-2xl mx-auto space-y-6">
-            <div className="relative mx-auto">
-              {fotoProfil ? (
-                <div className="relative h-20 w-20 overflow-hidden rounded-full border-2 border-[#D97706] shadow-md mx-auto">
-                  <Image
-                    src={fotoProfil}
-                    alt={formData.namaLengkap}
-                    fill
-                    unoptimized
-                    className="object-cover"
-                  />
-                </div>
-              ) : (
-                <div className="w-12 h-12 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center mx-auto">
-                  <CheckCircle2 className="w-6 h-6" />
-                </div>
-              )}
-            </div>
-
-            <div className="space-y-2.5">
-              <p className="text-base font-semibold text-[#92400E]">
-                Pendaftaran Tercatat
-              </p>
-              <h1 className="text-2xl sm:text-3xl font-bold text-[#0C2340]">
-                Terima kasih, {formData.namaLengkap}
-              </h1>
-              <p className="text-base text-[#475569] leading-[1.6]">
-                Data kamu ({formData.prodi}, Angkatan {formData.angkatan}, domisili{' '}
-                <strong className="text-[#0C2340]">{formData.wilayah}</strong>) telah dicatat dengan
-                nomor WhatsApp <strong className="text-[#0C2340]">{normalizedWa}</strong>.
-              </p>
-            </div>
-
-            <div className="bg-slate-50/80 border border-slate-200/90 rounded-2xl p-5 sm:p-6 text-left space-y-4 shadow-2xs">
-              <div className="flex items-center gap-2.5 pb-2 border-b border-slate-200/70">
-                <div className="w-7 h-7 rounded-lg bg-[#0C2340]/5 text-[#D97706] flex items-center justify-center">
-                  <Clock className="w-4 h-4" />
-                </div>
-                <p className="font-bold text-[#0C2340] text-base">Apa langkah selanjutnya?</p>
-              </div>
-
-              <div className="space-y-3 text-sm sm:text-base text-[#475569] leading-relaxed">
-                <div className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-amber-100 text-[#92400E] font-bold text-xs flex items-center justify-center mt-0.5">
-                    1
+          <div className="pattern-surface pattern-dots pattern-tone-light pattern-fade-soft-edges py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
+            <div className="max-w-xl mx-auto relative z-[1]">
+              <section className="surface-card rounded-2xl p-5 sm:p-8 text-center space-y-6 shadow-sm">
+                {/* Avatar / Foto Profil */}
+                <div className="relative mx-auto inline-block">
+                  {fotoProfil ? (
+                    <div className="relative h-20 w-20 sm:h-24 sm:w-24 overflow-hidden rounded-full border-3 border-[#D97706] shadow-md mx-auto">
+                      <Image
+                        src={fotoProfil}
+                        alt={formData.namaLengkap}
+                        fill
+                        unoptimized
+                        className="object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-200/80 text-emerald-600 flex items-center justify-center mx-auto shadow-2xs">
+                      <CheckCircle2 className="w-8 h-8" />
+                    </div>
+                  )}
+                  <span className="absolute -bottom-1 -right-1 inline-flex items-center justify-center w-6 h-6 rounded-full bg-emerald-600 text-white ring-2 ring-white">
+                    <CheckCircle2 className="w-4 h-4" />
                   </span>
-                  <div>
-                    <strong className="text-[#0C2340] font-semibold">Verifikasi Pengurus: </strong>
-                    Data alumni kamu akan divalidasi oleh pengurus wilayah secara bertahap.
+                </div>
+
+                {/* Judul & Sambutan */}
+                <div className="space-y-2">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/60 text-emerald-800 text-xs font-semibold">
+                    Pendaftaran Berhasil Dicatat
+                  </span>
+                  <h1 className="text-xl sm:text-2xl font-bold text-[#0C2340]">
+                    Terima kasih, {formData.namaLengkap}
+                  </h1>
+                  <p className="text-xs sm:text-sm text-slate-600 max-w-md mx-auto">
+                    Data alumni kamu telah kami terima dan masuk ke daftar tunggu verifikasi pengurus IKA UMS Jabodetabek.
+                  </p>
+                </div>
+
+                {/* Ringkasan Data Alumni (Badges / Pills Rapi) */}
+                <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-slate-700">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/80 font-medium">
+                    <GraduationCap className="w-3.5 h-3.5 text-[#0C2340]" />
+                    <span>{formData.prodi} • {formData.angkatan}</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/80 font-medium">
+                    <MapPin className="w-3.5 h-3.5 text-[#D97706]" />
+                    <span>{formData.wilayah}</span>
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200/80 font-medium">
+                    <Phone className="w-3.5 h-3.5 text-emerald-600" />
+                    <span>{normalizedWa}</span>
+                  </span>
+                </div>
+
+                {/* Kotak Langkah Selanjutnya (Card Modern Berikon) */}
+                <div className="bg-slate-50/90 border border-slate-200/80 rounded-xl p-4 sm:p-5 text-left space-y-3.5 shadow-2xs">
+                  <div className="flex items-center gap-2 pb-2.5 border-b border-slate-200/80">
+                    <div className="w-6 h-6 rounded-md bg-[#0C2340]/5 text-[#D97706] flex items-center justify-center">
+                      <Clock className="w-3.5 h-3.5" />
+                    </div>
+                    <p className="font-bold text-[#0C2340] text-sm">Apa langkah selanjutnya?</p>
+                  </div>
+
+                  <div className="space-y-3 text-xs sm:text-sm text-slate-600">
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-7 h-7 rounded-lg bg-blue-50 border border-blue-100 text-[#0C2340] flex items-center justify-center mt-0.5">
+                        <ShieldCheck className="w-4 h-4 text-[#0C2340]" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <strong className="text-[#0C2340] font-semibold block">1. Verifikasi Pengurus</strong>
+                        <span>Data alumni kamu akan divalidasi oleh pengurus wilayah secara bertahap.</span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-7 h-7 rounded-lg bg-amber-50 border border-amber-100 text-[#D97706] flex items-center justify-center mt-0.5">
+                        <MessageSquare className="w-4 h-4 text-[#D97706]" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <strong className="text-[#0C2340] font-semibold block">2. Undangan Kopdar Wilayah</strong>
+                        <span>
+                          Jadwal temu alumni di <strong className="text-[#0C2340] font-semibold">{formData.wilayah}</strong> akan dikabari via WhatsApp.
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 w-7 h-7 rounded-lg bg-emerald-50 border border-emerald-100 text-emerald-700 flex items-center justify-center mt-0.5">
+                        {formData.tampilDiDirektori ? (
+                          <Eye className="w-4 h-4 text-emerald-700" />
+                        ) : (
+                          <EyeOff className="w-4 h-4 text-slate-500" />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <strong className="text-[#0C2340] font-semibold block">3. Status Direktori Alumni</strong>
+                        <span>
+                          {formData.tampilDiDirektori
+                            ? 'Boleh tampil di direktori alumni (setelah diverifikasi).'
+                            : 'Privat (tidak ditampilkan di pencarian direktori publik).'}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="pt-2 border-t border-slate-200/70 text-[11px] sm:text-xs text-slate-500 flex items-center justify-between">
+                      <span>Perlu ubah data atau bantuan?</span>
+                      <span className="font-medium text-[#0C2340]">Dikonfirmasi saat verifikasi WA</span>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-amber-100 text-[#92400E] font-bold text-xs flex items-center justify-center mt-0.5">
-                    2
-                  </span>
-                  <div>
-                    <strong className="text-[#0C2340] font-semibold">Undangan Kopdar: </strong>
-                    Kamu akan dihubungi via WhatsApp ketika jadwal temu alumni di{' '}
-                    <strong className="text-[#0C2340]">{formData.wilayah}</strong> diagendakan.
+                {/* Tombol Aksi - RAPI, BERSIH & TIDAK MENUMPUK */}
+                <div className="pt-1 space-y-2.5 w-full">
+                  {/* Aksi Utama */}
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    <Link
+                      href="/app"
+                      className="inline-flex items-center justify-center gap-2 min-h-[46px] px-5 py-2.5 rounded-xl bg-[#D97706] hover:bg-[#B45309] active:scale-[0.99] text-white text-sm font-bold transition-all shadow-2xs"
+                    >
+                      <span>Buka Ruang Anggota</span>
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+                    <a
+                      href={whatsappShareUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center justify-center gap-2 min-h-[46px] px-5 py-2.5 rounded-xl bg-[#0C2340] hover:bg-[#16325C] active:scale-[0.99] text-white text-sm font-semibold transition-all shadow-2xs"
+                    >
+                      <Share2 className="w-4 h-4 text-[#F59E0B]" />
+                      <span>Bagikan ke Grup Alumni</span>
+                    </a>
+                  </div>
+
+                  {/* Aksi Navigasi Cepat (Berdampingan 50:50, Rapi di Mobile) */}
+                  <div className="grid grid-cols-2 gap-2.5 pt-0.5">
+                    <button
+                      type="button"
+                      onClick={() => setSubmitted(false)}
+                      className="inline-flex items-center justify-center gap-1.5 min-h-[40px] px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 active:scale-[0.99] text-slate-700 text-xs sm:text-sm font-medium transition-colors cursor-pointer"
+                    >
+                      <Edit3 className="w-3.5 h-3.5 text-slate-500" />
+                      <span>Ubah Formulir</span>
+                    </button>
+                    <Link
+                      href="/"
+                      className="inline-flex items-center justify-center gap-1.5 min-h-[40px] px-3 py-2 rounded-xl border border-slate-200 hover:bg-slate-50 active:scale-[0.99] text-slate-700 text-xs sm:text-sm font-medium transition-colors"
+                    >
+                      <Home className="w-3.5 h-3.5 text-slate-500" />
+                      <span>Ke Beranda</span>
+                    </Link>
                   </div>
                 </div>
-
-                <div className="flex items-start gap-3">
-                  <span className="flex-shrink-0 w-6 h-6 rounded-full bg-amber-100 text-[#92400E] font-bold text-xs flex items-center justify-center mt-0.5">
-                    3
-                  </span>
-                  <div>
-                    <strong className="text-[#0C2340] font-semibold">Izin Direktori: </strong>
-                    Status:{' '}
-                    <span className="font-semibold text-[#0C2340]">
-                      {formData.tampilDiDirektori
-                        ? 'Boleh tampil di direktori (setelah diverifikasi)'
-                        : 'Privat (tidak ditampilkan publik)'}
-                    </span>.
-                  </div>
-                </div>
-
-                <div className="pt-2 border-t border-slate-200/60 text-xs sm:text-sm text-slate-500">
-                  Jika perlu memperbarui atau menghapus data, hubungi sekretariat di{' '}
-                  <span className="font-medium text-[#0C2340]">{COMMUNITY_PLACEHOLDERS.contactWhatsapp}</span>.
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-2 space-y-3 w-full">
-              {/* Tombol Aksi Utama (2 Kolom Lebar & Proporsional) */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                <Link
-                  href="/app"
-                  className="inline-flex items-center justify-center gap-2 min-h-[48px] px-5 py-3 rounded-xl bg-[#D97706] hover:bg-[#B45309] active:scale-[0.99] text-white text-sm sm:text-base font-bold transition-all shadow-sm"
-                >
-                  <span>Buka Ruang Anggota</span>
-                  <ArrowRight className="w-4 h-4" />
-                </Link>
-                <a
-                  href={whatsappShareUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center gap-2 min-h-[48px] px-5 py-3 rounded-xl bg-[#0C2340] hover:bg-[#16325C] active:scale-[0.99] text-white text-sm sm:text-base font-semibold transition-all shadow-sm"
-                >
-                  <Share2 className="w-4 h-4 text-[#F59E0B]" />
-                  <span>Bagikan ke Grup Alumni</span>
-                </a>
-              </div>
-
-              {/* Tombol Aksi Sekunder (Elegan, Tenang, Rapi) */}
-              <div className="flex flex-wrap items-center justify-center gap-2.5 pt-1">
-                <button
-                  type="button"
-                  onClick={() => setSubmitted(false)}
-                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
-                >
-                  <Edit3 className="w-3.5 h-3.5 text-slate-500" />
-                  <span>Ubah data formulir</span>
-                </button>
-                <Link
-                  href="/"
-                  className="inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg border border-slate-200 hover:bg-slate-50 text-slate-700 text-xs sm:text-sm font-semibold transition-colors"
-                >
-                  <Home className="w-3.5 h-3.5 text-slate-500" />
-                  <span>Kembali ke Beranda</span>
-                </Link>
-              </div>
-            </div>
-          </section>
+              </section>
             </div>
           </div>
         )}

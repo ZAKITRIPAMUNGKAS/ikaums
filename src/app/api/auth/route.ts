@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
 
       // Verifikasi Kode Akses / PIN Pengurus untuk peran Admin
       if (role === 'admin') {
-        const expectedPasskey = process.env.ADMIN_PASSKEY;
+        const expectedPasskey = process.env.ADMIN_PASSKEY?.replace(/^[\uFEFF\s]+|[\uFEFF\s]+$/g, '');
         const providedPasskey = String(body.passkey || '').trim();
 
         if (!expectedPasskey || expectedPasskey.length < 8) {
