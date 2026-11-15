@@ -471,12 +471,12 @@ export function HomePageClient({ landing, cerita }: HomePageClientProps) {
         >
           <div className="rounded-3xl border border-slate-200/80 bg-white shadow-xs overflow-hidden">
             <div className="grid grid-cols-1 items-center lg:grid-cols-12 gap-6 lg:gap-8">
-              <div className="lg:col-span-5 h-64 sm:h-72 lg:h-full relative overflow-hidden bg-slate-100">
+              <div className="lg:col-span-5 h-64 sm:h-72 lg:h-full min-h-[260px] relative overflow-hidden bg-slate-100">
                 <Image
-                  src="/images/banner-mulai-dari-kotamu.png"
-                  alt="Alumni UMS berkumpul dalam kegiatan silaturahmi"
-                  width={385}
-                  height={150}
+                  src="/images/event-kopdar.jpg"
+                  alt="Pertemuan alumni Universitas Muhammadiyah Surakarta di Jabodetabek"
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 40vw"
                   className="w-full h-full object-cover"
                 />
               </div>

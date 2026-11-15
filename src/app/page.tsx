@@ -4,9 +4,9 @@ import { getCmsData } from '@/lib/cms-store';
 import { HomePageClient, type HomeCeritaItem } from '@/components/home/HomePageClient';
 
 const CERITA_IMAGES = [
-  '/images/cerita-kopdar-jakarta.png',
-  '/images/cerita-sarasehan-karier.png',
-  '/images/cerita-aksi-sosial.png',
+  '/images/hero-kumpul-bolo-pisah.jpg',
+  '/images/event-diskusi.jpg',
+  '/images/alumni-gathering-3.jpg',
 ];
 
 async function Beranda() {
