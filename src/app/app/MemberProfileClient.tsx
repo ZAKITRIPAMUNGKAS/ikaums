@@ -19,7 +19,6 @@ import {
   normalizeIndonesianWhatsApp,
   isValidEmail,
 } from '@/data/ums-prodi';
-import { DEMO_BADGE_LABEL } from '@/lib/config';
 import type { AgendaItem } from '@/lib/cms-store';
 import {
   ArrowRight,
@@ -340,7 +339,7 @@ export default function MemberProfileClient({
     if (editForm.whatsapp.trim()) {
       const validWa = normalizeIndonesianWhatsApp(editForm.whatsapp);
       if (!validWa) {
-        errors.whatsapp = 'Format nomor WhatsApp tidak valid (contoh: 081234567890).';
+        errors.whatsapp = 'Format nomor WhatsApp tidak valid. Masukkan nomor dengan awalan 08 atau +62.';
       }
     }
 
@@ -451,13 +450,14 @@ export default function MemberProfileClient({
                   <span className="font-semibold text-white">Ruang Anggota</span>
                 </nav>
 
-                <div className="flex items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2">
                   <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-400/30 bg-emerald-500/15 px-3 py-1 text-xs font-semibold text-emerald-200">
                     <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" aria-hidden="true" />
                     Anggota Terverifikasi
                   </span>
-                  <span className="rounded-full bg-[#F59E0B]/20 border border-[#F59E0B]/30 px-2.5 py-1 text-xs font-semibold text-[#FDE5B2]">
-                    {DEMO_BADGE_LABEL}
+                  <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/30 bg-amber-400/10 px-3 py-1 text-xs font-semibold text-amber-200">
+                    <MapPin className="h-3 w-3 text-[#F59E0B]" aria-hidden="true" />
+                    <span>{displayWilayah}</span>
                   </span>
                 </div>
               </div>
@@ -480,7 +480,7 @@ export default function MemberProfileClient({
                 </div>
 
                 {/* Hero Action Buttons */}
-                <div className="flex flex-wrap items-center gap-2.5 pt-1 sm:pt-0">
+                <div className="grid grid-cols-2 sm:flex items-center gap-2 sm:gap-2.5 pt-1 sm:pt-0 w-full sm:w-auto">
                   <button
                     type="button"
                     onClick={handleOpenEditModal}
@@ -502,11 +502,11 @@ export default function MemberProfileClient({
                     type="button"
                     onClick={handleLogout}
                     disabled={isLoggingOut}
-                    className="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-xl border border-rose-400/30 bg-rose-500/10 hover:bg-rose-500/20 px-3.5 py-2 text-xs sm:text-sm font-semibold text-rose-200 transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                    className="col-span-2 sm:col-span-1 inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-xl border border-rose-400/30 bg-rose-500/10 hover:bg-rose-500/20 px-3.5 py-2 text-xs sm:text-sm font-semibold text-rose-200 transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                     title="Keluar dari sesi akun"
                   >
                     <LogOut className="h-4 w-4" aria-hidden="true" />
-                    <span className="hidden sm:inline">Keluar</span>
+                    <span>Keluar</span>
                   </button>
                 </div>
               </div>
@@ -614,45 +614,45 @@ export default function MemberProfileClient({
                   </div>
                 </div>
 
-                {/* Info Attributes Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 rounded-xl bg-slate-50 border border-slate-200/90 p-4 text-xs sm:text-sm">
-                  <div className="flex items-center gap-2.5 text-[#334155]">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-[#92400E]">
-                      <GraduationCap className="h-4 w-4" aria-hidden="true" />
+                {/* Info Attributes Grid - Bento 2x2 Mobile & Desktop */}
+                <div className="grid grid-cols-2 gap-2 sm:gap-3 rounded-xl bg-slate-50 border border-slate-200/90 p-3 sm:p-4 text-xs sm:text-sm">
+                  <div className="flex items-center gap-2 sm:gap-2.5 text-[#334155] min-w-0">
+                    <div className="flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-[#92400E]">
+                      <GraduationCap className="h-3.5 w-3.5 sm:h-4 sm:w-4" aria-hidden="true" />
                     </div>
                     <div className="min-w-0">
-                      <span className="block text-[11px] text-slate-500 font-medium">Program Studi &amp; Angkatan</span>
-                      <span className="block font-bold text-[#0C2340] truncate">{displayProdiAngkatan}</span>
+                      <span className="block text-[10px] sm:text-[11px] text-slate-500 font-medium truncate">Prodi &amp; Angkatan</span>
+                      <span className="block font-bold text-xs sm:text-sm text-[#0C2340] truncate">{displayProdiAngkatan}</span>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2.5 text-[#334155]">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-[#92400E]">
-                      <Briefcase className="h-4 w-4" aria-hidden="true" />
+                  <div className="flex items-center gap-2 sm:gap-2.5 text-[#334155] min-w-0">
+                    <div className="flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-[#92400E]">
+                      <Briefcase className="h-3.5 w-3.5 sm:h-4 sm:w-4" aria-hidden="true" />
                     </div>
                     <div className="min-w-0">
-                      <span className="block text-[11px] text-slate-500 font-medium">Pekerjaan &amp; Instansi</span>
-                      <span className="block font-bold text-[#0C2340] truncate">{displayPekerjaan}</span>
+                      <span className="block text-[10px] sm:text-[11px] text-slate-500 font-medium truncate">Pekerjaan &amp; Instansi</span>
+                      <span className="block font-bold text-xs sm:text-sm text-[#0C2340] truncate">{displayPekerjaan}</span>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2.5 text-[#334155]">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-[#92400E]">
-                      <MapPin className="h-4 w-4" aria-hidden="true" />
+                  <div className="flex items-center gap-2 sm:gap-2.5 text-[#334155] min-w-0">
+                    <div className="flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-[#92400E]">
+                      <MapPin className="h-3.5 w-3.5 sm:h-4 sm:w-4" aria-hidden="true" />
                     </div>
                     <div className="min-w-0">
-                      <span className="block text-[11px] text-slate-500 font-medium">Wilayah Domisili</span>
-                      <span className="block font-bold text-[#0C2340] truncate">{displayWilayah}</span>
+                      <span className="block text-[10px] sm:text-[11px] text-slate-500 font-medium truncate">Wilayah Domisili</span>
+                      <span className="block font-bold text-xs sm:text-sm text-[#0C2340] truncate">{displayWilayah}</span>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-2.5 text-[#334155]">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-[#92400E]">
-                      <ShieldCheck className="h-4 w-4" aria-hidden="true" />
+                  <div className="flex items-center gap-2 sm:gap-2.5 text-[#334155] min-w-0">
+                    <div className="flex h-7 w-7 sm:h-8 sm:w-8 shrink-0 items-center justify-center rounded-lg bg-amber-100 text-[#92400E]">
+                      <ShieldCheck className="h-3.5 w-3.5 sm:h-4 sm:w-4" aria-hidden="true" />
                     </div>
                     <div className="min-w-0">
-                      <span className="block text-[11px] text-slate-500 font-medium">Status Keanggotaan</span>
-                      <span className="block font-bold text-emerald-700">Aktif Terdaftar</span>
+                      <span className="block text-[10px] sm:text-[11px] text-slate-500 font-medium truncate">Status Keanggotaan</span>
+                      <span className="block font-bold text-xs sm:text-sm text-emerald-700 truncate">Aktif Terdaftar</span>
                     </div>
                   </div>
                 </div>
@@ -912,41 +912,41 @@ export default function MemberProfileClient({
                   </div>
                 </div>
 
-                <div className="mt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="mt-5 grid grid-cols-2 gap-2.5 sm:gap-3">
                   <Link
                     href="/kegiatan"
-                    className="group rounded-xl border border-slate-200 bg-slate-50/70 p-3.5 transition-colors hover:border-slate-300 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340]"
+                    className="group rounded-xl border border-slate-200 bg-slate-50/70 p-3 sm:p-3.5 transition-colors hover:border-slate-300 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340]"
                   >
-                    <span className="block text-xs sm:text-sm font-bold text-[#0C2340]">Jadwal kopdar</span>
-                    <span className="mt-1 block text-xs text-[#475569]">Temukan pertemuan terdekat.</span>
-                    <ArrowRight className="mt-2.5 h-3.5 w-3.5 text-[#92400E] transition-transform group-hover:translate-x-1" />
+                    <span className="block text-xs sm:text-sm font-bold text-[#0C2340] leading-tight">Jadwal kopdar</span>
+                    <span className="mt-1 block text-[11px] sm:text-xs text-[#475569] leading-tight line-clamp-2">Temukan pertemuan terdekat.</span>
+                    <ArrowRight className="mt-2 h-3.5 w-3.5 text-[#92400E] transition-transform group-hover:translate-x-1" />
                   </Link>
 
                   <Link
                     href="/peluang"
-                    className="group rounded-xl border border-slate-200 bg-slate-50/70 p-3.5 transition-colors hover:border-slate-300 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340]"
+                    className="group rounded-xl border border-slate-200 bg-slate-50/70 p-3 sm:p-3.5 transition-colors hover:border-slate-300 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340]"
                   >
-                    <span className="block text-xs sm:text-sm font-bold text-[#0C2340]">Mentoring &amp; kerja</span>
-                    <span className="mt-1 block text-xs text-[#475569]">Bagikan atau cari peluang.</span>
-                    <ArrowRight className="mt-2.5 h-3.5 w-3.5 text-[#92400E] transition-transform group-hover:translate-x-1" />
+                    <span className="block text-xs sm:text-sm font-bold text-[#0C2340] leading-tight">Mentoring &amp; kerja</span>
+                    <span className="mt-1 block text-[11px] sm:text-xs text-[#475569] leading-tight line-clamp-2">Bagikan atau cari peluang.</span>
+                    <ArrowRight className="mt-2 h-3.5 w-3.5 text-[#92400E] transition-transform group-hover:translate-x-1" />
                   </Link>
 
                   <Link
                     href="/direktori"
-                    className="group rounded-xl border border-slate-200 bg-slate-50/70 p-3.5 transition-colors hover:border-slate-300 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340]"
+                    className="group rounded-xl border border-slate-200 bg-slate-50/70 p-3 sm:p-3.5 transition-colors hover:border-slate-300 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340]"
                   >
-                    <span className="block text-xs sm:text-sm font-bold text-[#0C2340]">Cari Teman Kampus</span>
-                    <span className="mt-1 block text-xs text-[#475569]">Jelajahi kawan satu prodi.</span>
-                    <ArrowRight className="mt-2.5 h-3.5 w-3.5 text-[#92400E] transition-transform group-hover:translate-x-1" />
+                    <span className="block text-xs sm:text-sm font-bold text-[#0C2340] leading-tight">Cari Teman Kampus</span>
+                    <span className="mt-1 block text-[11px] sm:text-xs text-[#475569] leading-tight line-clamp-2">Jelajahi kawan satu prodi.</span>
+                    <ArrowRight className="mt-2 h-3.5 w-3.5 text-[#92400E] transition-transform group-hover:translate-x-1" />
                   </Link>
 
                   <Link
                     href="/peta"
-                    className="group rounded-xl border border-slate-200 bg-slate-50/70 p-3.5 transition-colors hover:border-slate-300 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340]"
+                    className="group rounded-xl border border-slate-200 bg-slate-50/70 p-3 sm:p-3.5 transition-colors hover:border-slate-300 hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C2340]"
                   >
-                    <span className="block text-xs sm:text-sm font-bold text-[#0C2340]">Peta 9 Korwil</span>
-                    <span className="mt-1 block text-xs text-[#475569]">Sebaran alumni Jabodetabek.</span>
-                    <ArrowRight className="mt-2.5 h-3.5 w-3.5 text-[#92400E] transition-transform group-hover:translate-x-1" />
+                    <span className="block text-xs sm:text-sm font-bold text-[#0C2340] leading-tight">Peta 9 Korwil</span>
+                    <span className="mt-1 block text-[11px] sm:text-xs text-[#475569] leading-tight line-clamp-2">Sebaran alumni Jabodetabek.</span>
+                    <ArrowRight className="mt-2 h-3.5 w-3.5 text-[#92400E] transition-transform group-hover:translate-x-1" />
                   </Link>
                 </div>
               </div>
@@ -1040,7 +1040,7 @@ export default function MemberProfileClient({
                 value={editForm.nama}
                 onChange={(e) => setEditForm({ ...editForm, nama: e.target.value })}
                 className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:outline-hidden"
-                placeholder="Contoh: Zaki Maulana, S.Kom."
+                placeholder="Nama lengkap &amp; gelar (jika ada)"
                 required
               />
               {formErrors.nama && (
@@ -1118,7 +1118,7 @@ export default function MemberProfileClient({
                   value={editForm.pekerjaan}
                   onChange={(e) => setEditForm({ ...editForm, pekerjaan: e.target.value })}
                   className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:outline-hidden"
-                  placeholder="Contoh: Software Engineer"
+                  placeholder="Jabatan atau profesi aktif saat ini"
                 />
               </div>
 
@@ -1132,7 +1132,7 @@ export default function MemberProfileClient({
                   value={editForm.perusahaan}
                   onChange={(e) => setEditForm({ ...editForm, perusahaan: e.target.value })}
                   className="w-full min-h-[42px] px-3.5 py-2 text-sm rounded-lg bg-white border border-slate-300 text-slate-900 focus:border-[#0C2340] focus:ring-2 focus:ring-[#0C2340]/10 focus:outline-hidden"
-                  placeholder="Contoh: PT Teknologi Maju"
+                  placeholder="Nama instansi, institusi, atau bidang usaha"
                 />
               </div>
             </div>
