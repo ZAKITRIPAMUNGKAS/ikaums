@@ -340,7 +340,8 @@ export default function AdminDashboardClient() {
           showToast(`Status alumni berhasil diubah menjadi: ${status}.`);
         }
       } else {
-        showToast('Gagal memperbarui status pendaftar.');
+        const errorData = await res.json().catch(() => ({}));
+        showToast(errorData.error || 'Gagal memperbarui status pendaftar.');
       }
     } catch {
       showToast('Terjadi kendala jaringan.');

@@ -175,13 +175,6 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: 'Catatan tidak ditemukan' }, { status: 404 });
     }
 
-    if (status === 'disetujui' && !current.email) {
-      return NextResponse.json(
-        { error: 'Email wajib tersedia sebelum anggota dapat disetujui untuk akses magic link.' },
-        { status: 422 }
-      );
-    }
-
     const success = await updatePendaftarStatus(id, status);
     if (!success) {
       return NextResponse.json({ error: 'Catatan tidak ditemukan' }, { status: 404 });
@@ -206,6 +199,8 @@ export async function PATCH(request: NextRequest) {
           invitationMessage = ` Status disimpan, tetapi undangan belum terkirim: ${invitation.reason}`;
         }
       }
+    } else if (status === 'disetujui' && !current.email) {
+      invitationMessage = ' Anggota disetujui tanpa email (login menggunakan nomor WhatsApp).';
     }
 
     return NextResponse.json({ success: true, message: `Status berhasil diubah menjadi ${status}.${invitationMessage}` });
